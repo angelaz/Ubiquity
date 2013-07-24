@@ -17,50 +17,6 @@
 		60CB90C017A0872F00A9E93A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */; };
 		60CB90C617A0897E00A9E93A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90C517A0897E00A9E93A /* libz.dylib */; };
 		60CB90C817A0899700A9E93A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90C717A0899700A9E93A /* libsqlite3.dylib */; };
-		60CB911617A08C2100A9E93A /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90CA17A08C2100A9E93A /* CHANGELOG */; };
-		60CB911717A08C2100A9E93A /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90CB17A08C2100A9E93A /* GoogleMaps.framework */; };
-		60CB911817A08C2100A9E93A /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90CD17A08C2100A9E93A /* GoogleMaps.framework */; };
-		60CB911917A08C2100A9E93A /* README.GoogleMapsSDKDemos in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90D117A08C2100A9E93A /* README.GoogleMapsSDKDemos */; };
-		60CB911A17A08C2100A9E93A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90D417A08C2100A9E93A /* InfoPlist.strings */; };
-		60CB911B17A08C2100A9E93A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90D617A08C2100A9E93A /* main.m */; };
-		60CB911C17A08C2100A9E93A /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90D817A08C2100A9E93A /* MasterViewController.m */; };
-		60CB911D17A08C2100A9E93A /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90DA17A08C2100A9E93A /* arrow.png */; };
-		60CB911E17A08C2100A9E93A /* arrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90DB17A08C2100A9E93A /* arrow@2x.png */; };
-		60CB911F17A08C2100A9E93A /* australia.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90DC17A08C2100A9E93A /* australia.png */; };
-		60CB912017A08C2100A9E93A /* australia_large.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90DD17A08C2100A9E93A /* australia_large.png */; };
-		60CB912117A08C2100A9E93A /* australia_large@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90DE17A08C2100A9E93A /* australia_large@2x.png */; };
-		60CB912217A08C2100A9E93A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90DF17A08C2100A9E93A /* Default-568h@2x.png */; };
-		60CB912317A08C2100A9E93A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E017A08C2100A9E93A /* Default.png */; };
-		60CB912417A08C2100A9E93A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E117A08C2100A9E93A /* Default@2x.png */; };
-		60CB912517A08C2100A9E93A /* glow-marker.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E217A08C2100A9E93A /* glow-marker.png */; };
-		60CB912617A08C2100A9E93A /* glow-marker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E317A08C2100A9E93A /* glow-marker@2x.png */; };
-		60CB912717A08C2100A9E93A /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E417A08C2100A9E93A /* Icon-72.png */; };
-		60CB912817A08C2100A9E93A /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E517A08C2100A9E93A /* Icon-72@2x.png */; };
-		60CB912917A08C2100A9E93A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E617A08C2100A9E93A /* Icon.png */; };
-		60CB912A17A08C2100A9E93A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E717A08C2100A9E93A /* Icon@2x.png */; };
-		60CB912B17A08C2100A9E93A /* newark_nj_1922.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 60CB90E817A08C2100A9E93A /* newark_nj_1922.jpg */; };
-		60CB912C17A08C2100A9E93A /* BasicMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90EB17A08C2100A9E93A /* BasicMapViewController.m */; };
-		60CB912D17A08C2100A9E93A /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90ED17A08C2100A9E93A /* CameraViewController.m */; };
-		60CB912E17A08C2100A9E93A /* CustomMarkersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90EF17A08C2100A9E93A /* CustomMarkersViewController.m */; };
-		60CB912F17A08C2100A9E93A /* FitBoundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90F117A08C2100A9E93A /* FitBoundsViewController.m */; };
-		60CB913017A08C2100A9E93A /* FixedPanoramaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90F317A08C2100A9E93A /* FixedPanoramaViewController.m */; };
-		60CB913117A08C2100A9E93A /* GeocoderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90F517A08C2100A9E93A /* GeocoderViewController.m */; };
-		60CB913217A08C2100A9E93A /* GestureControlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90F717A08C2100A9E93A /* GestureControlViewController.m */; };
-		60CB913317A08C2100A9E93A /* GroundOverlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90F917A08C2100A9E93A /* GroundOverlayViewController.m */; };
-		60CB913417A08C2100A9E93A /* IndoorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90FB17A08C2100A9E93A /* IndoorViewController.m */; };
-		60CB913517A08C2100A9E93A /* MapLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90FD17A08C2100A9E93A /* MapLayerViewController.m */; };
-		60CB913617A08C2100A9E93A /* MapTypesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB90FF17A08C2100A9E93A /* MapTypesViewController.m */; };
-		60CB913717A08C2100A9E93A /* MarkerEventsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910117A08C2100A9E93A /* MarkerEventsViewController.m */; };
-		60CB913817A08C2100A9E93A /* MarkersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910317A08C2100A9E93A /* MarkersViewController.m */; };
-		60CB913917A08C2100A9E93A /* MyLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910517A08C2100A9E93A /* MyLocationViewController.m */; };
-		60CB913A17A08C2100A9E93A /* PanoramaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910717A08C2100A9E93A /* PanoramaViewController.m */; };
-		60CB913B17A08C2100A9E93A /* PolygonsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910917A08C2100A9E93A /* PolygonsViewController.m */; };
-		60CB913C17A08C2100A9E93A /* PolylinesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910B17A08C2100A9E93A /* PolylinesViewController.m */; };
-		60CB913D17A08C2100A9E93A /* Samples.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910D17A08C2100A9E93A /* Samples.m */; };
-		60CB913E17A08C2100A9E93A /* TileLayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB910F17A08C2100A9E93A /* TileLayerViewController.m */; };
-		60CB913F17A08C2100A9E93A /* TrafficMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB911117A08C2100A9E93A /* TrafficMapViewController.m */; };
-		60CB914017A08C2100A9E93A /* SDKDemos-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 60CB911217A08C2100A9E93A /* SDKDemos-Info.plist */; };
-		60CB914117A08C2100A9E93A /* SDKDemosAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60CB911517A08C2100A9E93A /* SDKDemosAppDelegate.m */; };
 		82E9316917A079C600B3958B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316817A079C600B3958B /* Foundation.framework */; };
 		82E9316B17A079C600B3958B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316A17A079C600B3958B /* CoreGraphics.framework */; };
 		82E9316D17A079C600B3958B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316C17A079C600B3958B /* UIKit.framework */; };
@@ -82,13 +38,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		60CB914317A08C2100A9E93A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 60CB90CE17A08C2100A9E93A /* GoogleMapsSDKDemos.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5FCDD8921664C2CC00F6F73E;
-			remoteInfo = SDKDemos;
-		};
 		82E9318517A079C600B3958B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 82E9315D17A079C600B3958B /* Project object */;
@@ -109,75 +58,6 @@
 		60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		60CB90C517A0897E00A9E93A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		60CB90C717A0899700A9E93A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		60CB90CA17A08C2100A9E93A /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
-		60CB90CB17A08C2100A9E93A /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
-		60CB90CD17A08C2100A9E93A /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
-		60CB90CE17A08C2100A9E93A /* GoogleMapsSDKDemos.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = GoogleMapsSDKDemos.xcodeproj; sourceTree = "<group>"; };
-		60CB90D117A08C2100A9E93A /* README.GoogleMapsSDKDemos */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.GoogleMapsSDKDemos; sourceTree = "<group>"; };
-		60CB90D317A08C2100A9E93A /* APIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIKey.h; sourceTree = "<group>"; };
-		60CB90D517A08C2100A9E93A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		60CB90D617A08C2100A9E93A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		60CB90D717A08C2100A9E93A /* MasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
-		60CB90D817A08C2100A9E93A /* MasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		60CB90DA17A08C2100A9E93A /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
-		60CB90DB17A08C2100A9E93A /* arrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow@2x.png"; sourceTree = "<group>"; };
-		60CB90DC17A08C2100A9E93A /* australia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = australia.png; sourceTree = "<group>"; };
-		60CB90DD17A08C2100A9E93A /* australia_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = australia_large.png; sourceTree = "<group>"; };
-		60CB90DE17A08C2100A9E93A /* australia_large@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "australia_large@2x.png"; sourceTree = "<group>"; };
-		60CB90DF17A08C2100A9E93A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		60CB90E017A08C2100A9E93A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		60CB90E117A08C2100A9E93A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		60CB90E217A08C2100A9E93A /* glow-marker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glow-marker.png"; sourceTree = "<group>"; };
-		60CB90E317A08C2100A9E93A /* glow-marker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glow-marker@2x.png"; sourceTree = "<group>"; };
-		60CB90E417A08C2100A9E93A /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
-		60CB90E517A08C2100A9E93A /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
-		60CB90E617A08C2100A9E93A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
-		60CB90E717A08C2100A9E93A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
-		60CB90E817A08C2100A9E93A /* newark_nj_1922.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = newark_nj_1922.jpg; sourceTree = "<group>"; };
-		60CB90EA17A08C2100A9E93A /* BasicMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicMapViewController.h; sourceTree = "<group>"; };
-		60CB90EB17A08C2100A9E93A /* BasicMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicMapViewController.m; sourceTree = "<group>"; };
-		60CB90EC17A08C2100A9E93A /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
-		60CB90ED17A08C2100A9E93A /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
-		60CB90EE17A08C2100A9E93A /* CustomMarkersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomMarkersViewController.h; sourceTree = "<group>"; };
-		60CB90EF17A08C2100A9E93A /* CustomMarkersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomMarkersViewController.m; sourceTree = "<group>"; };
-		60CB90F017A08C2100A9E93A /* FitBoundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FitBoundsViewController.h; sourceTree = "<group>"; };
-		60CB90F117A08C2100A9E93A /* FitBoundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FitBoundsViewController.m; sourceTree = "<group>"; };
-		60CB90F217A08C2100A9E93A /* FixedPanoramaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FixedPanoramaViewController.h; sourceTree = "<group>"; };
-		60CB90F317A08C2100A9E93A /* FixedPanoramaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FixedPanoramaViewController.m; sourceTree = "<group>"; };
-		60CB90F417A08C2100A9E93A /* GeocoderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeocoderViewController.h; sourceTree = "<group>"; };
-		60CB90F517A08C2100A9E93A /* GeocoderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeocoderViewController.m; sourceTree = "<group>"; };
-		60CB90F617A08C2100A9E93A /* GestureControlViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureControlViewController.h; sourceTree = "<group>"; };
-		60CB90F717A08C2100A9E93A /* GestureControlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GestureControlViewController.m; sourceTree = "<group>"; };
-		60CB90F817A08C2100A9E93A /* GroundOverlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroundOverlayViewController.h; sourceTree = "<group>"; };
-		60CB90F917A08C2100A9E93A /* GroundOverlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroundOverlayViewController.m; sourceTree = "<group>"; };
-		60CB90FA17A08C2100A9E93A /* IndoorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IndoorViewController.h; sourceTree = "<group>"; };
-		60CB90FB17A08C2100A9E93A /* IndoorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IndoorViewController.m; sourceTree = "<group>"; };
-		60CB90FC17A08C2100A9E93A /* MapLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapLayerViewController.h; sourceTree = "<group>"; };
-		60CB90FD17A08C2100A9E93A /* MapLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapLayerViewController.m; sourceTree = "<group>"; };
-		60CB90FE17A08C2100A9E93A /* MapTypesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapTypesViewController.h; sourceTree = "<group>"; };
-		60CB90FF17A08C2100A9E93A /* MapTypesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapTypesViewController.m; sourceTree = "<group>"; };
-		60CB910017A08C2100A9E93A /* MarkerEventsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkerEventsViewController.h; sourceTree = "<group>"; };
-		60CB910117A08C2100A9E93A /* MarkerEventsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkerEventsViewController.m; sourceTree = "<group>"; };
-		60CB910217A08C2100A9E93A /* MarkersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkersViewController.h; sourceTree = "<group>"; };
-		60CB910317A08C2100A9E93A /* MarkersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkersViewController.m; sourceTree = "<group>"; };
-		60CB910417A08C2100A9E93A /* MyLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyLocationViewController.h; sourceTree = "<group>"; };
-		60CB910517A08C2100A9E93A /* MyLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyLocationViewController.m; sourceTree = "<group>"; };
-		60CB910617A08C2100A9E93A /* PanoramaViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanoramaViewController.h; sourceTree = "<group>"; };
-		60CB910717A08C2100A9E93A /* PanoramaViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanoramaViewController.m; sourceTree = "<group>"; };
-		60CB910817A08C2100A9E93A /* PolygonsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolygonsViewController.h; sourceTree = "<group>"; };
-		60CB910917A08C2100A9E93A /* PolygonsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolygonsViewController.m; sourceTree = "<group>"; };
-		60CB910A17A08C2100A9E93A /* PolylinesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PolylinesViewController.h; sourceTree = "<group>"; };
-		60CB910B17A08C2100A9E93A /* PolylinesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PolylinesViewController.m; sourceTree = "<group>"; };
-		60CB910C17A08C2100A9E93A /* Samples.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Samples.h; sourceTree = "<group>"; };
-		60CB910D17A08C2100A9E93A /* Samples.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Samples.m; sourceTree = "<group>"; };
-		60CB910E17A08C2100A9E93A /* TileLayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileLayerViewController.h; sourceTree = "<group>"; };
-		60CB910F17A08C2100A9E93A /* TileLayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TileLayerViewController.m; sourceTree = "<group>"; };
-		60CB911017A08C2100A9E93A /* TrafficMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrafficMapViewController.h; sourceTree = "<group>"; };
-		60CB911117A08C2100A9E93A /* TrafficMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrafficMapViewController.m; sourceTree = "<group>"; };
-		60CB911217A08C2100A9E93A /* SDKDemos-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SDKDemos-Info.plist"; sourceTree = "<group>"; };
-		60CB911317A08C2100A9E93A /* SDKDemos-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SDKDemos-Prefix.pch"; sourceTree = "<group>"; };
-		60CB911417A08C2100A9E93A /* SDKDemosAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDKDemosAppDelegate.h; sourceTree = "<group>"; };
-		60CB911517A08C2100A9E93A /* SDKDemosAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDKDemosAppDelegate.m; sourceTree = "<group>"; };
 		82E9316517A079C600B3958B /* Ubiquity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ubiquity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82E9316817A079C600B3958B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		82E9316A17A079C600B3958B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -212,13 +92,11 @@
 				60CB90C817A0899700A9E93A /* libsqlite3.dylib in Frameworks */,
 				60CB90C617A0897E00A9E93A /* libz.dylib in Frameworks */,
 				60CB90C017A0872F00A9E93A /* MobileCoreServices.framework in Frameworks */,
-				60CB911817A08C2100A9E93A /* GoogleMaps.framework in Frameworks */,
 				60CB90BE17A0872200A9E93A /* CFNetwork.framework in Frameworks */,
 				60CB90BC17A086DB00A9E93A /* QuartzCore.framework in Frameworks */,
 				60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */,
 				60CB90B817A086C900A9E93A /* StoreKit.framework in Frameworks */,
 				60CB90B617A086B500A9E93A /* AdSupport.framework in Frameworks */,
-				60CB911717A08C2100A9E93A /* GoogleMaps.framework in Frameworks */,
 				82E9316B17A079C600B3958B /* CoreGraphics.framework in Frameworks */,
 				82E9316D17A079C600B3958B /* UIKit.framework in Frameworks */,
 				82E9316917A079C600B3958B /* Foundation.framework in Frameworks */,
@@ -240,122 +118,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		60CB90C917A08C2100A9E93A /* GoogleMaps-iOS-1.4.0 2 */ = {
-			isa = PBXGroup;
-			children = (
-				60CB90CA17A08C2100A9E93A /* CHANGELOG */,
-				60CB90CB17A08C2100A9E93A /* GoogleMaps.framework */,
-				60CB90CC17A08C2100A9E93A /* GoogleMapsSDKDemos */,
-			);
-			path = "GoogleMaps-iOS-1.4.0 2";
-			sourceTree = "<group>";
-		};
-		60CB90CC17A08C2100A9E93A /* GoogleMapsSDKDemos */ = {
-			isa = PBXGroup;
-			children = (
-				60CB90CD17A08C2100A9E93A /* GoogleMaps.framework */,
-				60CB90CE17A08C2100A9E93A /* GoogleMapsSDKDemos.xcodeproj */,
-				60CB90D117A08C2100A9E93A /* README.GoogleMapsSDKDemos */,
-				60CB90D217A08C2100A9E93A /* SDKDemos */,
-			);
-			path = GoogleMapsSDKDemos;
-			sourceTree = "<group>";
-		};
-		60CB90CF17A08C2100A9E93A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				60CB914417A08C2100A9E93A /* SDKDemos.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		60CB90D217A08C2100A9E93A /* SDKDemos */ = {
-			isa = PBXGroup;
-			children = (
-				60CB90D317A08C2100A9E93A /* APIKey.h */,
-				60CB90D417A08C2100A9E93A /* InfoPlist.strings */,
-				60CB90D617A08C2100A9E93A /* main.m */,
-				60CB90D717A08C2100A9E93A /* MasterViewController.h */,
-				60CB90D817A08C2100A9E93A /* MasterViewController.m */,
-				60CB90D917A08C2100A9E93A /* Resources */,
-				60CB90E917A08C2100A9E93A /* Samples */,
-				60CB911217A08C2100A9E93A /* SDKDemos-Info.plist */,
-				60CB911317A08C2100A9E93A /* SDKDemos-Prefix.pch */,
-				60CB911417A08C2100A9E93A /* SDKDemosAppDelegate.h */,
-				60CB911517A08C2100A9E93A /* SDKDemosAppDelegate.m */,
-			);
-			path = SDKDemos;
-			sourceTree = "<group>";
-		};
-		60CB90D917A08C2100A9E93A /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				60CB90DA17A08C2100A9E93A /* arrow.png */,
-				60CB90DB17A08C2100A9E93A /* arrow@2x.png */,
-				60CB90DC17A08C2100A9E93A /* australia.png */,
-				60CB90DD17A08C2100A9E93A /* australia_large.png */,
-				60CB90DE17A08C2100A9E93A /* australia_large@2x.png */,
-				60CB90DF17A08C2100A9E93A /* Default-568h@2x.png */,
-				60CB90E017A08C2100A9E93A /* Default.png */,
-				60CB90E117A08C2100A9E93A /* Default@2x.png */,
-				60CB90E217A08C2100A9E93A /* glow-marker.png */,
-				60CB90E317A08C2100A9E93A /* glow-marker@2x.png */,
-				60CB90E417A08C2100A9E93A /* Icon-72.png */,
-				60CB90E517A08C2100A9E93A /* Icon-72@2x.png */,
-				60CB90E617A08C2100A9E93A /* Icon.png */,
-				60CB90E717A08C2100A9E93A /* Icon@2x.png */,
-				60CB90E817A08C2100A9E93A /* newark_nj_1922.jpg */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		60CB90E917A08C2100A9E93A /* Samples */ = {
-			isa = PBXGroup;
-			children = (
-				60CB90EA17A08C2100A9E93A /* BasicMapViewController.h */,
-				60CB90EB17A08C2100A9E93A /* BasicMapViewController.m */,
-				60CB90EC17A08C2100A9E93A /* CameraViewController.h */,
-				60CB90ED17A08C2100A9E93A /* CameraViewController.m */,
-				60CB90EE17A08C2100A9E93A /* CustomMarkersViewController.h */,
-				60CB90EF17A08C2100A9E93A /* CustomMarkersViewController.m */,
-				60CB90F017A08C2100A9E93A /* FitBoundsViewController.h */,
-				60CB90F117A08C2100A9E93A /* FitBoundsViewController.m */,
-				60CB90F217A08C2100A9E93A /* FixedPanoramaViewController.h */,
-				60CB90F317A08C2100A9E93A /* FixedPanoramaViewController.m */,
-				60CB90F417A08C2100A9E93A /* GeocoderViewController.h */,
-				60CB90F517A08C2100A9E93A /* GeocoderViewController.m */,
-				60CB90F617A08C2100A9E93A /* GestureControlViewController.h */,
-				60CB90F717A08C2100A9E93A /* GestureControlViewController.m */,
-				60CB90F817A08C2100A9E93A /* GroundOverlayViewController.h */,
-				60CB90F917A08C2100A9E93A /* GroundOverlayViewController.m */,
-				60CB90FA17A08C2100A9E93A /* IndoorViewController.h */,
-				60CB90FB17A08C2100A9E93A /* IndoorViewController.m */,
-				60CB90FC17A08C2100A9E93A /* MapLayerViewController.h */,
-				60CB90FD17A08C2100A9E93A /* MapLayerViewController.m */,
-				60CB90FE17A08C2100A9E93A /* MapTypesViewController.h */,
-				60CB90FF17A08C2100A9E93A /* MapTypesViewController.m */,
-				60CB910017A08C2100A9E93A /* MarkerEventsViewController.h */,
-				60CB910117A08C2100A9E93A /* MarkerEventsViewController.m */,
-				60CB910217A08C2100A9E93A /* MarkersViewController.h */,
-				60CB910317A08C2100A9E93A /* MarkersViewController.m */,
-				60CB910417A08C2100A9E93A /* MyLocationViewController.h */,
-				60CB910517A08C2100A9E93A /* MyLocationViewController.m */,
-				60CB910617A08C2100A9E93A /* PanoramaViewController.h */,
-				60CB910717A08C2100A9E93A /* PanoramaViewController.m */,
-				60CB910817A08C2100A9E93A /* PolygonsViewController.h */,
-				60CB910917A08C2100A9E93A /* PolygonsViewController.m */,
-				60CB910A17A08C2100A9E93A /* PolylinesViewController.h */,
-				60CB910B17A08C2100A9E93A /* PolylinesViewController.m */,
-				60CB910C17A08C2100A9E93A /* Samples.h */,
-				60CB910D17A08C2100A9E93A /* Samples.m */,
-				60CB910E17A08C2100A9E93A /* TileLayerViewController.h */,
-				60CB910F17A08C2100A9E93A /* TileLayerViewController.m */,
-				60CB911017A08C2100A9E93A /* TrafficMapViewController.h */,
-				60CB911117A08C2100A9E93A /* TrafficMapViewController.m */,
-			);
-			path = Samples;
-			sourceTree = "<group>";
-		};
 		82E9315C17A079C600B3958B = {
 			isa = PBXGroup;
 			children = (
@@ -380,7 +142,6 @@
 			children = (
 				60CB90C717A0899700A9E93A /* libsqlite3.dylib */,
 				60CB90C517A0897E00A9E93A /* libz.dylib */,
-				60CB90C917A08C2100A9E93A /* GoogleMaps-iOS-1.4.0 2 */,
 				60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */,
 				60CB90BD17A0872200A9E93A /* CFNetwork.framework */,
 				60CB90BB17A086DB00A9E93A /* QuartzCore.framework */,
@@ -507,12 +268,6 @@
 			mainGroup = 82E9315C17A079C600B3958B;
 			productRefGroup = 82E9316617A079C600B3958B /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 60CB90CF17A08C2100A9E93A /* Products */;
-					ProjectRef = 60CB90CE17A08C2100A9E93A /* GoogleMapsSDKDemos.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				82E9316417A079C600B3958B /* Ubiquity */,
@@ -521,45 +276,16 @@
 		};
 /* End PBXProject section */
 
-/* Begin PBXReferenceProxy section */
-		60CB914417A08C2100A9E93A /* SDKDemos.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = SDKDemos.app;
-			remoteRef = 60CB914317A08C2100A9E93A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
-
 /* Begin PBXResourcesBuildPhase section */
 		82E9316317A079C600B3958B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB912517A08C2100A9E93A /* glow-marker.png in Resources */,
-				60CB912717A08C2100A9E93A /* Icon-72.png in Resources */,
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
 				82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */,
-				60CB911617A08C2100A9E93A /* CHANGELOG in Resources */,
-				60CB912B17A08C2100A9E93A /* newark_nj_1922.jpg in Resources */,
-				60CB912A17A08C2100A9E93A /* Icon@2x.png in Resources */,
-				60CB912317A08C2100A9E93A /* Default.png in Resources */,
-				60CB911E17A08C2100A9E93A /* arrow@2x.png in Resources */,
-				60CB912617A08C2100A9E93A /* glow-marker@2x.png in Resources */,
-				60CB912917A08C2100A9E93A /* Icon.png in Resources */,
-				60CB911D17A08C2100A9E93A /* arrow.png in Resources */,
-				60CB914017A08C2100A9E93A /* SDKDemos-Info.plist in Resources */,
-				60CB912017A08C2100A9E93A /* australia_large.png in Resources */,
 				82E9317317A079C600B3958B /* InfoPlist.strings in Resources */,
-				60CB912117A08C2100A9E93A /* australia_large@2x.png in Resources */,
-				60CB912417A08C2100A9E93A /* Default@2x.png in Resources */,
-				60CB912217A08C2100A9E93A /* Default-568h@2x.png in Resources */,
-				60CB912817A08C2100A9E93A /* Icon-72@2x.png in Resources */,
 				82E931C117A07B0B00B3958B /* UserDetailsViewController.xib in Resources */,
-				60CB911917A08C2100A9E93A /* README.GoogleMapsSDKDemos in Resources */,
 				82E931A717A07A3700B3958B /* FacebookSDKResources.bundle in Resources */,
-				60CB911A17A08C2100A9E93A /* InfoPlist.strings in Resources */,
-				60CB911F17A08C2100A9E93A /* australia.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -579,33 +305,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				60CB911B17A08C2100A9E93A /* main.m in Sources */,
-				60CB913717A08C2100A9E93A /* MarkerEventsViewController.m in Sources */,
-				60CB912D17A08C2100A9E93A /* CameraViewController.m in Sources */,
-				60CB913217A08C2100A9E93A /* GestureControlViewController.m in Sources */,
-				60CB913117A08C2100A9E93A /* GeocoderViewController.m in Sources */,
-				60CB913B17A08C2100A9E93A /* PolygonsViewController.m in Sources */,
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
-				60CB913617A08C2100A9E93A /* MapTypesViewController.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
-				60CB913F17A08C2100A9E93A /* TrafficMapViewController.m in Sources */,
-				60CB913D17A08C2100A9E93A /* Samples.m in Sources */,
-				60CB912C17A08C2100A9E93A /* BasicMapViewController.m in Sources */,
-				60CB914117A08C2100A9E93A /* SDKDemosAppDelegate.m in Sources */,
-				60CB913A17A08C2100A9E93A /* PanoramaViewController.m in Sources */,
-				60CB913417A08C2100A9E93A /* IndoorViewController.m in Sources */,
-				60CB913817A08C2100A9E93A /* MarkersViewController.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
-				60CB913317A08C2100A9E93A /* GroundOverlayViewController.m in Sources */,
-				60CB911C17A08C2100A9E93A /* MasterViewController.m in Sources */,
-				60CB912E17A08C2100A9E93A /* CustomMarkersViewController.m in Sources */,
 				82E931BA17A07A8800B3958B /* LoginViewController.m in Sources */,
-				60CB913E17A08C2100A9E93A /* TileLayerViewController.m in Sources */,
-				60CB913517A08C2100A9E93A /* MapLayerViewController.m in Sources */,
-				60CB913017A08C2100A9E93A /* FixedPanoramaViewController.m in Sources */,
-				60CB912F17A08C2100A9E93A /* FitBoundsViewController.m in Sources */,
-				60CB913C17A08C2100A9E93A /* PolylinesViewController.m in Sources */,
-				60CB913917A08C2100A9E93A /* MyLocationViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,14 +331,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		60CB90D417A08C2100A9E93A /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				60CB90D517A08C2100A9E93A /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		82E9317117A079C600B3958B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
