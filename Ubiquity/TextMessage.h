@@ -26,6 +26,7 @@
 @property (nonatomic, assign) BOOL animatesDrop;
 @property (nonatomic, readonly) MKPinAnnotationColor pinColor;
 
+- (BOOL)equalToPost:(TextMessage *)aTextMessage;
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate andTitle:(NSString *)title andAddress:(NSString *)address;
 - (id)initWithPFObject:(PFObject *)message;
 

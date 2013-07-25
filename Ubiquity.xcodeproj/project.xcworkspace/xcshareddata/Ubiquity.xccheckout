@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>B1D8EA9A-B15F-4EFD-A360-A9E35131D0E1</string>
+	<string>BCE38D54-F82F-49B3-9815-791E1D4068D1</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Ubiquity</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>9DB1E0B6-8100-4ACA-ACAC-7B1C3B31764E</key>
-		<string>https://github.com/angelafz/Ubiquity.git</string>
+		<string>ssh://github.com/angelafz/Ubiquity.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Ubiquity.xcodeproj/project.xcworkspace</string>
@@ -19,7 +19,7 @@
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/angelafz/Ubiquity.git</string>
+	<string>ssh://github.com/angelafz/Ubiquity.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
