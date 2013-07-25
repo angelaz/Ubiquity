@@ -7,8 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60C0B45E17A1A4E400DC0F92 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */; };
+		60C0B46017A1A9EF00DC0F92 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */; };
+		60C0B46217A1AA1500DC0F92 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */; };
+		60C0B46417A1AA1D00DC0F92 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46317A1AA1D00DC0F92 /* CoreData.framework */; };
+		60C0B46617A1AA2700DC0F92 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46517A1AA2700DC0F92 /* CoreLocation.framework */; };
+		60C0B46817A1AA2E00DC0F92 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46717A1AA2E00DC0F92 /* CoreText.framework */; };
+		60C0B46A17A1AA3500DC0F92 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46917A1AA3500DC0F92 /* GLKit.framework */; };
+		60C0B46C17A1AA3C00DC0F92 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46B17A1AA3C00DC0F92 /* ImageIO.framework */; };
+		60C0B46E17A1AA4500DC0F92 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46D17A1AA4500DC0F92 /* libc++.dylib */; };
+		60C0B47017A1AA5100DC0F92 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46F17A1AA5100DC0F92 /* libicucore.dylib */; };
+		60C0B47217A1AA6000DC0F92 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B47117A1AA6000DC0F92 /* OpenGLES.framework */; };
 		60CB90B217A0866B00A9E93A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90B117A0866B00A9E93A /* Parse.framework */; };
-		60CB90B417A0869500A9E93A /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90B317A0869500A9E93A /* FacebookSDK.framework */; };
 		60CB90B617A086B500A9E93A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90B517A086B500A9E93A /* AdSupport.framework */; };
 		60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90B917A086CF00A9E93A /* SystemConfiguration.framework */; };
 		60CB90BC17A086DB00A9E93A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90BB17A086DB00A9E93A /* QuartzCore.framework */; };
@@ -59,8 +69,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
+		60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		60C0B46317A1AA1D00DC0F92 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		60C0B46517A1AA2700DC0F92 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		60C0B46717A1AA2E00DC0F92 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		60C0B46917A1AA3500DC0F92 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		60C0B46B17A1AA3C00DC0F92 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		60C0B46D17A1AA4500DC0F92 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
+		60C0B46F17A1AA5100DC0F92 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		60C0B47117A1AA6000DC0F92 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		60CB90B117A0866B00A9E93A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		60CB90B317A0869500A9E93A /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		60CB90B517A086B500A9E93A /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		60CB90B917A086CF00A9E93A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		60CB90BB17A086DB00A9E93A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -113,19 +133,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */,
+				60CB90BC17A086DB00A9E93A /* QuartzCore.framework in Frameworks */,
+				60C0B47217A1AA6000DC0F92 /* OpenGLES.framework in Frameworks */,
+				60CB90C617A0897E00A9E93A /* libz.dylib in Frameworks */,
+				60C0B47017A1AA5100DC0F92 /* libicucore.dylib in Frameworks */,
+				60C0B46E17A1AA4500DC0F92 /* libc++.dylib in Frameworks */,
+				60C0B46C17A1AA3C00DC0F92 /* ImageIO.framework in Frameworks */,
+				60C0B46A17A1AA3500DC0F92 /* GLKit.framework in Frameworks */,
+				60C0B46817A1AA2E00DC0F92 /* CoreText.framework in Frameworks */,
+				60C0B46617A1AA2700DC0F92 /* CoreLocation.framework in Frameworks */,
+				60C0B46417A1AA1D00DC0F92 /* CoreData.framework in Frameworks */,
+				60C0B46217A1AA1500DC0F92 /* AVFoundation.framework in Frameworks */,
 				82E931E217A0939100B3958B /* StoreKit.framework in Frameworks */,
 				60CB90C817A0899700A9E93A /* libsqlite3.dylib in Frameworks */,
-				60CB90C617A0897E00A9E93A /* libz.dylib in Frameworks */,
 				60CB90C017A0872F00A9E93A /* MobileCoreServices.framework in Frameworks */,
 				60CB90BE17A0872200A9E93A /* CFNetwork.framework in Frameworks */,
-				60CB90BC17A086DB00A9E93A /* QuartzCore.framework in Frameworks */,
-				60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */,
 				60CB90B617A086B500A9E93A /* AdSupport.framework in Frameworks */,
+				60C0B45E17A1A4E400DC0F92 /* GoogleMaps.framework in Frameworks */,
 				82E9316B17A079C600B3958B /* CoreGraphics.framework in Frameworks */,
 				82E9316D17A079C600B3958B /* UIKit.framework in Frameworks */,
 				82E9316917A079C600B3958B /* Foundation.framework in Frameworks */,
 				60CB90B217A0866B00A9E93A /* Parse.framework in Frameworks */,
-				60CB90B417A0869500A9E93A /* FacebookSDK.framework in Frameworks */,
+				60C0B46017A1A9EF00DC0F92 /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,15 +194,25 @@
 		82E9316717A079C600B3958B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				60C0B47117A1AA6000DC0F92 /* OpenGLES.framework */,
+				60C0B46F17A1AA5100DC0F92 /* libicucore.dylib */,
+				60C0B46D17A1AA4500DC0F92 /* libc++.dylib */,
+				60C0B46B17A1AA3C00DC0F92 /* ImageIO.framework */,
+				60C0B46917A1AA3500DC0F92 /* GLKit.framework */,
+				60C0B46717A1AA2E00DC0F92 /* CoreText.framework */,
+				60C0B46517A1AA2700DC0F92 /* CoreLocation.framework */,
+				60C0B46317A1AA1D00DC0F92 /* CoreData.framework */,
+				60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */,
 				82E931E117A0939100B3958B /* StoreKit.framework */,
 				60CB90C717A0899700A9E93A /* libsqlite3.dylib */,
 				60CB90C517A0897E00A9E93A /* libz.dylib */,
+				60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */,
+				60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */,
 				60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */,
 				60CB90BD17A0872200A9E93A /* CFNetwork.framework */,
 				60CB90BB17A086DB00A9E93A /* QuartzCore.framework */,
 				60CB90B917A086CF00A9E93A /* SystemConfiguration.framework */,
 				60CB90B517A086B500A9E93A /* AdSupport.framework */,
-				60CB90B317A0869500A9E93A /* FacebookSDK.framework */,
 				82E9316817A079C600B3958B /* Foundation.framework */,
 				82E9319717A07A3700B3958B /* FacebookSDKResources.bundle */,
 				60CB90B117A0866B00A9E93A /* Parse.framework */,
@@ -469,6 +509,7 @@
 		82E9319217A079C600B3958B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = armv7;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -493,6 +534,7 @@
 		82E9319317A079C600B3958B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = armv7;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -509,6 +551,7 @@
 					"$(inherited)",
 					"$(SRCROOT)",
 				);
+				"OTHER_LDFLAGS[arch=*]" = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
