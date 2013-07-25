@@ -34,6 +34,7 @@ static NSString * const kPAWPostCreatedNotification = @"kPAWPostCreatedNotificat
 
 // UI strings:
 static NSString * const kPAWWallCantViewPost = @"Can’t view post! Get closer.";
+static NSString * const test = @"";
 
 
 #import <UIKit/UIKit.h>
