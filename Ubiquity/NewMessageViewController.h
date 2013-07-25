@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NewMessageViewController : UIViewController <UITextFieldDelegate>
+@interface NewMessageViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @end
