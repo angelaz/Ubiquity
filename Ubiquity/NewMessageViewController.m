@@ -119,22 +119,21 @@
 }
 
 - (void) setupMap {
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
 
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:-33.86
-                                                            longitude:151.20
-                                                                 zoom:6];
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:currentCoordinate zoom:6];
     mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
     mapView.myLocationEnabled = YES;
     self.view = mapView;
     
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];
-    marker.position = CLLocationCoordinate2DMake(-33.86, 151.20);
-    marker.title = @"Sydney";
-    marker.snippet = @"Australia";
+    marker.position = currentCoordinate;
+    marker.title = @"Here";
+    marker.snippet = @"My location";
     marker.map = mapView;
-
-
 
 }
 
