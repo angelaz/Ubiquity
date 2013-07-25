@@ -37,10 +37,17 @@ static NSString * const kPAWWallCantViewPost = @"Can’t view post! Get closer."
 
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+#import "LoginViewController.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 
+@property (nonatomic, assign) CLLocationAccuracy filterDistance;
+@property (nonatomic, strong) CLLocation *currentLocation;
+
+- (void)setCurrentLocation:(CLLocation *)aCurrentLocation;
 
 @end

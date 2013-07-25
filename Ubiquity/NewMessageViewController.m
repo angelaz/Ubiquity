@@ -8,6 +8,7 @@
 
 #import "NewMessageViewController.h"
 #import "AppDelegate.h"
+#import <Parse/Parse.h>
 
 @interface NewMessageViewController ()
 @property (nonatomic, strong) UITextField *toRecipientTextField;
@@ -112,8 +113,68 @@
     [self.view addSubview: self.repeatTimesPicker];
 }
 
+//ANYWALL
 - (void) sendMessage: (id) sender
 {
+    // Dismiss keyboard and capture any auto-correct
+    [_messageTextField resignFirstResponder];
+    
+    // Get user's current location
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
+    
+    // Get the post's message
+    NSString *postMessage = _messageTextField.text;
+    
+    //Get the currently logged in PFUser
+    PFUser *user = [PFUser currentUser];
+    
+    // Create a PFGeoPoint using the user's location
+    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude
+                                                      longitude:currentCoordinate.longitude];
+    
+    // Create a PFObject using the Post class and set the values we extracted above
+    PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
+    [postObject setObject:postMessage forKey:kPAWParseTextKey];
+    [postObject setObject:user forKey:kPAWParseUserKey];
+    [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
+    
+    // Set the access control list on the postObject to restrict future modifications
+    // to this object
+    PFACL *readOnlyACL = [PFACL ACL];
+    [readOnlyACL setPublicReadAccess:YES]; // Create read-only permissions
+    [readOnlyACL setPublicWriteAccess:NO];
+    
+    [postObject setACL:readOnlyACL]; // Set the permissions on the postObject
+    
+    //https://www.parse.com/docs/osx/api/Classes/PFACL.html
+    //The above link will become helpful when we want individual users to be able to see things
+    //(Or not)
+    
+    
+    [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+     {
+         if (error) // Failed to save, show an alert view with the error message
+         {
+             UIAlertView *alertView =
+             [[UIAlertView alloc] initWithTitle:[[error userInfo] objectForKey:@"error"]
+                                        message:nil
+                                       delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"Ok", nil];
+             [alertView show];
+             return;
+         }
+         if (succeeded) // Successfully saved, post a notification to tell other view controllers
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPAWPostCreatedNotification
+                                                                     object:nil];
+             });
+         }
+     }];
+    
+    
     NSLog(@"Message sent!");
     
     [self dismissViewControllerAnimated:NO completion:nil];
@@ -161,6 +222,17 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+//ANYWALL
+- (void)locationManager:(CLLocationManager *)manager
+    didUpdateToLocation:(CLLocation *)newLocation
+           fromLocation:(CLLocation *)oldLocation
+{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    // This is where the post happens
+    [appDelegate setCurrentLocation:newLocation];
 }
 
 @end
