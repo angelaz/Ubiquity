@@ -19,6 +19,7 @@
 		60C0B47017A1AA5100DC0F92 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46F17A1AA5100DC0F92 /* libicucore.dylib */; };
 		60C0B47217A1AA6000DC0F92 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B47117A1AA6000DC0F92 /* OpenGLES.framework */; };
 		60C0B47617A1E44A00DC0F92 /* GoogleMaps.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 60C0B47517A1E44A00DC0F92 /* GoogleMaps.bundle */; };
+		60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 60C0B47717A1E4F000DC0F92 /* GMSCoreResources.bundle */; };
 		60CB90B217A0866B00A9E93A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90B117A0866B00A9E93A /* Parse.framework */; };
 		60CB90B617A086B500A9E93A /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90B517A086B500A9E93A /* AdSupport.framework */; };
 		60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90B917A086CF00A9E93A /* SystemConfiguration.framework */; };
@@ -363,6 +364,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
 				82E931EE17A093C600B3958B /* Default-568h@2x.png in Resources */,
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,

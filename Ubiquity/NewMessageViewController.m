@@ -123,7 +123,9 @@
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
 
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:currentCoordinate zoom:6];
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:6];
     mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
     mapView.myLocationEnabled = YES;
     self.view = mapView;
@@ -134,7 +136,6 @@
     marker.title = @"Here";
     marker.snippet = @"My location";
     marker.map = mapView;
-
 }
 
 //ANYWALL
