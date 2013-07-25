@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 
 @interface NewMessageViewController ()
+
 @property (nonatomic, strong) UITextField *toRecipientTextField;
 @property (nonatomic, strong) UILabel *toLabel;
 @property (nonatomic, strong) UITextField *messageTextField;
@@ -23,7 +24,9 @@
 @property (nonatomic, strong) UIButton *locationSearchButton;
 @end
 
-@implementation NewMessageViewController
+@implementation NewMessageViewController {
+    GMSMapView *mapView;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -48,9 +51,13 @@
 
     
     //dummy mapview
-    MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-20)];
-    map.delegate = self;
-    [self.view addSubview:map];
+    
+    
+//    MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30)];
+//    map.delegate = self;
+//    [self.view addSubview:map];
+
+    [self setupMap];
     
     UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
     speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
@@ -159,6 +166,26 @@
     [self.sendButton removeFromSuperview];
     [self.view addSubview:self.pickerToolbar];
     [self.view addSubview: self.repeatTimesPicker];
+}
+
+- (void) setupMap {
+    
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
+
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:6];
+    mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
+    mapView.myLocationEnabled = YES;
+    self.view = mapView;
+    
+    // Creates a marker in the center of the map.
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    marker.position = currentCoordinate;
+    marker.title = @"Here";
+    marker.snippet = @"My location";
+    marker.map = mapView;
 }
 
 //ANYWALL
