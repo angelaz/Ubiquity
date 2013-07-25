@@ -11,6 +11,7 @@
 #import <Parse/Parse.h>
 
 @interface NewMessageViewController ()
+
 @property (nonatomic, strong) UITextField *toRecipientTextField;
 @property (nonatomic, strong) UILabel *toLabel;
 @property (nonatomic, strong) UITextField *messageTextField;
@@ -18,9 +19,12 @@
 @property (nonatomic, strong) UIPickerView *repeatTimesPicker;
 @property (nonatomic, strong) UIToolbar *pickerToolbar;
 @property (nonatomic, strong) UIButton *showRepeatPickerButton;
+
 @end
 
-@implementation NewMessageViewController
+@implementation NewMessageViewController {
+    GMSMapView *mapView;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -40,10 +44,11 @@
     int const SCREEN_HEIGHT = [UIScreen mainScreen].applicationFrame.size.height;
     
     //dummy mapview
-    MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30)];
-    map.delegate = self;
-    [self.view addSubview:map];
-    
+//    MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30)];
+//    map.delegate = self;
+//    [self.view addSubview:map];
+
+    [self setupMap];
     
     self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 30, 50, 30)];
     self.toLabel.text = @"To:";
@@ -111,6 +116,26 @@
     [self.sendButton removeFromSuperview];
     [self.view addSubview:self.pickerToolbar];
     [self.view addSubview: self.repeatTimesPicker];
+}
+
+- (void) setupMap {
+
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:-33.86
+                                                            longitude:151.20
+                                                                 zoom:6];
+    mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
+    mapView.myLocationEnabled = YES;
+    self.view = mapView;
+    
+    // Creates a marker in the center of the map.
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    marker.position = CLLocationCoordinate2DMake(-33.86, 151.20);
+    marker.title = @"Sydney";
+    marker.snippet = @"Australia";
+    marker.map = mapView;
+
+
+
 }
 
 //ANYWALL
