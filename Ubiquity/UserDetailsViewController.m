@@ -3,6 +3,8 @@
 #import "UserDetailsViewController.h"
 #import <QuartzCore/QuartzCore.h>
 
+#import "NewMessageViewController.h"
+
 @implementation UserDetailsViewController
 
 
@@ -13,6 +15,12 @@
     
     self.title = @"Facebook Profile";
     self.tableView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f];
+    
+    
+    // USE THIS FOR TESTING VIEWS BEFORE TAB CONTROLLER IS ADDED
+    UIBarButtonItem *testButton = [[UIBarButtonItem alloc] initWithTitle:@"NewMessageView" style:UIBarButtonItemStyleBordered target:self action:@selector(newView:)];
+    self.navigationItem.rightBarButtonItem = testButton;
+    
     
     // Add logout navigation bar button
     UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Log Out" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonTouchHandler:)];
@@ -89,8 +97,14 @@
         }
     }];
     
+    
 }
 
+- (void) newView: (id) sender
+{
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    [self presentViewController:nmvc animated:NO completion:nil];
+}
 
 #pragma mark - NSURLConnectionDataDelegate
 

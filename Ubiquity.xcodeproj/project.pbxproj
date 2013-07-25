@@ -44,6 +44,7 @@
 		82E931F017A093C600B3958B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931E917A093C600B3958B /* Default@2x.png */; };
 		82E931F317A093D500B3958B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F117A093D500B3958B /* icon.png */; };
 		82E931F417A093D500B3958B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F217A093D500B3958B /* icon@2x.png */; };
+		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +101,8 @@
 		82E931E917A093C600B3958B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		82E931F117A093D500B3958B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		82E931F217A093D500B3958B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
+		86894B5E17A096FF00F7146B /* NewMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,6 +192,8 @@
 				82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */,
 				82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */,
 				82E931BF17A07B0B00B3958B /* TableHeaderView.xib */,
+				86894B5D17A096FF00F7146B /* NewMessageViewController.h */,
+				86894B5E17A096FF00F7146B /* NewMessageViewController.m */,
 				82E9317A17A079C600B3958B /* Images.xcassets */,
 				82E9316F17A079C600B3958B /* Supporting Files */,
 			);
@@ -342,6 +347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
+				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				82E931BA17A07A8800B3958B /* LoginViewController.m in Sources */,
