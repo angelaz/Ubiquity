@@ -23,6 +23,9 @@ static NSString * const kPAWParseUsernameKey = @"username";
 static NSString * const kPAWParseTextKey = @"text";
 static NSString * const kPAWParseLocationKey = @"location";
 
+static NSString * const kNMFrequencyKey = @"frequency";
+
+
 // NSNotification userInfo keys:
 static NSString * const kPAWFilterDistanceKey = @"filterDistance";
 static NSString * const kPAWLocationKey = @"location";
@@ -34,6 +37,14 @@ static NSString * const kPAWPostCreatedNotification = @"kPAWPostCreatedNotificat
 
 // UI strings:
 static NSString * const kPAWWallCantViewPost = @"Can’t view post! Get closer.";
+
+//NewMessage strings:
+static NSString * const kNMNever = @"Appear Once";
+static NSString * const kNMDaily = @"Every Day";
+static NSString * const kNMWeekly = @"Every Week";
+static NSString * const kNMMonthy = @"Every Month";
+
+
 
 
 #import <UIKit/UIKit.h>
