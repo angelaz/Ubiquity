@@ -9,6 +9,7 @@
 #import "NewMessageViewController.h"
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
+#import "NewMessageView.h"
 
 @interface NewMessageViewController ()
 
@@ -27,6 +28,7 @@
 @end
 
 @implementation NewMessageViewController {
+    NewMessageView *nmv;
     GMSMapView *mapView;
 }
 
@@ -66,10 +68,9 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    int const SCREEN_WIDTH = [UIScreen mainScreen].bounds.size.width;
-    int const SCREEN_HEIGHT = [UIScreen mainScreen].bounds.size.height;
-    int const LEFT_PADDING = 30;
-    int const LINE_HEIGHT = 30;
+    nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    [self setView: nmv];
+    
     
     self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
 
@@ -77,83 +78,25 @@
     //dummy mapview
     
 //    
-//    MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30)];
-//    map.delegate = self;
-//    [self.view addSubview:map];
-
-    [self setupMapWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT - 35];
+    nmv.toRecipientTextField.delegate = self;
     
-    UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
-    speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
-    [self.view addSubview:speechBubbleBackground];
+    nmv.messageTextField.delegate = self;
     
-    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 45, 50, LINE_HEIGHT)];
-    self.toLabel.text = @"To:";
-    [self.view addSubview:self.toLabel];
+    nmv.locationSearchTextField.delegate = self;
     
-    self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 45, 230.0, LINE_HEIGHT)];
-    self.toRecipientTextField.delegate = self;
-    self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [self.view addSubview:self.toRecipientTextField];
+    [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.messageTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING, 85.0, 260.0, 140.0)];
-    self.messageTextField.delegate = self;
-    self.messageTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [self.view addSubview:self.messageTextField];
+    [nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
     
+    nmv.repeatTimesPicker.delegate = self;
+    nmv.repeatTimesPicker.dataSource = self;
     
-    self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 10, SCREEN_HEIGHT - 70, 250.0, LINE_HEIGHT)];
-    self.locationSearchTextField.delegate = self;
-    self.locationSearchTextField.placeholder = @"Search for a location";
-    self.locationSearchTextField.borderStyle = UITextBorderStyleRoundedRect;
-    [self.view addSubview:self.locationSearchTextField];
+    nmv.doneButton.target = self;
+    nmv.doneButton.action = @selector(pickerDoneClicked:);
 
     
-    
-    self.locationSearchButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *btnImage = [UIImage imageNamed:@"searchbutton"];
-    [self.locationSearchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
-    self.locationSearchButton.frame = CGRectMake(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 68, LINE_HEIGHT-5, LINE_HEIGHT-5);
-    [self.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
-  //  [self.locationSearchButton setTitle: @"Go" forState:UIControlStateNormal]; // replace with mag glass later
-    
-    [self.view addSubview:self.locationSearchButton];
-
-    
-    
-    
-    self.sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //self.sendButton.backgroundColor = [UIColor whiteColor];
-    self.sendButton.frame = CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 28, 50, LINE_HEIGHT);
-    [self.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
-    [self.sendButton setTitle: @"Send" forState:UIControlStateNormal];
-    [self.view addSubview:self.sendButton];
-    
-    
-    self.repeatTimesPicker = [[UIPickerView alloc] initWithFrame: CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 130, 280, LINE_HEIGHT)];
-    self.repeatTimesPicker.delegate = self;
-    self.repeatTimesPicker.backgroundColor = [UIColor whiteColor];
-    self.repeatTimesPicker.dataSource = self;
-    self.repeatTimesPicker.showsSelectionIndicator = YES;
-    
-    self.pickerToolbar = [[UIToolbar alloc] init];
-    self.pickerToolbar.barStyle = UIBarStyleDefault;
-    self.pickerToolbar.translucent = NO;
-    [self.pickerToolbar sizeToFit];
-    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
-                                                                   style:UIBarButtonItemStyleBordered target:self
-                                                                  action:@selector(pickerDoneClicked:)];
-    
-    [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
-    
-    
-    self.showRepeatPickerButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //self.showRepeatPickerButton.backgroundColor = [UIColor whiteColor];
-    self.showRepeatPickerButton.frame = CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 28, SCREEN_WIDTH - 100, 30.0);
-    [self.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
+    [nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
-    
-    [self.view addSubview:self.showRepeatPickerButton];
     
     
     
@@ -168,16 +111,16 @@
 - (void) setPickedValueForPickerButton
 {
     NSString *selectedTitle = [self pickerView:self.repeatTimesPicker titleForRow:[self.repeatTimesPicker selectedRowInComponent:0] forComponent:0];
-    [self.showRepeatPickerButton setTitle: selectedTitle forState:UIControlStateNormal];
+    [nmv.showRepeatPickerButton setTitle: selectedTitle forState:UIControlStateNormal];
 }
 
 - (void) pickerDoneClicked : (id) sender
 {
-    [self.pickerToolbar removeFromSuperview];
-    [self.repeatTimesPicker removeFromSuperview];
-    [self.view addSubview:self.sendButton];
+    [nmv.pickerToolbar removeFromSuperview];
+    [nmv.repeatTimesPicker removeFromSuperview];
+    [nmv addSubview:nmv.sendButton];
     [self setPickedValueForPickerButton];
-    [self.view addSubview:self.showRepeatPickerButton];
+    [nmv addSubview:nmv.showRepeatPickerButton];
 
     
 }
@@ -186,9 +129,9 @@
 {
     NSLog(@"show picker!");
     [sender removeFromSuperview];
-    [self.sendButton removeFromSuperview];
-    [self.view addSubview:self.pickerToolbar];
-    [self.view addSubview: self.repeatTimesPicker];
+    [nmv.sendButton removeFromSuperview];
+    [nmv addSubview:nmv.pickerToolbar];
+    [nmv addSubview: nmv.repeatTimesPicker];
 }
 
 - (void) setupMapWithWidth: (int) width andHeight: (int) height {
@@ -348,10 +291,12 @@
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:6];
-    CGRect mapRect = CGRectMake(0, 0, mapView.frame.size.width, mapView.frame.size.height);
-    mapView = [GMSMapView mapWithFrame:mapRect camera:camera];
-    mapView.myLocationEnabled = YES;
-    [self.view addSubview:mapView];
+//    CGRect mapRect = CGRectMake(0, 0, mapView.frame.size.width, mapView.frame.size.height);
+//    mapView = [GMSMapView mapWithFrame:mapRect camera:camera];
+//    mapView.myLocationEnabled = YES;
+//    [self.view addSubview:mapView];
+    
+    nmv.map.camera = camera;
     
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];

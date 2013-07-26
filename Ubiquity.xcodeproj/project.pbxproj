@@ -65,6 +65,7 @@
 		86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6417A1E96200F7146B /* searchbutton@2x.png */; };
 		86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6717A1EB2D00F7146B /* SpeechBubble.png */; };
 		86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */; };
+		86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A66C2C17A316A000DB5752 /* NewMessageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +150,8 @@
 		86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SpeechBubble@2x.png"; sourceTree = "<group>"; };
 		86894B6B17A1FF1800F7146B /* PinMarker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinMarker.png; sourceTree = "<group>"; };
 		86894B6C17A1FF1800F7146B /* PinMarker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinMarker@2x.png"; sourceTree = "<group>"; };
+		86A66C2B17A316A000DB5752 /* NewMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageView.h; sourceTree = "<group>"; };
+		86A66C2C17A316A000DB5752 /* NewMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,6 +271,8 @@
 				20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */,
 				86894B5D17A096FF00F7146B /* NewMessageViewController.h */,
 				86894B5E17A096FF00F7146B /* NewMessageViewController.m */,
+				86A66C2B17A316A000DB5752 /* NewMessageView.h */,
+				86A66C2C17A316A000DB5752 /* NewMessageView.m */,
 				86894B6017A0A72800F7146B /* TextMessage.h */,
 				86894B6117A0A72800F7146B /* TextMessage.m */,
 				82E9317A17A079C600B3958B /* Images.xcassets */,
@@ -438,6 +443,7 @@
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
+				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,
 				20F8F2A617A1F0F000594994 /* RecentViewController.m in Sources */,
 				86894B6217A0A72800F7146B /* TextMessage.m in Sources */,
