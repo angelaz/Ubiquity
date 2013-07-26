@@ -7,7 +7,10 @@
 //
 
 #import "AppDelegate.h"
-
+#import <Parse/Parse.h>
+#import "LoginViewController.h"
+#import "RecentViewController.h"
+#import "OptionsViewController.h"
 
 @implementation AppDelegate
 
@@ -21,6 +24,30 @@
     
     [PFFacebookUtils initializeFacebook];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+    
+    // if ([PFUser currentUser]) {
+    RecentViewController *rvc = [[RecentViewController alloc] init];
+    
+    UINavigationController *navController = [[UINavigationController alloc]
+                                             initWithRootViewController:rvc];
+    
+    OptionsViewController *ovc = [[OptionsViewController alloc] init];
+    
+    UINavigationController *navController2 = [[UINavigationController alloc]
+                                              initWithRootViewController:ovc];
+    
+    UITabBarController *tabBarController = [[UITabBarController alloc] init];
+    [tabBarController setViewControllers:@[navController, navController2]];
+    UITabBarItem *tbi = [navController tabBarItem];
+    [tbi setTitle:@"Recent Items"];
+    UITabBarItem *tbi2 = [navController2 tabBarItem];
+    [tbi2 setTitle:@"Options"];
+    
+    
+    [self.window setRootViewController:tabBarController];
+    //    } else {
+    //        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+    //    }
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
