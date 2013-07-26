@@ -12,6 +12,7 @@
 #import "RecentViewController.h"
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
+#import "FriendsViewController.h"
 
 @implementation AppDelegate
 
@@ -28,28 +29,33 @@
     
     if ([PFUser currentUser]) {
         RecentViewController *rvc = [[RecentViewController alloc] init];
-    
-        UINavigationController *navController = [[UINavigationController alloc]
+        UINavigationController *recentNavController = [[UINavigationController alloc]
                                              initWithRootViewController:rvc];
-    
-        OptionsViewController *ovc = [[OptionsViewController alloc] init];
-        
-        UINavigationController *navController2 = [[UINavigationController alloc]
-                                              initWithRootViewController:ovc];
         
         NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-        
-        UINavigationController *navController3 = [[UINavigationController alloc]
+        UINavigationController *newMessageNavController = [[UINavigationController alloc]
                                                   initWithRootViewController:nmvc];
         
+        FriendsViewController *fvc = [[FriendsViewController alloc] init];
+        UINavigationController *friendsNavController = [[UINavigationController alloc]
+                                                  initWithRootViewController:fvc];
+        
+        OptionsViewController *ovc = [[OptionsViewController alloc] init];
+        UINavigationController *optionsNavController = [[UINavigationController alloc]
+                                                        initWithRootViewController:ovc];
+        
         UITabBarController *tabBarController = [[UITabBarController alloc] init];
-        [tabBarController setViewControllers:@[navController, navController3, navController2]];
-        UITabBarItem *tbi = [navController tabBarItem];
-        [tbi setTitle:@"Recent Items"];
-        UITabBarItem *tbi3 = [navController3 tabBarItem];
-        [tbi3 setTitle:@"New Message"];
-        UITabBarItem *tbi2 = [navController2 tabBarItem];
-        [tbi2 setTitle:@"Options"];
+        [tabBarController setViewControllers:@[recentNavController, newMessageNavController,
+                                               friendsNavController, optionsNavController]];
+        UITabBarItem *recentTab = [recentNavController tabBarItem];
+        [recentTab setTitle:@"Recent Items"];
+        UITabBarItem *newMessageTab = [newMessageNavController tabBarItem];
+        [newMessageTab setTitle:@"New Message"];
+        [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
+        UITabBarItem *friendsTab = [friendsNavController tabBarItem];
+        [friendsTab setTitle:@"Friends"];
+        UITabBarItem *optionsTab = [optionsNavController tabBarItem];
+        [optionsTab setTitle:@"Options"];
         
         [self.window setRootViewController:tabBarController];
     } else {

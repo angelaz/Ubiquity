@@ -141,7 +141,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, 120.0f, 44.0f)];
         titleLabel.tag = 1; // We use the tag to set it later
-        titleLabel.textAlignment = UITextAlignmentRight;
+        titleLabel.textAlignment = NSTextAlignmentRight;
         titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         titleLabel.backgroundColor = [UIColor clearColor];
         
