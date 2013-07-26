@@ -22,6 +22,8 @@
 @property (nonatomic, strong) NSArray *repeatOptions;
 @property (nonatomic, strong) UITextField *locationSearchTextField;
 @property (nonatomic, strong) UIButton *locationSearchButton;
+
+@property (nonatomic, strong) CLLocationManager *locationManager;
 @end
 
 @implementation NewMessageViewController {
@@ -33,6 +35,28 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        
+        _locationManager = [[CLLocationManager alloc] init];
+        
+        _locationManager.delegate = self;
+        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        
+        // Set a movement threshold for new events
+        _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+        
+        [_locationManager startUpdatingLocation];
+        
+        // Set initial location if available
+        CLLocation *currentLocation = _locationManager.location;
+        if (currentLocation) {
+            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+            appDelegate.currentLocation = currentLocation;
+        }
+        
+//        [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                 selector:@selector(locationDidChange:)
+//                                                     name:kPAWLocationChangeNotification
+//                                                   object:nil];
     }
     return self;
 }
@@ -172,6 +196,9 @@
     
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
+    
+    NSLog(@"Long: %f", currentCoordinate.longitude);
+    NSLog(@"Lat: %f", currentCoordinate.latitude);
 
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
                                                             longitude:currentCoordinate.longitude
@@ -308,6 +335,63 @@
     
     // This is where the post happens
     [appDelegate setCurrentLocation:newLocation];
+    
+    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
+    
+    [self updateLocation:currentCoordinate];
 }
+
+- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
+
+    NSLog(@"New location");
+    
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:6];
+    CGRect mapRect = CGRectMake(0, 0, mapView.frame.size.width, mapView.frame.size.height);
+    mapView = [GMSMapView mapWithFrame:mapRect camera:camera];
+    mapView.myLocationEnabled = YES;
+    [self.view addSubview:mapView];
+    
+    // Creates a marker in the center of the map.
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    marker.position = currentCoordinate;
+    marker.title = @"Here";
+    marker.snippet = @"My location";
+    marker.map = mapView;
+
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+
+     didUpdateLocations:(NSArray *)locations {
+    
+    // If it's a relatively recent event, turn off updates to save power
+    
+    CLLocation* location = [locations lastObject];
+    
+    NSDate* eventDate = location.timestamp;
+    
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    
+    if (abs(howRecent) < 15.0) {
+        
+        // If the event is recent, do something with it.
+        
+        NSLog(@"latitude %+.6f, longitude %+.6f\n",
+              
+              location.coordinate.latitude,
+              
+              location.coordinate.longitude);
+        
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        appDelegate.currentLocation = location;
+        [self updateLocation:location.coordinate];
+        NSLog(@"Updated map");
+        
+    }
+    
+}
+
 
 @end

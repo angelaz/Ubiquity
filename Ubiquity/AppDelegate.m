@@ -11,6 +11,7 @@
 #import "LoginViewController.h"
 #import "RecentViewController.h"
 #import "OptionsViewController.h"
+#import "NewMessageViewController.h"
 
 @implementation AppDelegate
 
@@ -23,31 +24,38 @@
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
     
     [PFFacebookUtils initializeFacebook];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+  //  self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
     
-    // if ([PFUser currentUser]) {
-    RecentViewController *rvc = [[RecentViewController alloc] init];
+    if ([PFUser currentUser]) {
+        RecentViewController *rvc = [[RecentViewController alloc] init];
     
-    UINavigationController *navController = [[UINavigationController alloc]
+        UINavigationController *navController = [[UINavigationController alloc]
                                              initWithRootViewController:rvc];
     
-    OptionsViewController *ovc = [[OptionsViewController alloc] init];
-    
-    UINavigationController *navController2 = [[UINavigationController alloc]
+        OptionsViewController *ovc = [[OptionsViewController alloc] init];
+        
+        UINavigationController *navController2 = [[UINavigationController alloc]
                                               initWithRootViewController:ovc];
+        
+        NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+        
+        UINavigationController *navController3 = [[UINavigationController alloc]
+                                                  initWithRootViewController:nmvc];
+        
+        UITabBarController *tabBarController = [[UITabBarController alloc] init];
+        [tabBarController setViewControllers:@[navController, navController3, navController2]];
+        UITabBarItem *tbi = [navController tabBarItem];
+        [tbi setTitle:@"Recent Items"];
+        UITabBarItem *tbi3 = [navController3 tabBarItem];
+        [tbi3 setTitle:@"New Message"];
+        UITabBarItem *tbi2 = [navController2 tabBarItem];
+        [tbi2 setTitle:@"Options"];
     
-    UITabBarController *tabBarController = [[UITabBarController alloc] init];
-    [tabBarController setViewControllers:@[navController, navController2]];
-    UITabBarItem *tbi = [navController tabBarItem];
-    [tbi setTitle:@"Recent Items"];
-    UITabBarItem *tbi2 = [navController2 tabBarItem];
-    [tbi2 setTitle:@"Options"];
     
-    
-    [self.window setRootViewController:tabBarController];
-    //    } else {
-    //        self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-    //    }
+        [self.window setRootViewController:tabBarController];
+    } else {
+         [self presentLoginViewController];
+    }
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -96,6 +104,17 @@
     [[NSNotificationCenter defaultCenter] postNotificationName: kPAWLocationChangeNotification
                                                         object:nil
                                                       userInfo:userInfo];
+}
+
+- (void)presentLoginViewController {
+	// Go to the welcome screen and have them log in or create an account.
+	LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+	loginViewController.title = @"Welcome to Ubi";
+	
+	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+	navController.navigationBarHidden = YES;
+    
+	self.window.rootViewController = navController;
 }
 
 
