@@ -65,8 +65,6 @@
 		86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6417A1E96200F7146B /* searchbutton@2x.png */; };
 		86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6717A1EB2D00F7146B /* SpeechBubble.png */; };
 		86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */; };
-		86894B6D17A1FF1800F7146B /* PinMarker.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6B17A1FF1800F7146B /* PinMarker.png */; };
-		86894B6E17A1FF1800F7146B /* PinMarker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6C17A1FF1800F7146B /* PinMarker@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -403,7 +401,6 @@
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
 				82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */,
 				82E931F017A093C600B3958B /* Default@2x.png in Resources */,
-				86894B6E17A1FF1800F7146B /* PinMarker@2x.png in Resources */,
 				86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */,
 				86894B6517A1E96200F7146B /* searchbutton.png in Resources */,
 				82E931EB17A093C600B3958B /* login-button-small-pressed@2x.png in Resources */,
@@ -419,7 +416,6 @@
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
-				86894B6D17A1FF1800F7146B /* PinMarker.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
