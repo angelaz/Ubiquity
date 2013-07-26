@@ -13,7 +13,7 @@
 #import "AppDelegate.h"
 
 #import <CoreLocation/CoreLocation.h>
-
+#import "NewMessageViewController.h"
 #import "TextMessage.h"
 
 @interface RecentViewController ()
@@ -109,6 +109,8 @@
 //  //  [self presentViewController:navController
 //    //                   animated:YES
 //   //                  completion:nil];
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    [self presentViewController:nmvc animated:NO completion:nil];
 }
 
 - (void)locationManager:(CLLocationManager *)manager
