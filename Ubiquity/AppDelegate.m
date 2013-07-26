@@ -50,8 +50,7 @@
         [tbi3 setTitle:@"New Message"];
         UITabBarItem *tbi2 = [navController2 tabBarItem];
         [tbi2 setTitle:@"Options"];
-    
-    
+        
         [self.window setRootViewController:tabBarController];
     } else {
          [self presentLoginViewController];

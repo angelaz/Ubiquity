@@ -66,8 +66,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
-    int const SCREEN_WIDTH = [UIScreen mainScreen].applicationFrame.size.width;
-    int const SCREEN_HEIGHT = [UIScreen mainScreen].applicationFrame.size.height;
+    int const SCREEN_WIDTH = [UIScreen mainScreen].bounds.size.width;
+    int const SCREEN_HEIGHT = [UIScreen mainScreen].bounds.size.height;
     int const LEFT_PADDING = 30;
     int const LINE_HEIGHT = 30;
     
@@ -81,7 +81,7 @@
 //    map.delegate = self;
 //    [self.view addSubview:map];
 
-    [self setupMapWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT - 25];
+    [self setupMapWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT - 35];
     
     UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
     speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
@@ -102,7 +102,7 @@
     [self.view addSubview:self.messageTextField];
     
     
-    self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 10, SCREEN_HEIGHT - 60, 250.0, LINE_HEIGHT)];
+    self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 10, SCREEN_HEIGHT - 70, 250.0, LINE_HEIGHT)];
     self.locationSearchTextField.delegate = self;
     self.locationSearchTextField.placeholder = @"Search for a location";
     self.locationSearchTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -111,10 +111,9 @@
     
     
     self.locationSearchButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    //self.locationSearchButton.backgroundColor = [UIColor whiteColor];
     UIImage *btnImage = [UIImage imageNamed:@"searchbutton"];
     [self.locationSearchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
-    self.locationSearchButton.frame = CGRectMake(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 58, LINE_HEIGHT-5, LINE_HEIGHT-5);
+    self.locationSearchButton.frame = CGRectMake(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 68, LINE_HEIGHT-5, LINE_HEIGHT-5);
     [self.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
   //  [self.locationSearchButton setTitle: @"Go" forState:UIControlStateNormal]; // replace with mag glass later
     
@@ -124,14 +123,14 @@
     
     
     self.sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.sendButton.backgroundColor = [UIColor whiteColor];
-    self.sendButton.frame = CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 18, 50, LINE_HEIGHT);
+    //self.sendButton.backgroundColor = [UIColor whiteColor];
+    self.sendButton.frame = CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 28, 50, LINE_HEIGHT);
     [self.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
     [self.sendButton setTitle: @"Send" forState:UIControlStateNormal];
     [self.view addSubview:self.sendButton];
     
     
-    self.repeatTimesPicker = [[UIPickerView alloc] initWithFrame: CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 120, 280, LINE_HEIGHT)];
+    self.repeatTimesPicker = [[UIPickerView alloc] initWithFrame: CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 130, 280, LINE_HEIGHT)];
     self.repeatTimesPicker.delegate = self;
     self.repeatTimesPicker.backgroundColor = [UIColor whiteColor];
     self.repeatTimesPicker.dataSource = self;
@@ -149,8 +148,8 @@
     
     
     self.showRepeatPickerButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    self.showRepeatPickerButton.backgroundColor = [UIColor whiteColor];
-    self.showRepeatPickerButton.frame = CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 18, SCREEN_WIDTH - 100, 30.0);
+    //self.showRepeatPickerButton.backgroundColor = [UIColor whiteColor];
+    self.showRepeatPickerButton.frame = CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 28, SCREEN_WIDTH - 100, 30.0);
     [self.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
     
@@ -210,6 +209,7 @@
     
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];
+    //marker.icon = [UIImage imageNamed:@"PinMarker"]; needs to find better graphics
     marker.position = currentCoordinate;
     marker.title = @"Here";
     marker.snippet = @"My location";

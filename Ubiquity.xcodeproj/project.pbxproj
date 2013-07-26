@@ -49,7 +49,6 @@
 		82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */; };
 		82E931C117A07B0B00B3958B /* UserDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */; };
 		82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82E931BF17A07B0B00B3958B /* TableHeaderView.xib */; };
-		82E931E217A0939100B3958B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E931E117A0939100B3958B /* StoreKit.framework */; };
 		82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931E317A093C600B3958B /* login-button-small-pressed.png */; };
 		82E931EB17A093C600B3958B /* login-button-small-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931E417A093C600B3958B /* login-button-small-pressed@2x.png */; };
 		82E931EC17A093C600B3958B /* login-button-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931E517A093C600B3958B /* login-button-small.png */; };
@@ -59,12 +58,15 @@
 		82E931F017A093C600B3958B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931E917A093C600B3958B /* Default@2x.png */; };
 		82E931F317A093D500B3958B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F117A093D500B3958B /* icon.png */; };
 		82E931F417A093D500B3958B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F217A093D500B3958B /* icon@2x.png */; };
+		8624CD2117A2E99800F32DE8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8624CD2017A2E99800F32DE8 /* StoreKit.framework */; };
 		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
 		86894B6217A0A72800F7146B /* TextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B6117A0A72800F7146B /* TextMessage.m */; };
 		86894B6517A1E96200F7146B /* searchbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6317A1E96200F7146B /* searchbutton.png */; };
 		86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6417A1E96200F7146B /* searchbutton@2x.png */; };
 		86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6717A1EB2D00F7146B /* SpeechBubble.png */; };
 		86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */; };
+		86894B6D17A1FF1800F7146B /* PinMarker.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6B17A1FF1800F7146B /* PinMarker.png */; };
+		86894B6E17A1FF1800F7146B /* PinMarker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6C17A1FF1800F7146B /* PinMarker@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,7 +131,6 @@
 		82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDetailsViewController.m; sourceTree = "<group>"; };
 		82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailsViewController.xib; sourceTree = "<group>"; };
 		82E931BF17A07B0B00B3958B /* TableHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableHeaderView.xib; sourceTree = "<group>"; };
-		82E931E117A0939100B3958B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		82E931E317A093C600B3958B /* login-button-small-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small-pressed.png"; sourceTree = "<group>"; };
 		82E931E417A093C600B3958B /* login-button-small-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small-pressed@2x.png"; sourceTree = "<group>"; };
 		82E931E517A093C600B3958B /* login-button-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login-button-small.png"; sourceTree = "<group>"; };
@@ -139,6 +140,7 @@
 		82E931E917A093C600B3958B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		82E931F117A093D500B3958B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		82E931F217A093D500B3958B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		8624CD2017A2E99800F32DE8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
 		86894B5E17A096FF00F7146B /* NewMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageViewController.m; sourceTree = "<group>"; };
 		86894B6017A0A72800F7146B /* TextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMessage.h; sourceTree = "<group>"; };
@@ -147,6 +149,8 @@
 		86894B6417A1E96200F7146B /* searchbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchbutton@2x.png"; sourceTree = "<group>"; };
 		86894B6717A1EB2D00F7146B /* SpeechBubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpeechBubble.png; sourceTree = "<group>"; };
 		86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SpeechBubble@2x.png"; sourceTree = "<group>"; };
+		86894B6B17A1FF1800F7146B /* PinMarker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinMarker.png; sourceTree = "<group>"; };
+		86894B6C17A1FF1800F7146B /* PinMarker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinMarker@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,7 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				82E931E217A0939100B3958B /* StoreKit.framework in Frameworks */,
+				8624CD2117A2E99800F32DE8 /* StoreKit.framework in Frameworks */,
 				60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */,
 				60CB90BC17A086DB00A9E93A /* QuartzCore.framework in Frameworks */,
 				60C0B47217A1AA6000DC0F92 /* OpenGLES.framework in Frameworks */,
@@ -215,6 +219,7 @@
 		82E9316717A079C600B3958B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8624CD2017A2E99800F32DE8 /* StoreKit.framework */,
 				60C0B47717A1E4F000DC0F92 /* GMSCoreResources.bundle */,
 				60C0B47117A1AA6000DC0F92 /* OpenGLES.framework */,
 				60C0B46F17A1AA5100DC0F92 /* libicucore.dylib */,
@@ -226,7 +231,6 @@
 				60C0B46517A1AA2700DC0F92 /* CoreLocation.framework */,
 				60C0B46317A1AA1D00DC0F92 /* CoreData.framework */,
 				60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */,
-				82E931E117A0939100B3958B /* StoreKit.framework */,
 				60CB90C717A0899700A9E93A /* libsqlite3.dylib */,
 				60CB90C517A0897E00A9E93A /* libz.dylib */,
 				60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */,
@@ -277,6 +281,8 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				86894B6B17A1FF1800F7146B /* PinMarker.png */,
+				86894B6C17A1FF1800F7146B /* PinMarker@2x.png */,
 				86894B6717A1EB2D00F7146B /* SpeechBubble.png */,
 				86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */,
 				86894B6317A1E96200F7146B /* searchbutton.png */,
@@ -397,6 +403,7 @@
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
 				82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */,
 				82E931F017A093C600B3958B /* Default@2x.png in Resources */,
+				86894B6E17A1FF1800F7146B /* PinMarker@2x.png in Resources */,
 				86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */,
 				86894B6517A1E96200F7146B /* searchbutton.png in Resources */,
 				82E931EB17A093C600B3958B /* login-button-small-pressed@2x.png in Resources */,
@@ -412,6 +419,7 @@
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
+				86894B6D17A1FF1800F7146B /* PinMarker.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -565,8 +573,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\ 2",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\ 2/GoogleMapsSDKDemos",
+					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2",
+					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2/GoogleMapsSDKDemos",
+					"$(SRCROOT)/../../.Trash",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Ubiquity/Ubiquity-Prefix.pch";
@@ -591,8 +600,9 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\ 2",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\ 2/GoogleMapsSDKDemos",
+					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2",
+					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2/GoogleMapsSDKDemos",
+					"$(SRCROOT)/../../.Trash",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Ubiquity/Ubiquity-Prefix.pch";

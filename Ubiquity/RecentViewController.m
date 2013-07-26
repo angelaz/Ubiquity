@@ -58,10 +58,10 @@
     if (self) {
         UINavigationItem *nav = [self navigationItem];
         [nav setTitle:@"Recent"];
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-            target:self
-                                                                             action:@selector(addNewItem:)];
-        [[self navigationItem] setRightBarButtonItem:bbi];
+     //   UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+     //       target:self
+     //                                                                        action:@selector(addNewItem:)];
+     //   [[self navigationItem] setRightBarButtonItem:bbi];
     }
     
     return self;
@@ -95,8 +95,8 @@
 
 
 //
-- (void)addNewItem:(id)sender
-{
+//- (void)addNewItem:(id)sender
+//{
 //  //  ExpenseItem *newItem = [[ExpenseItemStore sharedStore] createItem];
 //  //  DetailViewController *detailViewController = [[DetailViewController alloc] initForNewItem:YES];
 //  //  [detailViewController setItem:newItem];
@@ -109,9 +109,7 @@
 //  //  [self presentViewController:navController
 //    //                   animated:YES
 //   //                  completion:nil];
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    [self presentViewController:nmvc animated:NO completion:nil];
-}
+//}
 
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation
