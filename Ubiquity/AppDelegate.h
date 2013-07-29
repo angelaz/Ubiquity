@@ -46,8 +46,6 @@ static NSString * const kNMWeekly = @"Every Week";
 static NSString * const kNMMonthy = @"Every Month";
 
 
-
-
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "LoginViewController.h"
@@ -56,10 +54,5 @@ static NSString * const kNMMonthy = @"Every Month";
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-
-@property (nonatomic, assign) CLLocationAccuracy filterDistance;
-@property (nonatomic, strong) CLLocation *currentLocation;
-
-- (void)setCurrentLocation:(CLLocation *)aCurrentLocation;
 
 @end

@@ -21,8 +21,6 @@
 @implementation AppDelegate
 
 @synthesize window = _window;
-@synthesize filterDistance;
-@synthesize currentLocation;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -108,19 +106,6 @@
 //Support for Facebook Single Sign-on
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     return [PFFacebookUtils handleOpenURL:url];
-}
-
-// We also add a method to be called when the location changes.
-// This is where we post the notification to all observers.
-- (void)setCurrentLocation:(CLLocation *)aCurrentLocation
-{
-    currentLocation = aCurrentLocation;
-    
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject: aCurrentLocation
-                                                         forKey:@"location"];
-    [[NSNotificationCenter defaultCenter] postNotificationName: kPAWLocationChangeNotification
-                                                        object:nil
-                                                      userInfo:userInfo];
 }
 
 - (void)presentLoginViewController {

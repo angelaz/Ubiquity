@@ -16,10 +16,10 @@
 #import "NewMessageViewController.h"
 #import "TextMessage.h"
 #import "WallPostsViewController.h"
+#import "LocationController.h"
 
 @interface RecentViewController ()
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSMutableArray *annotations;
 @property (nonatomic, copy) NSString *className;
 
@@ -87,22 +87,19 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
     
-    _locationManager = [[CLLocationManager alloc] init];
-    
-    _locationManager.delegate = self;
-    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
-    // Set a movement threshold for new events
-    _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
-    
-    [_locationManager startUpdatingLocation];
-    
-    // Set initial location if available
-    CLLocation *currentLocation = _locationManager.location;
-    if (currentLocation) {
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        appDelegate.currentLocation = currentLocation;
-    }
+//    _locationManager = [[CLLocationManager alloc] init];
+//    
+//    _locationManager.delegate = self;
+//    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+//    
+//    // Set a movement threshold for new events
+//    _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+//    
+//    [_locationManager startUpdatingLocation];
+//    
+//    // Set initial location if available
+//    LocationController* locationController = [LocationController sharedLocationController];
+//    CLLocation *currentLocation = _locationManager.location;
     
     // Register for the user location change notification: kPAWLocationChangeNotification
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -155,10 +152,10 @@
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation
 {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    //AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
     // This is where the post happens
-    [appDelegate setCurrentLocation:newLocation];
+    //[appDelegate setCurrentLocation:newLocation];
 }
 
 - (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation
@@ -296,7 +293,8 @@
 //	}
     
 	// Update our pins for the new filter distance:
-	[self updatePostsForLocation:appDelegate.currentLocation withNearbyDistance:filterDistance];
+    LocationController* locationController = [LocationController sharedLocationController];
+	[self updatePostsForLocation:locationController.location withNearbyDistance:filterDistance];
 	
 	// If they panned the map since our last location update, don't recenter it.
 	//if (!self.mapPannedSinceLocationUpdate) {
@@ -318,7 +316,8 @@
 
 - (void)locationDidChange:(NSNotification *)note;
 {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    LocationController* locationController = [LocationController sharedLocationController];
+    
     
     // If we haven't drawn the search radius on the map, initialize it.
     //  if (self.searchRadius == nil)
@@ -334,11 +333,11 @@
     //    }
     
     // Update the map with new pins:
-    [self queryForAllPostsNearLocation:appDelegate.currentLocation
-                    withNearbyDistance:appDelegate.filterDistance];
+    [self queryForAllPostsNearLocation:locationController.location
+                    withNearbyDistance:locationController.filterDistance];
     // And update the existing pins to reflect any changes in filter distance:
-    [self updatePostsForLocation:appDelegate.currentLocation
-              withNearbyDistance:appDelegate.filterDistance];
+    [self updatePostsForLocation:locationController.location
+              withNearbyDistance:locationController.filterDistance];
 }
 
 
@@ -349,28 +348,17 @@
 }
 
 - (void)postWasCreated:(NSNotification *)note {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-	[self queryForAllPostsNearLocation:appDelegate.currentLocation withNearbyDistance:appDelegate.filterDistance];
+    LocationController* locationController = [LocationController sharedLocationController];
+	[self queryForAllPostsNearLocation:locationController.location withNearbyDistance:locationController.filterDistance];
 }
 
 - (void)startStandardUpdates {
-	if (nil == _locationManager) {
-		_locationManager = [[CLLocationManager alloc] init];
-	}
+//	if (nil == _locationManager) {
+//		//_locationManager = [[CLLocationManager alloc] init];
+//	}
     
-	_locationManager.delegate = self;
-	_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
-	// Set a movement threshold for new events.
-	_locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
-    
-	[_locationManager startUpdatingLocation];
-    
-	CLLocation *currentLocation = _locationManager.location;
-	if (currentLocation) {
-		AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-		appDelegate.currentLocation = currentLocation;
-	}
+    LocationController* locationController = [LocationController sharedLocationController];
+	CLLocation *currentLocation = locationController.location;
 }
 
 
@@ -381,7 +369,7 @@
 	NSLog(@"Error: %@", [error description]);
     
 	if (error.code == kCLErrorDenied) {
-		[_locationManager stopUpdatingLocation];
+		//[_locationManager stopUpdatingLocation];
 	} else if (error.code == kCLErrorLocationUnknown) {
 		// todo: retry?
 		// set a timer for five seconds to cycle location, and if it fails again, bail and tell the user.

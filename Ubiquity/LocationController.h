@@ -25,6 +25,8 @@
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic, strong) CLLocation* location;
+@property CLLocationAccuracy filterDistance;
+
 @property (nonatomic, weak) id  delegate;
 
 + (LocationController*)sharedLocationController;

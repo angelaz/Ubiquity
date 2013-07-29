@@ -36,20 +36,11 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
-        LocationController* locationController = [LocationController sharedLocationController];
-        
-        // Set initial location if available
-        CLLocation *currentLocation = locationController.location;
-        if (currentLocation) {
-            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            appDelegate.currentLocation = currentLocation;
-        }
-        
-        // [[NSNotificationCenter defaultCenter] addObserver:self
-        // selector:@selector(locationDidChange:)
-        // name:kPAWLocationChangeNotification
-        // object:nil];
+    
+         [[NSNotificationCenter defaultCenter] addObserver:self
+         selector:@selector(locationDidChange:)
+         name:kPAWLocationChangeNotification
+         object:nil];
     }
     return self;
 }
@@ -75,9 +66,6 @@
     
     nmv.messageTextField.delegate = self;
     nmv.locationSearchTextField.delegate = self;
-
-    
-    
     
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     // [self.locationSearchButton setTitle: @"Go" forState:UIControlStateNormal]; // replace with mag glass later
@@ -143,8 +131,8 @@
     [nmv.messageTextField resignFirstResponder];
     
     // Get user's current location
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     
     // Get the post's message
     NSString *postMessage = nmv.messageTextField.text;
@@ -246,19 +234,16 @@
     // Dispose of any resources that can be recreated.
 }
 
-//ANYWALL
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation
 {
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    LocationController* locationController = [LocationController sharedLocationController];
+    locationController.location = newLocation;
     
-    // This is where the post happens
-    [appDelegate setCurrentLocation:newLocation];
+    NSLog(@"From to");
     
-    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
-    
-    [self updateLocation:currentCoordinate];
+    [self updateLocation:newLocation.coordinate];
 }
 
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
@@ -282,35 +267,48 @@
     
 }
 
-- (void)locationManager:(CLLocationManager *)manager
+//- (void)locationManager:(CLLocationManager *)manager
+//
+//     didUpdateLocations:(NSArray *)locations {
+//    
+//    // If it's a relatively recent event, turn off updates to save power
+//    
+//    //CLLocation* location = [locations lastObject];
+//    
+//    LocationController* locationController = [LocationController sharedLocationController];
+//    CLLocation *location = locationController.location;
+//    
+//    
+//    NSDate* eventDate = location.timestamp;
+//    
+//    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+//    
+//    if (abs(howRecent) < 15.0) {
+//        
+//        // If the event is recent, do something with it.
+//        
+//        NSLog(@"latitude %+.6f, longitude %+.6f\n",
+//              
+//              location.coordinate.latitude,
+//              
+//              location.coordinate.longitude);
+//        
+//        [self updateLocation:location.coordinate];
+//        NSLog(@"Updated map");
+//        
+//    }
+//    
+//}
 
-     didUpdateLocations:(NSArray *)locations {
-    
-    // If it's a relatively recent event, turn off updates to save power
-    
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation* location = [locations lastObject];
     
-    NSDate* eventDate = location.timestamp;
+    LocationController* locationController = [LocationController sharedLocationController];
+    locationController.location = location;
     
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    NSLog(@"Did update locations");
     
-    if (abs(howRecent) < 15.0) {
-        
-        // If the event is recent, do something with it.
-        
-        NSLog(@"latitude %+.6f, longitude %+.6f\n",
-              
-              location.coordinate.latitude,
-              
-              location.coordinate.longitude);
-        
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        appDelegate.currentLocation = location;
-        [self updateLocation:location.coordinate];
-        NSLog(@"Updated map");
-        
-    }
-    
+    [self updateLocation:location.coordinate];
 }
 
 

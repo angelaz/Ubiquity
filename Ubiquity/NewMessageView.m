@@ -8,6 +8,7 @@
 
 #import "NewMessageView.h"
 #import "AppDelegate.h"
+#import "LocationController.h"
 
 @interface NewMessageView ()
 
@@ -26,8 +27,9 @@
         int const LINE_HEIGHT = 30;
         
         
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
+        LocationController* locationController = [LocationController sharedLocationController];
+        CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+        
         NSLog(@"Long: %f", currentCoordinate.longitude);
         NSLog(@"Lat: %f", currentCoordinate.latitude);
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
