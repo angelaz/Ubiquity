@@ -168,7 +168,7 @@
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
     [postObject setObject:user forKey:kPAWParseUserKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
-    [postObject setObject: [NSString stringWithFormat: @"%@", self.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
+    [postObject setObject: [NSString stringWithFormat: @"%@", nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     
     // Set the access control list on the postObject to restrict future modifications
     // to this object
