@@ -3,6 +3,7 @@
 #import "LoginViewController.h"
 #import "UserDetailsViewController.h"
 #import <Parse/Parse.h>
+#import "RecentViewController.h"
 
 @implementation LoginViewController
 
@@ -43,10 +44,10 @@
             }
         } else if (user.isNew) {
             NSLog(@"User with facebook signed up and logged in!");
-            [self.navigationController pushViewController:[[UserDetailsViewController alloc] initWithStyle:UITableViewStyleGrouped] animated:YES];
+            [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
         } else {
             NSLog(@"User with facebook logged in!");
-            [self.navigationController pushViewController:[[UserDetailsViewController alloc] initWithStyle:UITableViewStyleGrouped] animated:YES];
+            [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
         }
     }];
     

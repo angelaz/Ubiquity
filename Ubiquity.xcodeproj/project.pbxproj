@@ -264,8 +264,6 @@
 		82E9316E17A079C600B3958B /* Ubiquity */ = {
 			isa = PBXGroup;
 			children = (
-				6097BED817A6DC650012A36A /* LocationController.h */,
-				6097BED917A6DC650012A36A /* LocationController.m */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
 				82E931B717A07A8800B3958B /* LoginViewController.h */,
@@ -279,6 +277,8 @@
 				20F8F2A517A1F0F000594994 /* RecentViewController.m */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
 				20F8F2A817A1F0F600594994 /* WallPostsViewController.m */,
+				6097BED817A6DC650012A36A /* LocationController.h */,
+				6097BED917A6DC650012A36A /* LocationController.m */,
 				20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */,
 				20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */,
 				82C7577417A322520094EB15 /* FriendsViewController.h */,
