@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Parse/Parse.h>
+#import "RecentViewController.h"
 
-@interface WallPostsViewController : UIViewController
+@interface WallPostsViewController : PFQueryTableViewController
 
 @end

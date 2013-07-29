@@ -20,6 +20,10 @@
 
 @implementation AppDelegate
 
+@synthesize window = _window;
+@synthesize filterDistance;
+@synthesize currentLocation;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -111,6 +115,8 @@
 // This is where we post the notification to all observers.
 - (void)setCurrentLocation:(CLLocation *)aCurrentLocation
 {
+    currentLocation = aCurrentLocation;
+    
     NSDictionary *userInfo = [NSDictionary dictionaryWithObject: aCurrentLocation
                                                          forKey:@"location"];
     [[NSNotificationCenter defaultCenter] postNotificationName: kPAWLocationChangeNotification
