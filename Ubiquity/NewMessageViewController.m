@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "NewMessageView.h"
+#import "RecentViewController.h"
 
 @interface NewMessageViewController ()
 
@@ -35,12 +36,14 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [self.tabBarController.tabBar setHidden: YES];
     [super viewWillAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [self.tabBarController.tabBar setHidden: NO];
     [super viewWillDisappear:animated];
 }
 
@@ -101,7 +104,7 @@
     
     
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
-    // [self.locationSearchButton setTitle: @"Go" forState:UIControlStateNormal]; // replace with mag glass later
+    [nmv.closeButton addTarget:self action:@selector(closeNewMessage:) forControlEvents:UIControlEventTouchUpInside];
     
     [nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -121,6 +124,14 @@
     [nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
     
+}
+
+-(void) closeNewMessage: (id) sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    RecentViewController *rvc = [[RecentViewController alloc] init];
+    [self.navigationController pushViewController: rvc animated: YES];
+
 }
 
 - (void) startSearch: (id) sender
@@ -222,11 +233,16 @@
     
     NSLog(@"Message sent!");
     
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    RecentViewController *rvc = [[RecentViewController alloc] init];
+    [self.navigationController pushViewController: rvc animated: YES];
     
 }
 
+
 - (BOOL) textFieldShouldReturn: (UITextField *)textField {
+    
     [textField resignFirstResponder];
     return NO;
 }
