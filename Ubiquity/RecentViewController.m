@@ -284,6 +284,38 @@
      }];
 }
 
+- (void)distanceFilterDidChange:(NSNotification *)note {
+	CLLocationAccuracy filterDistance = [[[note userInfo] objectForKey:kPAWFilterDistanceKey] doubleValue];
+	AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+//	if (self.searchRadius == nil) {
+//		self.searchRadius = [[PAWSearchRadius alloc] initWithCoordinate:appDelegate.currentLocation.coordinate radius:appDelegate.filterDistance];
+//		[mapView addOverlay:self.searchRadius];
+//	} else {
+//		self.searchRadius.radius = appDelegate.filterDistance;
+//	}
+    
+	// Update our pins for the new filter distance:
+	[self updatePostsForLocation:appDelegate.currentLocation withNearbyDistance:filterDistance];
+	
+	// If they panned the map since our last location update, don't recenter it.
+	//if (!self.mapPannedSinceLocationUpdate) {
+		// Set the map's region centered on their location at 2x filterDistance
+	//	MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance(appDelegate.currentLocation.coordinate, appDelegate.filterDistance * 2.0f, appDelegate.filterDistance * 2.0f);
+        
+	//	[mapView setRegion:newRegion animated:YES];
+	//	self.mapPannedSinceLocationUpdate = NO;
+	//} else {
+		// Just zoom to the new search radius (or maybe don't even do that?)
+	//	MKCoordinateRegion currentRegion = mapView.region;
+	//	MKCoordinateRegion newRegion = MKCoordinateRegionMakeWithDistance(currentRegion.center, appDelegate.filterDistance * 2.0f, appDelegate.filterDistance * 2.0f);
+        
+	//	BOOL oldMapPannedValue = self.mapPannedSinceLocationUpdate;
+	//	[mapView setRegion:newRegion animated:YES];
+	//	self.mapPannedSinceLocationUpdate = oldMapPannedValue;
+	//}
+}
+
 - (void)locationDidChange:(NSNotification *)note;
 {
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
@@ -317,7 +349,8 @@
 }
 
 - (void)postWasCreated:(NSNotification *)note {
-	//AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	[self queryForAllPostsNearLocation:appDelegate.currentLocation withNearbyDistance:appDelegate.filterDistance];
 }
 
 - (void)startStandardUpdates {
@@ -339,6 +372,8 @@
 		appDelegate.currentLocation = currentLocation;
 	}
 }
+
+
 
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error {
