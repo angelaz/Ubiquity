@@ -52,22 +52,26 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
     
-         [[NSNotificationCenter defaultCenter] addObserver:self
-         selector:@selector(locationDidChange:)
-         name:kPAWLocationChangeNotification
-         object:nil];
-    }
+             }
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
     // Do any additional setup after loading the view.
     self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
     
     nmv = [[NewMessageView alloc] initWithFrame: self.view.frame];
     [self setView: nmv];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(locationDidChange:)
+                                                 name:kPAWLocationChangeNotification
+                                               object:nil];
+
     
     nmv.toRecipientTextField.delegate = self;
     
@@ -168,7 +172,7 @@
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
     [postObject setObject:user forKey:kPAWParseUserKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
-    [postObject setObject: [NSString stringWithFormat: @"%@", self.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
+    [postObject setObject: [NSString stringWithFormat: @"%@", nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     
     // Set the access control list on the postObject to restrict future modifications
     // to this object
@@ -263,20 +267,20 @@
     
     NSLog(@"New location");
     
+    
+    
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:6];
-    CGRect mapRect = CGRectMake(0, 0, mapView.frame.size.width, mapView.frame.size.height);
-    mapView = [GMSMapView mapWithFrame:mapRect camera:camera];
-    mapView.myLocationEnabled = YES;
-    [self.view addSubview:mapView];
+    [nmv.map setCamera:camera];
     
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = currentCoordinate;
     marker.title = @"Here";
     marker.snippet = @"My location";
-    marker.map = mapView;
+    marker.map = nmv.map;
+
     
 }
 
@@ -290,7 +294,6 @@
 //    
 //    LocationController* locationController = [LocationController sharedLocationController];
 //    CLLocation *location = locationController.location;
-//    
 //    
 //    NSDate* eventDate = location.timestamp;
 //    

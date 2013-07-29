@@ -9,6 +9,10 @@
 
 @implementation LocationController
 
+@synthesize locationManager = _locationManager;
+@synthesize delegate = _delegate;
+@synthesize location = _location;
+
 #pragma mark - Singleton implementation in ARC
 + (LocationController *)sharedLocationController
 {
