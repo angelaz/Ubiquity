@@ -33,8 +33,12 @@
     if(self != nil){
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
-        _filterDistance = 30;
-        [locationManager setDistanceFilter: _filterDistance];
+        
+        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
+        locationManager.distanceFilter = self.filterDistance;
+        
+        [locationManager startUpdatingLocation];
+        
     }
     return self;
 }
