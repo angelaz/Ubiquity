@@ -57,6 +57,9 @@
 
 - (void)save:(id)sender
 {
+    //FOR USE IF WE TURN THIS INTO A DISMISS BUTTON
+    //[self dismissViewControllerAnimated:YES completion:nil];
+    
     //  //  ExpenseItem *newItem = [[ExpenseItemStore sharedStore] createItem];
     //  //  DetailViewController *detailViewController = [[DetailViewController alloc] initForNewItem:YES];
     //  //  [detailViewController setItem:newItem];
