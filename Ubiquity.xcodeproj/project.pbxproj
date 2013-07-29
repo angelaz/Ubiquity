@@ -453,8 +453,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				82C7577617A322580094EB15 /* FriendsViewController.m in Sources */,
-				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
+				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,

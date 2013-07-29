@@ -86,15 +86,6 @@
 //        self.repeatTimesPicker.dataSource = self;
         self.repeatTimesPicker.showsSelectionIndicator = YES;
         
-        self.pickerToolbar = [[UIToolbar alloc] init];
-        self.pickerToolbar.barStyle = UIBarStyleDefault;
-        self.pickerToolbar.translucent = NO;
-        [self.pickerToolbar sizeToFit];
-        UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
-                                                                       style:UIBarButtonItemStyleBordered target:nil
-                                                                      action:nil];
-        
-        [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
         
         
         self.showRepeatPickerButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];

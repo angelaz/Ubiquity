@@ -14,6 +14,10 @@
 #import "NewMessageViewController.h"
 #import "FriendsViewController.h"
 
+@interface AppDelegate ()
+
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -33,8 +37,10 @@
                                              initWithRootViewController:rvc];
         
         NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-        UINavigationController *newMessageNavController = [[UINavigationController alloc]
-                                                  initWithRootViewController:nmvc];
+        nmvc.hidesBottomBarWhenPushed = YES;
+        UINavigationController *newMessageNavController = [[UINavigationController alloc] init];
+        [newMessageNavController pushViewController: nmvc animated: YES];
+
         
         FriendsViewController *fvc = [[FriendsViewController alloc] init];
         UINavigationController *friendsNavController = [[UINavigationController alloc]

@@ -1,9 +1,9 @@
 //
-//  NewMessageViewController.m
-//  Ubiquity
+// NewMessageViewController.m
+// Ubiquity
 //
-//  Created by Winnie Wu on 7/24/13.
-//  Copyright (c) 2013 Team Ubi. All rights reserved.
+// Created by Winnie Wu on 7/24/13.
+// Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
 #import "NewMessageViewController.h"
@@ -46,7 +46,7 @@
         // Set a movement threshold for new events
         _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
         
-        [_locationManager startUpdatingLocation];
+     //   [_locationManager startUpdatingLocation];
         
         // Set initial location if available
         CLLocation *currentLocation = _locationManager.location;
@@ -55,10 +55,10 @@
             appDelegate.currentLocation = currentLocation;
         }
         
-//        [[NSNotificationCenter defaultCenter] addObserver:self
-//                                                 selector:@selector(locationDidChange:)
-//                                                     name:kPAWLocationChangeNotification
-//                                                   object:nil];
+        // [[NSNotificationCenter defaultCenter] addObserver:self
+        // selector:@selector(locationDidChange:)
+        // name:kPAWLocationChangeNotification
+        // object:nil];
     }
     return self;
 }
@@ -66,39 +66,48 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
-    [self setView: nmv];
-    
-    
+    // Do any additional setup after loading the view.
     self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
-
+    
     
     //dummy mapview
     
-//    
+    //
+    // MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30)];
+    // map.delegate = self;
+    // [self.view addSubview:map];
+    
+    nmv = [[NewMessageView alloc] initWithFrame: self.view.frame];
+    [self setView: nmv];
+    
     nmv.toRecipientTextField.delegate = self;
     
     nmv.messageTextField.delegate = self;
-    
     nmv.locationSearchTextField.delegate = self;
+
+    
+    
     
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
+    // [self.locationSearchButton setTitle: @"Go" forState:UIControlStateNormal]; // replace with mag glass later
     
     [nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
-    
+
     nmv.repeatTimesPicker.delegate = self;
     nmv.repeatTimesPicker.dataSource = self;
     
-    nmv.doneButton.target = self;
-    nmv.doneButton.action = @selector(pickerDoneClicked:);
-
+    
+    self.pickerToolbar = [[UIToolbar alloc] init];
+    self.pickerToolbar.barStyle = UIBarStyleDefault;
+    self.pickerToolbar.translucent = NO;
+    [self.pickerToolbar sizeToFit];
+    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                   style:UIBarButtonItemStyleBordered target:self
+                                                                  action:@selector(pickerDoneClicked:)];
+        [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
     
     [nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
-    
-    
     
 }
 
@@ -110,18 +119,18 @@
 
 - (void) setPickedValueForPickerButton
 {
-    NSString *selectedTitle = [self pickerView:self.repeatTimesPicker titleForRow:[self.repeatTimesPicker selectedRowInComponent:0] forComponent:0];
+    NSString *selectedTitle = [self pickerView:nmv.repeatTimesPicker titleForRow:[nmv.repeatTimesPicker selectedRowInComponent:0] forComponent:0];
     [nmv.showRepeatPickerButton setTitle: selectedTitle forState:UIControlStateNormal];
 }
 
 - (void) pickerDoneClicked : (id) sender
 {
-    [nmv.pickerToolbar removeFromSuperview];
+    [self.pickerToolbar removeFromSuperview];
     [nmv.repeatTimesPicker removeFromSuperview];
     [nmv addSubview:nmv.sendButton];
     [self setPickedValueForPickerButton];
     [nmv addSubview:nmv.showRepeatPickerButton];
-
+    
     
 }
 
@@ -130,47 +139,23 @@
     NSLog(@"show picker!");
     [sender removeFromSuperview];
     [nmv.sendButton removeFromSuperview];
-    [nmv addSubview:nmv.pickerToolbar];
+    [nmv addSubview:self.pickerToolbar];
     [nmv addSubview: nmv.repeatTimesPicker];
 }
 
-- (void) setupMapWithWidth: (int) width andHeight: (int) height {
-    
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
-    
-    NSLog(@"Long: %f", currentCoordinate.longitude);
-    NSLog(@"Lat: %f", currentCoordinate.latitude);
-
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
-                                                            longitude:currentCoordinate.longitude
-                                                                 zoom:6];
-    CGRect mapRect = CGRectMake(0, 0, width, height);
-    mapView = [GMSMapView mapWithFrame:mapRect camera:camera];
-    mapView.myLocationEnabled = YES;
-    [self.view addSubview:mapView];
-    
-    // Creates a marker in the center of the map.
-    GMSMarker *marker = [[GMSMarker alloc] init];
-    //marker.icon = [UIImage imageNamed:@"PinMarker"]; needs to find better graphics
-    marker.position = currentCoordinate;
-    marker.title = @"Here";
-    marker.snippet = @"My location";
-    marker.map = mapView;
-}
 
 //ANYWALL
 - (void) sendMessage: (id) sender
 {
     // Dismiss keyboard and capture any auto-correct
-    [_messageTextField resignFirstResponder];
+    [nmv.messageTextField resignFirstResponder];
     
     // Get user's current location
     AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
     
     // Get the post's message
-    NSString *postMessage = _messageTextField.text;
+    NSString *postMessage = nmv.messageTextField.text;
     
     //Get the currently logged in PFUser
     PFUser *user = [PFUser currentUser];
@@ -229,7 +214,7 @@
 
 - (BOOL) textFieldShouldReturn: (UITextField *)textField {
     [textField resignFirstResponder];
-    return  NO;
+    return NO;
 }
 
 /* Start Picker Methods */
@@ -239,7 +224,7 @@
 
 // tell the picker how many rows are available for a given component
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-   
+    
     
     return [self.repeatOptions count];
 }
@@ -285,18 +270,16 @@
 }
 
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
-
+    
     NSLog(@"New location");
     
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:6];
-//    CGRect mapRect = CGRectMake(0, 0, mapView.frame.size.width, mapView.frame.size.height);
-//    mapView = [GMSMapView mapWithFrame:mapRect camera:camera];
-//    mapView.myLocationEnabled = YES;
-//    [self.view addSubview:mapView];
-    
-    nmv.map.camera = camera;
+    CGRect mapRect = CGRectMake(0, 0, mapView.frame.size.width, mapView.frame.size.height);
+    mapView = [GMSMapView mapWithFrame:mapRect camera:camera];
+    mapView.myLocationEnabled = YES;
+    [self.view addSubview:mapView];
     
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];
@@ -304,7 +287,7 @@
     marker.title = @"Here";
     marker.snippet = @"My location";
     marker.map = mapView;
-
+    
 }
 
 - (void)locationManager:(CLLocationManager *)manager
