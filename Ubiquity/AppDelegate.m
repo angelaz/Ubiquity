@@ -126,7 +126,7 @@
 - (void)presentLoginViewController {
 	// Go to the welcome screen and have them log in or create an account.
 	LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-	loginViewController.title = @"Welcome to Ubi";
+	loginViewController.title = @"Welcome to Ubi!";
 	
 	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
 	navController.navigationBarHidden = YES;
