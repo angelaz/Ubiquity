@@ -10,7 +10,7 @@
 #import <Parse/Parse.h>
 //#import "PAWPost.h"
 
-@interface RecentViewController : UIViewController <CLLocationManagerDelegate>
+@interface RecentViewController : UIViewController
 
 @end
 

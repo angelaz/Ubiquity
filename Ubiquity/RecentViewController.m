@@ -86,7 +86,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
-        
+    
     // Register for the user location change notification: kPAWLocationChangeNotification
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(locationDidChange:)
@@ -132,16 +132,6 @@
     //  [self presentViewController:navController
     //                   animated:YES
     //                  completion:nil];
-}
-
-- (void)locationManager:(CLLocationManager *)manager
-    didUpdateToLocation:(CLLocation *)newLocation
-           fromLocation:(CLLocation *)oldLocation
-{
-    //AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    // This is where the post happens
-    //[appDelegate setCurrentLocation:newLocation];
 }
 
 - (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation

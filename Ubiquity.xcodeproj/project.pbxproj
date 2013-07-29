@@ -11,6 +11,10 @@
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
+		6097BEDD17A71FDE0012A36A /* blueBubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 6097BEDB17A71FDE0012A36A /* blueBubble.png */; };
+		6097BEDE17A71FDE0012A36A /* blueBubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6097BEDC17A71FDE0012A36A /* blueBubble@2x.png */; };
+		6097BEE117A71FEA0012A36A /* grayBubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 6097BEDF17A71FEA0012A36A /* grayBubble.png */; };
+		6097BEE217A71FEA0012A36A /* grayBubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6097BEE017A71FEA0012A36A /* grayBubble@2x.png */; };
 		60C0B45E17A1A4E400DC0F92 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */; };
 		60C0B46017A1A9EF00DC0F92 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */; };
 		60C0B46217A1AA1500DC0F92 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */; };
@@ -93,6 +97,10 @@
 		20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		6097BED817A6DC650012A36A /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
 		6097BED917A6DC650012A36A /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
+		6097BEDB17A71FDE0012A36A /* blueBubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueBubble.png; sourceTree = "<group>"; };
+		6097BEDC17A71FDE0012A36A /* blueBubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueBubble@2x.png"; sourceTree = "<group>"; };
+		6097BEDF17A71FEA0012A36A /* grayBubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grayBubble.png; sourceTree = "<group>"; };
+		6097BEE017A71FEA0012A36A /* grayBubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "grayBubble@2x.png"; sourceTree = "<group>"; };
 		60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -306,6 +314,10 @@
 				82C7577917A325C50094EB15 /* newMessage.png */,
 				86894B6717A1EB2D00F7146B /* SpeechBubble.png */,
 				86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */,
+				6097BEDF17A71FEA0012A36A /* grayBubble.png */,
+				6097BEE017A71FEA0012A36A /* grayBubble@2x.png */,
+				6097BEDB17A71FDE0012A36A /* blueBubble.png */,
+				6097BEDC17A71FDE0012A36A /* blueBubble@2x.png */,
 				86894B6317A1E96200F7146B /* searchbutton.png */,
 				86894B6417A1E96200F7146B /* searchbutton@2x.png */,
 				82E931F117A093D500B3958B /* icon.png */,
@@ -425,13 +437,16 @@
 				82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */,
 				82E931F017A093C600B3958B /* Default@2x.png in Resources */,
 				866C6BBE17A6F2B000CF8449 /* CloseButton@2x.png in Resources */,
+				6097BEE217A71FEA0012A36A /* grayBubble@2x.png in Resources */,
 				86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */,
 				86894B6517A1E96200F7146B /* searchbutton.png in Resources */,
 				82E931EB17A093C600B3958B /* login-button-small-pressed@2x.png in Resources */,
 				82E931EC17A093C600B3958B /* login-button-small.png in Resources */,
 				82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */,
+				6097BEE117A71FEA0012A36A /* grayBubble.png in Resources */,
 				60C0B47617A1E44A00DC0F92 /* GoogleMaps.bundle in Resources */,
 				866C6BBD17A6F2B000CF8449 /* CloseButton.png in Resources */,
+				6097BEDE17A71FDE0012A36A /* blueBubble@2x.png in Resources */,
 				82C7577A17A325C50094EB15 /* newMessage.png in Resources */,
 				82E9317317A079C600B3958B /* InfoPlist.strings in Resources */,
 				82E931F317A093D500B3958B /* icon.png in Resources */,
@@ -439,6 +454,7 @@
 				82E931ED17A093C600B3958B /* login-button-small@2x.png in Resources */,
 				82E931C117A07B0B00B3958B /* UserDetailsViewController.xib in Resources */,
 				86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */,
+				6097BEDD17A71FDE0012A36A /* blueBubble.png in Resources */,
 				82E931A717A07A3700B3958B /* FacebookSDKResources.bundle in Resources */,
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
