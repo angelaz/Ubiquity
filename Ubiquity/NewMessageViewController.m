@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "NewMessageView.h"
+#import "LocationController.h"
 
 @interface NewMessageViewController ()
 
@@ -24,7 +25,6 @@
 @property (nonatomic, strong) UITextField *locationSearchTextField;
 @property (nonatomic, strong) UIButton *locationSearchButton;
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
 @end
 
 @implementation NewMessageViewController {
@@ -36,20 +36,11 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
         
-        _locationManager = [[CLLocationManager alloc] init];
-        
-        _locationManager.delegate = self;
-        _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-        
-        // Set a movement threshold for new events
-        _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
-        
-     //   [_locationManager startUpdatingLocation];
+        LocationController* locationController = [LocationController sharedLocationController];
         
         // Set initial location if available
-        CLLocation *currentLocation = _locationManager.location;
+        CLLocation *currentLocation = locationController.location;
         if (currentLocation) {
             AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
             appDelegate.currentLocation = currentLocation;
