@@ -595,9 +595,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2/GoogleMapsSDKDemos",
-					"$(SRCROOT)/../../.Trash",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Ubiquity/Ubiquity-Prefix.pch";
@@ -622,9 +619,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2",
-					"$(SRCROOT)/GoogleMaps-iOS-1.4.0\\\\\\ 2/GoogleMapsSDKDemos",
-					"$(SRCROOT)/../../.Trash",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Ubiquity/Ubiquity-Prefix.pch";
