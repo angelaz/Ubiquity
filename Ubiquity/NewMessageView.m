@@ -34,21 +34,26 @@
                                                                 longitude:currentCoordinate.longitude
                                                                      zoom:6];
         self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30) camera:camera];
+        GMSMarker *marker = [[GMSMarker alloc] init];
+        marker.position = currentCoordinate;
+        marker.title = @"Here";
+        marker.snippet = @"My location";
+        marker.map = self.map;
         [self addSubview:self.map];
         
-        UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
+        UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING + LINE_HEIGHT, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
         speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
         [self addSubview:speechBubbleBackground];
         
-        self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 45, 50, LINE_HEIGHT)];
+        self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 45 + LINE_HEIGHT, 50, LINE_HEIGHT)];
         self.toLabel.text = @"To:";
         [self addSubview:self.toLabel];
         
-        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 45, 230.0, LINE_HEIGHT)];
+        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 45+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
         self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
         [self addSubview:self.toRecipientTextField];
         
-        self.messageTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING, 85.0, 260.0, 140.0)];
+        self.messageTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING, 85.0+ LINE_HEIGHT, 260.0, 140.0)];
         self.messageTextField.borderStyle = UITextBorderStyleRoundedRect;
         [self addSubview:self.messageTextField];
         
@@ -64,32 +69,29 @@
         UIImage *btnImage = [UIImage imageNamed:@"searchbutton"];
         [self.locationSearchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
         self.locationSearchButton.frame = CGRectMake(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 68, LINE_HEIGHT-5, LINE_HEIGHT-5);
-//        [self.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
-        //  [self.locationSearchButton setTitle: @"Go" forState:UIControlStateNormal]; // replace with mag glass later
         
         [self addSubview:self.locationSearchButton];
         
         
-        
+        self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *closeButtonImage = [UIImage imageNamed:@"CloseButton"];
+        [self.closeButton setBackgroundImage:closeButtonImage forState:UIControlStateNormal];
+        self.closeButton.frame = CGRectMake(SCREEN_WIDTH - 40, 25, LINE_HEIGHT, LINE_HEIGHT);
+        [self addSubview:self.closeButton];
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        //self.sendButton.backgroundColor = [UIColor whiteColor];
         self.sendButton.frame = CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 28, 50, LINE_HEIGHT);
-//        [self.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self.sendButton setTitle: @"Send" forState:UIControlStateNormal];
         [self addSubview:self.sendButton];
         
         
         self.repeatTimesPicker = [[UIPickerView alloc] initWithFrame: CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 130, 280, LINE_HEIGHT)];
-//        self.repeatTimesPicker.delegate = self;
         self.repeatTimesPicker.backgroundColor = [UIColor whiteColor];
-//        self.repeatTimesPicker.dataSource = self;
         self.repeatTimesPicker.showsSelectionIndicator = YES;
         
         
         
         self.showRepeatPickerButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        //self.showRepeatPickerButton.backgroundColor = [UIColor whiteColor];
         self.showRepeatPickerButton.frame = CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 28, SCREEN_WIDTH - 100, 30.0);
         [self addSubview:self.showRepeatPickerButton];
         

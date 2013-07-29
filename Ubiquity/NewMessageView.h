@@ -22,4 +22,5 @@
 @property (nonatomic, strong) UIButton *locationSearchButton;
 @property (nonatomic, strong) GMSMapView *map;
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
+@property (nonatomic, strong) UIButton *closeButton;
 @end

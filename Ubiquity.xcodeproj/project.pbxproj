@@ -63,6 +63,8 @@
 		82E931F317A093D500B3958B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F117A093D500B3958B /* icon.png */; };
 		82E931F417A093D500B3958B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F217A093D500B3958B /* icon@2x.png */; };
 		8624CD2117A2E99800F32DE8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8624CD2017A2E99800F32DE8 /* StoreKit.framework */; };
+		866C6BBD17A6F2B000CF8449 /* CloseButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 866C6BBB17A6F2B000CF8449 /* CloseButton.png */; };
+		866C6BBE17A6F2B000CF8449 /* CloseButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 866C6BBC17A6F2B000CF8449 /* CloseButton@2x.png */; };
 		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
 		86894B6217A0A72800F7146B /* TextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B6117A0A72800F7146B /* TextMessage.m */; };
 		86894B6517A1E96200F7146B /* searchbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6317A1E96200F7146B /* searchbutton.png */; };
@@ -150,6 +152,8 @@
 		82E931F117A093D500B3958B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		82E931F217A093D500B3958B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		8624CD2017A2E99800F32DE8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		866C6BBB17A6F2B000CF8449 /* CloseButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseButton.png; sourceTree = "<group>"; };
+		866C6BBC17A6F2B000CF8449 /* CloseButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CloseButton@2x.png"; sourceTree = "<group>"; };
 		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
 		86894B5E17A096FF00F7146B /* NewMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageViewController.m; sourceTree = "<group>"; };
 		86894B6017A0A72800F7146B /* TextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMessage.h; sourceTree = "<group>"; };
@@ -158,8 +162,6 @@
 		86894B6417A1E96200F7146B /* searchbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchbutton@2x.png"; sourceTree = "<group>"; };
 		86894B6717A1EB2D00F7146B /* SpeechBubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpeechBubble.png; sourceTree = "<group>"; };
 		86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SpeechBubble@2x.png"; sourceTree = "<group>"; };
-		86894B6B17A1FF1800F7146B /* PinMarker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PinMarker.png; sourceTree = "<group>"; };
-		86894B6C17A1FF1800F7146B /* PinMarker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PinMarker@2x.png"; sourceTree = "<group>"; };
 		86A66C2B17A316A000DB5752 /* NewMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageView.h; sourceTree = "<group>"; };
 		86A66C2C17A316A000DB5752 /* NewMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -299,9 +301,9 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				866C6BBB17A6F2B000CF8449 /* CloseButton.png */,
+				866C6BBC17A6F2B000CF8449 /* CloseButton@2x.png */,
 				82C7577917A325C50094EB15 /* newMessage.png */,
-				86894B6B17A1FF1800F7146B /* PinMarker.png */,
-				86894B6C17A1FF1800F7146B /* PinMarker@2x.png */,
 				86894B6717A1EB2D00F7146B /* SpeechBubble.png */,
 				86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */,
 				86894B6317A1E96200F7146B /* searchbutton.png */,
@@ -422,12 +424,14 @@
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
 				82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */,
 				82E931F017A093C600B3958B /* Default@2x.png in Resources */,
+				866C6BBE17A6F2B000CF8449 /* CloseButton@2x.png in Resources */,
 				86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */,
 				86894B6517A1E96200F7146B /* searchbutton.png in Resources */,
 				82E931EB17A093C600B3958B /* login-button-small-pressed@2x.png in Resources */,
 				82E931EC17A093C600B3958B /* login-button-small.png in Resources */,
 				82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */,
 				60C0B47617A1E44A00DC0F92 /* GoogleMaps.bundle in Resources */,
+				866C6BBD17A6F2B000CF8449 /* CloseButton.png in Resources */,
 				82C7577A17A325C50094EB15 /* newMessage.png in Resources */,
 				82E9317317A079C600B3958B /* InfoPlist.strings in Resources */,
 				82E931F317A093D500B3958B /* icon.png in Resources */,
