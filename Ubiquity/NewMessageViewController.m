@@ -51,20 +51,11 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
-        LocationController* locationController = [LocationController sharedLocationController];
-        
-        // Set initial location if available
-        CLLocation *currentLocation = locationController.location;
-        if (currentLocation) {
-            AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-            appDelegate.currentLocation = currentLocation;
-        }
-        
-        // [[NSNotificationCenter defaultCenter] addObserver:self
-        // selector:@selector(locationDidChange:)
-        // name:kPAWLocationChangeNotification
-        // object:nil];
+    
+         [[NSNotificationCenter defaultCenter] addObserver:self
+         selector:@selector(locationDidChange:)
+         name:kPAWLocationChangeNotification
+         object:nil];
     }
     return self;
 }
@@ -75,14 +66,6 @@
     // Do any additional setup after loading the view.
     self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
     
-    
-    //dummy mapview
-    
-    //
-    // MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30)];
-    // map.delegate = self;
-    // [self.view addSubview:map];
-    
     nmv = [[NewMessageView alloc] initWithFrame: self.view.frame];
     [self setView: nmv];
     
@@ -90,9 +73,6 @@
     
     nmv.messageTextField.delegate = self;
     nmv.locationSearchTextField.delegate = self;
-
-    
-    
     
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     [nmv.closeButton addTarget:self action:@selector(closeNewMessage:) forControlEvents:UIControlEventTouchUpInside];
@@ -110,10 +90,14 @@
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                    style:UIBarButtonItemStyleBordered target:self
                                                                   action:@selector(pickerDoneClicked:)];
-        [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
+    [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
     
     [nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
+    
+    
+    LocationController* locationController = [LocationController sharedLocationController];
+    [self updateLocation:locationController.location.coordinate];
     
 }
 
@@ -166,8 +150,8 @@
     [nmv.messageTextField resignFirstResponder];
     
     // Get user's current location
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     
     // Get the post's message
     NSString *postMessage = nmv.messageTextField.text;
@@ -275,21 +259,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-//ANYWALL
-- (void)locationManager:(CLLocationManager *)manager
-    didUpdateToLocation:(CLLocation *)newLocation
-           fromLocation:(CLLocation *)oldLocation
-{
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    
-    // This is where the post happens
-    [appDelegate setCurrentLocation:newLocation];
-    
-    CLLocationCoordinate2D currentCoordinate = appDelegate.currentLocation.coordinate;
-    
-    [self updateLocation:currentCoordinate];
-}
-
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
     
     NSLog(@"New location");
@@ -311,36 +280,47 @@
     
 }
 
-- (void)locationManager:(CLLocationManager *)manager
+//- (void)locationManager:(CLLocationManager *)manager
+//
+//     didUpdateLocations:(NSArray *)locations {
+//    
+//    // If it's a relatively recent event, turn off updates to save power
+//    
+//    //CLLocation* location = [locations lastObject];
+//    
+//    LocationController* locationController = [LocationController sharedLocationController];
+//    CLLocation *location = locationController.location;
+//    
+//    
+//    NSDate* eventDate = location.timestamp;
+//    
+//    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+//    
+//    if (abs(howRecent) < 15.0) {
+//        
+//        // If the event is recent, do something with it.
+//        
+//        NSLog(@"latitude %+.6f, longitude %+.6f\n",
+//              
+//              location.coordinate.latitude,
+//              
+//              location.coordinate.longitude);
+//        
+//        [self updateLocation:location.coordinate];
+//        NSLog(@"Updated map");
+//        
+//    }
+//    
+//}
 
-     didUpdateLocations:(NSArray *)locations {
-    
-    // If it's a relatively recent event, turn off updates to save power
-    
-    CLLocation* location = [locations lastObject];
-    
-    NSDate* eventDate = location.timestamp;
-    
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    
-    if (abs(howRecent) < 15.0) {
-        
-        // If the event is recent, do something with it.
-        
-        NSLog(@"latitude %+.6f, longitude %+.6f\n",
-              
-              location.coordinate.latitude,
-              
-              location.coordinate.longitude);
-        
-        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-        appDelegate.currentLocation = location;
-        [self updateLocation:location.coordinate];
-        NSLog(@"Updated map");
-        
-    }
-    
+
+
+- (void)locationDidChange:(NSNotification *)note{
+    LocationController* locationController = [LocationController sharedLocationController];
+    NSLog(@"Did update locations");
+    [self updateLocation:locationController.location.coordinate];
 }
+
 
 
 @end

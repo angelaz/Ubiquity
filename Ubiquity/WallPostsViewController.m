@@ -29,6 +29,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 #import "WallPostsViewController.h"
 #import "AppDelegate.h"
 #import "TextMessage.h"
+#import "LocationController.h"
 
 @interface WallPostsViewController ()
 
@@ -137,12 +138,13 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	// Query for posts near our current location.
     
 	// Get our current location:
-	AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-	CLLocation *currentLocation = appDelegate.currentLocation;
-	CLLocationAccuracy filterDistance = appDelegate.filterDistance;
+	LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = locationController.filterDistance;
     
 	// And set the query to look by location
-	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentLocation.coordinate.latitude longitude:currentLocation.coordinate.longitude];
+	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
 	[query includeKey:kPAWParseUserKey];
     
