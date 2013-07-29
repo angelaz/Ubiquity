@@ -6,6 +6,7 @@
 //
 
 #import "LocationController.h"
+#import "AppDelegate.h"
 
 @implementation LocationController
 
@@ -32,15 +33,21 @@
     if(self != nil){
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
+        _filterDistance = 30;
+        [locationManager setDistanceFilter: _filterDistance];
     }
     return self;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     
-    location = [locations lastObject];
+    _location = [locations lastObject];
     
-    NSLog(@"latitude %+.6f, longitude %+.6f\n", location.coordinate.latitude,   location.coordinate.longitude);
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName: kPAWLocationChangeNotification
+     object:self];
+    
+    NSLog(@"latitude %+.6f, longitude %+.6f\n", _location.coordinate.latitude,   _location.coordinate.longitude);
     
 //    if([self.delegate conformsToProtocol:@protocol(CLLocationManagerDelegate)]) {
 //        [self.delegate locationManager:manager didUpdateLocations:locations];

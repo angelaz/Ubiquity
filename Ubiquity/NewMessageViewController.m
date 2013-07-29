@@ -51,7 +51,11 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-    
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(locationDidChange:)
+                                                     name:kPAWLocationChangeNotification
+                                                   object:nil];
              }
     return self;
 }
@@ -67,11 +71,11 @@
     nmv = [[NewMessageView alloc] initWithFrame: self.view.frame];
     [self setView: nmv];
     
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(locationDidChange:)
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
-
     
     nmv.toRecipientTextField.delegate = self;
     
@@ -272,8 +276,9 @@
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:6];
+    NSLog(@"new camera");
     [nmv.map setCamera:camera];
-    
+    NSLog(@"set camera");
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = currentCoordinate;
