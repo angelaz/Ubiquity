@@ -109,7 +109,7 @@
     
     self.wallPostsViewController =
     [[WallPostsViewController alloc] init];
-    self.wallPostsViewController.view.frame = CGRectMake(0.f, 208.f, 320.f, 208.f);
+    self.wallPostsViewController.view.frame = CGRectMake(0.f, 0.f, 320.f, super.view.frame.size.height);
     
     // Add the WallPostsViewController as a child of RecentViewController
     [self addChildViewController:self.wallPostsViewController];
