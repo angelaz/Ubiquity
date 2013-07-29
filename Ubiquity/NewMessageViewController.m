@@ -37,10 +37,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
     
-         [[NSNotificationCenter defaultCenter] addObserver:self
-         selector:@selector(locationDidChange:)
-         name:kPAWLocationChangeNotification
-         object:nil];
+//         [[NSNotificationCenter defaultCenter] addObserver:self
+//         selector:@selector(locationDidChange:)
+//         name:kPAWLocationChangeNotification
+//         object:nil];
     }
     return self;
 }
@@ -50,14 +50,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
-    
-    
-    //dummy mapview
-    
-    //
-    // MKMapView * map = [[MKMapView alloc] initWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30)];
-    // map.delegate = self;
-    // [self.view addSubview:map];
     
     nmv = [[NewMessageView alloc] initWithFrame: self.view.frame];
     [self setView: nmv];
@@ -83,10 +75,14 @@
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                    style:UIBarButtonItemStyleBordered target:self
                                                                   action:@selector(pickerDoneClicked:)];
-        [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
+    [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
     
     [nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
+    
+    
+    LocationController* locationController = [LocationController sharedLocationController];
+    [self updateLocation:locationController.location.coordinate];
     
 }
 
@@ -234,18 +230,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)locationManager:(CLLocationManager *)manager
-    didUpdateToLocation:(CLLocation *)newLocation
-           fromLocation:(CLLocation *)oldLocation
-{
-    LocationController* locationController = [LocationController sharedLocationController];
-    locationController.location = newLocation;
-    
-    NSLog(@"From to");
-    
-    [self updateLocation:newLocation.coordinate];
-}
-
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
     
     NSLog(@"New location");
@@ -310,6 +294,8 @@
     
     [self updateLocation:location.coordinate];
 }
+
+
 
 
 @end

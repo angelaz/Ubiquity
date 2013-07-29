@@ -16,7 +16,7 @@
 - (void)locationUpdate:(CLLocation*)location;
 @end
 
-@interface LocationController : NSObject  {
+@interface LocationController : NSObject <CLLocationManagerDelegate> {
     
     CLLocationManager* locationManager;
     CLLocation* location;

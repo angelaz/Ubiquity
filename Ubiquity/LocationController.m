@@ -16,8 +16,32 @@
     static dispatch_once_t predicate;
     dispatch_once(&predicate, ^{
         sharedLocationControllerInstance = [[self alloc] init];
+        
+        [sharedLocationControllerInstance.locationManager startUpdatingLocation];
+        
     });
     return sharedLocationControllerInstance;
+}
+
+-(id) init {
+    self = [super init];
+    if(self != nil){
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+    }
+    return self;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    
+    location = [locations lastObject];
+    
+    NSLog(@"latitude %+.6f, longitude %+.6f\n", location.coordinate.latitude,   location.coordinate.longitude);
+    
+    if([self.delegate conformsToProtocol:@protocol(CLLocationManagerDelegate)]) {
+        [self.delegate locationManager:manager didUpdateLocations:locations];
+    }
+
 }
 
 @end
