@@ -100,7 +100,7 @@
 {
     
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    [self presentViewController:nmvc animated:NO completion:nil];
+    [self presentViewController:nmvc animated:YES completion:nil];
     
   //  ExpenseItem *newItem = [[ExpenseItemStore sharedStore] createItem];
   //  DetailViewController *detailViewController = [[DetailViewController alloc] initForNewItem:YES];

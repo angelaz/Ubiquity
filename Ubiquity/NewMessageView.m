@@ -34,6 +34,11 @@
                                                                 longitude:currentCoordinate.longitude
                                                                      zoom:6];
         self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30) camera:camera];
+        GMSMarker *marker = [[GMSMarker alloc] init];
+        marker.position = currentCoordinate;
+        marker.title = @"Here";
+        marker.snippet = @"My location";
+        marker.map = self.map;
         [self addSubview:self.map];
         
         UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
@@ -64,8 +69,6 @@
         UIImage *btnImage = [UIImage imageNamed:@"searchbutton"];
         [self.locationSearchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
         self.locationSearchButton.frame = CGRectMake(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 68, LINE_HEIGHT-5, LINE_HEIGHT-5);
-//        [self.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
-        //  [self.locationSearchButton setTitle: @"Go" forState:UIControlStateNormal]; // replace with mag glass later
         
         [self addSubview:self.locationSearchButton];
         
@@ -73,23 +76,18 @@
         
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        //self.sendButton.backgroundColor = [UIColor whiteColor];
         self.sendButton.frame = CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 28, 50, LINE_HEIGHT);
-//        [self.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
         [self.sendButton setTitle: @"Send" forState:UIControlStateNormal];
         [self addSubview:self.sendButton];
         
         
         self.repeatTimesPicker = [[UIPickerView alloc] initWithFrame: CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 130, 280, LINE_HEIGHT)];
-//        self.repeatTimesPicker.delegate = self;
         self.repeatTimesPicker.backgroundColor = [UIColor whiteColor];
-//        self.repeatTimesPicker.dataSource = self;
         self.repeatTimesPicker.showsSelectionIndicator = YES;
         
         
         
         self.showRepeatPickerButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        //self.showRepeatPickerButton.backgroundColor = [UIColor whiteColor];
         self.showRepeatPickerButton.frame = CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 28, SCREEN_WIDTH - 100, 30.0);
         [self addSubview:self.showRepeatPickerButton];
         
