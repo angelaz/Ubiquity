@@ -39,8 +39,7 @@
                                              initWithRootViewController:rvc];
         [UIView  beginAnimations: @"Showinfo"context: nil];
         NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-        UINavigationController *newMessageNavController = [[UINavigationController alloc] init];
-        [newMessageNavController pushViewController:nmvc animated:YES];
+        UINavigationController *newMessageNavController = [[UINavigationController alloc]                                                         initWithRootViewController:nmvc];
 
         
         FriendsViewController *fvc = [[FriendsViewController alloc] init];
