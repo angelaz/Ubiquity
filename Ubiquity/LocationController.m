@@ -33,7 +33,7 @@
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
         locationManager.distanceFilter = self.filterDistance;
         
         [locationManager startUpdatingLocation];
@@ -46,7 +46,7 @@
     
     location = [locations lastObject];
     
-    NSLog(@"latitude %+.6f, longitude %+.6f\n", location.coordinate.latitude,   location.coordinate.longitude);
+    //NSLog(@"latitude %+.6f, longitude %+.6f\n", location.coordinate.latitude,   location.coordinate.longitude);
     
 //    if([self.delegate conformsToProtocol:@protocol(CLLocationManagerDelegate)]) {
 //        [self.delegate locationManager:manager didUpdateLocations:locations];

@@ -86,21 +86,7 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
-    
-//    _locationManager = [[CLLocationManager alloc] init];
-//    
-//    _locationManager.delegate = self;
-//    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-//    
-//    // Set a movement threshold for new events
-//    _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
-//    
-//    [_locationManager startUpdatingLocation];
-//    
-//    // Set initial location if available
-//    LocationController* locationController = [LocationController sharedLocationController];
-//    CLLocation *currentLocation = _locationManager.location;
-    
+        
     // Register for the user location change notification: kPAWLocationChangeNotification
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(locationDidChange:)
