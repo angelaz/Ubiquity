@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>96A372FE-3619-4039-AC35-3063B4B279F8</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Ubiquity</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>8CDBF610-0C9B-4ED7-B996-F451B0D201FB</key>
+		<string>https://github.com/angelafz/Ubiquity.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Ubiquity.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>8CDBF610-0C9B-4ED7-B996-F451B0D201FB</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/angelafz/Ubiquity.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8CDBF610-0C9B-4ED7-B996-F451B0D201FB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8CDBF610-0C9B-4ED7-B996-F451B0D201FB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Ubiquity</string>
+		</dict>
+	</array>
+</dict>
+</plist>
