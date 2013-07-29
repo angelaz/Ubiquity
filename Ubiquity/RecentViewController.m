@@ -15,12 +15,15 @@
 #import <CoreLocation/CoreLocation.h>
 #import "NewMessageViewController.h"
 #import "TextMessage.h"
+#import "WallPostsViewController.h"
 
 @interface RecentViewController ()
 
-@property (nonatomic, strong) CLLocationManager *_locationManager;
+@property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) NSMutableArray *annotations;
 @property (nonatomic, copy) NSString *className;
+
+@property (nonatomic, strong) WallPostsViewController *wallPostsViewController;
 
 @property (nonatomic, strong) NSMutableArray *allPosts;
 
@@ -59,7 +62,7 @@
         UINavigationItem *nav = [self navigationItem];
         [nav setTitle:@"Recent"];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-            target:self
+                                                                             target:self
                                                                              action:@selector(addNewItem:)];
         [[self navigationItem] setRightBarButtonItem:bbi];
     }
@@ -67,22 +70,55 @@
     return self;
 }
 
-//- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-//	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-//	if (self) {
-//		self.title = @"Recent Posts";
-//		self.className = kPAWParsePostsClassKey;
-//		_annotations = [[NSMutableArray alloc] initWithCapacity:10];
-//		_allPosts = [[NSMutableArray alloc] initWithCapacity:10];
-//	}
-//	return self;
-//}
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	if (self) {
+		self.title = @"Recent Posts";
+		self.className = kPAWParsePostsClassKey;
+		_annotations = [[NSMutableArray alloc] initWithCapacity:10];
+		_allPosts = [[NSMutableArray alloc] initWithCapacity:10];
+	}
+	return self;
+}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
+    
+    _locationManager = [[CLLocationManager alloc] init];
+    
+    _locationManager.delegate = self;
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    
+    // Set a movement threshold for new events
+    _locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+    
+    [_locationManager startUpdatingLocation];
+    
+    // Set initial location if available
+    CLLocation *currentLocation = _locationManager.location;
+    if (currentLocation) {
+        AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+        appDelegate.currentLocation = currentLocation;
+    }
+    
+    // Register for the user location change notification: kPAWLocationChangeNotification
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(locationDidChange:)
+                                                 name:kPAWLocationChangeNotification
+                                               object:nil];
+    
+    self.wallPostsViewController =
+    [[WallPostsViewController alloc] init];
+    self.wallPostsViewController.view.frame = CGRectMake(0.f, 208.f, 320.f, 208.f);
+    
+    // Add the WallPostsViewController as a child of RecentViewController
+    [self addChildViewController:self.wallPostsViewController];
+    // Add the view of WallPostsViewController as a
+    // subview of RecentViewController's view
+    [self.view addSubview:self.wallPostsViewController.view];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -94,7 +130,6 @@
 
 
 
-
 - (void)addNewItem:(id)sender
 
 {
@@ -102,18 +137,18 @@
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
     [self presentViewController:nmvc animated:NO completion:nil];
     
-  //  ExpenseItem *newItem = [[ExpenseItemStore sharedStore] createItem];
-  //  DetailViewController *detailViewController = [[DetailViewController alloc] initForNewItem:YES];
-  //  [detailViewController setItem:newItem];
+    //  ExpenseItem *newItem = [[ExpenseItemStore sharedStore] createItem];
+    //  DetailViewController *detailViewController = [[DetailViewController alloc] initForNewItem:YES];
+    //  [detailViewController setItem:newItem];
     
-  //  [detailViewController setDismissBlock:^{[[self tableView] reloadData];}];
+    //  [detailViewController setDismissBlock:^{[[self tableView] reloadData];}];
     
-  //  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-  //  [navController setModalPresentationStyle:UIModalPresentationFormSheet];
-   // [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-  //  [self presentViewController:navController
+    //  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
+    //  [navController setModalPresentationStyle:UIModalPresentationFormSheet];
+    // [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+    //  [self presentViewController:navController
     //                   animated:YES
-   //                  completion:nil];
+    //                  completion:nil];
 }
 
 - (void)locationManager:(CLLocationManager *)manager
@@ -127,7 +162,7 @@
 }
 
 - (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation
-withNearbyDistance:(CLLocationAccuracy)nearbyDistance
+                  withNearbyDistance:(CLLocationAccuracy)nearbyDistance
 {
     PFQuery *wallPostQuery = [PFQuery queryWithClassName:self.className];
     
@@ -212,7 +247,7 @@ withNearbyDistance:(CLLocationAccuracy)nearbyDistance
                  
                  // If we did not find the wall post we currently have in the set of posts
                  // the query returned, then we add it to the 'postsToRemove' array
-                 if (!found) 
+                 if (!found)
                  {
                      [postsToRemove addObject:currentPost];
                  }
@@ -230,7 +265,7 @@ withNearbyDistance:(CLLocationAccuracy)nearbyDistance
                  // For posts outside the search radius, we show a different
                  // message by setting the following property
                  CLLocationDistance distanceFromCurrent = [currentLocation distanceFromLocation:objectLocation];
-                // [newPost setTitleAndSubtitleOutsideDistance:( distanceFromCurrent > nearbyDistance ? YES : NO )];
+                 // [newPost setTitleAndSubtitleOutsideDistance:( distanceFromCurrent > nearbyDistance ? YES : NO )];
                  
                  // Animate all pins after the initial load
                  //newPost.animatesDrop = mapPinsPlaced;
@@ -238,15 +273,40 @@ withNearbyDistance:(CLLocationAccuracy)nearbyDistance
              
              // 4. Remove the old posts and add the new posts
              // We remove all undesired posts from both the cache and the map
-           //  [mapView removeAnnotations:postsToRemove];
+             //  [mapView removeAnnotations:postsToRemove];
              [_allPosts removeObjectsInArray:postsToRemove];
              
              // We add all new posts to both the cache and the map
-           //  [mapView addAnnotations:newPosts];
+             //  [mapView addAnnotations:newPosts];
              [_allPosts addObjectsFromArray:newPosts];
-           //  self.mapPinsPlaced = YES;
+             //  self.mapPinsPlaced = YES;
          }
      }];
+}
+
+- (void)locationDidChange:(NSNotification *)note;
+{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    // If we haven't drawn the search radius on the map, initialize it.
+    //  if (self.searchRadius == nil)
+    //    {
+    //        self.searchRadius =
+    //        [[PAWSearchRadius alloc] initWithCoordinate:appDelegate.currentLocation.coordinate
+    //                                             radius:appDelegate.filterDistance];
+    //        [mapView addOverlay:self.searchRadius];
+    //    }
+    //    else
+    //    {
+    //        self.searchRadius.coordinate = appDelegate.currentLocation.coordinate;
+    //    }
+    
+    // Update the map with new pins:
+    [self queryForAllPostsNearLocation:appDelegate.currentLocation
+                    withNearbyDistance:appDelegate.filterDistance];
+    // And update the existing pins to reflect any changes in filter distance:
+    [self updatePostsForLocation:appDelegate.currentLocation
+              withNearbyDistance:appDelegate.filterDistance];
 }
 
 
@@ -258,6 +318,63 @@ withNearbyDistance:(CLLocationAccuracy)nearbyDistance
 
 - (void)postWasCreated:(NSNotification *)note {
 	//AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+}
+
+- (void)startStandardUpdates {
+	if (nil == _locationManager) {
+		_locationManager = [[CLLocationManager alloc] init];
+	}
+    
+	_locationManager.delegate = self;
+	_locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    
+	// Set a movement threshold for new events.
+	_locationManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+    
+	[_locationManager startUpdatingLocation];
+    
+	CLLocation *currentLocation = _locationManager.location;
+	if (currentLocation) {
+		AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+		appDelegate.currentLocation = currentLocation;
+	}
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+       didFailWithError:(NSError *)error {
+	NSLog(@"%s", __PRETTY_FUNCTION__);
+	NSLog(@"Error: %@", [error description]);
+    
+	if (error.code == kCLErrorDenied) {
+		[_locationManager stopUpdatingLocation];
+	} else if (error.code == kCLErrorLocationUnknown) {
+		// todo: retry?
+		// set a timer for five seconds to cycle location, and if it fails again, bail and tell the user.
+	} else {
+		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error retrieving location"
+		                                                message:[error description]
+		                                               delegate:nil
+		                                      cancelButtonTitle:nil
+		                                      otherButtonTitles:@"Ok", nil];
+		[alert show];
+	}
+}
+
+- (void)updatePostsForLocation:(CLLocation *)currentLocation withNearbyDistance:(CLLocationAccuracy) nearbyDistance {
+	for (TextMessage *post in _allPosts) {
+		CLLocation *objectLocation = [[CLLocation alloc] initWithLatitude:post.coordinate.latitude longitude:post.coordinate.longitude];
+		// if this post is outside the filter distance, don't show the regular callout.
+		CLLocationDistance distanceFromCurrent = [currentLocation distanceFromLocation:objectLocation];
+		if (distanceFromCurrent > nearbyDistance) { // Outside search radius
+			//[post setTitleAndSubtitleOutsideDistance:YES];
+			//[mapView viewForAnnotation:post];
+			//[(MKPinAnnotationView *) [mapView viewForAnnotation:post] setPinColor:post.pinColor];
+		} else {
+			//[post setTitleAndSubtitleOutsideDistance:NO]; // Inside search radius
+			//[mapView viewForAnnotation:post];
+			//[(MKPinAnnotationView *) [mapView viewForAnnotation:post] setPinColor:post.pinColor];
+		}
+	}
 }
 
 #pragma mark - Table view data source
