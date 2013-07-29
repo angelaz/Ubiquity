@@ -52,10 +52,10 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
     
-//         [[NSNotificationCenter defaultCenter] addObserver:self
-//         selector:@selector(locationDidChange:)
-//         name:kPAWLocationChangeNotification
-//         object:nil];
+         [[NSNotificationCenter defaultCenter] addObserver:self
+         selector:@selector(locationDidChange:)
+         name:kPAWLocationChangeNotification
+         object:nil];
     }
     return self;
 }
@@ -313,17 +313,13 @@
 //    
 //}
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    CLLocation* location = [locations lastObject];
-    
-    LocationController* locationController = [LocationController sharedLocationController];
-    locationController.location = location;
-    
-    NSLog(@"Did update locations");
-    
-    [self updateLocation:location.coordinate];
-}
 
+
+- (void)locationDidChange:(NSNotification *)note{
+    LocationController* locationController = [LocationController sharedLocationController];
+    NSLog(@"Did update locations");
+    [self updateLocation:locationController.location.coordinate];
+}
 
 
 
