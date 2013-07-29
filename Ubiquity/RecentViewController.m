@@ -184,7 +184,7 @@
     [wallPostQuery includeKey:kPAWParseUserKey];
     
     // Limit the number of wall posts returned to 20
-    wallPostQuery.limit = [NSNumber numberWithInt:kPAWWallPostsSearch];
+    wallPostQuery.limit = kPAWWallPostsSearch;
     
     //Run the query in background with completion block
     [wallPostQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error)
@@ -283,7 +283,6 @@
 
 - (void)distanceFilterDidChange:(NSNotification *)note {
 	CLLocationAccuracy filterDistance = [[[note userInfo] objectForKey:kPAWFilterDistanceKey] doubleValue];
-	AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
 //	if (self.searchRadius == nil) {
 //		self.searchRadius = [[PAWSearchRadius alloc] initWithCoordinate:appDelegate.currentLocation.coordinate radius:appDelegate.filterDistance];
@@ -353,12 +352,7 @@
 }
 
 - (void)startStandardUpdates {
-//	if (nil == _locationManager) {
-//		//_locationManager = [[CLLocationManager alloc] init];
-//	}
-    
-    LocationController* locationController = [LocationController sharedLocationController];
-	CLLocation *currentLocation = locationController.location;
+
 }
 
 

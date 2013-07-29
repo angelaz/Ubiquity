@@ -295,7 +295,6 @@
 //    LocationController* locationController = [LocationController sharedLocationController];
 //    CLLocation *location = locationController.location;
 //    
-//    
 //    NSDate* eventDate = location.timestamp;
 //    
 //    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
