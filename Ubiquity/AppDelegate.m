@@ -59,11 +59,11 @@
                                        tabBarItem];
         [newMessageTab setTitle:@"New Message"];
         [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
-        
         UITabBarItem *friendsTab = [friendsNavController tabBarItem];
         [friendsTab setTitle:@"Friends"];
         UITabBarItem *optionsTab = [optionsNavController tabBarItem];
         [optionsTab setTitle:@"Options"];
+        [optionsTab setImage:[UIImage imageNamed:@"options.png"]];
         
         [self.window setRootViewController:tabBarController];
     } else {

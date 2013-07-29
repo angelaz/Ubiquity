@@ -36,6 +36,7 @@
 		60CB90C017A0872F00A9E93A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */; };
 		60CB90C617A0897E00A9E93A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90C517A0897E00A9E93A /* libz.dylib */; };
 		60CB90C817A0899700A9E93A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90C717A0899700A9E93A /* libsqlite3.dylib */; };
+		824EB77917A735A00006AA5D /* options.png in Resources */ = {isa = PBXBuildFile; fileRef = 824EB77817A735A00006AA5D /* options.png */; };
 		82C7577617A322580094EB15 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C7577517A322570094EB15 /* FriendsViewController.m */; };
 		82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577717A3225D0094EB15 /* FriendsViewController.xib */; };
 		82C7577A17A325C50094EB15 /* newMessage.png in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577917A325C50094EB15 /* newMessage.png */; };
@@ -122,6 +123,7 @@
 		60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		60CB90C517A0897E00A9E93A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		60CB90C717A0899700A9E93A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		824EB77817A735A00006AA5D /* options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = options.png; sourceTree = "<group>"; };
 		82C7577417A322520094EB15 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
 		82C7577517A322570094EB15 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
 		82C7577717A3225D0094EB15 /* FriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FriendsViewController.xib; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				86894B6417A1E96200F7146B /* searchbutton@2x.png */,
 				82E931F117A093D500B3958B /* icon.png */,
 				82E931F217A093D500B3958B /* icon@2x.png */,
+				824EB77817A735A00006AA5D /* options.png */,
 				82E931E317A093C600B3958B /* login-button-small-pressed.png */,
 				82E931E417A093C600B3958B /* login-button-small-pressed@2x.png */,
 				82E931E517A093C600B3958B /* login-button-small.png */,
@@ -432,6 +435,7 @@
 			files = (
 				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
+				824EB77917A735A00006AA5D /* options.png in Resources */,
 				82E931EE17A093C600B3958B /* Default-568h@2x.png in Resources */,
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
 				82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */,
