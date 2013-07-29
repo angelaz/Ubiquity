@@ -273,12 +273,10 @@
     
     
     
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.005
                                                             longitude:currentCoordinate.longitude
-                                                                 zoom:6];
-    NSLog(@"new camera");
+                                                                 zoom:15];
     [nmv.map setCamera:camera];
-    NSLog(@"set camera");
     // Creates a marker in the center of the map.
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = currentCoordinate;
