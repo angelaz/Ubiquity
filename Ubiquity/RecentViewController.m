@@ -27,8 +27,6 @@
 
 @property (nonatomic, strong) NSMutableArray *allPosts;
 
-- (void)startStandardUpdates;
-
 // CLLocationManagerDelegate methods:
 - (void)locationManager:(CLLocationManager *)manager
     didUpdateToLocation:(CLLocation *)newLocation
@@ -37,6 +35,7 @@
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error;
 
+- (void)startStandardUpdates;
 
 - (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation withNearbyDistance:(CLLocationAccuracy)nearbyDistance;
 - (void)updatePostsForLocation:(CLLocation *)location withNearbyDistance:(CLLocationAccuracy) filterDistance;
@@ -93,8 +92,7 @@
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
     
-    self.wallPostsViewController =
-    [[WallPostsViewController alloc] init];
+    self.wallPostsViewController = [[WallPostsViewController alloc] init];
     self.wallPostsViewController.view.frame = CGRectMake(0.f, 0.f, 320.f, super.view.frame.size.height);
     
     // Add the WallPostsViewController as a child of RecentViewController
@@ -104,13 +102,12 @@
     [self.view addSubview:self.wallPostsViewController.view];
     
     // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+     //self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [self startStandardUpdates];
 }
-
-
 
 
 - (void)addNewItem:(id)sender
@@ -238,7 +235,7 @@
                  // For posts outside the search radius, we show a different
                  // message by setting the following property
                  CLLocationDistance distanceFromCurrent = [currentLocation distanceFromLocation:objectLocation];
-                 // [newPost setTitleAndSubtitleOutsideDistance:( distanceFromCurrent > nearbyDistance ? YES : NO )];
+                 [newPost setTitleAndSubtitleOutsideDistance:( distanceFromCurrent > nearbyDistance ? YES : NO )];
                  
                  // Animate all pins after the initial load
                  //newPost.animatesDrop = mapPinsPlaced;
@@ -327,11 +324,6 @@
 	[self queryForAllPostsNearLocation:locationController.location withNearbyDistance:locationController.filterDistance];
 }
 
-- (void)startStandardUpdates {
-
-}
-
-
 
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error {
@@ -359,15 +351,38 @@
 		// if this post is outside the filter distance, don't show the regular callout.
 		CLLocationDistance distanceFromCurrent = [currentLocation distanceFromLocation:objectLocation];
 		if (distanceFromCurrent > nearbyDistance) { // Outside search radius
-			//[post setTitleAndSubtitleOutsideDistance:YES];
+			[post setTitleAndSubtitleOutsideDistance:YES];
 			//[mapView viewForAnnotation:post];
 			//[(MKPinAnnotationView *) [mapView viewForAnnotation:post] setPinColor:post.pinColor];
 		} else {
-			//[post setTitleAndSubtitleOutsideDistance:NO]; // Inside search radius
+			[post setTitleAndSubtitleOutsideDistance:NO]; // Inside search radius
 			//[mapView viewForAnnotation:post];
 			//[(MKPinAnnotationView *) [mapView viewForAnnotation:post] setPinColor:post.pinColor];
 		}
 	}
+}
+
+- (void)startStandardUpdates {
+    LocationController *locationController = [LocationController sharedLocationController];
+    CLLocationManager *locManager = [locationController locationManager];
+	if (nil == locManager) {
+		locManager = [[CLLocationManager alloc] init];
+	}
+    
+	locManager.delegate = self;
+	locManager.desiredAccuracy = kCLLocationAccuracyBest;
+    
+	// Set a movement threshold for new events.
+	locManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+    
+	[locManager startUpdatingLocation];
+    
+	CLLocation *currentLocation = locManager.location;
+	if (currentLocation) {
+	//	AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+	//	appDelegate.currentLocation = currentLocation;
+	}
+    
 }
 
 #pragma mark - Table view data source
