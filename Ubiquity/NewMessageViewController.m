@@ -35,14 +35,12 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
     [self.tabBarController.tabBar setHidden: YES];
     [super viewWillAppear:animated];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
     [self.tabBarController.tabBar setHidden: NO];
     [super viewWillDisappear:animated];
 }
@@ -109,11 +107,24 @@
     
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    if ([nmv.messageTextField isFirstResponder] && [touch view] != nmv.messageTextField) {
+        [nmv.messageTextField resignFirstResponder];
+    } else if ([nmv.toRecipientTextField isFirstResponder] && [touch view] != nmv.toRecipientTextField) {
+        [nmv.toRecipientTextField resignFirstResponder];
+    } else if ([nmv.locationSearchTextField isFirstResponder] && [touch view] != nmv.locationSearchTextField) {
+        [nmv.locationSearchTextField resignFirstResponder];
+    }
+    [super touchesBegan:touches withEvent:event];
+}
+
 -(void) closeNewMessage: (id) sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
-    RecentViewController *rvc = [[RecentViewController alloc] init];
-    [self.navigationController pushViewController: rvc animated: YES];
+    [self.tabBarController setSelectedIndex: 0];
+    
 
 }
 
@@ -216,11 +227,7 @@
     
     NSLog(@"Message sent!");
     
-    [self dismissViewControllerAnimated:YES completion:nil];
-    
-    RecentViewController *rvc = [[RecentViewController alloc] init];
-    [self.navigationController pushViewController: rvc animated: YES];
-    
+    [self closeNewMessage:self];
 }
 
 
@@ -273,7 +280,7 @@
     
     
     
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.005
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.003
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:15];
     [nmv.map setCamera:camera];
