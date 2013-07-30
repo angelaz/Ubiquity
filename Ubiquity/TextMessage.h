@@ -30,6 +30,6 @@
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate andTitle:(NSString *)title andAddress:(NSString *)address;
 - (id)initWithPFObject:(PFObject *)message;
 
-//- (void)setTitleAndSubtitleOutsideDistance:(BOOL)outside;
+- (void)setTitleAndSubtitleOutsideDistance:(BOOL)outside;
 
 @end
