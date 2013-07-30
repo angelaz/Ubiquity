@@ -47,6 +47,7 @@
         speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
         [self addSubview:speechBubbleBackground];
         
+                
         self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 45 + LINE_HEIGHT, 50, LINE_HEIGHT)];
         self.toLabel.text = @"To:";
         [self addSubview:self.toLabel];
