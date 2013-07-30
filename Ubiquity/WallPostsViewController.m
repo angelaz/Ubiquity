@@ -207,7 +207,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	textLabel.textColor = [UIColor whiteColor];
 	textLabel.backgroundColor = [UIColor clearColor];
 	
-	NSString *username = [NSString stringWithFormat:@"- %@",[[PFUser currentUser] objectForKey:@"profile"][@"name"]];
+	NSString *username = [NSString stringWithFormat:@"- %@",[[object objectForKey:@"user"] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSize];
