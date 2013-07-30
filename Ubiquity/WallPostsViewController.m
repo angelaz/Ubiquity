@@ -161,10 +161,6 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	// Try to reuse a cell
 	BOOL cellIsRight = [[[object objectForKey:kPAWParseUserKey] objectForKey:kPAWParseUsernameKey] isEqualToString:[[PFUser currentUser] objectForKey:@"username"]];
     
-    NSLog(@"First val is %@", [[object objectForKey:kPAWParseUserKey] objectForKey:kPAWParseUsernameKey]);
-    NSLog(@"Second val is %@", [[PFUser currentUser] objectForKey:@"username"]);
-    
-    
 	UITableViewCell *cell;
 	if (cellIsRight) { // User's post so create blue bubble
 		cell = [tableView dequeueReusableCellWithIdentifier:RightCellIdentifier];
