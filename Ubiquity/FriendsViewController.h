@@ -21,6 +21,5 @@
     __weak IBOutlet UITableView *menuTableView;
 }
 @property (strong, nonatomic) FBProfilePictureView *profilePictureView;
-@property (nonatomic, strong) NSArray *allFriends;
 - (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect;
 @end

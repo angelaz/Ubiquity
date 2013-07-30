@@ -24,39 +24,41 @@
                                                                              target:self
                                                                              action:@selector(displayFriendPicker)];
         self.navigationItem.rightBarButtonItem = add;
-        //        ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
-        //        ubiquityFriends.objectId = [[PFUser currentUser] objectForKey:@"profile"][@"facebookId"];
-        //        if (!selectedFriends) selectedFriends = [[NSArray alloc] init];
-        //        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-        //        [ubiquityFriends saveInBackground];
-        //        NSLog(@"%@", ubiquityFriends.objectId);
-        ////        if (!ubiquityFriends) {
-        ////            selectedFriends = [[NSArray alloc] init];
-        ////            [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-        ////        }
-        //        PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
-        //        [query getObjectInBackgroundWithId:ubiquityFriends.objectId block:^(PFObject *friends, NSError *error) {
-        //            // Do something with the returned PFObject in the gameScore variable.
-        //            //selectedFriends = [friends objectForKey:@"friends"];
-        //            if (!error) {
-        //                NSLog(@"Here are my friends: %@", friends);
-        //            } else {
-        //                // Log details of the failure
-        //                NSLog(@"Error: %@ %@", error, [error userInfo]);
-        //            }
-        //        }];
+        
+        selectedFriends = [[NSArray alloc] init];
+        
+        PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
+        [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
+        NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {   // The find succeeded.
+                NSLog(@"Successfully retrieved %d objects.", objects.count);
+                if ([objects count] > 0) {      //Saved friend list exists
+                    for (PFObject *object in objects) {
+                        NSLog(@"%@", object.objectId);
+                        NSArray *friendList = [object objectForKey:@"friends"];
+                        selectedFriends = friendList;   //Load saved friends
+                    }
+                } else {    //No saved friend list, instantiate new one
+                    //Setting up PFObject
+                    ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
+                    [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
+                    [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
+                    [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
+                    //User read/write permissions
+                    PFACL *defaultACL = [PFACL ACL];
+                    [defaultACL setPublicReadAccess:YES];       //Everyone can see a given Ubiquity user's in-app friends
+                    [defaultACL setPublicWriteAccess:NO];       //But only that user can modify their friend list
+                    [defaultACL setWriteAccess:YES forUser:[PFUser currentUser]];
+                    ubiquityFriends.ACL = defaultACL;
+                }
+                
+            } else {        // Log details of the failure
+                NSLog(@"Error: %@ %@", error, [error userInfo]);
+            }
+        }];
         
     }
-    selectedFriends = [[NSArray alloc] init];
-    PFACL *defaultACL = [PFACL ACL];
-    [defaultACL setPublicReadAccess:YES];
-    [defaultACL setPublicWriteAccess:YES];
-    [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
-    ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
-    ubiquityFriends.objectId = [[PFUser currentUser] objectForKey:@"profile"][@"facebookId"];
-    [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-    [ubiquityFriends setObject:[[PFUser currentUser] objectForKey:@"profile"][@"facebookId"] forKey:@"userID"];
-    [ubiquityFriends saveInBackground];
     return self;
 }
 - (void)viewDidLoad
@@ -67,21 +69,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
-    //[query whereKey:@"userID" equalTo:[[PFUser currentUser] objectForKey:@"profile"][@"facebookId"]];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
-        if (!error) {
-            // The find succeeded.
-            NSLog(@"Successfully retrieved %d friends.", friends.count);
-            // Do something with the found objects
-            for (PFObject *friend in friends) {
-                NSLog(@"%@", friend.objectId);
-            }
-        } else {
-            // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    }];
     [[self tableView] reloadData];
 }
 - (id)initWithStyle:(UITableViewStyle)style
@@ -107,24 +94,9 @@
     UITableViewCell *cell = (UITableViewCell*)[tableView
                                                dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];
-        //        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        //        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        //
-        //        cell.textLabel.font = [UIFont systemFontOfSize:16];
-        //        cell.textLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
-        //        cell.textLabel.clipsToBounds = YES;
-        //
-        //        cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
-        //        cell.detailTextLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0];
-        //        cell.detailTextLabel.textColor = [UIColor colorWithRed:0.4
-        //                                                         green:0.6
-        //                                                          blue:0.8
-        //                                                         alpha:1];
-        //        cell.detailTextLabel.clipsToBounds = YES;
     }
-    NSLog(@"%@", [selectedFriends objectAtIndex:indexPath.row]);
     NSDictionary *userData = [selectedFriends objectAtIndex:indexPath.row];
     NSString *facebookID = userData[@"id"];
     NSString *name = userData[@"name"];
@@ -180,7 +152,9 @@
 - (void)friendPickerViewControllerSelectionDidChange:
 (FBFriendPickerViewController *)friendPicker
 {
-    
+    selectedFriends = friendPickerController.selection;
+    [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
+    [ubiquityFriends saveInBackground];
     
 }
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
@@ -190,5 +164,6 @@
     [ubiquityFriends saveInBackground];
     // Dismiss the friend picker
     [self.navigationController popToRootViewControllerAnimated:YES];
+    NSLog(@"object ID is:%@", ubiquityFriends.objectId);
 }
 @end
