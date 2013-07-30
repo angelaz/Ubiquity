@@ -16,7 +16,7 @@
     
     // Check if user is cached and linked to Facebook, if so, bypass login    
     if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        [self.navigationController pushViewController:[[UserDetailsViewController alloc] initWithStyle:UITableViewStyleGrouped] animated:NO];
+        [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
     }
 }
 

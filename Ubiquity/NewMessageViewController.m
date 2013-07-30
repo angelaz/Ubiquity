@@ -120,16 +120,8 @@
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation:locationController.location.coordinate];
     
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
-                                             
-                                             initWithTarget:self action:@selector(hideKeyboard:)];
-    
-    
-    
-    // Specify that the gesture must be a single tap
-    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
     tapRecognizer.numberOfTapsRequired = 1;
-    
     [nmv addGestureRecognizer:tapRecognizer];
 
     
@@ -145,12 +137,12 @@
 
 -(void) hideKeyboard: (id) sender
 {
-    NSLog(@"I sense a touch2!");
+    NSLog(@"I sense a touch!");
     
     [nmv.messageTextView resignFirstResponder];
     [nmv.locationSearchTextField resignFirstResponder];
     [nmv.toRecipientTextField resignFirstResponder];
-[nmv.map setUserInteractionEnabled:YES];
+    [nmv.map setUserInteractionEnabled:YES];
 
     
 }

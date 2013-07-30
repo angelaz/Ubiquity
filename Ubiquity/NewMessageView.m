@@ -116,35 +116,6 @@
 }
 
 
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-//    NSLog(@"I sense a touch!");
-//    UITouch *touch = [[event allTouches] anyObject];
-//    [super touchesBegan:touches withEvent:event];
-//    //    if ([nmv.messageTextField isFirstResponder] && [touch view] != nmv.messageTextField) {
-//    [self.messageTextView resignFirstResponder];
-//    //    } else if ([nmv.toRecipientTextField isFirstResponder] && [touch view] != nmv.toRecipientTextField) {
-//    [self.toRecipientTextField resignFirstResponder];
-//    //    }  else if ([nmv.locationSearchTextField isFirstResponder] && [touch view] != nmv.locationSearchTextField) {
-//    [self.locationSearchTextField resignFirstResponder];
-//    //    }
-//  //  [super touchesBegan:touches withEvent:event];
-//}
-//
-//- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
-//    [super touchesMoved:touches withEvent:event];
-//}
-//
-//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    [super touchesEnded:touches withEvent:event];
-//}
-//
-//- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    [super touchesCancelled:touches withEvent:event];
-//}
-
-
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
