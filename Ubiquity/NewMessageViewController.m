@@ -92,7 +92,7 @@
     
     nmv.toRecipientTextField.delegate = self;
     
-    nmv.messageTextField.delegate = self;
+    nmv.messageTextView.delegate = self;
     nmv.locationSearchTextField.delegate = self;
     
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
@@ -120,6 +120,38 @@
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation:locationController.location.coordinate];
     
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             
+                                             initWithTarget:self action:@selector(hideKeyboard:)];
+    
+    
+    
+    // Specify that the gesture must be a single tap
+    
+    tapRecognizer.numberOfTapsRequired = 1;
+    
+    [nmv addGestureRecognizer:tapRecognizer];
+
+    
+    
+    
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [nmv.map setUserInteractionEnabled:NO];
+}
+
+
+-(void) hideKeyboard: (id) sender
+{
+    NSLog(@"I sense a touch2!");
+    
+    [nmv.messageTextView resignFirstResponder];
+    [nmv.locationSearchTextField resignFirstResponder];
+    [nmv.toRecipientTextField resignFirstResponder];
+[nmv.map setUserInteractionEnabled:YES];
+
     
 }
 
@@ -146,6 +178,9 @@
             [self setViewMovedUp:YES];
         }
     }
+    [nmv.map setUserInteractionEnabled:NO];
+
+    
 }
 
 //method to move the view up/down whenever the keyboard is shown/dismissed
@@ -186,18 +221,6 @@
     }
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    NSLog(@"I sense a touch!");
-    UITouch *touch = [[event allTouches] anyObject];
-    if ([nmv.messageTextField isFirstResponder] && [touch view] != nmv.messageTextField) {
-        [nmv.messageTextField resignFirstResponder];
-    } else if ([nmv.toRecipientTextField isFirstResponder] && [touch view] != nmv.toRecipientTextField) {
-        [nmv.toRecipientTextField resignFirstResponder];
-    } else if ([nmv.locationSearchTextField isFirstResponder] && [touch view] != nmv.locationSearchTextField) {
-        [nmv.locationSearchTextField resignFirstResponder];
-    }
-   [super touchesBegan:touches withEvent:event];
-}
 
 -(void) closeNewMessage: (id) sender
 {
@@ -245,14 +268,14 @@
 - (void) sendMessage: (id) sender
 {
     // Dismiss keyboard and capture any auto-correct
-    [nmv.messageTextField resignFirstResponder];
+    [nmv.messageTextView resignFirstResponder];
     
     // Get user's current location
     LocationController* locationController = [LocationController sharedLocationController];
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     
     // Get the post's message
-    NSString *postMessage = nmv.messageTextField.text;
+    NSString *postMessage = nmv.messageTextView.text;
     
     //Get the currently logged in PFUser
     PFUser *user = [PFUser currentUser];

@@ -27,6 +27,7 @@
         int const LINE_HEIGHT = 30;
         
         
+        
         LocationController* locationController = [LocationController sharedLocationController];
         CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
         
@@ -47,10 +48,15 @@
         speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
         [self addSubview:speechBubbleBackground];
         
-                
+        
         self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 45 + LINE_HEIGHT, 50, LINE_HEIGHT)];
         self.toLabel.text = @"To:";
         [self addSubview:self.toLabel];
+        
+        
+        
+        
+        
         
         self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 45+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
         self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -64,8 +70,8 @@
         [self addSubview:self.messageTextFieldBg];
 
         
-        self.messageTextField = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 90.0+ LINE_HEIGHT, 250.0, 130.0)];
-        [self addSubview:self.messageTextField];
+        self.messageTextView = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 90.0+ LINE_HEIGHT, 250.0, 130.0)];
+        [self addSubview:self.messageTextView];
 
         
         self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 10, SCREEN_HEIGHT - 70, 250.0, LINE_HEIGHT)];
@@ -108,6 +114,36 @@
     }
     return self;
 }
+
+
+//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//    NSLog(@"I sense a touch!");
+//    UITouch *touch = [[event allTouches] anyObject];
+//    [super touchesBegan:touches withEvent:event];
+//    //    if ([nmv.messageTextField isFirstResponder] && [touch view] != nmv.messageTextField) {
+//    [self.messageTextView resignFirstResponder];
+//    //    } else if ([nmv.toRecipientTextField isFirstResponder] && [touch view] != nmv.toRecipientTextField) {
+//    [self.toRecipientTextField resignFirstResponder];
+//    //    }  else if ([nmv.locationSearchTextField isFirstResponder] && [touch view] != nmv.locationSearchTextField) {
+//    [self.locationSearchTextField resignFirstResponder];
+//    //    }
+//  //  [super touchesBegan:touches withEvent:event];
+//}
+//
+//- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
+//    [super touchesMoved:touches withEvent:event];
+//}
+//
+//- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [super touchesEnded:touches withEvent:event];
+//}
+//
+//- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [super touchesCancelled:touches withEvent:event];
+//}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.
