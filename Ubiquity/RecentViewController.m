@@ -371,10 +371,10 @@
 	}
     
 	locManager.delegate = self;
-	locManager.desiredAccuracy = kCLLocationAccuracyBest;
+	//locManager.desiredAccuracy = kCLLocationAccuracyBest;
     
 	// Set a movement threshold for new events.
-	locManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+	locManager.distanceFilter = 1000.0f;
     
 	[locManager startUpdatingLocation];
     
@@ -382,6 +382,7 @@
 	if (currentLocation) {
 	//	AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
 	//	appDelegate.currentLocation = currentLocation;
+        locManager.delegate = locationController;
 	}
     
 }
