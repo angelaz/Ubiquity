@@ -355,9 +355,9 @@
 
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
     
-    //NSLog(@"New location");
-    
-    
+    NSLog(@"New location");
+    NSLog(@"Long: %f", currentCoordinate.longitude);
+    NSLog(@"Lat: %f", currentCoordinate.latitude);
     
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.003
                                                             longitude:currentCoordinate.longitude
@@ -409,7 +409,7 @@
 
 - (void)locationDidChange:(NSNotification *)note{
     LocationController* locationController = [LocationController sharedLocationController];
-    //NSLog(@"Did update locations");
+    NSLog(@"Did update locations");
     [self updateLocation:locationController.location.coordinate];
 }
 

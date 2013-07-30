@@ -31,21 +31,26 @@
 -(id) init {
     self = [super init];
     if(self != nil){
+        
+        self.location = [[CLLocation alloc] initWithLatitude:37.4832526 longitude:-122.150037];
+        
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        self.locationManager.distanceFilter = 1000.0f;
-        self.locationManager.headingFilter = 5;
+        //self.locationManager.distanceFilter = 1000.0f;
+        //self.locationManager.headingFilter = 5;
         
         [locationManager startUpdatingLocation];
+        NSLog(@"Location updates started");
         
     }
     return self;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-     NSLog(@"%f", locationManager
+    
+    NSLog(@"%f is the accuracy level", locationManager
            .location.horizontalAccuracy);
     _location = [locations lastObject];
     

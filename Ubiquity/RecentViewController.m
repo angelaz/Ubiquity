@@ -165,6 +165,7 @@
          if (error) // The query failed
          {
              NSLog(@"Error in geo query!");
+             NSLog(@"%@", error);
          }
          else // The query is successful
          {
