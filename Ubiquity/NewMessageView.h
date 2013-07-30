@@ -13,7 +13,8 @@
 @interface NewMessageView : UIView
 @property (nonatomic, strong) UITextField *toRecipientTextField;
 @property (nonatomic, strong) UILabel *toLabel;
-@property (nonatomic, strong) UITextField *messageTextField;
+@property (nonatomic, strong) UITextView *messageTextField;
+@property (nonatomic, strong) UITextField *messageTextFieldBg;
 @property (nonatomic, strong) UIButton *sendButton;
 @property (nonatomic, strong) UIPickerView *repeatTimesPicker;
 @property (nonatomic, strong) UIToolbar *pickerToolbar;

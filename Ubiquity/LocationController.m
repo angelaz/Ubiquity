@@ -34,8 +34,9 @@
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
         
-        locationManager.desiredAccuracy = kCLLocationAccuracyKilometer;
-        locationManager.distanceFilter = self.filterDistance;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        self.locationManager.distanceFilter = 1000.0f;
+        self.locationManager.headingFilter = 5;
         
         [locationManager startUpdatingLocation];
         
@@ -44,7 +45,8 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    
+     NSLog(@"%f", locationManager
+           .location.horizontalAccuracy);
     _location = [locations lastObject];
     
     [[NSNotificationCenter defaultCenter]
@@ -58,5 +60,7 @@
 //    }
 
 }
+
+
 
 @end

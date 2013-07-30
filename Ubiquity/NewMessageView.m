@@ -35,7 +35,7 @@
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
                                                                 longitude:currentCoordinate.longitude
                                                                      zoom:6];
-        self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT+30) camera:camera];
+        self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-30) camera:camera];
         GMSMarker *marker = [[GMSMarker alloc] init];
         marker.position = currentCoordinate;
         marker.title = @"Here";
@@ -55,10 +55,17 @@
         self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
         [self addSubview:self.toRecipientTextField];
         
-        self.messageTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING, 85.0+ LINE_HEIGHT, 260.0, 140.0)];
-        self.messageTextField.borderStyle = UITextBorderStyleRoundedRect;
-        [self addSubview:self.messageTextField];
         
+        
+        self.messageTextFieldBg = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING, 85.0+ LINE_HEIGHT, 260.0, 140.0)];
+        self.messageTextFieldBg.allowsEditingTextAttributes = NO;
+        self.messageTextFieldBg.borderStyle = UITextBorderStyleRoundedRect;
+        [self addSubview:self.messageTextFieldBg];
+
+        
+        self.messageTextField = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 90.0+ LINE_HEIGHT, 250.0, 130.0)];
+        [self addSubview:self.messageTextField];
+
         
         self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 10, SCREEN_HEIGHT - 70, 250.0, LINE_HEIGHT)];
         self.locationSearchTextField.placeholder = @"Search for a location";

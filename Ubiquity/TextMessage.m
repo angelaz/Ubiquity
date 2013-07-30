@@ -78,5 +78,17 @@
 	}
 }
 
+- (void)setTitleAndSubtitleOutsideDistance:(BOOL)outside {
+	if (outside) {
+	//	self.address = nil;
+		self.title = kPAWWallCantViewPost;
+		self.pinColor = MKPinAnnotationColorRed;
+	} else {
+		self.title = [self.message objectForKey:kPAWParseTextKey];
+	//	self.address = [[self.message objectForKey:kPAWParseUserKey] objectForKey:kPAWParseUsernameKey];
+		self.pinColor = MKPinAnnotationColorGreen;
+	}
+}
+
 
 @end
