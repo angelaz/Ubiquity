@@ -173,8 +173,21 @@
     [UIView commitAnimations];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+-(void)logTouchesFor: (UIEvent*)event
+{
+    int count = 1;
     
+    for (UITouch* touch in event.allTouches)
+    {
+        CGPoint location = [touch locationInView: self.view];
+        
+        NSLog(@"%d: (%.0f, %.0f)", count, location.x, location.y);
+        count++;
+    }
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"I sense a touch!");
     UITouch *touch = [[event allTouches] anyObject];
     if ([nmv.messageTextField isFirstResponder] && [touch view] != nmv.messageTextField) {
         [nmv.messageTextField resignFirstResponder];
