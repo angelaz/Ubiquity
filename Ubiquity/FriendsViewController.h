@@ -14,8 +14,12 @@
 @interface FriendsViewController :  UITableViewController <NSURLConnectionDelegate>
 {
     //Model objects
+<<<<<<< Updated upstream
     CustomFBFriendPickerViewController *friendPickerController;
     NSMutableArray* selectedFriends;
+=======
+    FBFriendPickerViewController *friendPickerController;
+>>>>>>> Stashed changes
     PFObject *ubiquityFriends;
     
     //View objects
@@ -24,5 +28,8 @@
     BOOL userLoggedIn; //needed because fvc is init-ed before user actually logs in (for navigation)
 
 }
+
+@property (nonatomic, strong) NSArray* selectedFriends;
+
 - (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect;
 @end

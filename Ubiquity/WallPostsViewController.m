@@ -30,8 +30,12 @@ static NSInteger kPAWCellNameLabelTag = 4;
 #import "AppDelegate.h"
 #import "TextMessage.h"
 #import "LocationController.h"
+#import "FriendsViewController.h"
 
 @interface WallPostsViewController ()
+
+
+@property (nonatomic, strong) FriendsViewController *friendsViewController;
 
 @end
 
@@ -148,14 +152,24 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
 	[query includeKey:kPAWParseUserKey];
     
-    RecentViewController *controller = [[RecentViewController alloc] init];
-   // if ([controller indexNumber] == 0) {
-    //    [query orderByDescending:@"location"];
-   // } else if ([controller indexNumber] == 1) {
+    if (self.indexing == 0) {
+        
+        // THIS IS WHERE WE NEED TO IMPLEMENT JUST FRIENDS SHOWING UP!!!!!
+        
+        NSLog(@"Order was changed to just friends (actually just text alphabetical)");
+
+        [query orderByDescending:@"text"];
+    } else
+    if (self.indexing == 1) {
         [query orderByDescending:@"updatedAt"];
-   // } else if ([controller indexNumber] == 2) {
-   //     [query orderByDescending:@"text"];
-   // }
+        NSLog(@"Order was changed to date");
+    } else if (self.indexing == 2) {
+        
+        // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
+        
+        [query orderByDescending:@"updatedAt"];
+        NSLog(@"Order was changed to favorites (not really)");
+    }
     
 	return query;
 }

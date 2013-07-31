@@ -12,4 +12,6 @@
 
 @interface WallPostsViewController : PFQueryTableViewController
 
+@property (nonatomic) int indexing;
+
 @end
