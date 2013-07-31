@@ -127,15 +127,19 @@
     cell.textLabel.text = name;
     
     //Gray out a cell if that friend doesn't use Parse
-    PFQuery *findUsers = [PFQuery queryWithClassName:@"User"];
+    PFQuery *findUsers = [PFQuery queryWithClassName:@"_User"];
+    [findUsers whereKey:@"fbId" equalTo:facebookID];
     [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {   // The find succeeded.
-            NSLog(@"Successfully retrieved %d objects.", objects.count);
-            for (PFObject *object in objects) {
-                NSLog(@"%@", object);
-                if ([object objectForKey:@"id"] == facebookID) {
-                    NSLog(@"%@", [object objectForKey:@"id"]);
-                }
+            if (objects.count == 0) {               //This user doesn't use Ubiquity
+                cell.textLabel.textColor = [UIColor lightGrayColor];
+                UIButton *inviteFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                inviteFriendButton.frame = CGRectMake(cell.bounds.size.width - 60, 5.0f, 60.0f, 44.0f);
+                [inviteFriendButton setTitle:@"Invite" forState:UIControlStateNormal];
+                [inviteFriendButton addTarget:self
+                                       action:@selector(inviteFriendforUser:)
+                             forControlEvents:UIControlEventTouchUpInside];
+                [cell addSubview:inviteFriendButton];
             }
         } else {        // Log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);
@@ -168,6 +172,11 @@
     
 }
 
+- (void)inviteFriendforUser:(PFUser *) user
+{
+    /* Implement inviting friends to the Ubiquity app here */
+    NSLog(@"Heyyo. You tried to invite a friend but this isn't implemented yet. Sadface.");
+}
 
 - (void)removeFriends
 {

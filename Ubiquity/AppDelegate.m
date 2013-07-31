@@ -64,6 +64,7 @@
     [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
     UITabBarItem *friendsTab = [friendsNavController tabBarItem];
     [friendsTab setTitle:@"Friends"];
+    [friendsTab setImage:[UIImage imageNamed:@"friends.png"]];
     UITabBarItem *optionsTab = [optionsNavController tabBarItem];
     [optionsTab setTitle:@"Options"];
     [optionsTab setImage:[UIImage imageNamed:@"options.png"]];
