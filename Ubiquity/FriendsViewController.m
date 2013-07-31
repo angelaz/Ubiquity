@@ -10,7 +10,7 @@
 
 @interface FriendsViewController () <UITableViewDataSource, UITableViewDelegate, FBFriendPickerDelegate>
 {
-    
+
 }
 @end
 
@@ -18,53 +18,59 @@
 - (id) init{
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
-        UINavigationItem *nav = [self navigationItem];
-        [nav setTitle:@"Friends"];
-        UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                             target:self
-                                                                             action:@selector(displayFriendPicker)];
-        self.navigationItem.rightBarButtonItem = add;
-        
-        selectedFriends = [[NSArray alloc] init];
-        
-        PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
-        [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
-        NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {   // The find succeeded.
-                NSLog(@"Successfully retrieved %d objects.", objects.count);
-                if ([objects count] > 0) {      //Saved friend list exists
-                    for (PFObject *object in objects) {
-                        NSLog(@"%@", object.objectId);
-                        NSArray *friendList = [object objectForKey:@"friends"];
-                        selectedFriends = friendList;   //Load saved friends
+        userLoggedIn = NO;
+        if ([PFUser currentUser])
+        {
+            userLoggedIn = YES;
+            UINavigationItem *nav = [self navigationItem];
+            [nav setTitle:@"Friends"];
+            UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                                 target:self
+                                                                                 action:@selector(displayFriendPicker)];
+            self.navigationItem.rightBarButtonItem = add;
+            
+            selectedFriends = [[NSArray alloc] init];
+            
+            PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
+            [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
+            NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {   // The find succeeded.
+                    NSLog(@"Successfully retrieved %d objects.", objects.count);
+                    if ([objects count] > 0) {      //Saved friend list exists
+                        for (PFObject *object in objects) {
+                            NSLog(@"%@", object.objectId);
+                            NSArray *friendList = [object objectForKey:@"friends"];
+                            selectedFriends = friendList;   //Load saved friends
+                        }
+                    } else {    //No saved friend list, instantiate new one
+                        //Setting up PFObject
+                        ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
+                        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
+                        [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
+                        [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
+                        //User read/write permissions
+                        PFACL *defaultACL = [PFACL ACL];
+                        [defaultACL setPublicReadAccess:YES];       //Everyone can see a given Ubiquity user's in-app friends
+                        [defaultACL setPublicWriteAccess:NO];       //But only that user can modify their friend list
+                        [defaultACL setWriteAccess:YES forUser:[PFUser currentUser]];
+                        ubiquityFriends.ACL = defaultACL;
                     }
-                } else {    //No saved friend list, instantiate new one
-                    //Setting up PFObject
-                    ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
-                    [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-                    [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
-                    [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
-                    //User read/write permissions
-                    PFACL *defaultACL = [PFACL ACL];
-                    [defaultACL setPublicReadAccess:YES];       //Everyone can see a given Ubiquity user's in-app friends
-                    [defaultACL setPublicWriteAccess:NO];       //But only that user can modify their friend list
-                    [defaultACL setWriteAccess:YES forUser:[PFUser currentUser]];
-                    ubiquityFriends.ACL = defaultACL;
+                    
+                } else {        // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
                 }
-                
-            } else {        // Log details of the failure
-                NSLog(@"Error: %@ %@", error, [error userInfo]);
-            }
-        }];
-        
+            }];
+        }
     }
     return self;
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    if (!userLoggedIn)
+        [self init];
+
 }
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -106,8 +112,8 @@
     profilePictureView.profileID = facebookID;
     [cell.imageView addSubview:profilePictureView];
     
-//    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
-//    NSData *imageData = [NSData dataWithContentsOfURL:pictureURL];
+    //    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
+    //    NSData *imageData = [NSData dataWithContentsOfURL:pictureURL];
     cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://www.faithlineprotestants.org/wp-content/uploads/2010/12/facebook-default-no-profile-pic.jpg"]]];
     //cell.imageView.image = [UIImage imageWithData:imageData];
     //cell.imageView.image = [self getSubImageFrom:[UIImage imageWithData:data] WithRect:CGRectMake(0.0, 0.0, 75.0, 75.0)];

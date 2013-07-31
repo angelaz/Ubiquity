@@ -7,7 +7,8 @@
 //
 
 #import "OptionsViewController.h"
-
+#import <Parse/Parse.h>
+#import "AppDelegate.h"
 @interface OptionsViewController ()
 
 @end
@@ -25,13 +26,29 @@
     if (self) {
         UINavigationItem *nav = [self navigationItem];
         [nav setTitle:@"Options"];
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
-                                                                             target:self
-                                                                             action:@selector(save:)];
-        [[self navigationItem] setRightBarButtonItem:bbi];
+//        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+//                                                                             target:self
+//                                                                             action:@selector(save:)];
+        UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTouchHandler:)];
+        [[self navigationItem] setRightBarButtonItem:logoutButton];
     }
     
     return self;
+}
+- (void)logoutButtonTouchHandler:(id)sender {
+    
+    [PFUser logOut];
+    if ([PFUser currentUser] == nil)
+    {
+        NSLog(@"Successfully Logged out");
+        //[self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
+        LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+        [self.tabBarController setSelectedIndex:0];
+        [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
+
+
+
+    }
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil

@@ -33,47 +33,53 @@
     [PFFacebookUtils initializeFacebook];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
     
-    if ([PFUser currentUser]) {
-        RecentViewController *rvc = [[RecentViewController alloc] init];
-        UINavigationController *recentNavController = [[UINavigationController alloc]
-                                             initWithRootViewController:rvc];
-        [UIView  beginAnimations: @"Showinfo"context: nil];
-        
-        NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
- 
-        
-        FriendsViewController *fvc = [[FriendsViewController alloc] init];
-        UINavigationController *friendsNavController = [[UINavigationController alloc]
-                                                  initWithRootViewController:fvc];
-        
-        OptionsViewController *ovc = [[OptionsViewController alloc] init];
-        UINavigationController *optionsNavController = [[UINavigationController alloc]
-                                                        initWithRootViewController:ovc];
-        
-        
-        
-        UITabBarController *tabBarController = [[UITabBarController alloc] init];
-        [tabBarController setViewControllers:@[recentNavController, nmvc,
-                                               friendsNavController, optionsNavController]];
-        UITabBarItem *recentTab = [recentNavController tabBarItem];
-        [recentTab setTitle:@"Recent Items"];
-        UITabBarItem *newMessageTab = [nmvc
-                                       tabBarItem];
-        [newMessageTab setTitle:@"New Message"];
-        [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
-        UITabBarItem *friendsTab = [friendsNavController tabBarItem];
-        [friendsTab setTitle:@"Friends"];
-        UITabBarItem *optionsTab = [optionsNavController tabBarItem];
-        [optionsTab setTitle:@"Options"];
-        [optionsTab setImage:[UIImage imageNamed:@"options.png"]];
-        
-        [self.window setRootViewController:tabBarController];
-    } else {
-         [self presentLoginViewController];
-    }
+    //    if ([PFUser currentUser]) {
+    RecentViewController *rvc = [[RecentViewController alloc] init];
+    UINavigationController *recentNavController = [[UINavigationController alloc]
+                                                   initWithRootViewController:rvc];
+    [UIView  beginAnimations: @"Showinfo"context: nil];
+    
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    
+    
+    FriendsViewController *fvc = [[FriendsViewController alloc] init];
+    UINavigationController *friendsNavController = [[UINavigationController alloc]
+                                                    initWithRootViewController:fvc];
+    
+    OptionsViewController *ovc = [[OptionsViewController alloc] init];
+    UINavigationController *optionsNavController = [[UINavigationController alloc]
+                                                    initWithRootViewController:ovc];
+    
+    
+    
+    self.tabBarController = [[UITabBarController alloc] init];
+    [self.tabBarController setViewControllers:@[recentNavController, nmvc,
+                                                
+                                                friendsNavController, optionsNavController]];
+    UITabBarItem *recentTab = [recentNavController tabBarItem];
+    [recentTab setTitle:@"Recent Items"];
+    UITabBarItem *newMessageTab = [nmvc
+                                   tabBarItem];
+    [newMessageTab setTitle:@"New Message"];
+    [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
+    UITabBarItem *friendsTab = [friendsNavController tabBarItem];
+    [friendsTab setTitle:@"Friends"];
+    UITabBarItem *optionsTab = [optionsNavController tabBarItem];
+    [optionsTab setTitle:@"Options"];
+    [optionsTab setImage:[UIImage imageNamed:@"options.png"]];
+    
+    [self.window setRootViewController:self.tabBarController];
+    
+    //    } else {
+    //         [self presentLoginViewController];
+    //    }
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    if ([PFUser currentUser] == nil) {
+        [self presentLoginViewController];
+    }
+    
     return YES;
 }
 
@@ -85,7 +91,7 @@
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
@@ -114,11 +120,12 @@
 	// Go to the welcome screen and have them log in or create an account.
 	LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
 	loginViewController.title = @"Welcome to Ubi!";
+    [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
 	
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
-	navController.navigationBarHidden = YES;
-    
-	self.window.rootViewController = navController;
+    //	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+    //	navController.navigationBarHidden = YES;
+    //
+    //	self.window.rootViewController = navController;
 }
 
 
