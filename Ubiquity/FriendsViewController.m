@@ -101,16 +101,21 @@
     NSString *facebookID = userData[@"id"];
     NSString *name = userData[@"name"];
     
-    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
-    NSData *data = [NSData dataWithContentsOfURL:pictureURL];
-    UIImage *img = [UIImage imageWithData:data];
-    cell.imageView.image = img;
-    cell.imageView.layer.cornerRadius = 8.0f;
-    cell.imageView.layer.frame = CGRectMake(0.0, 0.0, 75.0, 75.0); //I want to resize/crop these images
-    cell.imageView.layer.masksToBounds = YES;                      //But that can be lower priority
+    FBProfilePictureView *profilePictureView = [[FBProfilePictureView alloc] init];
+    profilePictureView.frame = CGRectMake(0.0, 0.0, 45.0, 45.0);
+    profilePictureView.profileID = facebookID;
+    [cell.imageView addSubview:profilePictureView];
+    
+//    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
+//    NSData *imageData = [NSData dataWithContentsOfURL:pictureURL];
+    cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://www.faithlineprotestants.org/wp-content/uploads/2010/12/facebook-default-no-profile-pic.jpg"]]];
+    //cell.imageView.image = [UIImage imageWithData:imageData];
+    //cell.imageView.image = [self getSubImageFrom:[UIImage imageWithData:data] WithRect:CGRectMake(0.0, 0.0, 75.0, 75.0)];
+    
     cell.textLabel.text = name;
     return cell;
 }
+
 
 // gets cropped FB profile pic sized image (not scaled though)
 - (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect {
