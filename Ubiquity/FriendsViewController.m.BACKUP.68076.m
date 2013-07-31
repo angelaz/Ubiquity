@@ -29,7 +29,7 @@
                                                                                  action:@selector(displayFriendPicker)];
             self.navigationItem.rightBarButtonItem = add;
             
-
+<<<<<<< Updated upstream
             UIBarButtonItem *remove = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                                                     target:self
                                                                                     action:@selector(removeFriends)];
@@ -38,13 +38,14 @@
             self.tableView.scrollEnabled = YES;
             
             selectedFriends = [[NSMutableArray alloc] init];
-
+=======
             _selectedFriends = [[NSArray alloc] init];
-
+>>>>>>> Stashed changes
+            
             PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
             [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
             NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
-
+<<<<<<< Updated upstream
 
             
             
@@ -74,7 +75,7 @@
 //                    NSLog(@"Error: %@ %@", error, [error userInfo]);
 //                }
 //            }];
-
+=======
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {   // The find succeeded.
                     NSLog(@"Successfully retrieved %d objects.", objects.count);
@@ -102,7 +103,7 @@
                     NSLog(@"Error: %@ %@", error, [error userInfo]);
                 }
             }];
-
+>>>>>>> Stashed changes
         }
     }
     return self;
@@ -266,6 +267,7 @@
 - (void)friendPickerViewControllerSelectionDidChange:
 (FBFriendPickerViewController *)friendPicker
 {
+<<<<<<< Updated upstream
     for (id friend in friendPicker.selection) {
         if (![selectedFriends containsObject:friend]) {
             [selectedFriends addObject:friend];
@@ -311,20 +313,20 @@
         }
     }
 }
-//- (void)facebookViewControllerDoneWasPressed:(id)sender {
-//    //Save friends
-//    [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-//
-//    _selectedFriends = friendPickerController.selection;
-//    [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
-//    [ubiquityFriends saveInBackground];
-//    
-//}
+- (void)facebookViewControllerDoneWasPressed:(id)sender {
+    //Save friends
+    [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
+=======
+    _selectedFriends = friendPickerController.selection;
+    [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
+    [ubiquityFriends saveInBackground];
+    
+}
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     //Save friends
     _selectedFriends = friendPickerController.selection;
     [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
-
+>>>>>>> Stashed changes
     [ubiquityFriends saveInBackground];
     // Dismiss the friend picker
     [self.navigationController popToRootViewControllerAnimated:YES];

@@ -14,10 +14,12 @@
 @interface FriendsViewController :  UITableViewController <NSURLConnectionDelegate>
 {
     //Model objects
-
+<<<<<<< Updated upstream
     CustomFBFriendPickerViewController *friendPickerController;
     NSMutableArray* selectedFriends;
-
+=======
+    FBFriendPickerViewController *friendPickerController;
+>>>>>>> Stashed changes
     PFObject *ubiquityFriends;
     
     //View objects
