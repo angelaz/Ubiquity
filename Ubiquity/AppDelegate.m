@@ -31,7 +31,7 @@
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
     
     [PFFacebookUtils initializeFacebook];
-  //  self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
     
     if ([PFUser currentUser]) {
         RecentViewController *rvc = [[RecentViewController alloc] init];

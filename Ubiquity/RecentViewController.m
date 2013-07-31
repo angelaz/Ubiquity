@@ -20,6 +20,8 @@
 
 @interface RecentViewController ()
 
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+
 @property (nonatomic, strong) NSMutableArray *annotations;
 @property (nonatomic, copy) NSString *className;
 
@@ -59,14 +61,38 @@
     self = [super init];
     if (self) {
         UINavigationItem *nav = [self navigationItem];
-        [nav setTitle:@"Recent"];
+       // [nav setTitle:@"Recent"];
         UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                              target:self
                                                                              action:@selector(addNewItem:)];
         [[self navigationItem] setRightBarButtonItem:bbi];
+        
+        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Nearby", @"Recent", @"Favorites"]];
+        
+        _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+        [_segmentedControl setSelectedSegmentIndex:1];
+        
+        [_segmentedControl addTarget:self
+                              action:@selector(changeSegment:)
+                    forControlEvents:UIControlEventValueChanged];
+        
+        nav.titleView = _segmentedControl;
+        
     }
     
     return self;
+}
+
+- (void)changeSegment:(UISegmentedControl *)sender
+{
+    NSInteger value = [sender selectedSegmentIndex];
+    if (value == 0) {
+        _indexNumber = 0;
+    } else if (value == 1) {
+        _indexNumber = 1;
+    } else if (value == 2) {
+        _indexNumber = 2;
+    }
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -371,10 +397,10 @@
 	}
     
 	locManager.delegate = self;
-	locManager.desiredAccuracy = kCLLocationAccuracyBest;
+	//locManager.desiredAccuracy = kCLLocationAccuracyBest;
     
 	// Set a movement threshold for new events.
-	locManager.distanceFilter = kCLLocationAccuracyNearestTenMeters;
+	locManager.distanceFilter = 1000.0f;
     
 	[locManager startUpdatingLocation];
     
@@ -382,6 +408,7 @@
 	if (currentLocation) {
 	//	AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
 	//	appDelegate.currentLocation = currentLocation;
+        locManager.delegate = locationController;
 	}
     
 }

@@ -13,6 +13,8 @@
 #import "RecentViewController.h"
 #import "LocationController.h"
 
+#define kOFFSET_FOR_KEYBOARD 190.0
+
 @interface NewMessageViewController ()
 
 @property (nonatomic, strong) UITextField *toRecipientTextField;
@@ -36,13 +38,26 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden: YES];
+    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
     [super viewWillAppear:animated];
+
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     [self.tabBarController.tabBar setHidden: NO];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
     [super viewWillDisappear:animated];
+
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -77,7 +92,7 @@
     
     nmv.toRecipientTextField.delegate = self;
     
-    nmv.messageTextField.delegate = self;
+    nmv.messageTextView.delegate = self;
     nmv.locationSearchTextField.delegate = self;
     
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
@@ -105,20 +120,99 @@
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation:locationController.location.coordinate];
     
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
+    tapRecognizer.numberOfTapsRequired = 1;
+    [nmv addGestureRecognizer:tapRecognizer];
+
+    
+    
+    
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    
-    UITouch *touch = [[event allTouches] anyObject];
-    if ([nmv.messageTextField isFirstResponder] && [touch view] != nmv.messageTextField) {
-        [nmv.messageTextField resignFirstResponder];
-    } else if ([nmv.toRecipientTextField isFirstResponder] && [touch view] != nmv.toRecipientTextField) {
-        [nmv.toRecipientTextField resignFirstResponder];
-    } else if ([nmv.locationSearchTextField isFirstResponder] && [touch view] != nmv.locationSearchTextField) {
-        [nmv.locationSearchTextField resignFirstResponder];
-    }
-    [super touchesBegan:touches withEvent:event];
+- (void)textViewDidBeginEditing:(UITextView *)textView
+{
+    [nmv.map setUserInteractionEnabled:NO];
 }
+
+
+-(void) hideKeyboard: (id) sender
+{
+    NSLog(@"I sense a touch!");
+    
+    [nmv.messageTextView resignFirstResponder];
+    [nmv.locationSearchTextField resignFirstResponder];
+    [nmv.toRecipientTextField resignFirstResponder];
+    [nmv.map setUserInteractionEnabled:YES];
+
+    
+}
+
+
+
+-(void)keyboardWillHide {
+    if (self.view.frame.origin.y > 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+-(void)textFieldDidBeginEditing:(UITextField *)sender
+{
+    if ([sender isEqual:nmv.locationSearchTextField])
+    {
+        //move the main view, so that the keyboard does not hide it.
+        if  (self.view.frame.origin.y >= 0)
+        {
+            [self setViewMovedUp:YES];
+        }
+    }
+    [nmv.map setUserInteractionEnabled:NO];
+
+    
+}
+
+//method to move the view up/down whenever the keyboard is shown/dismissed
+-(void)setViewMovedUp:(BOOL)movedUp
+{
+    [UIView beginAnimations:nil context:NULL];
+    [UIView setAnimationDuration:0.3]; // if you want to slide up the view
+    
+    CGRect rect = self.view.frame;
+    if (movedUp)
+    {
+        // 1. move the view's origin up so that the text field that will be hidden come above the keyboard
+        // 2. increase the size of the view so that the area behind the keyboard is covered up.
+        rect.origin.y -= kOFFSET_FOR_KEYBOARD;
+        rect.size.height += kOFFSET_FOR_KEYBOARD;
+    }
+    else
+    {
+        // revert back to the normal state.
+        rect.origin.y += kOFFSET_FOR_KEYBOARD;
+        rect.size.height -= kOFFSET_FOR_KEYBOARD;
+    }
+    self.view.frame = rect;
+    
+    [UIView commitAnimations];
+}
+
+-(void)logTouchesFor: (UIEvent*)event
+{
+    int count = 1;
+    
+    for (UITouch* touch in event.allTouches)
+    {
+        CGPoint location = [touch locationInView: self.view];
+        
+        NSLog(@"%d: (%.0f, %.0f)", count, location.x, location.y);
+        count++;
+    }
+}
+
 
 -(void) closeNewMessage: (id) sender
 {
@@ -166,14 +260,14 @@
 - (void) sendMessage: (id) sender
 {
     // Dismiss keyboard and capture any auto-correct
-    [nmv.messageTextField resignFirstResponder];
+    [nmv.messageTextView resignFirstResponder];
     
     // Get user's current location
     LocationController* locationController = [LocationController sharedLocationController];
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     
     // Get the post's message
-    NSString *postMessage = nmv.messageTextField.text;
+    NSString *postMessage = nmv.messageTextView.text;
     
     //Get the currently logged in PFUser
     PFUser *user = [PFUser currentUser];

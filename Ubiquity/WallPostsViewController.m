@@ -148,6 +148,15 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
 	[query includeKey:kPAWParseUserKey];
     
+    RecentViewController *controller = [[RecentViewController alloc] init];
+   // if ([controller indexNumber] == 0) {
+    //    [query orderByDescending:@"location"];
+   // } else if ([controller indexNumber] == 1) {
+        [query orderByDescending:@"updatedAt"];
+   // } else if ([controller indexNumber] == 2) {
+   //     [query orderByDescending:@"text"];
+   // }
+    
 	return query;
 }
 

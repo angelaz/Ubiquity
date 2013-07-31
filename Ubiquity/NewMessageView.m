@@ -27,6 +27,7 @@
         int const LINE_HEIGHT = 30;
         
         
+        
         LocationController* locationController = [LocationController sharedLocationController];
         CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
         
@@ -47,9 +48,15 @@
         speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
         [self addSubview:speechBubbleBackground];
         
+        
         self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 45 + LINE_HEIGHT, 50, LINE_HEIGHT)];
         self.toLabel.text = @"To:";
         [self addSubview:self.toLabel];
+        
+        
+        
+        
+        
         
         self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 45+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
         self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
@@ -63,8 +70,8 @@
         [self addSubview:self.messageTextFieldBg];
 
         
-        self.messageTextField = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 90.0+ LINE_HEIGHT, 250.0, 130.0)];
-        [self addSubview:self.messageTextField];
+        self.messageTextView = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 90.0+ LINE_HEIGHT, 250.0, 130.0)];
+        [self addSubview:self.messageTextView];
 
         
         self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 10, SCREEN_HEIGHT - 70, 250.0, LINE_HEIGHT)];
@@ -107,6 +114,7 @@
     }
     return self;
 }
+
 
 /*
 // Only override drawRect: if you perform custom drawing.
