@@ -27,7 +27,5 @@
 
 }
 
-@property (nonatomic, strong) NSArray* selectedFriends;
-
 - (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect;
 @end

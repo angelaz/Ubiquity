@@ -39,7 +39,7 @@
             
             selectedFriends = [[NSMutableArray alloc] init];
 
-            _selectedFriends = [[NSArray alloc] init];
+            selectedFriends = [[NSArray alloc] init];
 
             PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
             [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
@@ -82,12 +82,12 @@
                         for (PFObject *object in objects) {
                             NSLog(@"%@", object.objectId);
                             NSArray *friendList = [object objectForKey:@"friends"];
-                            _selectedFriends = friendList;   //Load saved friends
+                            selectedFriends = friendList;   //Load saved friends
                         }
                     } else {    //No saved friend list, instantiate new one
                         //Setting up PFObject
                         ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
-                        [ubiquityFriends setObject:_selectedFriends forKey:@"friends"];
+                        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
                         [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
                         [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
                         //User read/write permissions
@@ -132,7 +132,7 @@
 
 //Friends Table View Logic
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [_selectedFriends count];
+    return [selectedFriends count];
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -145,7 +145,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                       reuseIdentifier:CellIdentifier];
     }
-    NSDictionary *userData = [_selectedFriends objectAtIndex:indexPath.row];
+    NSDictionary *userData = [selectedFriends objectAtIndex:indexPath.row];
     NSString *facebookID = userData[@"id"];
     NSString *name = userData[@"name"];
     
@@ -322,7 +322,7 @@
 //}
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     //Save friends
-    _selectedFriends = friendPickerController.selection;
+    selectedFriends = friendPickerController.selection;
     [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
 
     [ubiquityFriends saveInBackground];
