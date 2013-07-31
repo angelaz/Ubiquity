@@ -14,7 +14,7 @@
 {
     //Model objects
     FBFriendPickerViewController *friendPickerController;
-    NSArray* selectedFriends;
+    NSMutableArray* selectedFriends;
     PFObject *ubiquityFriends;
     
     //View objects

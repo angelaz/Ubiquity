@@ -25,7 +25,9 @@
                                                                              action:@selector(displayFriendPicker)];
         self.navigationItem.rightBarButtonItem = add;
         
-        selectedFriends = [[NSArray alloc] init];
+        self.tableView.scrollEnabled = YES;
+        
+        selectedFriends = [[NSMutableArray alloc] init];
         
         PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
         [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
@@ -35,9 +37,8 @@
                 NSLog(@"Successfully retrieved %d objects.", objects.count);
                 if ([objects count] > 0) {      //Saved friend list exists
                     for (PFObject *object in objects) {
-                        NSLog(@"%@", object.objectId);
-                        NSArray *friendList = [object objectForKey:@"friends"];
-                        selectedFriends = friendList;   //Load saved friends
+                        ubiquityFriends = object;
+                        selectedFriends = [object objectForKey:@"friends"];;   //Load saved friends
                     }
                 } else {    //No saved friend list, instantiate new one
                     //Setting up PFObject
@@ -147,25 +148,26 @@
                                   initWithNibName:nil bundle:nil];
         friendPickerController.delegate = self;
         friendPickerController.cancelButton = nil;
-        friendPickerController.title = @"Select friends";
+        friendPickerController.title = @"Add Friends";
     }
     
     [friendPickerController loadData];
     [self.navigationController pushViewController:friendPickerController
                                          animated:true];
+
 }
 - (void)friendPickerViewControllerSelectionDidChange:
 (FBFriendPickerViewController *)friendPicker
 {
-    selectedFriends = friendPickerController.selection;
-    [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
-    [ubiquityFriends saveInBackground];
-    
+    for (id friend in friendPicker.selection) {
+        if (![selectedFriends containsObject:friend]) {
+            [selectedFriends addObject:friend];
+        }
+    }
 }
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     //Save friends
-    selectedFriends = friendPickerController.selection;
-    [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
+    [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
     [ubiquityFriends saveInBackground];
     // Dismiss the friend picker
     [self.navigationController popToRootViewControllerAnimated:YES];
