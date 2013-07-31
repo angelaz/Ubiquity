@@ -41,32 +41,35 @@
             PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
             [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
             NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if (!error) {   // The find succeeded.
-                    NSLog(@"Successfully retrieved %d objects.", objects.count);
-                    if ([objects count] > 0) {      //Saved friend list exists
-                        for (PFObject *object in objects) {
-                            ubiquityFriends = object;
-                            selectedFriends = [object objectForKey:@"friends"];;   //Load saved friends
-                        }
-                    } else {    //No saved friend list, instantiate new one
-                        //Setting up PFObject
-                        ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
-                        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-                        [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
-                        [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
-                        //User read/write permissions
-                        PFACL *defaultACL = [PFACL ACL];
-                        [defaultACL setPublicReadAccess:YES];       //Everyone can see a given Ubiquity user's in-app friends
-                        [defaultACL setPublicWriteAccess:NO];       //But only that user can modify their friend list
-                        [defaultACL setWriteAccess:YES forUser:[PFUser currentUser]];
-                        ubiquityFriends.ACL = defaultACL;
-                    }
-                    
-                } else {        // Log details of the failure
-                    NSLog(@"Error: %@ %@", error, [error userInfo]);
-                }
-            }];
+
+            
+            
+//            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//                if (!error) {   // The find succeeded.
+//                    NSLog(@"Successfully retrieved %d objects.", objects.count);
+//                    if ([objects count] > 0) {      //Saved friend list exists
+//                        for (PFObject *object in objects) {
+//                            ubiquityFriends = object;
+//                            selectedFriends = [object objectForKey:@"friends"];;   //Load saved friends
+//                        }
+//                    } else {    //No saved friend list, instantiate new one
+//                        //Setting up PFObject
+//                        ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
+//                        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
+//                        [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
+//                        [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
+//                        //User read/write permissions
+//                        PFACL *defaultACL = [PFACL ACL];
+//                        [defaultACL setPublicReadAccess:YES];       //Everyone can see a given Ubiquity user's in-app friends
+//                        [defaultACL setPublicWriteAccess:NO];       //But only that user can modify their friend list
+//                        [defaultACL setWriteAccess:YES forUser:[PFUser currentUser]];
+//                        ubiquityFriends.ACL = defaultACL;
+//                    }
+//                    
+//                } else {        // Log details of the failure
+//                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+//                }
+//            }];
         }
     }
     return self;
@@ -225,6 +228,45 @@
     for (id friend in friendPicker.selection) {
         if (![selectedFriends containsObject:friend]) {
             [selectedFriends addObject:friend];
+            //NSLog(@"the current friend: %@", friend);
+            
+            //NSLog(@"fbId = %@", [friend objectForKey:@"id"]);
+            
+            PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+            [query whereKey:@"fbId" equalTo:[friend objectForKey:@"id"]];
+
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {
+                    // The find succeeded.
+                    NSLog(@"Successfully retrieved %d friends.", objects.count);
+                    // Do something with the found objects
+                    if(objects.count > 0) {
+                        //There really should be only one return here, max
+                        for (PFObject *object in objects) {
+                            if(objects.count > 0) {
+                                
+                                PFObject *me = [PFUser currentUser];
+                                PFRelation *relation = [object relationforKey:@"follows"];
+                                [relation addObject:me];
+                                [me saveInBackground];
+                                NSLog(@"Saved relation");
+                            }
+                        }
+                    } else {
+                        //MAKE NEW TEMP USER? INVITE BUTTON? GRAY OUT?
+                    }
+                } else {
+                    // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
+            
+            
+//            PFObject *me = [PFUser currentUser];
+//            PFRelation *relation = [friend relationforKey:@"follows"];
+//            [relation addObject:me];
+//            [me saveInBackground];
+        
         }
     }
 }
