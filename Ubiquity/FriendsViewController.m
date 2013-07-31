@@ -29,6 +29,11 @@
                                                                                  action:@selector(displayFriendPicker)];
             self.navigationItem.rightBarButtonItem = add;
             
+            UIBarButtonItem *remove = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                                    target:self
+                                                                                    action:@selector(removeFriends)];
+            self.navigationItem.leftBarButtonItem = remove;
+            
             self.tableView.scrollEnabled = YES;
             
             selectedFriends = [[NSMutableArray alloc] init];
@@ -123,6 +128,23 @@
     //cell.imageView.image = [self getSubImageFrom:[UIImage imageWithData:data] WithRect:CGRectMake(0.0, 0.0, 75.0, 75.0)];
     
     cell.textLabel.text = name;
+    
+    //Gray out a cell if that friend doesn't use Parse
+    PFQuery *findUsers = [PFQuery queryWithClassName:@"User"];
+    [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {   // The find succeeded.
+            NSLog(@"Successfully retrieved %d objects.", objects.count);
+            for (PFObject *object in objects) {
+                NSLog(@"%@", object);
+                if ([object objectForKey:@"id"] == facebookID) {
+                    NSLog(@"%@", [object objectForKey:@"id"]);
+                }
+            }
+        } else {        // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+    
     return cell;
 }
 
@@ -147,6 +169,32 @@
     
     /* Implement loading/viewing/selecting a friend's saved public locations here */
     
+}
+
+
+- (void)removeFriends
+{
+    if (self.tableView.editing == NO) {
+        [self.tableView setEditing:YES animated:YES];
+    } else {
+        [self.tableView setEditing:NO animated:YES];
+        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
+        [ubiquityFriends saveInBackground];
+    }
+    
+}
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellEditingStyleDelete;
+}
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [selectedFriends removeObjectAtIndex:indexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.tableView setEditing:NO animated:YES];
 }
 
 //FriendPicker Display Logic
