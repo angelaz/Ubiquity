@@ -11,6 +11,8 @@
 
 @interface RecentViewController : UIViewController
 
+@property (nonatomic) int indexNumber;
+
 @end
 
 @protocol PAWWallViewControllerHighlight <NSObject>

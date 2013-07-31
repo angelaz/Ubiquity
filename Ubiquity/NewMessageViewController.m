@@ -27,7 +27,7 @@
 @property (nonatomic, strong) NSArray *repeatOptions;
 @property (nonatomic, strong) UITextField *locationSearchTextField;
 @property (nonatomic, strong) UIButton *locationSearchButton;
-
+@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 @end
 
 @implementation NewMessageViewController {
@@ -37,8 +37,7 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self.tabBarController.tabBar setHidden: YES];
-    
+    [self hideTabBar];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide)
@@ -48,10 +47,10 @@
 
 }
 
+
 -(void) viewWillDisappear:(BOOL)animated
 {
-    [self.tabBarController.tabBar setHidden: NO];
-    
+    [self showTabBar];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
@@ -59,6 +58,7 @@
     [super viewWillDisappear:animated];
 
 }
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -81,7 +81,7 @@
     // Do any additional setup after loading the view.
     self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
     
-    nmv = [[NewMessageView alloc] initWithFrame: self.view.frame];
+    nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: nmv];
     
     
@@ -104,14 +104,6 @@
     nmv.repeatTimesPicker.dataSource = self;
     
     
-    self.pickerToolbar = [[UIToolbar alloc] init];
-    self.pickerToolbar.barStyle = UIBarStyleDefault;
-    self.pickerToolbar.translucent = NO;
-    [self.pickerToolbar sizeToFit];
-    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
-                                                                   style:UIBarButtonItemStyleBordered target:self
-                                                                  action:@selector(pickerDoneClicked:)];
-    [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
     
     [nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
@@ -120,9 +112,18 @@
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation:locationController.location.coordinate];
     
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
-    tapRecognizer.numberOfTapsRequired = 1;
-    [nmv addGestureRecognizer:tapRecognizer];
+    self.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
+    [nmv addGestureRecognizer:self.tapRecognizer];
+
+    
+    self.pickerToolbar = [[UIToolbar alloc] init];
+    self.pickerToolbar.barStyle = UIBarStyleDefault;
+    self.pickerToolbar.translucent = NO;
+    [self.pickerToolbar sizeToFit];
+    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
+                                                                   style:UIBarButtonItemStyleBordered target:self
+                                                                  action:@selector(pickerDoneClicked:)];
+    [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
 
     
     
@@ -200,25 +201,10 @@
     [UIView commitAnimations];
 }
 
--(void)logTouchesFor: (UIEvent*)event
-{
-    int count = 1;
-    
-    for (UITouch* touch in event.allTouches)
-    {
-        CGPoint location = [touch locationInView: self.view];
-        
-        NSLog(@"%d: (%.0f, %.0f)", count, location.x, location.y);
-        count++;
-    }
-}
-
-
 -(void) closeNewMessage: (id) sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
-    
 
 }
 
@@ -242,6 +228,8 @@
     [nmv addSubview:nmv.sendButton];
     [self setPickedValueForPickerButton];
     [nmv addSubview:nmv.showRepeatPickerButton];
+    [self.tapRecognizer setEnabled:YES];
+
     
     
 }
@@ -253,6 +241,8 @@
     [nmv.sendButton removeFromSuperview];
     [nmv addSubview:self.pickerToolbar];
     [nmv addSubview: nmv.repeatTimesPicker];
+    [self.tapRecognizer setEnabled:NO];
+
 }
 
 
@@ -368,6 +358,41 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)hideTabBar {
+    UITabBar *tabBar = self.tabBarController.tabBar;
+    UIView *parent = tabBar.superview; // UILayoutContainerView
+    UIView *content = [parent.subviews objectAtIndex:0];  // UITransitionView
+    UIView *window = parent.superview;
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         CGRect tabFrame = tabBar.frame;
+                         tabFrame.origin.y = CGRectGetMaxY(window.bounds);
+                         tabBar.frame = tabFrame;
+                         content.frame = window.bounds;
+                     }];
+    
+}
+
+
+- (void)showTabBar {
+    UITabBar *tabBar = self.tabBarController.tabBar;
+    UIView *parent = tabBar.superview; // UILayoutContainerView
+    UIView *content = [parent.subviews objectAtIndex:0];  // UITransitionView
+    UIView *window = parent.superview;
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         CGRect tabFrame = tabBar.frame;
+                         tabFrame.origin.y = CGRectGetMaxY(window.bounds) - CGRectGetHeight(tabBar.frame);
+                         tabBar.frame = tabFrame;
+                         
+                         CGRect contentFrame = content.frame;
+                         contentFrame.size.height -= tabFrame.size.height;
+                     }];
+}
+
+
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
     
     NSLog(@"New location");
@@ -384,42 +409,9 @@
     marker.title = @"Here";
     marker.snippet = @"My location";
     marker.map = nmv.map;
-
+    
     
 }
-
-//- (void)locationManager:(CLLocationManager *)manager
-//
-//     didUpdateLocations:(NSArray *)locations {
-//    
-//    // If it's a relatively recent event, turn off updates to save power
-//    
-//    //CLLocation* location = [locations lastObject];
-//    
-//    LocationController* locationController = [LocationController sharedLocationController];
-//    CLLocation *location = locationController.location;
-//    
-//    NSDate* eventDate = location.timestamp;
-//    
-//    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-//    
-//    if (abs(howRecent) < 15.0) {
-//        
-//        // If the event is recent, do something with it.
-//        
-//        NSLog(@"latitude %+.6f, longitude %+.6f\n",
-//              
-//              location.coordinate.latitude,
-//              
-//              location.coordinate.longitude);
-//        
-//        [self updateLocation:location.coordinate];
-//        NSLog(@"Updated map");
-//        
-//    }
-//    
-//}
-
 
 
 - (void)locationDidChange:(NSNotification *)note{

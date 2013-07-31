@@ -4,6 +4,7 @@
 #import "UserDetailsViewController.h"
 #import <Parse/Parse.h>
 #import "RecentViewController.h"
+#import "AppDelegate.h"
 
 @implementation LoginViewController
 
@@ -15,9 +16,9 @@
     self.title = @"Facebook Profile";
     
     // Check if user is cached and linked to Facebook, if so, bypass login    
-    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-        [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
-    }
+//    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+//        [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
+//    }
 }
 
 
@@ -44,10 +45,19 @@
             }
         } else if (user.isNew) {
             NSLog(@"User with facebook signed up and logged in!");
+            self.navigationController.navigationBarHidden = NO;
+            
             [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
+            
         } else {
             NSLog(@"User with facebook logged in!");
-            [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
+           //[self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
+//            AppDelegate *ad = [[AppDelegate alloc] init];
+//            [ad.window setRootViewController:ad.tabBarController];
+//            [ad.window makeKeyAndVisible];
+            [self dismissViewControllerAnimated:YES completion:nil];
+            self.tabBarController.selectedIndex = 0;
+
         }
     }];
     

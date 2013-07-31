@@ -148,7 +148,14 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
 	[query includeKey:kPAWParseUserKey];
     
-    [query orderByDescending:@"updatedAt"];
+    RecentViewController *controller = [[RecentViewController alloc] init];
+   // if ([controller indexNumber] == 0) {
+    //    [query orderByDescending:@"location"];
+   // } else if ([controller indexNumber] == 1) {
+        [query orderByDescending:@"updatedAt"];
+   // } else if ([controller indexNumber] == 2) {
+   //     [query orderByDescending:@"text"];
+   // }
     
 	return query;
 }
@@ -162,10 +169,6 @@ static NSInteger kPAWCellNameLabelTag = 4;
     
 	// Try to reuse a cell
 	BOOL cellIsRight = [[[object objectForKey:kPAWParseUserKey] objectForKey:kPAWParseUsernameKey] isEqualToString:[[PFUser currentUser] objectForKey:@"username"]];
-    
-    NSLog(@"First val is %@", [[object objectForKey:kPAWParseUserKey] objectForKey:kPAWParseUsernameKey]);
-    NSLog(@"Second val is %@", [[PFUser currentUser] objectForKey:@"username"]);
-    
     
 	UITableViewCell *cell;
 	if (cellIsRight) { // User's post so create blue bubble

@@ -44,33 +44,35 @@
         marker.map = self.map;
         [self addSubview:self.map];
         
-        UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING + LINE_HEIGHT, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
+        self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *closeButtonImage = [UIImage imageNamed:@"CloseButton"];
+        [self.closeButton setBackgroundImage:closeButtonImage forState:UIControlStateNormal];
+        self.closeButton.frame = CGRectMake(SCREEN_WIDTH - 40, 15, LINE_HEIGHT, LINE_HEIGHT);
+        [self addSubview:self.closeButton];
+        
+        UIImageView *speechBubbleBackground = [[UIImageView alloc] initWithFrame:CGRectMake(LEFT_PADDING-20, LEFT_PADDING + LINE_HEIGHT - 10, SCREEN_WIDTH - LEFT_PADDING + 10, 240)];
         speechBubbleBackground.image = [UIImage imageNamed:@"SpeechBubble"];
         [self addSubview:speechBubbleBackground];
         
         
-        self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 45 + LINE_HEIGHT, 50, LINE_HEIGHT)];
+        self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(LEFT_PADDING, 35 + LINE_HEIGHT, 50, LINE_HEIGHT)];
         self.toLabel.text = @"To:";
         [self addSubview:self.toLabel];
         
         
-        
-        
-        
-        
-        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 45+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
+        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
         self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
         [self addSubview:self.toRecipientTextField];
         
         
         
-        self.messageTextFieldBg = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING, 85.0+ LINE_HEIGHT, 260.0, 140.0)];
+        self.messageTextFieldBg = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING, 75.0+ LINE_HEIGHT, 260.0, 140.0)];
         self.messageTextFieldBg.allowsEditingTextAttributes = NO;
         self.messageTextFieldBg.borderStyle = UITextBorderStyleRoundedRect;
         [self addSubview:self.messageTextFieldBg];
 
         
-        self.messageTextView = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 90.0+ LINE_HEIGHT, 250.0, 130.0)];
+        self.messageTextView = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 80.0+ LINE_HEIGHT, 250.0, 130.0)];
         [self addSubview:self.messageTextView];
 
         
@@ -89,11 +91,6 @@
         [self addSubview:self.locationSearchButton];
         
         
-        self.closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *closeButtonImage = [UIImage imageNamed:@"CloseButton"];
-        [self.closeButton setBackgroundImage:closeButtonImage forState:UIControlStateNormal];
-        self.closeButton.frame = CGRectMake(SCREEN_WIDTH - 40, 25, LINE_HEIGHT, LINE_HEIGHT);
-        [self addSubview:self.closeButton];
         
         self.sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         self.sendButton.frame = CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 28, 50, LINE_HEIGHT);
