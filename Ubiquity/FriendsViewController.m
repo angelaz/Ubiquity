@@ -10,7 +10,7 @@
 
 @interface FriendsViewController () <UITableViewDataSource, UITableViewDelegate, FBFriendPickerDelegate>
 {
-
+    
 }
 @end
 
@@ -76,11 +76,11 @@
     [super viewDidLoad];
     if (!userLoggedIn)
         [self init];
-
+    
 }
 - (void)viewWillAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewWillAppear:NO];
     [[self tableView] reloadData];
 }
 - (id)initWithStyle:(UITableViewStyle)style
@@ -120,11 +120,12 @@
     
     //    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
     //    NSData *imageData = [NSData dataWithContentsOfURL:pictureURL];
-    cell.imageView.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://www.faithlineprotestants.org/wp-content/uploads/2010/12/facebook-default-no-profile-pic.jpg"]]];
+    cell.imageView.image = [UIImage imageNamed:@"pixel"];
     //cell.imageView.image = [UIImage imageWithData:imageData];
     //cell.imageView.image = [self getSubImageFrom:[UIImage imageWithData:data] WithRect:CGRectMake(0.0, 0.0, 75.0, 75.0)];
     
     cell.textLabel.text = name;
+    
     
     //Gray out a cell if that friend doesn't use Parse
     PFQuery *findUsers = [PFQuery queryWithClassName:@"User"];
@@ -171,12 +172,15 @@
 
 - (void)removeFriends
 {
+    
     if (self.tableView.editing == NO) {
         [self.tableView setEditing:YES animated:YES];
+
     } else {
         [self.tableView setEditing:NO animated:YES];
         [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
         [ubiquityFriends saveInBackground];
+
     }
     
 }
@@ -185,20 +189,24 @@
 }
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        [friendPickerController.selection removeObject: [selectedFriends objectAtIndex:indexPath.row]];
         [selectedFriends removeObjectAtIndex:indexPath.row];
+        
+        
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [self.tableView setEditing:NO animated:YES];
+    [self.tableView setEditing:NO animated:NO];
 }
 
 //FriendPicker Display Logic
 - (void)displayFriendPicker
 {
     if (!friendPickerController) {
-        friendPickerController = [[FBFriendPickerViewController alloc]
+        friendPickerController = [[CustomFBFriendPickerViewController alloc]
                                   initWithNibName:nil bundle:nil];
         friendPickerController.delegate = self;
         friendPickerController.cancelButton = nil;
@@ -208,7 +216,7 @@
     [friendPickerController loadData];
     [self.navigationController pushViewController:friendPickerController
                                          animated:true];
-
+    
 }
 - (void)friendPickerViewControllerSelectionDidChange:
 (FBFriendPickerViewController *)friendPicker

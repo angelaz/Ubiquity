@@ -7,13 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomFBFriendPickerViewController.h"
 #import <FacebookSDK/FacebookSDK.h>
 #import <Parse/Parse.h>
 
 @interface FriendsViewController :  UITableViewController <NSURLConnectionDelegate>
 {
     //Model objects
-    FBFriendPickerViewController *friendPickerController;
+    CustomFBFriendPickerViewController *friendPickerController;
     NSMutableArray* selectedFriends;
     PFObject *ubiquityFriends;
     

@@ -69,6 +69,8 @@
 		82E931F317A093D500B3958B /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F117A093D500B3958B /* icon.png */; };
 		82E931F417A093D500B3958B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F217A093D500B3958B /* icon@2x.png */; };
 		8624CD2117A2E99800F32DE8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8624CD2017A2E99800F32DE8 /* StoreKit.framework */; };
+		8626C10317A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8626C10217A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m */; };
+		8626C10517A9C7B6009F6AA7 /* pixel.png in Resources */ = {isa = PBXBuildFile; fileRef = 8626C10417A9C7B6009F6AA7 /* pixel.png */; };
 		866C6BBD17A6F2B000CF8449 /* CloseButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 866C6BBB17A6F2B000CF8449 /* CloseButton.png */; };
 		866C6BBE17A6F2B000CF8449 /* CloseButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 866C6BBC17A6F2B000CF8449 /* CloseButton@2x.png */; };
 		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
@@ -164,6 +166,9 @@
 		82E931F117A093D500B3958B /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		82E931F217A093D500B3958B /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		8624CD2017A2E99800F32DE8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		8626C10117A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFBFriendPickerViewController.h; sourceTree = "<group>"; };
+		8626C10217A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFBFriendPickerViewController.m; sourceTree = "<group>"; };
+		8626C10417A9C7B6009F6AA7 /* pixel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pixel.png; sourceTree = "<group>"; };
 		866C6BBB17A6F2B000CF8449 /* CloseButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CloseButton.png; sourceTree = "<group>"; };
 		866C6BBC17A6F2B000CF8449 /* CloseButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CloseButton@2x.png"; sourceTree = "<group>"; };
 		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
@@ -297,6 +302,8 @@
 				20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */,
 				82C7577417A322520094EB15 /* FriendsViewController.h */,
 				82C7577517A322570094EB15 /* FriendsViewController.m */,
+				8626C10117A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.h */,
+				8626C10217A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m */,
 				82C7577717A3225D0094EB15 /* FriendsViewController.xib */,
 				86894B5D17A096FF00F7146B /* NewMessageViewController.h */,
 				86894B5E17A096FF00F7146B /* NewMessageViewController.m */,
@@ -313,6 +320,7 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8626C10417A9C7B6009F6AA7 /* pixel.png */,
 				825733BA17A8690D0046AA3D /* default.jpg */,
 				866C6BBB17A6F2B000CF8449 /* CloseButton.png */,
 				866C6BBC17A6F2B000CF8449 /* CloseButton@2x.png */,
@@ -466,6 +474,7 @@
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
+				8626C10517A9C7B6009F6AA7 /* pixel.png in Resources */,
 				825733BB17A8690D0046AA3D /* default.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -493,6 +502,7 @@
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,
 				20F8F2A617A1F0F000594994 /* RecentViewController.m in Sources */,
+				8626C10317A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m in Sources */,
 				6097BEDA17A6DC650012A36A /* LocationController.m in Sources */,
 				86894B6217A0A72800F7146B /* TextMessage.m in Sources */,
 				82E931BA17A07A8800B3958B /* LoginViewController.m in Sources */,
