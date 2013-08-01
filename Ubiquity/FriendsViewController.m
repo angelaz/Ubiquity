@@ -117,6 +117,8 @@
 {
     static NSString *CellIdentifier = @"Cell";
     
+    //ADA
+    
     UITableViewCell *cell = (UITableViewCell*)[tableView
                                                dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -124,8 +126,10 @@
                                       reuseIdentifier:CellIdentifier];
     }
     NSDictionary *userData = [selectedFriends objectAtIndex:indexPath.row];
-    NSString *facebookID = userData[@"id"];
-    NSString *name = userData[@"name"];
+    NSLog(@"%@", userData);
+    
+    NSString *facebookID = [userData objectForKey:@"fbId"];//userData[@"id"];
+    NSString *name = [userData objectForKey:@"profile"][@"name"];//userData[@"name"];
     
     FBProfilePictureView *profilePictureView = [[FBProfilePictureView alloc] init];
     profilePictureView.frame = CGRectMake(0.0, 0.0, 45.0, 45.0);
