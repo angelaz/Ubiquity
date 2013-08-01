@@ -25,6 +25,9 @@ static NSString * const kPAWParseLocationKey = @"location";
 
 static NSString * const kNMFrequencyKey = @"frequency";
 
+static NSString * const kPAWParseUbiquityFriendsClassKey = @"UbiquityFriends";
+static NSString * const kPAWParseFriendsKey = @"friends";
+
 
 // NSNotification userInfo keys:
 static NSString * const kPAWFilterDistanceKey = @"filterDistance";

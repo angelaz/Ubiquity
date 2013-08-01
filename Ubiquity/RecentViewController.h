@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Catherine Morrison. All rights reserved.
 //
 
+static int indexNumber = 0;
+
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
 @interface RecentViewController : UIViewController
-
-@property (nonatomic) int indexNumber;
 
 @end
 

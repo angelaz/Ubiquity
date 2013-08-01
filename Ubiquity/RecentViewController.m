@@ -67,10 +67,10 @@
                                                                              action:@selector(addNewItem:)];
         [[self navigationItem] setRightBarButtonItem:bbi];
         
-        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Nearby", @"Recent", @"Favorites"]];
+        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Friends", @"Public", @"Favorites"]];
         
         _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
-        [_segmentedControl setSelectedSegmentIndex:1];
+        [_segmentedControl setSelectedSegmentIndex:0];
         
         [_segmentedControl addTarget:self
                               action:@selector(changeSegment:)
@@ -86,12 +86,18 @@
 - (void)changeSegment:(UISegmentedControl *)sender
 {
     NSInteger value = [sender selectedSegmentIndex];
+    WallPostsViewController *wall = self.wallPostsViewController;
     if (value == 0) {
-        _indexNumber = 0;
+        wall.indexing = 0;
+        NSLog(@"Changed value to 0");
+        [wall loadObjects];
     } else if (value == 1) {
-        _indexNumber = 1;
+        wall.indexing = 1;
+        NSLog(@"Changed value to 1");
+        [wall loadObjects];
     } else if (value == 2) {
-        _indexNumber = 2;
+        indexNumber = 2;
+        NSLog(@"Changed value to 2");
     }
 }
 

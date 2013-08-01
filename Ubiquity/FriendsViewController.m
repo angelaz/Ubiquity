@@ -29,6 +29,7 @@
                                                                                  action:@selector(displayFriendPicker)];
             self.navigationItem.rightBarButtonItem = add;
             
+
             UIBarButtonItem *remove = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                                                     target:self
                                                                                     action:@selector(removeFriends)];
@@ -42,10 +43,8 @@
 //            [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
             NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
 
-//            PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+
             
-//            PFRelation *relation = [place relationForKey:@"follows"];
-//            PFQuery *query = [relation query];
             
             PFRelation *relation = [[PFUser currentUser] relationforKey:@"follows"];
             PFQuery *query = [relation query];
@@ -298,7 +297,9 @@
 }
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     //Save friends
-    [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
+    selectedFriends = friendPickerController.selection;
+    [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
+
     [ubiquityFriends saveInBackground];
     // Dismiss the friend picker
     [self.navigationController popToRootViewControllerAnimated:YES];
