@@ -38,38 +38,50 @@
             
             selectedFriends = [[NSMutableArray alloc] init];
             
-            PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
-            [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
+//            PFQuery *query = [PFQuery queryWithClassName:@"UbiquityFriends"];
+//            [query whereKey:@"userID" equalTo:[[PFUser currentUser] objectId]];
             NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
 
+//            PFQuery *query = [PFQuery queryWithClassName:@"_User"];
             
+//            PFRelation *relation = [place relationForKey:@"follows"];
+//            PFQuery *query = [relation query];
             
-//            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//                if (!error) {   // The find succeeded.
-//                    NSLog(@"Successfully retrieved %d objects.", objects.count);
-//                    if ([objects count] > 0) {      //Saved friend list exists
+            PFRelation *relation = [[PFUser currentUser] relationforKey:@"follows"];
+            PFQuery *query = [relation query];
+            
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (!error) {   // The find succeeded.
+                    NSLog(@"Successfully retrieved %d relationships.", objects.count);
+                    if ([objects count] > 0) {      //Saved friend list exists
 //                        for (PFObject *object in objects) {
 //                            ubiquityFriends = object;
-//                            selectedFriends = [object objectForKey:@"friends"];;   //Load saved friends
+//                            selectedFriends = [object objectForKey:@"friends"];   //Load saved friends
+//                            NSLog(@"Loaded saved friends");
+//                            
+//                            selectedFriends = [[NSMutableArray alloc] initWithArray:objects];
 //                        }
-//                    } else {    //No saved friend list, instantiate new one
-//                        //Setting up PFObject
-//                        ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
-//                        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-//                        [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
-//                        [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
-//                        //User read/write permissions
-//                        PFACL *defaultACL = [PFACL ACL];
-//                        [defaultACL setPublicReadAccess:YES];       //Everyone can see a given Ubiquity user's in-app friends
-//                        [defaultACL setPublicWriteAccess:NO];       //But only that user can modify their friend list
-//                        [defaultACL setWriteAccess:YES forUser:[PFUser currentUser]];
-//                        ubiquityFriends.ACL = defaultACL;
-//                    }
-//                    
-//                } else {        // Log details of the failure
-//                    NSLog(@"Error: %@ %@", error, [error userInfo]);
-//                }
-//            }];
+                        selectedFriends = [[NSMutableArray alloc] initWithArray:objects];
+                        
+                    } else {    //No saved friend list, instantiate new one
+                        //Setting up PFObject
+                        ubiquityFriends = [PFObject objectWithClassName:@"UbiquityFriends"];
+                        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
+                        [ubiquityFriends setObject:[[PFUser currentUser] objectId] forKey:@"userID"];
+                        [ubiquityFriends setObject:[PFUser currentUser] forKey:@"user"];
+                        //User read/write permissions
+                        PFACL *defaultACL = [PFACL ACL];
+                        [defaultACL setPublicReadAccess:YES];       //Everyone can see a given Ubiquity user's in-app friends
+                        [defaultACL setPublicWriteAccess:NO];       //But only that user can modify their friend list
+                        [defaultACL setWriteAccess:YES forUser:[PFUser currentUser]];
+                        ubiquityFriends.ACL = defaultACL;
+                        NSLog(@"Thought there was no saved friends list");
+                    }
+                    
+                } else {        // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
         }
     }
     return self;
@@ -254,9 +266,15 @@
                             if(objects.count > 0) {
                                 
                                 PFObject *me = [PFUser currentUser];
-                                PFRelation *relation = [object relationforKey:@"follows"];
-                                [relation addObject:me];
-                                [me saveInBackground];
+                                PFRelation *relation = [me relationforKey:@"follows"];
+                                [relation addObject:object];
+                                [me saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                    if (!error) {
+                                        NSLog(@"Success saving relation");
+                                    } else {
+                                        NSLog(@"Error saving relation");
+                                    }
+                                }];
                                 NSLog(@"Saved relation");
                             }
                         }
