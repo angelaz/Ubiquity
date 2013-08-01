@@ -116,9 +116,7 @@
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
-    
-    //ADA
-    
+        
     UITableViewCell *cell = (UITableViewCell*)[tableView
                                                dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
