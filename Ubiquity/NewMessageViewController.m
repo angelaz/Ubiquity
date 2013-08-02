@@ -37,6 +37,8 @@
     GMSMapView *mapView;
 }
 
+@synthesize gs;
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [self hideTabBar];
@@ -97,6 +99,8 @@
     nmv.messageTextView.delegate = self;
     nmv.locationSearchTextField.delegate = self;
     
+    gs = [[Geocoding alloc] init];
+    
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     [nmv.closeButton addTarget:self action:@selector(closeNewMessage:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -127,6 +131,7 @@
                                                                    style:UIBarButtonItemStyleBordered target:self
                                                                   action:@selector(pickerDoneClicked:)];
     [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
+    
 
 
 }
@@ -221,10 +226,29 @@
 
 }
 
+- (void)addMarker{
+    
+    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
+    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
+    
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
+    marker.position = geolocation;
+    marker.title = [gs.geocode objectForKey:@"address"];
+    NSLog(@"%@", marker.title);
+    NSLog(@"%f, %f", lat, lng);
+    
+    marker.map = mapView;
+    
+    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation zoom:10.0];
+    [mapView animateWithCameraUpdate:geoLocateCam];
+    
+}
+
 - (void) startSearch: (id) sender
 {
     NSLog(@"Searching for location");
-    // append to code
+    [gs geocodeAddress:_locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
 }
 
 

@@ -10,6 +10,7 @@
 #import <MapKit/MapKit.h>
 #import <GoogleMaps/GoogleMaps.h>
 
+
 @interface NewMessageView : UIView
 @property (nonatomic, strong) UITextField *toRecipientTextField;
 @property (nonatomic, strong) UILabel *toLabel;
@@ -25,4 +26,5 @@
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIView *tapView;
+
 @end

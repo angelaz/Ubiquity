@@ -13,6 +13,7 @@
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
 #import "FriendsViewController.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @interface AppDelegate ()
 
