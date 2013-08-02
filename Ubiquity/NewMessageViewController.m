@@ -348,7 +348,7 @@
     // Create a PFObject using the Post class and set the values we extracted above
     PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
-    [postObject setObject:user forKey:@"sender"];
+    [postObject setObject:user forKey:@"user"];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     [postObject setObject: [NSString stringWithFormat: @"%@", nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     
