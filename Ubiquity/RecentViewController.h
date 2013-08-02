@@ -13,6 +13,8 @@ static int indexNumber = 0;
 
 @interface RecentViewController : UIViewController
 
+- (void)startStandardUpdates;
+
 @end
 
 @protocol PAWWallViewControllerHighlight <NSObject>
