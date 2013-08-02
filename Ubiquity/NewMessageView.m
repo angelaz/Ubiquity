@@ -41,6 +41,7 @@
         marker.position = currentCoordinate;
         marker.title = @"Here";
         marker.snippet = @"My location";
+        //marker.animated = YES;
         marker.map = self.map;
         [self addSubview:self.map];
         
@@ -114,6 +115,7 @@
         self.showRepeatPickerButton.frame = CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 28, SCREEN_WIDTH - 100, 30.0);
         [self addSubview:self.showRepeatPickerButton];
         
+    
     }
     return self;
 }

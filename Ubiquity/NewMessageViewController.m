@@ -128,10 +128,24 @@
                                                                    style:UIBarButtonItemStyleBordered target:self
                                                                   action:@selector(pickerDoneClicked:)];
     [nmv.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
-
+    
+    nmv.map.delegate = self;
+    
     self.friendPickerController = nil;
     
     
+}
+
+-(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
+{
+    NSLog(@"New pin please!");
+    [self updateLocation:coord];
+//    GMSMarker *marker3 = [[GMSMarker alloc] init];
+//    marker3.position = coord;
+//    marker3.title = @"New coordinate!";
+//    marker3.snippet = @"US";
+//    marker3.animated = YES;
+//    marker3.map = nmv.map;
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
@@ -313,8 +327,7 @@
     [self closeNewMessage:self];
 }
 
-
-- (BOOL) textFieldShouldReturn: (UITextField *)textField {
+- (BOOL)textFieldShouldReturn: (UITextField *)textField {
     
     [textField resignFirstResponder];
     return NO;
@@ -394,6 +407,8 @@
 
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
     
+    [nmv.map clear];
+    
     NSLog(@"New location");
     NSLog(@"Long: %f", currentCoordinate.longitude);
     NSLog(@"Lat: %f", currentCoordinate.latitude);
@@ -407,6 +422,7 @@
     marker.position = currentCoordinate;
     marker.title = @"Here";
     marker.snippet = @"My location";
+    marker.animated = YES;
     marker.map = nmv.map;
     
     
