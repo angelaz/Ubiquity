@@ -12,6 +12,7 @@
 #import "NewMessageView.h"
 #import "RecentViewController.h"
 #import "LocationController.h"
+#import "Geocoding.h"
 
 #define kOFFSET_FOR_KEYBOARD 190.0
 
