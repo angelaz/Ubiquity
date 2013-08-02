@@ -17,17 +17,20 @@
 
 @interface NewMessageViewController ()
 
-@property (nonatomic, strong) UITextField *toRecipientTextField;
-@property (nonatomic, strong) UILabel *toLabel;
-@property (nonatomic, strong) UITextField *messageTextField;
-@property (nonatomic, strong) UIButton *sendButton;
-@property (nonatomic, strong) UIPickerView *repeatTimesPicker;
-@property (nonatomic, strong) UIToolbar *pickerToolbar;
-@property (nonatomic, strong) UIButton *showRepeatPickerButton;
+@property (retain, nonatomic) FBFriendPickerViewController *friendPickerController;
+
+//@property (nonatomic, strong) UITextField *toRecipientTextField;
+//@property (nonatomic, strong) UILabel *toLabel;
+//@property (nonatomic, strong) UITextField *messageTextField;
+//@property (nonatomic, strong) UIButton *sendButton;
+//@property (nonatomic, strong) UIPickerView *repeatTimesPicker;
+//@property (nonatomic, strong) UIToolbar *pickerToolbar;
+//@property (nonatomic, strong) UIButton *showRepeatPickerButton;
 @property (nonatomic, strong) NSArray *repeatOptions;
-@property (nonatomic, strong) UITextField *locationSearchTextField;
-@property (nonatomic, strong) UIButton *locationSearchButton;
-@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
+//@property (nonatomic, strong) UITextField *locationSearchTextField;
+//@property (nonatomic, strong) UIButton *locationSearchButton;
+//@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
+
 @end
 
 @implementation NewMessageViewController {
@@ -108,24 +111,25 @@
     [nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
     [self setPickedValueForPickerButton];
     
+    [nmv.toRecipientButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation:locationController.location.coordinate];
     
-    self.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
-    [nmv addGestureRecognizer:self.tapRecognizer];
+    nmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
+    [nmv addGestureRecognizer:nmv.tapRecognizer];
 
     
-    self.pickerToolbar = [[UIToolbar alloc] init];
-    self.pickerToolbar.barStyle = UIBarStyleDefault;
-    self.pickerToolbar.translucent = NO;
-    [self.pickerToolbar sizeToFit];
+    nmv.pickerToolbar = [[UIToolbar alloc] init];
+    nmv.pickerToolbar.barStyle = UIBarStyleDefault;
+    nmv.pickerToolbar.translucent = NO;
+    [nmv.pickerToolbar sizeToFit];
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                    style:UIBarButtonItemStyleBordered target:self
                                                                   action:@selector(pickerDoneClicked:)];
-    [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
+    [nmv.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
 
-    
+    self.friendPickerController = nil;
     
     
 }
@@ -223,12 +227,12 @@
 
 - (void) pickerDoneClicked : (id) sender
 {
-    [self.pickerToolbar removeFromSuperview];
+    [nmv.pickerToolbar removeFromSuperview];
     [nmv.repeatTimesPicker removeFromSuperview];
     [nmv addSubview:nmv.sendButton];
     [self setPickedValueForPickerButton];
     [nmv addSubview:nmv.showRepeatPickerButton];
-    [self.tapRecognizer setEnabled:YES];
+    [nmv.tapRecognizer setEnabled:YES];
 
     
     
@@ -239,9 +243,9 @@
     NSLog(@"show picker!");
     [sender removeFromSuperview];
     [nmv.sendButton removeFromSuperview];
-    [nmv addSubview:self.pickerToolbar];
+    [nmv addSubview:nmv.pickerToolbar];
     [nmv addSubview: nmv.repeatTimesPicker];
-    [self.tapRecognizer setEnabled:NO];
+    [nmv.tapRecognizer setEnabled:NO];
 
 }
 
@@ -269,7 +273,7 @@
     // Create a PFObject using the Post class and set the values we extracted above
     PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
-    [postObject setObject:user forKey:kPAWParseUserKey];
+    [postObject setObject:user forKey:@"sender"];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     [postObject setObject: [NSString stringWithFormat: @"%@", nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     
@@ -280,11 +284,6 @@
     [readOnlyACL setPublicWriteAccess:NO];
     
     [postObject setACL:readOnlyACL]; // Set the permissions on the postObject
-    
-    //https://www.parse.com/docs/osx/api/Classes/PFACL.html
-    //The above link will become helpful when we want individual users to be able to see things
-    //(Or not)
-    
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
      {
@@ -419,6 +418,39 @@
     NSLog(@"Did update locations");
     [self updateLocation:locationController.location.coordinate];
 }
+
+- (void) handlePickerDone
+{
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+//ADA
+- (IBAction)selectFriendsButtonAction:(id)sender {
+    if (self.friendPickerController == nil) {
+        // Create friend picker, and get data loaded into it.
+        self.friendPickerController = [[FBFriendPickerViewController alloc] init];
+        self.friendPickerController.title = @"Select Friends";
+        self.friendPickerController.delegate = self;
+    }
+    [self.friendPickerController loadData];
+    [self.friendPickerController clearSelection];
+    [self presentModalViewController:self.friendPickerController animated:YES];
+    
+}
+- (void)facebookViewControllerCancelWasPressed:(id)sender
+{
+    NSLog(@"Friend selection cancelled.");
+    [self handlePickerDone];
+}
+
+- (void)facebookViewControllerDoneWasPressed:(id)sender
+{
+    for (id<FBGraphUser> user in self.friendPickerController.selection) {
+        NSLog(@"Friend selected: %@", user.name);
+    }
+    [self handlePickerDone];
+}
+
 
 
 

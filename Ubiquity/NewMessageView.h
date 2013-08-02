@@ -12,6 +12,8 @@
 
 @interface NewMessageView : UIView
 @property (nonatomic, strong) UITextField *toRecipientTextField;
+@property (nonatomic, strong) UIButton *toRecipientButton;
+
 @property (nonatomic, strong) UILabel *toLabel;
 @property (nonatomic, strong) UITextView *messageTextView;
 @property (nonatomic, strong) UITextField *messageTextFieldBg;
@@ -25,4 +27,7 @@
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIView *tapView;
+
+@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
+
 @end
