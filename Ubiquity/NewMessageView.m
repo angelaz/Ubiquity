@@ -61,9 +61,15 @@
         [self addSubview:self.toLabel];
         
         
-        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
-        self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
-        [self addSubview:self.toRecipientTextField];
+//        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
+//        self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
+//        [self.toRecipientTextField addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+//        [self addSubview:self.toRecipientTextField];
+        
+        self.toRecipientButton = [[UIButton alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
+        self.toRecipientTextField.text = @"Select Recipients";
+        [self addSubview:self.toRecipientButton];
+
         
         
         

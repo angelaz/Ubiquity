@@ -10,6 +10,7 @@
 #import <MapKit/MapKit.h>
 #import <GoogleMaps/GoogleMaps.h>
 
+
 @interface NewMessageView : UIView
 @property (nonatomic, strong) UITextField *toRecipientTextField;
 @property (nonatomic, strong) UIButton *toRecipientButton;
@@ -28,6 +29,9 @@
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIView *tapView;
 
+<<<<<<< HEAD
+=======
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
+>>>>>>> a4308aa1742cfb3c99f44f3cabbda9e7d74f1d51
 @end

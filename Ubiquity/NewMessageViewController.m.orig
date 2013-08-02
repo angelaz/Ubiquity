@@ -26,13 +26,6 @@
 //@property (nonatomic, strong) UIPickerView *repeatTimesPicker;
 //@property (nonatomic, strong) UIToolbar *pickerToolbar;
 //@property (nonatomic, strong) UIButton *showRepeatPickerButton;
-@property (nonatomic, strong) UITextField *toRecipientTextField;
-@property (nonatomic, strong) UILabel *toLabel;
-@property (nonatomic, strong) UITextField *messageTextField;
-@property (nonatomic, strong) UIButton *sendButton;
-@property (nonatomic, strong) UIPickerView *repeatTimesPicker;
-@property (nonatomic, strong) UIToolbar *pickerToolbar;
-@property (nonatomic, strong) UIButton *showRepeatPickerButton;
 @property (nonatomic, strong) NSArray *repeatOptions;
 //@property (nonatomic, strong) UITextField *locationSearchTextField;
 //@property (nonatomic, strong) UIButton *locationSearchButton;
@@ -138,6 +131,12 @@
     UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                    style:UIBarButtonItemStyleBordered target:self
                                                                   action:@selector(pickerDoneClicked:)];
+<<<<<<< HEAD
+    [self.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
+    
+
+
+=======
     [nmv.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
     
     nmv.map.delegate = self;
@@ -145,6 +144,7 @@
     self.friendPickerController = nil;
     
     
+>>>>>>> a4308aa1742cfb3c99f44f3cabbda9e7d74f1d51
 }
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
@@ -249,17 +249,17 @@
     NSLog(@"%@", marker.title);
     NSLog(@"%f, %f", lat, lng);
     
-    marker.map = nmv.map;
+    marker.map = mapView;
     
     GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation zoom:10.0];
-    [nmv.map animateWithCameraUpdate:geoLocateCam];
+    [mapView animateWithCameraUpdate:geoLocateCam];
     
 }
 
 - (void) startSearch: (id) sender
 {
-    NSLog(@"searching for: %@", nmv.locationSearchTextField.text);
-   [gs geocodeAddress:nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
+    NSLog(@"Searching for location");
+    [gs geocodeAddress:_locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
 }
 
 
