@@ -14,6 +14,9 @@
 @property (nonatomic, strong) UITextField *toRecipientTextField;
 @property (nonatomic, strong) UIButton *toRecipientButton;
 
+@property (strong, nonatomic) UISearchBar *searchBar;
+@property (strong, nonatomic) NSString *searchText;
+
 @property (nonatomic, strong) UILabel *toLabel;
 @property (nonatomic, strong) UITextView *messageTextView;
 @property (nonatomic, strong) UITextField *messageTextFieldBg;

@@ -143,9 +143,38 @@
     nmv.map.delegate = self;
     
     self.friendPickerController = nil;
+    nmv.searchBar = nil;
     
     
 }
+
+- (void)addSearchBarToFriendPickerView
+{
+    if (nmv.searchBar == nil) {
+        CGFloat searchBarHeight = 44.0;
+        nmv.searchBar =
+        [[UISearchBar alloc]
+         initWithFrame:
+         CGRectMake(0,0,
+                    self.view.bounds.size.width,
+                    searchBarHeight)];
+        nmv.searchBar.autoresizingMask = nmv.searchBar.autoresizingMask |
+        UIViewAutoresizingFlexibleWidth;
+        nmv.searchBar.delegate = self;
+        nmv.searchBar.showsCancelButton = YES;
+        
+        [self.friendPickerController.canvasView addSubview:nmv.searchBar];
+        CGRect newFrame = self.friendPickerController.view.bounds;
+        newFrame.size.height -= searchBarHeight;
+        newFrame.origin.y = searchBarHeight;
+        self.friendPickerController.tableView.frame = newFrame;
+    }
+}
+
+
+
+
+
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
 {
@@ -293,8 +322,6 @@
 
 }
 
-
-//ANYWALL
 - (void) sendMessage: (id) sender
 {
     // Dismiss keyboard and capture any auto-correct
@@ -480,7 +507,12 @@
     }
     [self.friendPickerController loadData];
     [self.friendPickerController clearSelection];
-    [self presentModalViewController:self.friendPickerController animated:YES];
+    [self presentViewController:self.friendPickerController
+                       animated:YES
+                     completion:^(void){
+                         [self addSearchBarToFriendPickerView];
+                     }
+     ];
     
 }
 - (void)facebookViewControllerCancelWasPressed:(id)sender
@@ -497,7 +529,38 @@
     [self handlePickerDone];
 }
 
+- (void) handleSearch:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    nmv.searchText = searchBar.text;
+    [self.friendPickerController updateView];
+}
 
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar
+{
+    [self handleSearch:searchBar];
+}
 
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+    nmv.searchText = nil;
+    [searchBar resignFirstResponder];
+}
+
+- (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker
+                 shouldIncludeUser:(id<FBGraphUser>)user
+{
+    if (nmv.searchText && ![nmv.searchText isEqualToString:@""]) {
+        NSRange result = [user.name
+                          rangeOfString:nmv.searchText
+                          options:NSCaseInsensitiveSearch];
+        if (result.location != NSNotFound) {
+            return YES;
+        } else {
+            return NO;
+        }
+    } else {
+        return YES;
+    }
+    return YES;
+}
 
 @end
