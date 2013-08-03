@@ -12,6 +12,7 @@
 #import "NewMessageView.h"
 #import "RecentViewController.h"
 #import "LocationController.h"
+#import "Geocoding.h"
 
 #define kOFFSET_FOR_KEYBOARD 190.0
 
@@ -493,6 +494,9 @@
     LocationController* locationController = [LocationController sharedLocationController];
     NSLog(@"Did update locations");
     [self updateLocation:locationController.location.coordinate];
+    
+    [locationController.av dismissWithClickedButtonIndex:0 animated:YES];
+    locationController.av = nil;
 }
 
 - (void) handlePickerDone
