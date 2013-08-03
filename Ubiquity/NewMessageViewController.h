@@ -12,5 +12,5 @@
 #import "Geocoding.h"
 
 @interface NewMessageViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate>
-
+@property (strong,nonatomic) Geocoding *gs;
 @end

@@ -107,8 +107,6 @@
     nmv.messageTextView.delegate = self;
     nmv.locationSearchTextField.delegate = self;
     
-    gs = [[Geocoding alloc] init];
-    
     [nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     [nmv.closeButton addTarget:self action:@selector(closeNewMessage:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -280,7 +278,7 @@
     
     marker.map = nmv.map;
     
-    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation zoom:10.0];
+    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
     [nmv.map animateWithCameraUpdate:geoLocateCam];
     
 }
@@ -288,6 +286,11 @@
 - (void) startSearch: (id) sender
 {
     NSLog(@"searching for: %@", nmv.locationSearchTextField.text);
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
+    //Not a perfect solution for keeping the map at the same place
+    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
    [gs geocodeAddress:nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
 }
 

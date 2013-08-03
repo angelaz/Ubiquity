@@ -15,4 +15,5 @@
           withDelegate:(id)delegate;
 
 @property (nonatomic, strong) NSDictionary *geocode;
+- (id)initWithCurLocation:(NSDictionary *)curLocation;
 @end

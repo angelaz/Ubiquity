@@ -21,6 +21,12 @@
     return self;
 }
 
+- (id)initWithCurLocation:(NSDictionary *)curLocation {
+    self = [super init];
+    geocode = curLocation;
+    return self;
+}
+
 - (void)geocodeAddress:(NSString *)address withCallback:(SEL)sel withDelegate:(id)delegate {
     
     NSString *geocodingBaseUrl = @"http://maps.googleapis.com/maps/api/geocode/json?";
@@ -45,16 +51,25 @@
                           error:&error];
     
     NSArray* results = [json objectForKey:@"results"];
-    NSDictionary *result = [results objectAtIndex:0];
-    NSString *address = [result objectForKey:@"formatted_address"];
-    NSDictionary *geometry = [result objectForKey:@"geometry"];
-    NSDictionary *location = [geometry objectForKey:@"location"];
-    NSString *lat = [location objectForKey:@"lat"];
-    NSString *lng = [location objectForKey:@"lng"];
+    if (results == nil || [results count] == 0) { //Check if the results array is empty (can't find location)
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Invalid Location"
+                                                          message:@"Please enter an address."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+    } else {
+        NSDictionary *result = [results objectAtIndex:0];
+        NSString *address = [result objectForKey:@"formatted_address"];
+        NSDictionary *geometry = [result objectForKey:@"geometry"];
+        NSDictionary *location = [geometry objectForKey:@"location"];
+        NSString *lat = [location objectForKey:@"lat"];
+        NSString *lng = [location objectForKey:@"lng"];
     
-    NSDictionary *gc = [[NSDictionary alloc]initWithObjectsAndKeys:lat,@"lat",lng,@"lng",address,@"address",nil];
+        NSDictionary *gc = [[NSDictionary alloc]initWithObjectsAndKeys:lat,@"lat",lng,@"lng",address,@"address",nil];
     
-    geocode = gc;
+        geocode = gc;   //Only update geocoded location if we found what the user was looking for
+    }
     [delegate performSelector:sel];
 }
 @end
