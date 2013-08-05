@@ -19,7 +19,6 @@
 @interface LocationController : NSObject <CLLocationManagerDelegate> {
     
     CLLocationManager* locationManager;
-    CLLocation* location;
     __weak id delegate;
 }
 

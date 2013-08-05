@@ -15,35 +15,10 @@
 #import <CoreLocation/CoreLocation.h>
 #import "NewMessageViewController.h"
 #import "TextMessage.h"
-#import "WallPostsViewController.h"
 #import "LocationController.h"
 
 @interface RecentViewController ()
 
-@property (nonatomic, strong) UISegmentedControl *segmentedControl;
-
-@property (nonatomic, strong) NSMutableArray *annotations;
-@property (nonatomic, copy) NSString *className;
-
-@property (nonatomic, strong) WallPostsViewController *wallPostsViewController;
-
-@property (nonatomic, strong) NSMutableArray *allPosts;
-
-// CLLocationManagerDelegate methods:
-- (void)locationManager:(CLLocationManager *)manager
-    didUpdateToLocation:(CLLocation *)newLocation
-           fromLocation:(CLLocation *)oldLocation;
-
-- (void)locationManager:(CLLocationManager *)manager
-       didFailWithError:(NSError *)error;
-
-- (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation withNearbyDistance:(CLLocationAccuracy)nearbyDistance;
-- (void)updatePostsForLocation:(CLLocation *)location withNearbyDistance:(CLLocationAccuracy) filterDistance;
-
-// NSNotification callbacks
-- (void)distanceFilterDidChange:(NSNotification *)note;
-- (void)locationDidChange:(NSNotification *)note;
-- (void)postWasCreated:(NSNotification *)note;
 
 @end
 
@@ -139,13 +114,13 @@
     [self startStandardUpdates];
     
     if ([PFUser currentUser]) {
-        LocationController* locationController = [LocationController sharedLocationController];
-        locationController.av = [[UIAlertView alloc] initWithTitle:@"Loading Data" message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-        UIActivityIndicatorView *ActInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [ActInd startAnimating];
-        [ActInd setFrame:CGRectMake(125, 60, 37, 37)];
-        [locationController.av addSubview:ActInd];
-        [locationController.av show];
+//        LocationController* locationController = [LocationController sharedLocationController];
+//        locationController.av = [[UIAlertView alloc] initWithTitle:@"Loading Data" message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+//        UIActivityIndicatorView *ActInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//        [ActInd startAnimating];
+//        [ActInd setFrame:CGRectMake(125, 60, 37, 37)];
+//        [locationController.av addSubview:ActInd];
+//        [locationController.av show];
     }
 }
 
