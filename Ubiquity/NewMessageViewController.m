@@ -373,15 +373,8 @@
                     //Should only be one
                     for(PFObject *obj in objects) {
                         [relation addObject:obj];
-                        [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-                         {
-                             if(!error) {
-                                 NSLog(@"Yay");
-                             } else {
-                                 NSLog(@"Boo hiss");
-                             }
-                         }];
-                        NSLog(@"Sent to existing user");
+                        [postObject saveInBackgroundWithBlock:nil];
+                        //NSLog(@"Sent to existing user");
                     }
                     
                 } else {
@@ -395,21 +388,12 @@
                             [relation addObject:newGuy];
                             [newGuy saveInBackgroundWithBlock:nil];
                             [postObject saveInBackgroundWithBlock:nil];
-                            NSLog(@"Added the new guy");
+                            //NSLog(@"Added the new guy");
                         } else {
                             NSLog(@"%@", e);
                         }
                     }];
                     
-//                    [newGuy signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *e) {
-//                        if(!e) {
-//                            [relation addObject:newGuy];
-//                            [newGuy saveInBackgroundWithBlock:nil];
-//                            NSLog(@"Added the new guy");
-//                        } else {
-//                            NSLog(@"%@", e);
-//                        }
-//                    }];
                 }
                 
             } else {
@@ -424,7 +408,7 @@
     // to this object
     PFACL *readOnlyACL = [PFACL ACL];
     [readOnlyACL setPublicReadAccess:YES]; // Create read-only permissions
-    [readOnlyACL setPublicWriteAccess:YES];
+    [readOnlyACL setWriteAccess:YES forUser:[PFUser currentUser]];
     
     [postObject setACL:readOnlyACL]; // Set the permissions on the postObject
     
