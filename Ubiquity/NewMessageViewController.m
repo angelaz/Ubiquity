@@ -361,7 +361,7 @@
         NSLog(@"Adding somebody");
         
         //Add the relation that they are a receiver of the message
-        PFRelation *relation = [postObject relationforKey:@"recievers"];
+        PFRelation *relation = [postObject relationforKey:@"receivers"];
         
         //Query for thulkcefvgelhucljkllnfibnrlrgduuekem, if they already exist or not
         PFQuery *findUsers = [PFQuery queryWithClassName:@"_User"];
@@ -373,6 +373,14 @@
                     //Should only be one
                     for(PFObject *obj in objects) {
                         [relation addObject:obj];
+                        [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+                         {
+                             if(!error) {
+                                 NSLog(@"Yay");
+                             } else {
+                                 NSLog(@"Boo hiss");
+                             }
+                         }];
                         NSLog(@"Sent to existing user");
                     }
                     
@@ -416,7 +424,7 @@
     // to this object
     PFACL *readOnlyACL = [PFACL ACL];
     [readOnlyACL setPublicReadAccess:YES]; // Create read-only permissions
-    [readOnlyACL setPublicWriteAccess:NO];
+    [readOnlyACL setPublicWriteAccess:YES];
     
     [postObject setACL:readOnlyACL]; // Set the permissions on the postObject
     
