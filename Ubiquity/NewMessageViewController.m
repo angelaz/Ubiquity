@@ -531,7 +531,9 @@
 
 - (void) handlePickerDone
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [self hideTabBar];
+
 }
 
 //ADA
@@ -578,6 +580,7 @@
     }
     [_nmv.toRecipientButton setTitle: names forState: UIControlStateNormal];
 
+    
     [self handlePickerDone];
 }
 
