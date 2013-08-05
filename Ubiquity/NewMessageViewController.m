@@ -314,6 +314,10 @@
     // Get the post's message
     NSString *postMessage = _nmv.messageTextView.text;
     
+    [_nmv.messageTextView setText: @""];
+    [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
+
+    
     //Get the currently logged in PFUser
     PFUser *user = [PFUser currentUser];
     
@@ -551,6 +555,7 @@
 - (void)facebookViewControllerCancelWasPressed:(id)sender
 {
     NSLog(@"Friend selection cancelled.");
+
     [self handlePickerDone];
 }
 
@@ -572,7 +577,7 @@
         names = [names stringByAppendingString: (@", ")];
     }
     [_nmv.toRecipientButton setTitle: names forState: UIControlStateNormal];
-    
+
     [self handlePickerDone];
 }
 
