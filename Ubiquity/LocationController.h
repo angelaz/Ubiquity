@@ -27,6 +27,8 @@
 @property (nonatomic, strong) CLLocation* location;
 @property CLLocationAccuracy filterDistance;
 
+@property (nonatomic, strong) UIAlertView *av;
+
 @property (nonatomic, weak) id  delegate;
 
 + (LocationController*)sharedLocationController;

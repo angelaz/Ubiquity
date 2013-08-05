@@ -37,8 +37,6 @@
 - (void)locationManager:(CLLocationManager *)manager
        didFailWithError:(NSError *)error;
 
-- (void)startStandardUpdates;
-
 - (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation withNearbyDistance:(CLLocationAccuracy)nearbyDistance;
 - (void)updatePostsForLocation:(CLLocation *)location withNearbyDistance:(CLLocationAccuracy) filterDistance;
 
@@ -139,6 +137,16 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self startStandardUpdates];
+    
+    if ([PFUser currentUser]) {
+        LocationController* locationController = [LocationController sharedLocationController];
+        locationController.av = [[UIAlertView alloc] initWithTitle:@"Loading Data" message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
+        UIActivityIndicatorView *ActInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [ActInd startAnimating];
+        [ActInd setFrame:CGRectMake(125, 60, 37, 37)];
+        [locationController.av addSubview:ActInd];
+        [locationController.av show];
+    }
 }
 
 

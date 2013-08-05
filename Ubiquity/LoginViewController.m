@@ -60,6 +60,8 @@
 
         }
     }];
+    RecentViewController *recent = [[RecentViewController alloc] init];
+    [recent startStandardUpdates];
     
     [_activityIndicator startAnimating]; // Show loading indicator until login is finished
 }
