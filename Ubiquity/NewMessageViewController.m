@@ -31,11 +31,14 @@
 //@property (nonatomic, strong) UIButton *locationSearchButton;
 //@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
+@property (nonatomic, strong) NSArray *friendsOnApp;
+
 @end
 
 @implementation NewMessageViewController {
     NewMessageView *nmv;
     GMSMapView *mapView;
+    NSMutableArray *recipientsList;
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -72,6 +75,8 @@
                                                  selector:@selector(locationDidChange:)
                                                      name:kPAWLocationChangeNotification
                                                    object:nil];
+        recipientsList = [[NSMutableArray alloc] init];
+        
              }
     return self;
 }
@@ -133,7 +138,6 @@
     
     self.friendPickerController = nil;
     nmv.searchBar = nil;
-    
     
 }
 
@@ -318,6 +322,62 @@
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     [postObject setObject: [NSString stringWithFormat: @"%@", nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     
+    //For each person we are sending to
+    for (id<FBGraphUser> user in recipientsList) {
+        NSLog(@"Adding somebody");
+        
+        //Add the relation that they are a receiver of the message
+        PFRelation *relation = [postObject relationforKey:@"recievers"];
+        
+        //Query for thulkcefvgelhucljkllnfibnrlrgduuekem, if they already exist or not
+        PFQuery *findUsers = [PFQuery queryWithClassName:@"_User"];
+        [findUsers whereKey:@"fbId" equalTo:[user id]];
+        [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if(!error) {
+                //This is an existing user (temp, or actual user)
+                if([objects count] > 0) {
+                    //Should only be one
+                    for(PFObject *obj in objects) {
+                        [relation addObject:obj];
+                        NSLog(@"Sent to existing user");
+                    }
+                    
+                } else {
+                    //They are not in our db (yet)
+                    //TODO Make this a function, instead of fully typed out. Ick.
+     
+                    [PFAnonymousUtils logInWithBlock:^(PFUser *newGuy, NSError *e) {
+                        if(!e) {
+                            [newGuy setObject:user.id forKey:@"fbId"];
+                            [newGuy setObject:user    forKey:@"profile"];
+                            [relation addObject:newGuy];
+                            [newGuy saveInBackgroundWithBlock:nil];
+                            [postObject saveInBackgroundWithBlock:nil];
+                            NSLog(@"Added the new guy");
+                        } else {
+                            NSLog(@"%@", e);
+                        }
+                    }];
+                    
+//                    [newGuy signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *e) {
+//                        if(!e) {
+//                            [relation addObject:newGuy];
+//                            [newGuy saveInBackgroundWithBlock:nil];
+//                            NSLog(@"Added the new guy");
+//                        } else {
+//                            NSLog(@"%@", e);
+//                        }
+//                    }];
+                }
+                
+            } else {
+                //Something went wrong (weird) :-(
+                NSLog(@"%@", error);
+            }
+        }];
+    }
+    
+    
     // Set the access control list on the postObject to restrict future modifications
     // to this object
     PFACL *readOnlyACL = [PFACL ACL];
@@ -453,6 +513,8 @@
     marker.map = nmv.map;
     
     
+    
+    
 }
 
 
@@ -493,8 +555,11 @@
 
 - (void)facebookViewControllerDoneWasPressed:(id)sender
 {
+    [recipientsList removeAllObjects];
+    
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
-        NSLog(@"Friend selected: %@", user.name);
+        [recipientsList addObject:user];
+        NSLog(@"Person is %@", user);
     }
     [self handlePickerDone];
 }
@@ -518,10 +583,12 @@
 - (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker
                  shouldIncludeUser:(id<FBGraphUser>)user
 {
+    //TODO: Trim this list to just show FB friends who are members of this app
     if (nmv.searchText && ![nmv.searchText isEqualToString:@""]) {
         NSRange result = [user.name
                           rangeOfString:nmv.searchText
                           options:NSCaseInsensitiveSearch];
+        
         if (result.location != NSNotFound) {
             return YES;
         } else {
