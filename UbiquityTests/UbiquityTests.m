@@ -32,6 +32,11 @@
     [super setUp];
     appDelegate = [[UIApplication sharedApplication] delegate];
     locationController = [[LocationController alloc] init];
+    STAssertTrue( 1 == 2, @"FAIL");
+    id nmvc = [[NewMessageViewController alloc] init];
+    [self testNewMessageControllerSend];
+    NSLog(@"hi");
+
 
     // Set-up code here.
 }
@@ -91,7 +96,26 @@
     
 }
 
+- (void) testNewMessageControllerSend
+{
+    id nmvc = [[NewMessageViewController alloc] init];
+    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
+    [[[nmvc nmv] messageTextView] setText: @"Test Message"];
+    STAssertFalse([[[[nmvc nmv] messageTextView] text] isEqualToString: @"1"], nil);
+    [nmvc sendMessage: [[nmvc nmv] sendButton]];
+    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
+    NSLog(@"%@", [[[nmvc nmv] messageTextView] text]);
+    [[[nmvc nmv] messageTextView] setText: @""];
+    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
 
 
+    
+}
+
+- (void) testNewMessageControllerSearch
+{
+    id nmvc = [[NewMessageViewController alloc] init];
+    
+}
 
 @end

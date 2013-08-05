@@ -32,8 +32,7 @@
     self = [super init];
     if(self != nil){
         
-        self.location = [[CLLocation alloc] initWithLatitude:0 longitude:0];
-//        self.location = [[CLLocation alloc] initWithLatitude:37.4832526 longitude:-122.150037];
+        self.location = [[CLLocation alloc] initWithLatitude:37.4832526 longitude:-122.150037];
 
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;

@@ -557,11 +557,22 @@
 - (void)facebookViewControllerDoneWasPressed:(id)sender
 {
     [recipientsList removeAllObjects];
+
     
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
-        [recipientsList addObject:user];
+        [recipientsList addObject: user];
+
         NSLog(@"Person is %@", user);
     }
+    NSMutableString *names = [[NSMutableString alloc] initWithString:@" "];
+    
+    for (id <FBGraphUser> user in recipientsList)
+    {
+        names = [names stringByAppendingString: (@"%@", [user name])];
+        names = [names stringByAppendingString: (@", ")];
+    }
+    [_nmv.toRecipientButton setTitle: names forState: UIControlStateNormal];
+    
     [self handlePickerDone];
 }
 

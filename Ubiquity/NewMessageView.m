@@ -61,15 +61,16 @@
         [self addSubview:self.toLabel];
         
         
-//        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
-//        self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
-//        [self.toRecipientTextField addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-//        [self addSubview:self.toRecipientTextField];
+        //        self.toRecipientTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
+        //        self.toRecipientTextField.borderStyle = UITextBorderStyleRoundedRect;
+        //        [self.toRecipientTextField addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        //        [self addSubview:self.toRecipientTextField];
         
-        self.toRecipientButton = [[UIButton alloc] initWithFrame:CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT)];
-        self.toRecipientTextField.text = @"Select Recipients";
+        self.toRecipientButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        self.toRecipientButton.frame = CGRectMake(LEFT_PADDING + 30, 35+ LINE_HEIGHT, 230.0, LINE_HEIGHT);
+        [self.toRecipientButton setTitle: @"Select Recipients" forState: UIControlStateNormal];
         [self addSubview:self.toRecipientButton];
-
+        
         
         
         
@@ -77,11 +78,11 @@
         self.messageTextFieldBg.allowsEditingTextAttributes = NO;
         self.messageTextFieldBg.borderStyle = UITextBorderStyleRoundedRect;
         [self addSubview:self.messageTextFieldBg];
-
+        
         
         self.messageTextView = [[UITextView alloc] initWithFrame:CGRectMake(LEFT_PADDING+5, 80.0+ LINE_HEIGHT, 250.0, 130.0)];
         [self addSubview:self.messageTextView];
-
+        
         
         self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 10, SCREEN_HEIGHT - 70, 250.0, LINE_HEIGHT)];
         self.locationSearchTextField.placeholder = @"Search for a location";
@@ -115,7 +116,7 @@
         self.showRepeatPickerButton.frame = CGRectMake(LEFT_PADDING-10, SCREEN_HEIGHT - 28, SCREEN_WIDTH - 100, 30.0);
         [self addSubview:self.showRepeatPickerButton];
         
-    
+        
     }
     return self;
 }
