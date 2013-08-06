@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) PFObject *message;
 @property (nonatomic, strong) PFGeoPoint *geopoint;
-@property (nonatomic, strong) PFUser *user;
+@property (nonatomic, strong) PFUser *sender;
 @property (nonatomic, assign) MKPinAnnotationColor pinColor;
 
 
@@ -41,14 +41,16 @@
 }
 
 - (id)initWithPFObject:(PFObject *)anObject {
-	self.message = anObject;
-	self.geopoint = [anObject objectForKey:kPAWParseLocationKey];
-	self.user = [anObject objectForKey:kPAWParseUserKey];
-    
 	[anObject fetchIfNeeded];
+    self.message = anObject;
+	self.geopoint = [anObject objectForKey:kPAWParseLocationKey];
+	self.sender = [anObject objectForKey:kPAWParseSenderKey];
+    
+    [self.sender fetchIfNeeded];
+    
 	CLLocationCoordinate2D aCoordinate = CLLocationCoordinate2DMake(self.geopoint.latitude, self.geopoint.longitude);
 	NSString *aTitle = [anObject objectForKey:kPAWParseTextKey];
-	NSString *aAddress = [[anObject objectForKey:kPAWParseUserKey] objectForKey:kPAWParseUsernameKey];
+	NSString *aAddress = [self.sender objectForKey:kPAWParseUsernameKey];
     
 	return [self initWithCoordinate:aCoordinate andTitle:aTitle andAddress:aAddress];
 }

@@ -128,7 +128,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
     // This method is called before a PFQuery is fired to get more objects
 }
 
-// Override to customize what kind of query to perform on the class. The default is to query for
+// Override to customize what kind of query to perform on the class. The default is  for
 // all objects ordered by createdAt descending.
 - (PFQuery *)queryForTable {
 	PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
@@ -150,7 +150,9 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	// And set the query to look by location
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-	[query includeKey:kPAWParseUserKey];
+    //TODO Investigate why this line shuts down all text messages being received
+    [query includeKey:kPAWParseSenderKey];
+
     
     if (self.indexing == 0) {
         
@@ -182,7 +184,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	static NSString *LeftCellIdentifier = @"LeftCell";
     
 	// Try to reuse a cell
-	BOOL cellIsRight = [[[object objectForKey:kPAWParseUserKey] objectForKey:kPAWParseUsernameKey] isEqualToString:[[PFUser currentUser] objectForKey:@"username"]];
+	BOOL cellIsRight = [[[object objectForKey:kPAWParseSenderKey] objectForKey:kPAWParseUsernameKey] isEqualToString:[[PFUser currentUser] objectForKey:@"username"]];
     
 	UITableViewCell *cell;
 	if (cellIsRight) { // User's post so create blue bubble
@@ -235,7 +237,12 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	[tableView setSeparatorColor: [UIColor clearColor]];
     [tableView setBackgroundColor: [UIColor lightGrayColor]];
     
-	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:@"user"] objectForKey:@"profile"][@"name"]];
+	
+    //TODO Remove
+    PFUser *sender = [object objectForKey:@"sender"];
+    NSString *prof = [sender objectForKey:@"profile"];
+    
+	NSString *username = [NSString stringWithFormat:@"- %@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSize];
@@ -308,7 +315,8 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	PFObject *object = [self.objects objectAtIndex:indexPath.row];
 	TextMessage *postFromObject = [[TextMessage alloc] initWithPFObject:object];
 	NSString *text = postFromObject.title;
-	NSString *username = postFromObject.user.username;
+    //NSLog(@"%@", [postFromObject.sender objectForKey:@"profile"]);
+	NSString *username = [postFromObject.sender objectForKey:@"profile"][@"name"];
 	
 	// Calculate what the frame to fit the post text and the username
 	CGSize textSize = [text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSize] constrainedToSize:CGSizeMake(kPAWWallPostTableViewCellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
