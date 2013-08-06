@@ -28,4 +28,5 @@
 }
 
 - (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect;
+
 @end

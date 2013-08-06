@@ -236,6 +236,8 @@
 
 -(void) closeNewMessage: (id) sender
 {
+    [_nmv.messageTextView setText: @""];
+    [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
 

@@ -8,7 +8,7 @@
 
 #import "CustomFBFriendPickerViewController.h"
 
-@interface CustomFBFriendPickerViewController ()
+@interface CustomFBFriendPickerViewController () <FBFriendPickerDelegate, UISearchBarDelegate>
 
 @end
 
@@ -19,6 +19,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.title = @"Add Friends";
+        self.cancelButton = nil;
     }
     return self;
 }
