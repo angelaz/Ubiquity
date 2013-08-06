@@ -236,6 +236,8 @@
 
 -(void) closeNewMessage: (id) sender
 {
+    [_nmv.messageTextView setText: @""];
+    [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
 
@@ -531,7 +533,9 @@
 
 - (void) handlePickerDone
 {
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [self hideTabBar];
+
 }
 
 //ADA
@@ -578,6 +582,7 @@
     }
     [_nmv.toRecipientButton setTitle: names forState: UIControlStateNormal];
 
+    
     [self handlePickerDone];
 }
 

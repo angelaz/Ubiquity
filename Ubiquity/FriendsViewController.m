@@ -8,7 +8,7 @@
 
 #import "FriendsViewController.h"
 
-@interface FriendsViewController () <UITableViewDataSource, UITableViewDelegate, FBFriendPickerDelegate>
+@interface FriendsViewController () <UITableViewDataSource, UITableViewDelegate, FBFriendPickerDelegate, UISearchBarDelegate>
 {
     
 }
@@ -202,6 +202,60 @@
     [self.tableView setEditing:NO animated:NO];
 }
 
+//Search bar
+- (void)addSearchBarToFriendPickerView
+{
+    if (friendPickerController.searchBar == nil) {
+        CGFloat searchBarHeight = 44.0;
+        friendPickerController.searchBar =
+        [[UISearchBar alloc]
+         initWithFrame:
+         CGRectMake(0,0,
+                    self.view.bounds.size.width,
+                    searchBarHeight)];
+        friendPickerController.searchBar.autoresizingMask = friendPickerController.searchBar.autoresizingMask |
+        UIViewAutoresizingFlexibleWidth;
+        friendPickerController.searchBar.delegate = self;
+        friendPickerController.searchBar.showsCancelButton = YES;
+        
+        [friendPickerController.canvasView addSubview:friendPickerController.searchBar];
+        CGRect newFrame = self.view.bounds;
+        newFrame.size.height -= searchBarHeight;
+        newFrame.origin.y = searchBarHeight;
+        self.tableView.frame = newFrame;
+    }
+}
+- (void) handleSearch:(UISearchBar *)searchBar {
+    [searchBar resignFirstResponder];
+    friendPickerController.searchText = searchBar.text;
+    [friendPickerController updateView];
+}
+- (void)searchBarSearchButtonClicked:(UISearchBar*)searchBar
+{
+    [self handleSearch:searchBar];
+}
+- (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
+    friendPickerController.searchText = nil;
+    [searchBar resignFirstResponder];
+}
+- (BOOL)friendPickerViewController:(FBFriendPickerViewController *)friendPicker
+                 shouldIncludeUser:(id<FBGraphUser>)user
+{
+    if (friendPickerController.searchText && ![friendPickerController.searchText isEqualToString:@""]) {
+        NSRange result = [user.name
+                          rangeOfString:friendPickerController.searchText
+                          options:NSCaseInsensitiveSearch];
+        if (result.location != NSNotFound) {
+            return YES;
+        } else {
+            return NO;
+        }
+    } else {
+        return YES;
+    }
+    return YES;
+}
+
 //FriendPicker Display Logic
 - (void)displayFriendPicker
 {
@@ -209,18 +263,24 @@
         friendPickerController = [[CustomFBFriendPickerViewController alloc]
                                   initWithNibName:nil bundle:nil];
         friendPickerController.delegate = self;
-        friendPickerController.cancelButton = nil;
-        friendPickerController.title = @"Add Friends";
     }
-    
     [friendPickerController loadData];
-    [self.navigationController pushViewController:friendPickerController
-                                         animated:true];
+    //[self addSearchBarToFriendPickerView];
+//    [self.navigationController pushViewController:friendPickerController
+//                                         animated:true];
+    [self.navigationController presentViewController:friendPickerController
+                       animated:YES
+                     completion:^(void){
+                         [self addSearchBarToFriendPickerView];
+                     }
+     ];
+    
     
 }
 - (void)friendPickerViewControllerSelectionDidChange:
 (FBFriendPickerViewController *)friendPicker
 {
+    NSLog(@"how about here?");
     for (id friend in friendPicker.selection) {
         if (![selectedFriends containsObject:friend]) {
             [selectedFriends addObject:friend];
@@ -274,12 +334,14 @@
 }
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
     //Save friends
+    NSLog(@"IS this the problem?");
     selectedFriends = friendPickerController.selection;
     [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
 
     [ubiquityFriends saveInBackground];
     // Dismiss the friend picker
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    //[self.navigationController popToRootViewControllerAnimated:YES];
     NSLog(@"object ID is:%@", ubiquityFriends.objectId);
+    [self dismissModalViewControllerAnimated:YES];
 }
 @end

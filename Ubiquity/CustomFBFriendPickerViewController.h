@@ -11,6 +11,8 @@
 @interface CustomFBFriendPickerViewController : FBFriendPickerViewController
 
 @property (nonatomic, strong) NSMutableArray *selection;
+@property (retain, nonatomic) UISearchBar *searchBar;
+@property (retain, nonatomic) NSString *searchText;
 
-
+- (void)addSearchBarToFriendPickerView;
 @end
