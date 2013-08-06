@@ -6,16 +6,16 @@
 //  Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
-static CGFloat const kPAWWallPostTableViewFontSize = 12.f;
+static CGFloat const kPAWWallPostTableViewFontSize = 24.f;
 static CGFloat const kPAWWallPostTableViewCellWidth = 230.f; // subject to change.
 
 // Cell dimension and positioning constants
-static CGFloat const kPAWCellPaddingTop = 5.0f;
-static CGFloat const kPAWCellPaddingBottom = 1.0f;
-static CGFloat const kPAWCellPaddingSides = 0.0f;
-static CGFloat const kPAWCellTextPaddingTop = 6.0f;
+static CGFloat const kPAWCellPaddingTop = 10.0f;
+static CGFloat const kPAWCellPaddingBottom = 10.0f;
+static CGFloat const kPAWCellPaddingSides = 10.0f;
+static CGFloat const kPAWCellTextPaddingTop = 10.0f;
 static CGFloat const kPAWCellTextPaddingBottom = 5.0f;
-static CGFloat const kPAWCellTextPaddingSides = 5.0f;
+static CGFloat const kPAWCellTextPaddingSides = 10.0f;
 
 static CGFloat const kPAWCellUsernameHeight = 15.0f;
 static CGFloat const kPAWCellBkgdHeight = 32.0f;
@@ -190,7 +190,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 		if (cell == nil) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:RightCellIdentifier];
 			
-			UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"blueBubble.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 11.0f, 16.0f, 11.0f)]];
+			UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SelfPostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
 			[backgroundImage setTag:kPAWCellBackgroundTag];
 			[cell.contentView addSubview:backgroundImage];
             
@@ -207,7 +207,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 		if (cell == nil) {
 			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:LeftCellIdentifier];
 			
-			UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"grayBubble.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(15.0f, 11.0f, 16.0f, 11.0f)]];
+			UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"PostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
 			[backgroundImage setTag:kPAWCellBackgroundTag];
 			[cell.contentView addSubview:backgroundImage];
             
@@ -220,6 +220,8 @@ static NSInteger kPAWCellNameLabelTag = 4;
 			[cell.contentView addSubview:nameLabel];
 		}
 	}
+    
+    
 	
 	// Configure the cell content
 	UILabel *textLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellTextLabelTag];
@@ -227,10 +229,13 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	textLabel.lineBreakMode = NSLineBreakByWordWrapping;
 	textLabel.numberOfLines = 0;
 	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSize];
-	textLabel.textColor = [UIColor whiteColor];
+	textLabel.textColor = [UIColor darkGrayColor];
 	textLabel.backgroundColor = [UIColor clearColor];
-	
-	NSString *username = [NSString stringWithFormat:@"- %@",[[object objectForKey:@"user"] objectForKey:@"profile"][@"name"]];
+    
+	[tableView setSeparatorColor: [UIColor clearColor]];
+    [tableView setBackgroundColor: [UIColor lightGrayColor]];
+    
+	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:@"user"] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSize];
@@ -253,38 +258,25 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSize] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
 	
 	
-	CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath]; // Get the height of the cell
+	CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath] + kPAWCellTextPaddingTop ; // Get the height of the cell
 	CGFloat textWidth = textSize.width > nameSize.width ? textSize.width : nameSize.width; // Set the width to the largest (text of username)
 	
 	// Place the content in the correct position depending on the type
-	if (cellIsRight) {
-		[nameLabel setFrame:CGRectMake(self.tableView.frame.size.width-textWidth-kPAWCellTextPaddingSides-kPAWCellPaddingSides,
-									   kPAWCellPaddingTop+kPAWCellTextPaddingTop+textSize.height,
-									   nameSize.width,
-									   nameSize.height)];
-		[textLabel setFrame:CGRectMake(self.tableView.frame.size.width-textWidth-kPAWCellTextPaddingSides-kPAWCellPaddingSides,
-									   kPAWCellPaddingTop+kPAWCellTextPaddingTop,
-									   textSize.width,
-									   textSize.height)];
-		[backgroundImage setFrame:CGRectMake(self.tableView.frame.size.width-textWidth-kPAWCellTextPaddingSides*2-kPAWCellPaddingSides,
-											 kPAWCellPaddingTop,
-											 textWidth+kPAWCellTextPaddingSides*2,
-											 cellHeight-kPAWCellPaddingTop-kPAWCellPaddingBottom)];
 		
-	} else {
-		[nameLabel setFrame:CGRectMake(kPAWCellTextPaddingSides-kPAWCellPaddingSides,
-									   kPAWCellPaddingTop+kPAWCellTextPaddingTop+textSize.height,
+		[nameLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
+									   
+                                       kPAWCellPaddingTop+kPAWCellTextPaddingTop,
 									   nameSize.width,
 									   nameSize.height)];
 		[textLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
-									   kPAWCellPaddingTop+kPAWCellTextPaddingTop,
+									   kPAWCellPaddingTop+kPAWCellTextPaddingTop+textSize.height,
 									   textSize.width,
 									   textSize.height)];
 		[backgroundImage setFrame:CGRectMake(kPAWCellPaddingSides,
 											 kPAWCellPaddingTop,
-											 textWidth+kPAWCellTextPaddingSides*2,
+											 self.tableView.frame.size.width - kPAWCellPaddingSides*2,
 											 cellHeight-kPAWCellPaddingTop-kPAWCellPaddingBottom)];
-	}
+
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
@@ -323,7 +315,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSize] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
 	// And return this height plus cell padding and the offset of the bubble image height (without taking into account the text height twice)
-	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height + kPAWCellBkgdOffset;
+	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height + kPAWCellBkgdOffset + kPAWCellPaddingTop * 4;
 	return rowHeight;
 }
 

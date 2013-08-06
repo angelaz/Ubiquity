@@ -80,6 +80,8 @@
 		86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6417A1E96200F7146B /* searchbutton@2x.png */; };
 		86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6717A1EB2D00F7146B /* SpeechBubble.png */; };
 		86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */; };
+		86928EE617B1789B001BB026 /* PostBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86928EE517B1789B001BB026 /* PostBackground@2x.png */; };
+		86928EE817B180F7001BB026 /* SelfPostBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */; };
 		869BEC9D17B0143E00437EA0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869BEC8517B0119D00437EA0 /* SenTestingKit.framework */; };
 		86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A66C2C17A316A000DB5752 /* NewMessageView.m */; };
 /* End PBXBuildFile section */
@@ -186,6 +188,8 @@
 		86894B6417A1E96200F7146B /* searchbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchbutton@2x.png"; sourceTree = "<group>"; };
 		86894B6717A1EB2D00F7146B /* SpeechBubble.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SpeechBubble.png; sourceTree = "<group>"; };
 		86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SpeechBubble@2x.png"; sourceTree = "<group>"; };
+		86928EE517B1789B001BB026 /* PostBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PostBackground@2x.png"; sourceTree = "<group>"; };
+		86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SelfPostBackground@2x.png"; sourceTree = "<group>"; };
 		869BEC8517B0119D00437EA0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		86A66C2B17A316A000DB5752 /* NewMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageView.h; sourceTree = "<group>"; };
 		86A66C2C17A316A000DB5752 /* NewMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageView.m; sourceTree = "<group>"; };
@@ -333,6 +337,8 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */,
+				86928EE517B1789B001BB026 /* PostBackground@2x.png */,
 				8626C10417A9C7B6009F6AA7 /* pixel.png */,
 				825733BA17A8690D0046AA3D /* default.jpg */,
 				866C6BBB17A6F2B000CF8449 /* CloseButton.png */,
@@ -482,9 +488,11 @@
 				82E931F317A093D500B3958B /* icon.png in Resources */,
 				82E931EF17A093C600B3958B /* Default.png in Resources */,
 				82E931ED17A093C600B3958B /* login-button-small@2x.png in Resources */,
+				86928EE617B1789B001BB026 /* PostBackground@2x.png in Resources */,
 				82E931C117A07B0B00B3958B /* UserDetailsViewController.xib in Resources */,
 				86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */,
 				6097BEDD17A71FDE0012A36A /* blueBubble.png in Resources */,
+				86928EE817B180F7001BB026 /* SelfPostBackground@2x.png in Resources */,
 				82E931A717A07A3700B3958B /* FacebookSDKResources.bundle in Resources */,
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,

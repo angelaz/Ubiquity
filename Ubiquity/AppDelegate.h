@@ -49,6 +49,8 @@ static NSString * const kNMWeekly = @"Every Week";
 static NSString * const kNMMonthy = @"Every Month";
 
 
+
+
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 #import "LoginViewController.h"

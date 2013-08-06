@@ -155,12 +155,6 @@
 {
     NSLog(@"New pin please!");
     [self updateLocation:coord];
-//    GMSMarker *marker3 = [[GMSMarker alloc] init];
-//    marker3.position = coord;
-//    marker3.title = @"New coordinate!";
-//    marker3.snippet = @"US";
-//    marker3.animated = YES;
-//    marker3.map = nmv.map;
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView

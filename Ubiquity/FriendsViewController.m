@@ -342,6 +342,6 @@
     // Dismiss the friend picker
     //[self.navigationController popToRootViewControllerAnimated:YES];
     NSLog(@"object ID is:%@", ubiquityFriends.objectId);
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
