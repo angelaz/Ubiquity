@@ -17,8 +17,6 @@
 
     CustomFBFriendPickerViewController *friendPickerController;
     NSMutableArray* selectedFriends;
-
-    PFObject *ubiquityFriends;
     
     //View objects
     __weak IBOutlet UITableView *menuTableView;
