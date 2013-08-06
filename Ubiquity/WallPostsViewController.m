@@ -151,7 +151,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     //TODO Investigate why this line shuts down all text messages being received
-    //[query includeKey:kPAWParseSenderKey];
+    [query includeKey:kPAWParseSenderKey];
 
     
     if (self.indexing == 0) {
