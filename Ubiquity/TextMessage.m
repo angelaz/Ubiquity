@@ -41,12 +41,12 @@
 }
 
 - (id)initWithPFObject:(PFObject *)anObject {
-	[anObject fetchIfNeeded];
+//	[anObject fetchIfNeeded];
     self.message = anObject;
 	self.geopoint = [anObject objectForKey:kPAWParseLocationKey];
 	self.sender = [anObject objectForKey:kPAWParseSenderKey];
     
-    [self.sender fetchIfNeeded];
+//    [self.sender fetchIfNeeded];
     
 	CLLocationCoordinate2D aCoordinate = CLLocationCoordinate2DMake(self.geopoint.latitude, self.geopoint.longitude);
 	NSString *aTitle = [anObject objectForKey:kPAWParseTextKey];

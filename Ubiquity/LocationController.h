@@ -24,7 +24,7 @@
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic, strong) CLLocation* location;
-@property CLLocationAccuracy filterDistance;
+//@property CLLocationAccuracy filterDistance;
 
 @property (nonatomic, strong) UIAlertView *av;
 
