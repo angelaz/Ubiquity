@@ -169,7 +169,7 @@
            withinKilometers:kPAWWallPostMaximumSearchDistance];
     
     // Include the associated PFUser objects in the returned data
-    [wallPostQuery includeKey:kPAWParseUserKey];
+    [wallPostQuery includeKey:kPAWParseSenderKey];
     
     // Limit the number of wall posts returned to 20
     wallPostQuery.limit = kPAWWallPostsSearch;
