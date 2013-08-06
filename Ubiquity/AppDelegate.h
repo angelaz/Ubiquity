@@ -18,16 +18,12 @@ static NSUInteger const kPAWWallPostsSearch = 20; // query limit for pins and ta
 
 // Parse API key constants:
 static NSString * const kPAWParsePostsClassKey = @"Posts";
-static NSString * const kPAWParseUserKey = @"user";
+static NSString * const kPAWParseSenderKey = @"sender";
 static NSString * const kPAWParseUsernameKey = @"username";
 static NSString * const kPAWParseTextKey = @"text";
 static NSString * const kPAWParseLocationKey = @"location";
 
 static NSString * const kNMFrequencyKey = @"frequency";
-
-static NSString * const kPAWParseUbiquityFriendsClassKey = @"UbiquityFriends";
-static NSString * const kPAWParseFriendsKey = @"friends";
-
 
 // NSNotification userInfo keys:
 static NSString * const kPAWFilterDistanceKey = @"filterDistance";
