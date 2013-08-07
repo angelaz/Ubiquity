@@ -25,6 +25,7 @@
         int const SCREEN_HEIGHT = frame.size.height;
         int const LEFT_PADDING = 30;
         int const LINE_HEIGHT = 30;
+        
          
         LocationController* locationController = [LocationController sharedLocationController];
         CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;

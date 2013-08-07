@@ -15,6 +15,8 @@
 #import "Geocoding.h"
 
 #define kOFFSET_FOR_KEYBOARD 180.0
+#define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
+
 
 @interface NewMessageViewController ()
 @end
@@ -52,6 +54,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        
         self.title = @"New Message";
 
         [[NSNotificationCenter defaultCenter] addObserver:self
