@@ -244,10 +244,12 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:kPAWCellLocationLabelTag];
     locationLabel.text = @"Facebook HQ, 1601 Willow Road";
     locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
+    locationLabel.backgroundColor = [UIColor clearColor];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
     sentDate.text = @"Sent at: 10:28am Wednesday 20 May 2013";
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
+    
     
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
