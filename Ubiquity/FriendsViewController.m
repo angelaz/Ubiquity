@@ -21,6 +21,7 @@
         userLoggedIn = NO;
         if ([PFUser currentUser])
         {
+            NSLog(@"init: %@", [PFUser currentUser]);
             userLoggedIn = YES;
             UINavigationItem *nav = [self navigationItem];
             [nav setTitle:@"Friends"];
@@ -64,6 +65,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:NO];
+    NSLog(@"Currently logged in: %@", [PFUser currentUser]);
     [[self tableView] reloadData];
 }
 - (id)initWithStyle:(UITableViewStyle)style
@@ -116,42 +118,9 @@
                      forControlEvents:UIControlEventTouchUpInside];
         [cell addSubview:inviteFriendButton];
     }
-//    NSPredicate *predicate = [NSPredicate predicateWithFormat:
-//                              @"authData != 'Anonymous'"];
-//    PFQuery *findUsers = [PFQuery queryWithClassName:@"_User" predicate:predicate];
-//    [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if (!error) {   // The find succeeded.
-//            if (objects.count == 0) {               //This user doesn't use Ubiquity
-//                cell.textLabel.textColor = [UIColor lightGrayColor];
-//                UIButton *inviteFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//                inviteFriendButton.frame = CGRectMake(cell.bounds.size.width - 60, 5.0f, 60.0f, 44.0f);
-//                [inviteFriendButton setTitle:@"Invite" forState:UIControlStateNormal];
-//                [inviteFriendButton addTarget:self
-//                                       action:@selector(inviteFriendforUser:)
-//                             forControlEvents:UIControlEventTouchUpInside];
-//                [cell addSubview:inviteFriendButton];
-//            }
-//            for (id object in objects) {
-//                NSLog(@"This person DOES use parse: %@", object);
-//            }
-//        } else {        // Log details of the failure
-//            NSLog(@"Error: %@ %@", error, [error userInfo]);
-//        }
-//    }];
     return cell;
 }
 
-// gets cropped FB profile pic sized image (not scaled though)
-- (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect {
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, img.size.width, img.size.height);
-    CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
-    [img drawInRect:drawRect];
-    UIImage* subImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return subImage;
-}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -160,7 +129,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     /* Implement loading/viewing/selecting a friend's saved public locations here */
-    NSLog(@"%@", [selectedFriends objectAtIndex:indexPath.row]);
     
 }
 
