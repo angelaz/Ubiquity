@@ -29,29 +29,23 @@
                                                                                  action:@selector(displayFriendPicker)];
             self.navigationItem.rightBarButtonItem = add;
             
-
             UIBarButtonItem *remove = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
                                                                                     target:self
                                                                                     action:@selector(removeFriends)];
             self.navigationItem.leftBarButtonItem = remove;
             
             self.tableView.scrollEnabled = YES;
-            
-            selectedFriends = [[NSMutableArray alloc] init];
-            
-            //NSLog(@"the current user is %@", [[PFUser currentUser] objectId]);
 
             PFRelation *relation = [[PFUser currentUser] relationforKey:@"follows"];
             PFQuery *query = [relation query];
             
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {   // The find succeeded.
-                    //NSLog(@"Successfully retrieved %d relationships.", objects.count);
                     if ([objects count] > 0) {      //Saved friend list exists
                         selectedFriends = [[NSMutableArray alloc] initWithArray:objects];
-                    } else {    //No saved friend list. No need to instantiate anything though
+                    } else {    //No saved friend list.
+                        selectedFriends = [[NSMutableArray alloc] init];
                     }
-                    
                 } else {        // Log details of the failure
                     //NSLog(@"Error: %@ %@", error, [error userInfo]);
                 }
@@ -99,48 +93,53 @@
                                       reuseIdentifier:CellIdentifier];
     }
     NSDictionary *userData = [selectedFriends objectAtIndex:indexPath.row];
-    NSLog(@"%@", userData);
+
     
     NSString *facebookID = [userData objectForKey:@"fbId"];//userData[@"id"];
     NSString *name = [userData objectForKey:@"profile"][@"name"];//userData[@"name"];
-    
+    NSLog(@"Current user: %@", name);
     FBProfilePictureView *profilePictureView = [[FBProfilePictureView alloc] init];
     profilePictureView.frame = CGRectMake(0.0, 0.0, 45.0, 45.0);
     profilePictureView.profileID = facebookID;
     [cell.imageView addSubview:profilePictureView];
-    
-    //    NSURL *pictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large&return_ssl_resources=1", facebookID]];
-    //    NSData *imageData = [NSData dataWithContentsOfURL:pictureURL];
     cell.imageView.image = [UIImage imageNamed:@"pixel"];
-    //cell.imageView.image = [UIImage imageWithData:imageData];
-    //cell.imageView.image = [self getSubImageFrom:[UIImage imageWithData:data] WithRect:CGRectMake(0.0, 0.0, 75.0, 75.0)];
-    
     cell.textLabel.text = name;
     
-    //
     //Gray out a cell if that friend doesn't use Parse
-    PFQuery *findUsers = [PFQuery queryWithClassName:@"_User"];
-    [findUsers whereKey:@"fbId" equalTo:facebookID];
-    [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {   // The find succeeded.
-            if (objects.count == 0) {               //This user doesn't use Ubiquity
-                cell.textLabel.textColor = [UIColor lightGrayColor];
-                UIButton *inviteFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-                inviteFriendButton.frame = CGRectMake(cell.bounds.size.width - 60, 5.0f, 60.0f, 44.0f);
-                [inviteFriendButton setTitle:@"Invite" forState:UIControlStateNormal];
-                [inviteFriendButton addTarget:self
-                                       action:@selector(inviteFriendforUser:)
-                             forControlEvents:UIControlEventTouchUpInside];
-                [cell addSubview:inviteFriendButton];
-            }
-        } else {        // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-    }];
-    
+    if ([PFAnonymousUtils isLinkedWithUser:[selectedFriends objectAtIndex:indexPath.row]]) { //Anonymous user, not registered for Parse!
+        cell.textLabel.textColor = [UIColor lightGrayColor];
+        UIButton *inviteFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        inviteFriendButton.frame = CGRectMake(cell.bounds.size.width - 60, 5.0f, 60.0f, 44.0f);
+        [inviteFriendButton setTitle:@"Invite" forState:UIControlStateNormal];
+        [inviteFriendButton addTarget:self
+                               action:@selector(inviteFriendforUser:)
+                     forControlEvents:UIControlEventTouchUpInside];
+        [cell addSubview:inviteFriendButton];
+    }
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:
+//                              @"authData != 'Anonymous'"];
+//    PFQuery *findUsers = [PFQuery queryWithClassName:@"_User" predicate:predicate];
+//    [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//        if (!error) {   // The find succeeded.
+//            if (objects.count == 0) {               //This user doesn't use Ubiquity
+//                cell.textLabel.textColor = [UIColor lightGrayColor];
+//                UIButton *inviteFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//                inviteFriendButton.frame = CGRectMake(cell.bounds.size.width - 60, 5.0f, 60.0f, 44.0f);
+//                [inviteFriendButton setTitle:@"Invite" forState:UIControlStateNormal];
+//                [inviteFriendButton addTarget:self
+//                                       action:@selector(inviteFriendforUser:)
+//                             forControlEvents:UIControlEventTouchUpInside];
+//                [cell addSubview:inviteFriendButton];
+//            }
+//            for (id object in objects) {
+//                NSLog(@"This person DOES use parse: %@", object);
+//            }
+//        } else {        // Log details of the failure
+//            NSLog(@"Error: %@ %@", error, [error userInfo]);
+//        }
+//    }];
     return cell;
 }
-
 
 // gets cropped FB profile pic sized image (not scaled though)
 - (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect {
@@ -161,13 +160,31 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     /* Implement loading/viewing/selecting a friend's saved public locations here */
+    NSLog(@"%@", [selectedFriends objectAtIndex:indexPath.row]);
     
 }
 
 - (void)inviteFriendforUser:(PFUser *) user
 {
     /* Implement inviting friends to the Ubiquity app here */
-    NSLog(@"Heyyo. You tried to invite a friend but this isn't implemented yet. Sadface.");
+    NSLog(@"Trying to invite friend!");
+    NSMutableDictionary* params =   [NSMutableDictionary dictionaryWithObjectsAndKeys:nil];
+    [FBWebDialogs presentRequestsDialogModallyWithSession:nil
+                                                  message:[NSString stringWithFormat:@"Join Ubiquity so you can send and receive messages from me!"]
+                                                    title:nil
+                                               parameters:params
+                                                  handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                                      if (error) {
+                                                          // Case A: Error launching the dialog or sending request.
+                                                          NSLog(@"Error sending request.");
+                                                      } else {
+                                                          if (result == FBWebDialogResultDialogNotCompleted) {
+                                                              // Case B: User clicked the "x" icon
+                                                              NSLog(@"User canceled request.");
+                                                          } else {
+                                                              NSLog(@"Request Sent.");
+                                                          }
+                                                      }}];
 }
 
 - (void)removeFriends
@@ -283,7 +300,6 @@
 - (void)friendPickerViewControllerSelectionDidChange:
 (FBFriendPickerViewController *)friendPicker
 {
-    //NSLog(@"how about here?");
     for (id<FBGraphUser> user in friendPicker.selection) {
             
         PFQuery *query = [PFQuery queryWithClassName:@"_User"];
@@ -293,7 +309,6 @@
             if (!error) {
                 // The find succeeded.
                 //NSLog(@"Successfully retrieved %d friends.", objects.count);
-                // Do something with the found objects
                 if(objects.count > 0) {
                     //There really should be only one return here, max
                     for (PFObject *object in objects) {
