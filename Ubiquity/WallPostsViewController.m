@@ -6,8 +6,11 @@
 //  Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
-static CGFloat const kPAWWallPostTableViewFontSize = 24.f;
-static CGFloat const kPAWWallPostTableViewCellWidth = 230.f; // subject to change.
+static CGFloat const kPAWWallPostTableViewFontSizeName = 20.f;
+static CGFloat const kPAWWallPostTableViewFontSizeText = 15.f;
+static CGFloat const kPawWallPostTableViewFontSizeDate = 12.f;
+
+static CGFloat const kPAWWallPostTableViewCellWidth = 280.f; // subject to change.
 
 // Cell dimension and positioning constants
 static CGFloat const kPAWCellPaddingTop = 10.0f;
@@ -25,6 +28,10 @@ static CGFloat const kPAWCellBkgdOffset = kPAWCellBkgdHeight - kPAWCellUsernameH
 static NSInteger kPAWCellBackgroundTag = 2;
 static NSInteger kPAWCellTextLabelTag = 3;
 static NSInteger kPAWCellNameLabelTag = 4;
+static NSInteger kPAWCellSentDateLabelTag = 5;
+static NSInteger kPAWCellReceivedDateLabelTag = 6;
+static NSInteger kPAWCellLocationLabelTag = 7;
+
 
 #import "WallPostsViewController.h"
 #import "AppDelegate.h"
@@ -152,26 +159,26 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     //TODO Investigate why this line shuts down all text messages being received
     [query includeKey:kPAWParseSenderKey];
-
+    
     
     if (self.indexing == 0) {
         
         // THIS IS WHERE WE NEED TO IMPLEMENT JUST FRIENDS SHOWING UP!!!!!
         
         NSLog(@"Order was changed to just friends (actually just text alphabetical)");
-
+        
         [query orderByDescending:@"text"];
     } else
-    if (self.indexing == 1) {
-        [query orderByDescending:@"updatedAt"];
-        NSLog(@"Order was changed to date");
-    } else if (self.indexing == 2) {
-        
-        // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
-        
-        [query orderByDescending:@"updatedAt"];
-        NSLog(@"Order was changed to favorites (not really)");
-    }
+        if (self.indexing == 1) {
+            [query orderByDescending:@"updatedAt"];
+            NSLog(@"Order was changed to date");
+        } else if (self.indexing == 2) {
+            
+            // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
+            
+            [query orderByDescending:@"updatedAt"];
+            NSLog(@"Order was changed to favorites (not really)");
+        }
     
 	return query;
 }
@@ -179,73 +186,80 @@ static NSInteger kPAWCellNameLabelTag = 4;
 // Override to customize the look of a cell representing an object. The default is to display
 // a UITableViewCellStyleDefault style cell with the label being the first key in the object.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+    [tableView setSeparatorColor: [UIColor clearColor]];
+    [tableView setBackgroundColor: [UIColor lightGrayColor]];
+
 	// Reuse identifiers for left and right cells
-	static NSString *RightCellIdentifier = @"RightCell";
 	static NSString *LeftCellIdentifier = @"LeftCell";
     
 	// Try to reuse a cell
 	BOOL cellIsRight = [[[object objectForKey:kPAWParseSenderKey] objectForKey:kPAWParseUsernameKey] isEqualToString:[[PFUser currentUser] objectForKey:@"username"]];
     
 	UITableViewCell *cell;
-	if (cellIsRight) { // User's post so create blue bubble
-		cell = [tableView dequeueReusableCellWithIdentifier:RightCellIdentifier];
-		if (cell == nil) {
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:RightCellIdentifier];
-			
-			UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"SelfPostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
-			[backgroundImage setTag:kPAWCellBackgroundTag];
-			[cell.contentView addSubview:backgroundImage];
-            
-			UILabel *textLabel = [[UILabel alloc] init];
-			[textLabel setTag:kPAWCellTextLabelTag];
-			[cell.contentView addSubview:textLabel];
-			
-			UILabel *nameLabel = [[UILabel alloc] init];
-			[nameLabel setTag:kPAWCellNameLabelTag];
-			[cell.contentView addSubview:nameLabel];
-		}
-	} else { // Someone else's post so create gray bubble
-		cell = [tableView dequeueReusableCellWithIdentifier:LeftCellIdentifier];
-		if (cell == nil) {
-			cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:LeftCellIdentifier];
-			
-			UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"PostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
-			[backgroundImage setTag:kPAWCellBackgroundTag];
-			[cell.contentView addSubview:backgroundImage];
-            
-			UILabel *textLabel = [[UILabel alloc] init];
-			[textLabel setTag:kPAWCellTextLabelTag];
-			[cell.contentView addSubview:textLabel];
-			
-			UILabel *nameLabel = [[UILabel alloc] init];
-			[nameLabel setTag:kPAWCellNameLabelTag];
-			[cell.contentView addSubview:nameLabel];
-		}
-	}
+    cell = [tableView dequeueReusableCellWithIdentifier:LeftCellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:LeftCellIdentifier];
+        
+        UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"PostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
+        [backgroundImage setTag:kPAWCellBackgroundTag];
+        [cell.contentView addSubview:backgroundImage];
+        
+        
+        UILabel *nameLabel = [[UILabel alloc] init];
+        [nameLabel setTag:kPAWCellNameLabelTag];
+        [cell.contentView addSubview:nameLabel];
+        
+        UILabel *textLabel = [[UILabel alloc] init];
+        [textLabel setTag:kPAWCellTextLabelTag];
+        [cell.contentView addSubview:textLabel];
+        
+        UILabel *sentDate = [[UILabel alloc] init];
+        [sentDate setTag:kPAWCellSentDateLabelTag];
+        [cell.contentView addSubview:sentDate];
+        
+        UILabel *receivedDate = [[UILabel alloc] init];
+        [receivedDate setTag: kPAWCellReceivedDateLabelTag];
+        [cell.contentView addSubview:receivedDate];
+        
+        UILabel *locationLabel = [[UILabel alloc] init];
+        [locationLabel setTag: kPAWCellLocationLabelTag];
+        [cell.contentView addSubview:locationLabel];
+    }
     
     
 	
 	// Configure the cell content
+
+    
 	UILabel *textLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellTextLabelTag];
 	textLabel.text = [object objectForKey:kPAWParseTextKey];
 	textLabel.lineBreakMode = NSLineBreakByWordWrapping;
 	textLabel.numberOfLines = 0;
-	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSize];
+	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
 	textLabel.textColor = [UIColor darkGrayColor];
 	textLabel.backgroundColor = [UIColor clearColor];
     
-	[tableView setSeparatorColor: [UIColor clearColor]];
-    [tableView setBackgroundColor: [UIColor lightGrayColor]];
+	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:kPAWCellLocationLabelTag];
+    locationLabel.text = @"Facebook HQ, 1601 Willow Road";
+    locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
     
-	
+    UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
+    sentDate.text = @"Sent at: 10:28am Wednesday 20 May 2013";
+    sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
+    
+    UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
+    receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
+    receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
+    
+    
     //TODO Remove
     PFUser *sender = [object objectForKey:@"sender"];
     NSString *prof = [sender objectForKey:@"profile"];
     
-	NSString *username = [NSString stringWithFormat:@"- %@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
 	nameLabel.text = username;
-	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSize];
+	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName];
 	nameLabel.backgroundColor = [UIColor clearColor];
 	if (cellIsRight) {
 		nameLabel.textColor = [UIColor colorWithRed:175.0f/255.0f green:172.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
@@ -261,29 +275,56 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	
 	// Move cell content to the right position
 	// Calculate the size of the post's text and username
-	CGSize textSize = [[object objectForKey:kPAWParseTextKey] sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSize] constrainedToSize:CGSizeMake(kPAWWallPostTableViewCellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSize] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
-	
+	CGSize textSize = [[object objectForKey:kPAWParseTextKey] sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText] constrainedToSize:CGSizeMake(kPAWWallPostTableViewCellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    CGSize sentDateSize = [sentDate.text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    CGSize receivedDateSize = [receivedDate.text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    CGSize locationLabelSize = [locationLabel.text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    
+    
+    
 	
 	CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath] + kPAWCellTextPaddingTop ; // Get the height of the cell
-	CGFloat textWidth = textSize.width > nameSize.width ? textSize.width : nameSize.width; // Set the width to the largest (text of username)
 	
 	// Place the content in the correct position depending on the type
-		
-		[nameLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
-									   
-                                       kPAWCellPaddingTop+kPAWCellTextPaddingTop,
-									   nameSize.width,
-									   nameSize.height)];
-		[textLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
-									   kPAWCellPaddingTop+kPAWCellTextPaddingTop+textSize.height,
-									   textSize.width,
-									   textSize.height)];
-		[backgroundImage setFrame:CGRectMake(kPAWCellPaddingSides,
-											 kPAWCellPaddingTop,
-											 self.tableView.frame.size.width - kPAWCellPaddingSides*2,
-											 cellHeight-kPAWCellPaddingTop-kPAWCellPaddingBottom)];
+    
+    [nameLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
+                                   
+                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop,
+                                   nameSize.width,
+                                   nameSize.height)];
+    
+    
+    [locationLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
+                                       kPAWCellPaddingTop+kPAWCellTextPaddingTop*3,
+                                       locationLabelSize.width,
+                                       locationLabelSize.height)];
 
+    [sentDate setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
+                                  kPAWCellPaddingTop+kPAWCellTextPaddingTop*5,
+                                  sentDateSize.width,
+                                  sentDateSize.height)];
+    [receivedDate setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
+                                      kPAWCellPaddingTop+kPAWCellTextPaddingTop+nameSize.height*4+textSize.height,
+                                      receivedDateSize.width,
+                                      receivedDateSize.height)];
+    
+    [textLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
+                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*9,
+                                   textSize.width,
+                                   textSize.height)];
+
+    
+    [backgroundImage setFrame:CGRectMake(kPAWCellPaddingSides,
+                                         kPAWCellPaddingTop,
+                                         self.tableView.frame.size.width - kPAWCellPaddingSides*2,
+                                         cellHeight-kPAWCellPaddingTop-kPAWCellPaddingBottom)];
+    
+    
+    
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
@@ -291,7 +332,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [super tableView:tableView cellForNextPageAtIndexPath:indexPath];
-	cell.textLabel.font = [cell.textLabel.font fontWithSize:kPAWWallPostTableViewFontSize];
+	cell.textLabel.font = [cell.textLabel.font fontWithSize:kPAWWallPostTableViewFontSizeText];
 	return cell;
 }
 
@@ -319,11 +360,11 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	NSString *username = [postFromObject.sender objectForKey:@"profile"][@"name"];
 	
 	// Calculate what the frame to fit the post text and the username
-	CGSize textSize = [text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSize] constrainedToSize:CGSizeMake(kPAWWallPostTableViewCellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSize] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+	CGSize textSize = [text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText] constrainedToSize:CGSizeMake(kPAWWallPostTableViewCellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
 	// And return this height plus cell padding and the offset of the bubble image height (without taking into account the text height twice)
-	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height + kPAWCellBkgdOffset + kPAWCellPaddingTop * 4;
+	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height * 5 + kPAWCellBkgdOffset + kPAWCellPaddingTop;
 	return rowHeight;
 }
 
