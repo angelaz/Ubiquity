@@ -87,7 +87,6 @@
     
     [_nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     [_nmv.closeButton addTarget:self action:@selector(closeNewMessage:) forControlEvents:UIControlEventTouchUpInside];
-    
     [_nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
 
     _nmv.repeatTimesPicker.delegate = self;
@@ -115,6 +114,8 @@
                                                                    style:UIBarButtonItemStyleBordered target:self
                                                                   action:@selector(pickerDoneClicked:)];
     [_nmv.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
+    
+    [_nmv.pictureButton addTarget:self action:@selector(choosePicture:) forControlEvents:UIControlEventTouchUpInside];
     
     _nmv.map.delegate = self;
     
@@ -263,6 +264,7 @@
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
     //Not a perfect solution for keeping the map at the same place
+    //TODO: Fix it so map doesn't shift at all when search for invalid address
     gs = [[Geocoding alloc] initWithCurLocation:curLocation];
    [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
 }
@@ -282,9 +284,6 @@
     [self setPickedValueForPickerButton];
     [_nmv addSubview:_nmv.showRepeatPickerButton];
     [_nmv.tapRecognizer setEnabled:YES];
-
-    
-    
 }
 
 - (void) showPicker: (id) sender
@@ -410,6 +409,28 @@
     NSLog(@"Message sent!");
     
     [self closeNewMessage:self];
+}
+
+- (void) choosePicture: (id) sender
+{
+    NSLog(@"Trying to attach a picture!");
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    } else {
+        [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    }
+    
+    imagePicker.delegate = self;
+    [self presentViewController:imagePicker animated:YES completion:^{}];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)textFieldShouldReturn: (UITextField *)textField {
