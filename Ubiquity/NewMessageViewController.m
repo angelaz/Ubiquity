@@ -347,18 +347,22 @@
                     //They are not in our db (yet)
                     //TODO Make this a function, instead of fully typed out. Ick.
      
-                    [PFAnonymousUtils logInWithBlock:^(PFUser *newGuy, NSError *e) {
-                        if(!e) {
-                            [newGuy setObject:user.id forKey:@"fbId"];
-                            [newGuy setObject:user    forKey:@"profile"];
-                            [relation addObject:newGuy];
-                            [newGuy saveInBackgroundWithBlock:nil];
-                            [postObject saveInBackgroundWithBlock:nil];
-                            //NSLog(@"Added the new guy");
-                        } else {
-                            NSLog(@"%@", e);
-                        }
-                    }];
+//                    [PFAnonymousUtils logInWithBlock:^(PFUser *newGuy, NSError *e) {
+//                        if(!e) {
+//                            [newGuy setObject:user.id forKey:@"fbId"];
+//                            [newGuy setObject:user    forKey:@"profile"];
+//                            [relation addObject:newGuy];
+//                            [newGuy saveInBackgroundWithBlock:nil];
+//                            [postObject saveInBackgroundWithBlock:nil];
+//                            //NSLog(@"Added the new guy");
+//                            
+//                            [self logBackIn];
+//                            
+//                            NSLog(@"%@", [PFUser currentUser]);
+//                        } else {
+//                            NSLog(@"%@", e);
+//                        }
+//                    }];
                     
                 }
                 
