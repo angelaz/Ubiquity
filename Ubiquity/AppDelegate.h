@@ -7,6 +7,21 @@
 //
 
 
+//theme colors
+#define mainThemeColor [UIColor colorWithRed:0.016 green:0.506 blue:0.62 alpha:1]; /*#04819e*/
+
+
+#define tabBarColor [UIColor colorWithRed:0.004 green:0.325 blue:0.404 alpha:1]; /*#015367*/
+
+#define lightestThemeColor [UIColor colorWithRed:0.376 green:0.725 blue:0.808 alpha:1]; /*#60b9ce*/
+
+#define lighterThemeColor [UIColor colorWithRed:0.22 green:0.698 blue:0.808 alpha:1]; /*#38b2ce*/
+
+
+
+
+
+
 static NSUInteger const kPAWWallPostMaximumCharacterCount = 140;
 
 static double const kPAWFeetToMeters = 0.3048; // this is an exact value.

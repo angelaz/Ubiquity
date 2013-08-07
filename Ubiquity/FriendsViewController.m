@@ -7,6 +7,7 @@
 //
 
 #import "FriendsViewController.h"
+#import "AppDelegate.h"
 
 @interface FriendsViewController () <UITableViewDataSource, UITableViewDelegate, FBFriendPickerDelegate, UISearchBarDelegate>
 {
@@ -272,12 +273,16 @@
     //[self addSearchBarToFriendPickerView];
 //    [self.navigationController pushViewController:friendPickerController
 //                                         animated:true];
+
+
     [self.navigationController presentViewController:friendPickerController
                        animated:YES
                      completion:^(void){
                          [self addSearchBarToFriendPickerView];
                      }
+     
      ];
+
     
     
 }

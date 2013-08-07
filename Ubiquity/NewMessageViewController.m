@@ -14,7 +14,9 @@
 #import "LocationController.h"
 #import "Geocoding.h"
 
-#define kOFFSET_FOR_KEYBOARD 190.0
+#define kOFFSET_FOR_KEYBOARD 180.0
+#define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
+
 
 @interface NewMessageViewController ()
 @end
@@ -53,11 +55,19 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         
+        self.title = @"New Message";
+
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(locationDidChange:)
                                                      name:kPAWLocationChangeNotification
                                                    object:nil];
         recipientsList = [[NSMutableArray alloc] init];
+        
+        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                             target:self
+                                                                             action:@selector(closeNewMessage:)];
+        [[self navigationItem] setLeftBarButtonItem:backButton];
+
         
              }
     return self;
@@ -86,17 +96,9 @@
     _nmv.locationSearchTextField.delegate = self;
     
     [_nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
-    [_nmv.closeButton addTarget:self action:@selector(closeNewMessage:) forControlEvents:UIControlEventTouchUpInside];
     
     [_nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
-
-    _nmv.repeatTimesPicker.delegate = self;
-    _nmv.repeatTimesPicker.dataSource = self;
     
-    
-    
-    [_nmv.showRepeatPickerButton addTarget:self action:@selector(showPicker:) forControlEvents:UIControlEventTouchUpInside];
-    [self setPickedValueForPickerButton];
     
     [_nmv.toRecipientButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -107,14 +109,6 @@
     [_nmv addGestureRecognizer:_nmv.tapRecognizer];
 
     
-    _nmv.pickerToolbar = [[UIToolbar alloc] init];
-    _nmv.pickerToolbar.barStyle = UIBarStyleDefault;
-    _nmv.pickerToolbar.translucent = NO;
-    [_nmv.pickerToolbar sizeToFit];
-    UIBarButtonItem* doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
-                                                                   style:UIBarButtonItemStyleBordered target:self
-                                                                  action:@selector(pickerDoneClicked:)];
-    [_nmv.pickerToolbar setItems:[NSArray arrayWithObjects:doneButton, nil]];
     
     _nmv.map.delegate = self;
     
@@ -542,6 +536,7 @@
         // Create friend picker, and get data loaded into it.
         self.friendPickerController = [[FBFriendPickerViewController alloc] init];
         self.friendPickerController.title = @"Select Friends";
+
         self.friendPickerController.delegate = self;
     }
     [self.friendPickerController loadData];

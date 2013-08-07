@@ -5,6 +5,7 @@
 #import <Parse/Parse.h>
 #import "RecentViewController.h"
 #import "AppDelegate.h"
+#import "LoginView.h"
 
 @implementation LoginViewController
 
@@ -14,8 +15,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"Facebook Profile";
-    
-    // Check if user is cached and linked to Facebook, if so, bypass login    
+    LoginView *view = [[LoginView alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    [self setView: view];
+    [view.loginButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
+
+    // Check if user is cached and linked to Facebook, if so, bypass login
 //    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
 //        [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
 //    }
@@ -25,7 +29,7 @@
 #pragma mark - Login mehtods
 
 /* Login to facebook method */
-- (IBAction)loginButtonTouchHandler:(id)sender  {
+- (void)loginButtonTouchHandler:(id)sender  {
     // Set permissions required from the facebook user account
     NSArray *permissionsArray = @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location"];
     
