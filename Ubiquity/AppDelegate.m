@@ -15,6 +15,7 @@
 #import "FriendsViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
 
+
 @interface AppDelegate ()
 
 @end
@@ -39,22 +40,34 @@
     UINavigationController *recentNavController = [[UINavigationController alloc]
                                                    initWithRootViewController:rvc];
     [UIView  beginAnimations: @"Showinfo"context: nil];
+    recentNavController.navigationBar.tintColor = mainThemeColor;
+    
+
     
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
     UINavigationController *newMessageNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:nmvc];
+    newMessageNavController.navigationBar.tintColor = mainThemeColor;
+
     
     FriendsViewController *fvc = [[FriendsViewController alloc] init];
     UINavigationController *friendsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:fvc];
+    friendsNavController.navigationBar.tintColor = mainThemeColor;
+
     
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:ovc];
-    
+    optionsNavController.navigationBar.tintColor = mainThemeColor;
+
     
     
     self.tabBarController = [[UITabBarController alloc] init];
+    self.tabBarController.tabBar.tintColor = tabBarColor;
+    
+
+
     [self.tabBarController setViewControllers:@[recentNavController, newMessageNavController,
                                                 
                                                 friendsNavController, optionsNavController]];

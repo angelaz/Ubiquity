@@ -7,6 +7,15 @@
 //
 
 
+//theme colors
+#define mainThemeColor [UIColor colorWithRed:0.016 green:0.506 blue:0.62 alpha:1]; /*#04819e*/
+
+
+#define tabBarColor [UIColor colorWithRed:0.004 green:0.325 blue:0.404 alpha:1] /*#015367*/
+
+
+
+
 static NSUInteger const kPAWWallPostMaximumCharacterCount = 140;
 
 static double const kPAWFeetToMeters = 0.3048; // this is an exact value.
