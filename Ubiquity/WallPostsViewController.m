@@ -116,6 +116,10 @@ static NSInteger kPAWCellNameLabelTag = 4;
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
+    if (error) {
+        NSLog(@"objectsDidLoad: Error: %@", error);
+    }
+    
     // This method is called every time objects are loaded from Parse via the PFQuery
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
@@ -124,7 +128,7 @@ static NSInteger kPAWCellNameLabelTag = 4;
 
 - (void)objectsWillLoad {
     [super objectsWillLoad];
-    
+    NSLog(@"objectsWillLoad");
     // This method is called before a PFQuery is fired to get more objects
 }
 
@@ -145,14 +149,12 @@ static NSInteger kPAWCellNameLabelTag = 4;
 	LocationController* locationController = [LocationController sharedLocationController];
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     
-	CLLocationAccuracy filterDistance = locationController.filterDistance;
+	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
     
 	// And set the query to look by location
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    //TODO Investigate why this line shuts down all text messages being received
     [query includeKey:kPAWParseSenderKey];
-
     
     if (self.indexing == 0) {
         
@@ -160,10 +162,10 @@ static NSInteger kPAWCellNameLabelTag = 4;
         
         NSLog(@"Order was changed to just friends (actually just text alphabetical)");
 
-        [query orderByDescending:@"text"];
+        [query orderByDescending:@"createdAt"];
     } else
     if (self.indexing == 1) {
-        [query orderByDescending:@"updatedAt"];
+        [query orderByDescending:@"createdAt"];
         NSLog(@"Order was changed to date");
     } else if (self.indexing == 2) {
         
