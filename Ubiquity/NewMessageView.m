@@ -96,8 +96,7 @@
         
         [self addSubview:self.locationSearchButton];
         
-        
-        
+
         self.sendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         self.sendButton.frame = CGRectMake(SCREEN_WIDTH - 60, SCREEN_HEIGHT - 28, 50, LINE_HEIGHT);
         [self.sendButton setTitle: @"Send" forState:UIControlStateNormal];
