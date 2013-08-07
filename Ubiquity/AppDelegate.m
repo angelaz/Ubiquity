@@ -27,7 +27,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
     //Set up Parse/Facebook interfacing
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
@@ -36,30 +35,30 @@
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
 
     //    if ([PFUser currentUser]) {
+    
+    [UINavigationBar appearance].tintColor = mainThemeColor;
+    
     RecentViewController *rvc = [[RecentViewController alloc] init];
     UINavigationController *recentNavController = [[UINavigationController alloc]
                                                    initWithRootViewController:rvc];
     [UIView  beginAnimations: @"Showinfo"context: nil];
-    recentNavController.navigationBar.tintColor = mainThemeColor;
+    
     
 
     
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
     UINavigationController *newMessageNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:nmvc];
-    newMessageNavController.navigationBar.tintColor = mainThemeColor;
 
     
     FriendsViewController *fvc = [[FriendsViewController alloc] init];
     UINavigationController *friendsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:fvc];
-    friendsNavController.navigationBar.tintColor = mainThemeColor;
 
     
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:ovc];
-    optionsNavController.navigationBar.tintColor = mainThemeColor;
 
     
     
@@ -73,6 +72,8 @@
                                                 friendsNavController, optionsNavController]];
     UITabBarItem *recentTab = [recentNavController tabBarItem];
     [recentTab setTitle:@"Recent Items"];
+    [recentTab setImage: [UIImage imageNamed:@"recentmessages"]]
+    ;
     UITabBarItem *newMessageTab = [newMessageNavController
                                    tabBarItem];
     [newMessageTab setTitle:@"New Message"];

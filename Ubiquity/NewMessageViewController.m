@@ -536,6 +536,7 @@
         // Create friend picker, and get data loaded into it.
         self.friendPickerController = [[FBFriendPickerViewController alloc] init];
         self.friendPickerController.title = @"Select Friends";
+
         self.friendPickerController.delegate = self;
     }
     [self.friendPickerController loadData];
