@@ -33,7 +33,7 @@
     
     [PFFacebookUtils initializeFacebook];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-    
+
     //    if ([PFUser currentUser]) {
     RecentViewController *rvc = [[RecentViewController alloc] init];
     UINavigationController *recentNavController = [[UINavigationController alloc]
@@ -72,9 +72,11 @@
     
     [self.window setRootViewController:self.tabBarController];
     
-    //    } else {
-    //         [self presentLoginViewController];
-    //    }
+    // register for push notifications
+    [application registerForRemoteNotificationTypes:
+     UIRemoteNotificationTypeBadge |
+     UIRemoteNotificationTypeAlert |
+     UIRemoteNotificationTypeSound];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
@@ -83,6 +85,28 @@
     }
     
     return YES;
+}
+
+// if push notification registration is successful
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    [PFPush storeDeviceToken:deviceToken];
+    [PFPush subscribeToChannelInBackground:@""];
+    
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation saveInBackground];
+    NSLog(@"Registered for push");
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    NSLog(@"Failed to register for push, %@", error);
+}
+
+// method for handling when push notif is received while app is open/in foreground
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    [PFPush handlePush:userInfo];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
