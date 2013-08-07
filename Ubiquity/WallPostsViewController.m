@@ -238,7 +238,6 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 	textLabel.lineBreakMode = NSLineBreakByWordWrapping;
 	textLabel.numberOfLines = 0;
 	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
-	textLabel.textColor = [UIColor darkGrayColor];
 	textLabel.backgroundColor = [UIColor clearColor];
     
 	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:kPAWCellLocationLabelTag];

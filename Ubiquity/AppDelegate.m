@@ -41,7 +41,8 @@
     [UIView  beginAnimations: @"Showinfo"context: nil];
     
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    
+    UINavigationController *newMessageNavController = [[UINavigationController alloc]
+                                                    initWithRootViewController:nmvc];
     
     FriendsViewController *fvc = [[FriendsViewController alloc] init];
     UINavigationController *friendsNavController = [[UINavigationController alloc]
@@ -54,12 +55,12 @@
     
     
     self.tabBarController = [[UITabBarController alloc] init];
-    [self.tabBarController setViewControllers:@[recentNavController, nmvc,
+    [self.tabBarController setViewControllers:@[recentNavController, newMessageNavController,
                                                 
                                                 friendsNavController, optionsNavController]];
     UITabBarItem *recentTab = [recentNavController tabBarItem];
     [recentTab setTitle:@"Recent Items"];
-    UITabBarItem *newMessageTab = [nmvc
+    UITabBarItem *newMessageTab = [newMessageNavController
                                    tabBarItem];
     [newMessageTab setTitle:@"New Message"];
     [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
