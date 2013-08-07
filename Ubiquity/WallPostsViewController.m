@@ -123,6 +123,10 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
+    if (error) {
+        NSLog(@"objectsDidLoad: Error: %@", error);
+    }
+    
     // This method is called every time objects are loaded from Parse via the PFQuery
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
@@ -131,7 +135,7 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 
 - (void)objectsWillLoad {
     [super objectsWillLoad];
-    
+    NSLog(@"objectsWillLoad");
     // This method is called before a PFQuery is fired to get more objects
 }
 
@@ -152,33 +156,31 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 	LocationController* locationController = [LocationController sharedLocationController];
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     
-	CLLocationAccuracy filterDistance = locationController.filterDistance;
+	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
     
 	// And set the query to look by location
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    //TODO Investigate why this line shuts down all text messages being received
     [query includeKey:kPAWParseSenderKey];
-    
     
     if (self.indexing == 0) {
         
         // THIS IS WHERE WE NEED TO IMPLEMENT JUST FRIENDS SHOWING UP!!!!!
         
         NSLog(@"Order was changed to just friends (actually just text alphabetical)");
-        
-        [query orderByDescending:@"text"];
+
+        [query orderByDescending:@"createdAt"];
     } else
-        if (self.indexing == 1) {
-            [query orderByDescending:@"updatedAt"];
-            NSLog(@"Order was changed to date");
-        } else if (self.indexing == 2) {
-            
-            // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
-            
-            [query orderByDescending:@"updatedAt"];
-            NSLog(@"Order was changed to favorites (not really)");
-        }
+    if (self.indexing == 1) {
+        [query orderByDescending:@"createdAt"];
+        NSLog(@"Order was changed to date");
+    } else if (self.indexing == 2) {
+        
+        // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
+        
+        [query orderByDescending:@"updatedAt"];
+        NSLog(@"Order was changed to favorites (not really)");
+    }
     
 	return query;
 }

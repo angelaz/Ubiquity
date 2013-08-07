@@ -322,10 +322,10 @@
     
     // Update the map with new pins:
     [self queryForAllPostsNearLocation:locationController.location
-                    withNearbyDistance:locationController.filterDistance];
+                    withNearbyDistance:locationController.locationManager.distanceFilter];
     // And update the existing pins to reflect any changes in filter distance:
     [self updatePostsForLocation:locationController.location
-              withNearbyDistance:locationController.filterDistance];
+              withNearbyDistance:locationController.locationManager.distanceFilter];
 }
 
 
@@ -337,7 +337,7 @@
 
 - (void)postWasCreated:(NSNotification *)note {
     LocationController* locationController = [LocationController sharedLocationController];
-	[self queryForAllPostsNearLocation:locationController.location withNearbyDistance:locationController.filterDistance];
+	[self queryForAllPostsNearLocation:locationController.location withNearbyDistance:locationController.locationManager.distanceFilter];
 }
 
 
