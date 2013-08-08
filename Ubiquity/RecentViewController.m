@@ -28,7 +28,6 @@
 {
     [super viewWillAppear:animated];
     
-    NSLog(@"push notifications called viewwillappear");
 }
 
 - (id)init
@@ -250,7 +249,7 @@
              
          }
      }];
-        NSLog(@"push notifications called querying");
+        [self pushNotifications];
 }
 
 - (void)pushNotifications {
@@ -309,7 +308,6 @@
     LocationController* locationController = [LocationController sharedLocationController];
     
     
-    NSLog(@"push notifications called locationdidchange");
     // If we haven't drawn the search radius on the map, initialize it.
     //  if (self.searchRadius == nil)
     //    {
@@ -379,9 +377,7 @@
 			//[(MKPinAnnotationView *) [mapView viewForAnnotation:post] setPinColor:post.pinColor];
 		}
 	}
-    [self pushNotifications];
-    NSLog(@"push notifications called updatepostsforlocation");
-    
+
 }
 
 - (void)startStandardUpdates {
@@ -406,7 +402,6 @@
         locManager.delegate = locationController;
 	}
     
-    NSLog(@"push notifications called standard updates");
     
 }
 

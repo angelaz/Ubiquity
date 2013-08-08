@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		200052E317B331FA00B9C14E /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 200052E217B331FA00B9C14E /* LoginView.m */; };
 		20F8F2A617A1F0F000594994 /* RecentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A517A1F0F000594994 /* RecentViewController.m */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
@@ -58,7 +59,6 @@
 		82E9318E17A079C600B3958B /* UbiquityTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 82E9318D17A079C600B3958B /* UbiquityTests.m */; };
 		82E931A717A07A3700B3958B /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 82E9319717A07A3700B3958B /* FacebookSDKResources.bundle */; };
 		82E931BA17A07A8800B3958B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82E931B817A07A8800B3958B /* LoginViewController.m */; };
-		82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82E931B917A07A8800B3958B /* LoginViewController.xib */; };
 		82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */; };
 		82E931C117A07B0B00B3958B /* UserDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */; };
 		82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82E931BF17A07B0B00B3958B /* TableHeaderView.xib */; };
@@ -98,6 +98,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		200052E117B331FA00B9C14E /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		200052E217B331FA00B9C14E /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
 		20F8F2A417A1F0F000594994 /* RecentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentViewController.h; sourceTree = "<group>"; };
 		20F8F2A517A1F0F000594994 /* RecentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentViewController.m; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
@@ -162,7 +164,6 @@
 		82E9319717A07A3700B3958B /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FacebookSDKResources.bundle; sourceTree = "<group>"; };
 		82E931B717A07A8800B3958B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		82E931B817A07A8800B3958B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		82E931B917A07A8800B3958B /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		82E931BC17A07B0B00B3958B /* UserDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDetailsViewController.h; sourceTree = "<group>"; };
 		82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDetailsViewController.m; sourceTree = "<group>"; };
 		82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailsViewController.xib; sourceTree = "<group>"; };
@@ -302,9 +303,10 @@
 			children = (
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
+				200052E117B331FA00B9C14E /* LoginView.h */,
+				200052E217B331FA00B9C14E /* LoginView.m */,
 				82E931B717A07A8800B3958B /* LoginViewController.h */,
 				82E931B817A07A8800B3958B /* LoginViewController.m */,
-				82E931B917A07A8800B3958B /* LoginViewController.xib */,
 				82E931BC17A07B0B00B3958B /* UserDetailsViewController.h */,
 				82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */,
 				82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */,
@@ -472,7 +474,6 @@
 				824EB77917A735A00006AA5D /* options.png in Resources */,
 				82E931EE17A093C600B3958B /* Default-568h@2x.png in Resources */,
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
-				82E931BB17A07A8800B3958B /* LoginViewController.xib in Resources */,
 				82E931F017A093C600B3958B /* Default@2x.png in Resources */,
 				866C6BBE17A6F2B000CF8449 /* CloseButton@2x.png in Resources */,
 				6097BEE217A71FEA0012A36A /* grayBubble@2x.png in Resources */,
@@ -524,6 +525,7 @@
 				82C7577617A322580094EB15 /* FriendsViewController.m in Sources */,
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
+				200052E317B331FA00B9C14E /* LoginView.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
