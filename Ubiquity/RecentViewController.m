@@ -35,10 +35,6 @@
     if (self) {
         UINavigationItem *nav = [self navigationItem];
        // [nav setTitle:@"Recent"];
-        UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                             target:self
-                                                                             action:@selector(addNewItem:)];
-        [[self navigationItem] setRightBarButtonItem:bbi];
         
         _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Friends", @"Public", @"Favorites"]];
         
@@ -124,27 +120,6 @@
     }
 }
 
-
-- (void)addNewItem:(id)sender
-
-{
-    
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    [self presentViewController:nmvc animated:YES completion:nil];
-    
-    //  ExpenseItem *newItem = [[ExpenseItemStore sharedStore] createItem];
-    //  DetailViewController *detailViewController = [[DetailViewController alloc] initForNewItem:YES];
-    //  [detailViewController setItem:newItem];
-    
-    //  [detailViewController setDismissBlock:^{[[self tableView] reloadData];}];
-    
-    //  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-    //  [navController setModalPresentationStyle:UIModalPresentationFormSheet];
-    // [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    //  [self presentViewController:navController
-    //                   animated:YES
-    //                  completion:nil];
-}
 
 - (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation
                   withNearbyDistance:(CLLocationAccuracy)nearbyDistance

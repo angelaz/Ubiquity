@@ -15,6 +15,7 @@
 #import "FriendsViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
 
+
 @interface AppDelegate ()
 
 @end
@@ -26,7 +27,6 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
     //Set up Parse/Facebook interfacing
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
@@ -35,31 +35,46 @@
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
 
     //    if ([PFUser currentUser]) {
+    
+    [UINavigationBar appearance].tintColor = mainThemeColor;
+    
     RecentViewController *rvc = [[RecentViewController alloc] init];
     UINavigationController *recentNavController = [[UINavigationController alloc]
                                                    initWithRootViewController:rvc];
     [UIView  beginAnimations: @"Showinfo"context: nil];
     
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
     
+
+    
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    UINavigationController *newMessageNavController = [[UINavigationController alloc]
+                                                    initWithRootViewController:nmvc];
+
     
     FriendsViewController *fvc = [[FriendsViewController alloc] init];
     UINavigationController *friendsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:fvc];
+
     
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:ovc];
-    
+
     
     
     self.tabBarController = [[UITabBarController alloc] init];
-    [self.tabBarController setViewControllers:@[recentNavController, nmvc,
+    self.tabBarController.tabBar.tintColor = tabBarColor;
+    
+
+
+    [self.tabBarController setViewControllers:@[recentNavController, newMessageNavController,
                                                 
                                                 friendsNavController, optionsNavController]];
     UITabBarItem *recentTab = [recentNavController tabBarItem];
     [recentTab setTitle:@"Recent Items"];
-    UITabBarItem *newMessageTab = [nmvc
+    [recentTab setImage: [UIImage imageNamed:@"recentmessages"]]
+    ;
+    UITabBarItem *newMessageTab = [newMessageNavController
                                    tabBarItem];
     [newMessageTab setTitle:@"New Message"];
     [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];

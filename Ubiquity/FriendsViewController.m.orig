@@ -37,10 +37,13 @@
             self.navigationItem.leftBarButtonItem = remove;
             
             self.tableView.scrollEnabled = YES;
+<<<<<<< HEAD
+=======
             
             selectedFriends = [[NSMutableArray alloc] init];
             
             NSLog(@"the current user is %@", [PFUser currentUser]);
+>>>>>>> dbf510e549cc245a7f7b8515793ddbf3772a88ca
 
             PFRelation *relation = [[PFUser currentUser] relationforKey:@"follows"];
             PFQuery *query = [relation query];
@@ -49,8 +52,13 @@
                 if (!error) {   // The find succeeded.
                     if ([objects count] > 0) {      //Saved friend list exists
                         selectedFriends = [[NSMutableArray alloc] initWithArray:objects];
+<<<<<<< HEAD
+                    } else {    //No saved friend list.
+                        selectedFriends = [[NSMutableArray alloc] init];
+=======
                     } else {    //No saved friend list. No need to instantiate anything though
                         NSLog(@"No saved friends");
+>>>>>>> dbf510e549cc245a7f7b8515793ddbf3772a88ca
                     }
                 } else {        // Log details of the failure
                     NSLog(@"Error: %@ %@", error, [error userInfo]);
@@ -158,7 +166,6 @@
                                                               NSLog(@"Request Sent.");
                                                           }
                                                       }}];
-    NSLog(@"Heyyo. You tried to invite a friend but this isn't implemented yet. Sadface.");
 }
 
 - (void)removeFriends
@@ -285,6 +292,17 @@
             PFQuery *query = [PFQuery queryWithClassName:@"_User"];
             [query whereKey:@"fbId" equalTo:[user id]];
 
+<<<<<<< HEAD
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                //NSLog(@"Successfully retrieved %d friends.", objects.count);
+                if(objects.count > 0) {
+                    //There really should be only one return here, max
+                    for (PFObject *object in objects) {
+                        if(objects.count > 0) {
+                            
+=======
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {
                     // The find succeeded.
@@ -294,6 +312,7 @@
                         //There really should be only one return here, max
                         for (PFObject *object in objects) {
                                 
+>>>>>>> dbf510e549cc245a7f7b8515793ddbf3772a88ca
                             PFObject *me = [PFUser currentUser];
                             PFRelation *relation = [me relationforKey:@"follows"];
                             [relation addObject:object];
