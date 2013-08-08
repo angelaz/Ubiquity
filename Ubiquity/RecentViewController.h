@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 Catherine Morrison. All rights reserved.
 //
 
-static int indexNumber = 0;
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
@@ -25,6 +24,8 @@ static int indexNumber = 0;
 @property (nonatomic, strong) WallPostsViewController *wallPostsViewController;
 
 @property (nonatomic, strong) NSMutableArray *allPosts;
+
+@property (nonatomic, strong) NSMutableArray *postsToPush;
 
 // CLLocationManagerDelegate methods:
 - (void)locationManager:(CLLocationManager *)manager

@@ -27,6 +27,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    NSLog(@"push notifications called viewwillappear");
 }
 
 - (id)init
@@ -65,7 +67,7 @@
         NSLog(@"Changed value to 1");
         [wall loadObjects];
     } else if (value == 2) {
-        indexNumber = 2;
+        wall.indexing = 2;
         NSLog(@"Changed value to 2");
     }
 }
@@ -77,6 +79,7 @@
 		self.className = kPAWParsePostsClassKey;
 		_annotations = [[NSMutableArray alloc] initWithCapacity:10];
 		_allPosts = [[NSMutableArray alloc] initWithCapacity:10];
+        _postsToPush = [[NSMutableArray alloc] initWithCapacity:10];
 	}
 	return self;
 }
@@ -126,6 +129,7 @@
 {
     PFQuery *wallPostQuery = [PFQuery queryWithClassName:self.className];
     
+
     // If no objects are loaded in memory, we look to the cache first to fill the table
     // and then subsequently do a query against the network.
     if ([self.allPosts count] == 0) {
@@ -241,9 +245,32 @@
              //  [mapView addAnnotations:newPosts];
              [_allPosts addObjectsFromArray:newPosts];
              //  self.mapPinsPlaced = YES;
+             
+             [_postsToPush addObjectsFromArray:newPosts];
+             
          }
      }];
+        NSLog(@"push notifications called querying");
 }
+
+- (void)pushNotifications {
+    // Create our Installation query
+    PFQuery *pushQuery = [PFInstallation query];
+    [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+    
+    // change this to _postsToPush array
+    for (TextMessage *newPost in _allPosts)
+    {
+        if ([newPost.address isEqualToString:[[PFUser currentUser] objectForKey:@"username"]]) {
+            
+            NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [[PFUser currentUser] objectForKey:@"profile"][@"name"]];
+        // Send push notification to query
+            [PFPush sendPushMessageToQueryInBackground:pushQuery
+                                       withMessage:pushMessage];
+        }
+    }
+}
+
 
 - (void)distanceFilterDidChange:(NSNotification *)note {
 	CLLocationAccuracy filterDistance = [[[note userInfo] objectForKey:kPAWFilterDistanceKey] doubleValue];
@@ -258,7 +285,7 @@
 	// Update our pins for the new filter distance:
     LocationController* locationController = [LocationController sharedLocationController];
 	[self updatePostsForLocation:locationController.location withNearbyDistance:filterDistance];
-	
+
 	// If they panned the map since our last location update, don't recenter it.
 	//if (!self.mapPannedSinceLocationUpdate) {
 		// Set the map's region centered on their location at 2x filterDistance
@@ -282,6 +309,7 @@
     LocationController* locationController = [LocationController sharedLocationController];
     
     
+    NSLog(@"push notifications called locationdidchange");
     // If we haven't drawn the search radius on the map, initialize it.
     //  if (self.searchRadius == nil)
     //    {
@@ -351,6 +379,9 @@
 			//[(MKPinAnnotationView *) [mapView viewForAnnotation:post] setPinColor:post.pinColor];
 		}
 	}
+    [self pushNotifications];
+    NSLog(@"push notifications called updatepostsforlocation");
+    
 }
 
 - (void)startStandardUpdates {
@@ -374,6 +405,8 @@
 	//	appDelegate.currentLocation = currentLocation;
         locManager.delegate = locationController;
 	}
+    
+    NSLog(@"push notifications called standard updates");
     
 }
 
