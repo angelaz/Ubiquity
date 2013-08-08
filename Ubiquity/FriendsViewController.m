@@ -333,7 +333,7 @@
 //                                            [relation addObject:newGuy];
 //                                            [me saveInBackgroundWithBlock:nil];
 //                                            
-//                                        } else {
+//                                        } else { g
 //                                            NSLog(@"%@", e);
 //                                        }
 //                                    }];

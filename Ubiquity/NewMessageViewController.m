@@ -226,6 +226,8 @@
 {
     [_nmv.messageTextView setText: @""];
     [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
+    LocationController* locationController = [LocationController sharedLocationController];
+    [self updateLocation: locationController.location.coordinate];
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
 
@@ -464,7 +466,7 @@
                          CGRect tabFrame = tabBar.frame;
                          tabFrame.origin.y = CGRectGetMaxY(window.bounds);
                          tabBar.frame = tabFrame;
-                         content.frame = window.bounds;
+                         content.frame = parent.bounds;
                      }];
     
 }

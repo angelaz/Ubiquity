@@ -37,6 +37,8 @@ static NSString * const kPAWParseSenderKey = @"sender";
 static NSString * const kPAWParseUsernameKey = @"username";
 static NSString * const kPAWParseTextKey = @"text";
 static NSString * const kPAWParseLocationKey = @"location";
+static NSString * const kPAWParseCreatedKey = @"createdAt";
+
 
 static NSString * const kNMFrequencyKey = @"frequency";
 

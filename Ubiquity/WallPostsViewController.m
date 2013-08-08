@@ -246,7 +246,11 @@ static NSInteger kPAWCellLocationLabelTag = 7;
     locationLabel.backgroundColor = [UIColor clearColor];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
-    sentDate.text = @"Sent at: 10:28am Wednesday 20 May 2013";
+    NSDate *sentAt = object.createdAt;
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"hh:mm a 'on' dd MMMM yyyy"];
+    NSString *sentAtString = [df stringFromDate:sentAt];
+    sentDate.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
     
