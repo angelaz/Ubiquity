@@ -14,6 +14,7 @@
 #import "LocationController.h"
 #import "Geocoding.h"
 
+#define kOFFSET_FOR_KEYBOARD 190.0
 #define kOFFSET_FOR_KEYBOARD 180.0
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
 
@@ -109,6 +110,8 @@
     [_nmv addGestureRecognizer:_nmv.tapRecognizer];
 
     
+    
+    [_nmv.pictureButton addTarget:self action:@selector(choosePicture:) forControlEvents:UIControlEventTouchUpInside];
     
     _nmv.map.delegate = self;
     
@@ -259,6 +262,7 @@
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
     //Not a perfect solution for keeping the map at the same place
+    //TODO: Fix it so map doesn't shift at all when search for invalid address
     gs = [[Geocoding alloc] initWithCurLocation:curLocation];
    [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
 }
@@ -278,9 +282,6 @@
     [self setPickedValueForPickerButton];
     [_nmv addSubview:_nmv.showRepeatPickerButton];
     [_nmv.tapRecognizer setEnabled:YES];
-
-    
-    
 }
 
 - (void) showPicker: (id) sender
@@ -410,6 +411,28 @@
     NSLog(@"Message sent!");
     
     [self closeNewMessage:self];
+}
+
+- (void) choosePicture: (id) sender
+{
+    NSLog(@"Trying to attach a picture!");
+    
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    } else {
+        [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    }
+    
+    imagePicker.delegate = self;
+    [self presentViewController:imagePicker animated:YES completion:^{}];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (BOOL)textFieldShouldReturn: (UITextField *)textField {
