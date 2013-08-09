@@ -394,6 +394,11 @@ static NSInteger kPAWCellLocationLabelTag = 7;
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
+    //HI WINNIE THIS IS THE LOADING PHOTO SECTION
+    NSData *photoData = [[object objectForKey:@"photo"] getData];
+    UIImage *photo = [[UIImage alloc] initWithData:photoData];
+    UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
+    [cell.contentView addSubview:photoView];
     
     //TODO Remove
     PFUser *sender = [object objectForKey:@"sender"];
