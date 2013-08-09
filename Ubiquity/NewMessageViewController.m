@@ -20,6 +20,10 @@
 
 
 @interface NewMessageViewController ()
+{
+    BOOL imagePicked;
+    PFFile *photoFile;
+}
 @end
 
 @implementation NewMessageViewController
@@ -65,12 +69,10 @@
         recipientsList = [[NSMutableArray alloc] init];
         
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                             target:self
-                                                                             action:@selector(closeNewMessage:)];
+                                                                                    target:self
+                                                                                    action:@selector(closeNewMessage:)];
         [[self navigationItem] setLeftBarButtonItem:backButton];
-
-        
-             }
+    }
     return self;
 }
 
@@ -118,6 +120,9 @@
     self.friendPickerController = nil;
     _nmv.searchBar = nil;
     
+    _nmv.imagePicker = [[UIImagePickerController alloc] init];
+    _nmv.imagePicker.delegate = self;
+    
 }
 
 - (void)addSearchBarToFriendPickerView
@@ -143,14 +148,8 @@
     }
 }
 
-
-
-
-
-
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
 {
-    NSLog(@"New pin please!");
     [self updateLocation:coord];
 }
 
@@ -159,21 +158,14 @@
     [_nmv.map setUserInteractionEnabled:NO];
 }
 
-
 -(void) hideKeyboard: (id) sender
 {
-    NSLog(@"I sense a touch!");
-    
     [_nmv.messageTextView resignFirstResponder];
     [_nmv.locationSearchTextField resignFirstResponder];
     [_nmv.toRecipientTextField resignFirstResponder];
     [_nmv.map setUserInteractionEnabled:YES];
 
-    
 }
-
-
-
 -(void)keyboardWillHide {
     if (self.view.frame.origin.y > 0)
     {
@@ -227,13 +219,16 @@
 
 -(void) closeNewMessage: (id) sender
 {
+    if (imagePicked == YES) {
+        [_nmv.thumbnailImageView removeFromSuperview];
+    }
     [_nmv.messageTextView setText: @""];
     [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
+    imagePicked = NO;
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation: locationController.location.coordinate];
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
-
 }
 
 - (void)addMarker{
@@ -286,7 +281,6 @@
 
 - (void) showPicker: (id) sender
 {
-    NSLog(@"show picker!");
     [sender removeFromSuperview];
     [_nmv.sendButton removeFromSuperview];
     [_nmv addSubview:_nmv.pickerToolbar];
@@ -318,12 +312,18 @@
     PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude
                                                       longitude:currentCoordinate.longitude];
     
+    
     // Create a PFObject using the Post class and set the values we extracted above
     PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
     [postObject setObject:user forKey:@"sender"];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     [postObject setObject: [NSString stringWithFormat: @"%@", _nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
+    if (imagePicked == YES) { //There's an image to be included with this post!
+        [postObject setObject:photoFile forKey:@"photo"];
+        [_nmv.thumbnailImageView removeFromSuperview];
+    }
+    imagePicked = NO;
     
     //For each person we are sending to
     for (id<FBGraphUser> user in recipientsList) {
@@ -417,22 +417,54 @@
 {
     NSLog(@"Trying to attach a picture!");
     
-    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-    
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        [imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
     } else {
-        [imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     }
     
-    imagePicker.delegate = self;
-    [self presentViewController:imagePicker animated:YES completion:^{}];
+    [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
     
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
+    imagePicked = NO;
+}
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *newImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    NSData *imageData = UIImageJPEGRepresentation(newImage, 1.0f);
+    photoFile = [PFFile fileWithData:imageData];
+    imagePicked = YES;
+    //Make a thumbnail appear so user can see the image they attached!
+    _nmv.thumbnailImage = [self getThumbnailFromImage:newImage];
+    _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
+    float x = _nmv.messageTextView.frame.origin.x + 230 - _nmv.thumbnailImage.size.width;
+    float y = _nmv.messageTextView.frame.origin.y + 130 - _nmv.thumbnailImage.size.height;
+    _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
+    [_nmv addSubview:_nmv.thumbnailImageView];
+}
+
+- (UIImage *)getThumbnailFromImage:(UIImage *)image {
+    CGRect newRect = CGRectIntegral(CGRectMake(0, 0, 20, 20));
+    CGImageRef imageRef = image.CGImage;
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(20.0f, 20.0f), NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetInterpolationQuality(context, kCGInterpolationHigh);
+    CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, 20.0f);
+    CGContextConcatCTM(context, flipVertical);
+    // Draw into the context; this scales the image
+    CGContextDrawImage(context, newRect, imageRef);
+    CGImageRef newImageRef = CGBitmapContextCreateImage(context);
+    UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
+    
+    CGImageRelease(newImageRef);
+    UIGraphicsEndImageContext();
+    
+    return newImage;
 }
 
 - (BOOL)textFieldShouldReturn: (UITextField *)textField {
@@ -532,10 +564,6 @@
     marker.snippet = @"My location";
     marker.animated = YES;
     marker.map = _nmv.map;
-    
-    
-    
-    
 }
 
 
@@ -598,7 +626,7 @@
         names = [names stringByAppendingString: (@"%@", [user name])];
         names = [names stringByAppendingString: (@", ")];
     }
-    [_nmv.toRecipientButton setTitle: names forState: UIControlStateNormal];
+    [_nmv.toRecipientButton setTitle:names forState: UIControlStateNormal];
 
     
     [self handlePickerDone];

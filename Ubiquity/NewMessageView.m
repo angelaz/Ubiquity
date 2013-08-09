@@ -97,7 +97,7 @@
         self.pictureButton = [UIButton buttonWithType:UIButtonTypeCustom];
         UIImage *pictureButtonImage = [UIImage imageNamed:@"camera"];
         [self.pictureButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
-        self.pictureButton.frame = CGRectMake(SCREEN_WIDTH - 55, 222, 20.0, 20.0);
+        self.pictureButton.frame = CGRectMake(SCREEN_WIDTH - 55, 182, 20.0, 20.0);
         [self addSubview:self.pictureButton];
     }
     return self;
