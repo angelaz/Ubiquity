@@ -36,7 +36,7 @@
 
     //    if ([PFUser currentUser]) {
     
-    [UINavigationBar appearance].tintColor = mainThemeColor;
+    //[UINavigationBar appearance].tintColor = mainThemeColor;
     
     WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
     UINavigationController *wallPostsNavController = [[UINavigationController alloc]
@@ -56,7 +56,7 @@
     
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.tabBar.tintColor = tabBarColor;
+    //self.tabBarController.tabBar.tintColor = tabBarColor;
     
 
 
@@ -172,7 +172,6 @@
     //Check for data which needs linking
     
     PFQuery *checkIfExists = [PFQuery queryWithClassName:@"UserData"];
-    NSLog(@"%@", [PFUser currentUser]);
     
     [checkIfExists whereKey:@"facebookId" equalTo:facebookID];
     [checkIfExists findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -211,6 +210,8 @@
                 [userDataObject setObject:userData forKey:@"profile"];
                 [userDataObject setObject:facebookID forKey:@"facebookId"];
                 [userDataObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    NSLog(@"%@", error);
+                    
                     //Once you make it, save the link
                     if(user != nil) {
                         [user setObject:userDataObject forKey:@"userData"];
