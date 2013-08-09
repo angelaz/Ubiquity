@@ -38,6 +38,7 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 #import "TextMessage.h"
 #import "LocationController.h"
 #import "FriendsViewController.h"
+#import "NewMessageViewController.h"
 
 @interface WallPostsViewController ()
 
@@ -48,11 +49,73 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 
 @implementation WallPostsViewController
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        UINavigationItem *nav = [self navigationItem];
+        // [nav setTitle:@"Recent"];
+        
+        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Friends", @"Public", @"Favorites"]];
+        
+        _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+        [_segmentedControl setSelectedSegmentIndex:0];
+        
+        [_segmentedControl addTarget:self
+                              action:@selector(changeSegment:)
+                    forControlEvents:UIControlEventValueChanged];
+        
+        nav.titleView = _segmentedControl;
+        
+        [self initNewMessageButton];
+        
+    }
+    
+    return self;
+}
+
+- (void) initNewMessageButton
+{
+    UIImage *image = [UIImage imageNamed:@"newMessage"];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
+    
+    button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+    
+    [button addTarget:self action:@selector(openNewMessageView)    forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height) ];
+    
+    [v addSubview:button];
+    
+    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
+    
+    self.navigationItem.rightBarButtonItem = newMessage;
+
+}
+
+- (void) openNewMessageView
+{
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    UINavigationController *newMessageNavController = [[UINavigationController alloc]
+                                                       initWithRootViewController:nmvc];
+    [self.navigationController presentViewController:newMessageNavController animated:YES completion:nil ];
+}
+
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.title = @"Recent Posts";
+		self.className = kPAWParsePostsClassKey;
     }
     return self;
 }
@@ -104,7 +167,36 @@ static NSInteger kPAWCellLocationLabelTag = 7;
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
 	// Do any additional setup after loading the view.
+    
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:swipeLeft];
+    
 }
+
+- (void)nextTab:(id)sender
+{
+    
+    int controllerIndex = 1;
+    UIView * fromView = self.tabBarController.selectedViewController.view;
+    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
+    
+    // Transition using a page curl.
+    [UIView transitionFromView:fromView toView:toView duration:0.5
+                       options: UIViewAnimationOptionTransitionFlipFromRight
+     
+                    completion:^(BOOL finished) {
+                        
+                        if (finished) {
+                            self.tabBarController.selectedIndex = controllerIndex;
+                        }
+                        
+                    }];
+    
+    [self.tabBarController setSelectedIndex: controllerIndex];
+    
+}
+
 
 - (void)viewDidUnload {
     [[NSNotificationCenter defaultCenter] removeObserver:self
@@ -119,6 +211,24 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 }
 
 // table view controller stuff
+
+- (void)changeSegment:(UISegmentedControl *)sender
+{
+    NSInteger value = [sender selectedSegmentIndex];
+    if (value == 0) {
+        _indexing = 0;
+        NSLog(@"Changed value to 0");
+        [self loadObjects];
+    } else if (value == 1) {
+        _indexing = 1;
+        NSLog(@"Changed value to 1");
+        [self loadObjects];
+    } else if (value == 2) {
+        _indexing = 2;
+        NSLog(@"Changed value to 2");
+        [self loadObjects];
+    }
+}
 
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
@@ -144,6 +254,7 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 - (PFQuery *)queryForTable {
 	PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
     
+    NSLog(@"querying for table called");
 	// If no objects are loaded in memory, we look to the cache first to fill the table
 	// and then subsequently do a query against the network.
 	if ([self.objects count] == 0) {
@@ -184,6 +295,31 @@ static NSInteger kPAWCellLocationLabelTag = 7;
     
 	return query;
 }
+
+//             [_postsToPush addObjectsFromArray:newPosts];
+//
+//             [self pushNotifications];
+//         }
+//     }];
+//}
+//
+//- (void)pushNotifications {
+//    // Create our Installation query
+//    PFQuery *pushQuery = [PFInstallation query];
+//    [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+//
+//    // change this to _postsToPush array
+//    for (TextMessage *newPost in _allPosts)
+//    {
+//        if ([newPost.address isEqualToString:[[PFUser currentUser] objectForKey:@"username"]]) {
+//
+//            NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [[PFUser currentUser] objectForKey:@"profile"][@"name"]];
+//        // Send push notification to query
+//            [PFPush sendPushMessageToQueryInBackground:pushQuery
+//                                       withMessage:pushMessage];
+//        }
+//    }
+//}
 
 // Override to customize the look of a cell representing an object. The default is to display
 // a UITableViewCellStyleDefault style cell with the label being the first key in the object.

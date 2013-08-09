@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "NewMessageView.h"
-#import "RecentViewController.h"
+#import "WallPostsViewController.h"
 #import "LocationController.h"
 #import "Geocoding.h"
 
@@ -117,9 +117,9 @@
     self.friendPickerController = nil;
     _nmv.searchBar = nil;
     
-    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
-    [swipeUp setDirection:UISwipeGestureRecognizerDirectionUp];
-    [self.view addGestureRecognizer:swipeUp];
+    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
+    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
+    [self.view addGestureRecognizer:swipeDown];
 
     
 }
@@ -236,25 +236,8 @@
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation: locationController.location.coordinate];
     
-    int controllerIndex = 1;
-    UIView * fromView = self.tabBarController.selectedViewController.view;
-    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
+    [self dismissViewControllerAnimated:YES completion:nil];
     
-    // Transition using a page curl.
-    [UIView transitionFromView:fromView toView:toView duration:0.75
-                       options: UIViewAnimationOptionTransitionCurlUp
-     
-                    completion:^(BOOL finished) {
-                        
-                        if (finished) {
-                            self.tabBarController.selectedIndex = controllerIndex;
-                        }
-                        
-                    }];
-    
-    
-    [self.tabBarController setSelectedIndex: controllerIndex];
-
 }
 
 - (void)addMarker{

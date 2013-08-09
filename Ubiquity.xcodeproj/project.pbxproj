@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		20F8F2A617A1F0F000594994 /* RecentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A517A1F0F000594994 /* RecentViewController.m */; };
+		200052E317B331FA00B9C14E /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 200052E217B331FA00B9C14E /* LoginView.m */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
@@ -64,7 +64,11 @@
 		82E931F417A093D500B3958B /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 82E931F217A093D500B3958B /* icon@2x.png */; };
 		8626C10317A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8626C10217A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m */; };
 		8626C10517A9C7B6009F6AA7 /* pixel.png in Resources */ = {isa = PBXBuildFile; fileRef = 8626C10417A9C7B6009F6AA7 /* pixel.png */; };
-		865FBE4517B4031400A3F7E2 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 865FBE4417B4031400A3F7E2 /* LoginView.m */; };
+		864C053A17B57003000B5A52 /* newMessage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C053917B57003000B5A52 /* newMessage@2x.png */; };
+		864C053C17B57018000B5A52 /* recentmessages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C053B17B57018000B5A52 /* recentmessages@2x.png */; };
+		864C053F17B5702C000B5A52 /* friends.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C053D17B5702C000B5A52 /* friends.png */; };
+		864C054017B5702C000B5A52 /* friends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C053E17B5702C000B5A52 /* friends@2x.png */; };
+		864C054217B5704B000B5A52 /* options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C054117B5704B000B5A52 /* options@2x.png */; };
 		865FBE4717B4061B00A3F7E2 /* LoginBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4617B4061B00A3F7E2 /* LoginBg.png */; };
 		865FBE4917B4063600A3F7E2 /* recentmessages.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4817B4063600A3F7E2 /* recentmessages.png */; };
 		865FBE4B17B4064300A3F7E2 /* ubi.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4A17B4064300A3F7E2 /* ubi.png */; };
@@ -93,8 +97,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		20F8F2A417A1F0F000594994 /* RecentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentViewController.h; sourceTree = "<group>"; };
-		20F8F2A517A1F0F000594994 /* RecentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentViewController.m; sourceTree = "<group>"; };
+		200052E117B331FA00B9C14E /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		200052E217B331FA00B9C14E /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
 		20F8F2A817A1F0F600594994 /* WallPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostsViewController.m; sourceTree = "<group>"; };
 		20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -166,6 +170,11 @@
 		8626C10117A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomFBFriendPickerViewController.h; sourceTree = "<group>"; };
 		8626C10217A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomFBFriendPickerViewController.m; sourceTree = "<group>"; };
 		8626C10417A9C7B6009F6AA7 /* pixel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pixel.png; sourceTree = "<group>"; };
+		864C053917B57003000B5A52 /* newMessage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newMessage@2x.png"; sourceTree = "<group>"; };
+		864C053B17B57018000B5A52 /* recentmessages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "recentmessages@2x.png"; sourceTree = "<group>"; };
+		864C053D17B5702C000B5A52 /* friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = friends.png; sourceTree = "<group>"; };
+		864C053E17B5702C000B5A52 /* friends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "friends@2x.png"; sourceTree = "<group>"; };
+		864C054117B5704B000B5A52 /* options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "options@2x.png"; sourceTree = "<group>"; };
 		865FBE4317B4031400A3F7E2 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
 		865FBE4417B4031400A3F7E2 /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
 		865FBE4617B4061B00A3F7E2 /* LoginBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoginBg.png; sourceTree = "<group>"; };
@@ -295,14 +304,14 @@
 				865FBE4417B4031400A3F7E2 /* LoginView.m */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
+				200052E117B331FA00B9C14E /* LoginView.h */,
+				200052E217B331FA00B9C14E /* LoginView.m */,
 				82E931B717A07A8800B3958B /* LoginViewController.h */,
 				82E931B817A07A8800B3958B /* LoginViewController.m */,
 				82E931BC17A07B0B00B3958B /* UserDetailsViewController.h */,
 				82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */,
 				82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */,
 				82E931BF17A07B0B00B3958B /* TableHeaderView.xib */,
-				20F8F2A417A1F0F000594994 /* RecentViewController.h */,
-				20F8F2A517A1F0F000594994 /* RecentViewController.m */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
 				20F8F2A817A1F0F600594994 /* WallPostsViewController.m */,
 				6097BED817A6DC650012A36A /* LocationController.h */,
@@ -331,15 +340,20 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				864C053917B57003000B5A52 /* newMessage@2x.png */,
 				865FBE4817B4063600A3F7E2 /* recentmessages.png */,
+				864C053B17B57018000B5A52 /* recentmessages@2x.png */,
 				865FBE4617B4061B00A3F7E2 /* LoginBg.png */,
 				865FBE4C17B4069000A3F7E2 /* Default.png */,
 				865FBE4D17B4069000A3F7E2 /* Default@2x.png */,
 				829ED75E17B3135A006AD7D5 /* camera.png */,
+				864C053D17B5702C000B5A52 /* friends.png */,
+				864C053E17B5702C000B5A52 /* friends@2x.png */,
 				86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */,
 				86928EE517B1789B001BB026 /* PostBackground@2x.png */,
 				8626C10417A9C7B6009F6AA7 /* pixel.png */,
 				865FBE4A17B4064300A3F7E2 /* ubi.png */,
+				864C054117B5704B000B5A52 /* options@2x.png */,
 				82C7577917A325C50094EB15 /* newMessage.png */,
 				86894B6717A1EB2D00F7146B /* SpeechBubble.png */,
 				86894B6817A1EB2D00F7146B /* SpeechBubble@2x.png */,
@@ -455,6 +469,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
+				864C053A17B57003000B5A52 /* newMessage@2x.png in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
 				865FBE4E17B4069000A3F7E2 /* Default.png in Resources */,
 				824EB77917A735A00006AA5D /* options.png in Resources */,
@@ -463,7 +478,10 @@
 				86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */,
 				86894B6517A1E96200F7146B /* searchbutton.png in Resources */,
 				82E931EB17A093C600B3958B /* login-button-small-pressed@2x.png in Resources */,
+				864C054017B5702C000B5A52 /* friends@2x.png in Resources */,
+				864C053F17B5702C000B5A52 /* friends.png in Resources */,
 				82E931EC17A093C600B3958B /* login-button-small.png in Resources */,
+				864C053C17B57018000B5A52 /* recentmessages@2x.png in Resources */,
 				82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */,
 				60C0B47617A1E44A00DC0F92 /* GoogleMaps.bundle in Resources */,
 				865FBE4F17B4069000A3F7E2 /* Default@2x.png in Resources */,
@@ -483,6 +501,7 @@
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
+				864C054217B5704B000B5A52 /* options@2x.png in Resources */,
 				8626C10517A9C7B6009F6AA7 /* pixel.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -505,13 +524,12 @@
 				82C7577617A322580094EB15 /* FriendsViewController.m in Sources */,
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
-				865FBE4517B4031400A3F7E2 /* LoginView.m in Sources */,
+				200052E317B331FA00B9C14E /* LoginView.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,
 				82148F3217AADD140066C69A /* Geocoding.m in Sources */,
-				20F8F2A617A1F0F000594994 /* RecentViewController.m in Sources */,
 				8626C10317A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m in Sources */,
 				6097BEDA17A6DC650012A36A /* LocationController.m in Sources */,
 				86894B6217A0A72800F7146B /* TextMessage.m in Sources */,

@@ -64,7 +64,34 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:swipeRight];
+
 }
+
+- (void)nextTab:(id)sender
+{
+    int controllerIndex = 1;
+    
+    UIView * fromView = self.tabBarController.selectedViewController.view;
+    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
+    
+    // Transition using a page curl.
+    [UIView transitionFromView:fromView toView:toView duration:0.5
+                       options: (controllerIndex > self.tabBarController.selectedIndex ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft)
+                    completion:^(BOOL finished) {
+                        
+                        if (finished) {
+                            self.tabBarController.selectedIndex = controllerIndex;
+                        }
+                        
+                    }];
+    
+    [self.tabBarController setSelectedIndex: controllerIndex];
+    
+}
+
 
 - (void)didReceiveMemoryWarning
 {

@@ -11,7 +11,8 @@
 
 @interface FriendsViewController () <UITableViewDataSource, UITableViewDelegate, FBFriendPickerDelegate, UISearchBarDelegate>
 {
-    
+    UISwipeGestureRecognizer *swipeLeft;
+    UISwipeGestureRecognizer *swipeRight;
 }
 @end
 
@@ -29,6 +30,7 @@
             UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
                                                                                  target:self
                                                                                  action:@selector(displayFriendPicker)];
+
             self.navigationItem.rightBarButtonItem = add;
             
             UIBarButtonItem *remove = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
@@ -65,8 +67,40 @@
     [super viewDidLoad];
     if (!userLoggedIn)
         [self init];
+    swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:swipeLeft];
+    
+    swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
+    [self.view addGestureRecognizer:swipeRight];
+
+}
+- (void)nextTab:(id)sender
+{
+    int controllerIndex = 0;
+    if (sender == swipeLeft)
+        controllerIndex = 2;
+    
+    UIView * fromView = self.tabBarController.selectedViewController.view;
+    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
+    
+    // Transition using a page curl.
+    [UIView transitionFromView:fromView toView:toView duration:0.5
+                       options: (controllerIndex > self.tabBarController.selectedIndex ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft)
+                    completion:^(BOOL finished) {
+                        
+                        if (finished) {
+                            self.tabBarController.selectedIndex = controllerIndex;
+                        }
+                        
+                    }];
+    
+    [self.tabBarController setSelectedIndex: controllerIndex];
     
 }
+
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:NO];

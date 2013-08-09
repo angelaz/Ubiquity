@@ -9,11 +9,11 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "LoginViewController.h"
-#import "RecentViewController.h"
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
 #import "FriendsViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import "WallPostsViewController.h"
 
 
 @interface AppDelegate ()
@@ -38,18 +38,11 @@
     
     [UINavigationBar appearance].tintColor = mainThemeColor;
     
-    RecentViewController *rvc = [[RecentViewController alloc] init];
-    UINavigationController *recentNavController = [[UINavigationController alloc]
-                                                   initWithRootViewController:rvc];
+    WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
+    UINavigationController *wallPostsNavController = [[UINavigationController alloc]
+                                                   initWithRootViewController:wpvc];
     [UIView  beginAnimations: @"Showinfo"context: nil];
     
-    
-
-    
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    UINavigationController *newMessageNavController = [[UINavigationController alloc]
-                                                    initWithRootViewController:nmvc];
-
     
     FriendsViewController *fvc = [[FriendsViewController alloc] init];
     UINavigationController *friendsNavController = [[UINavigationController alloc]
@@ -67,14 +60,10 @@
     
 
 
-    [self.tabBarController setViewControllers:@[newMessageNavController, recentNavController,
+    [self.tabBarController setViewControllers:@[wallPostsNavController,
                                                 
                                                 friendsNavController, optionsNavController]];
-    UITabBarItem *newMessageTab = [newMessageNavController
-                                   tabBarItem];
-    [newMessageTab setTitle:@"New Message"];
-    [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
-    UITabBarItem *recentTab = [recentNavController tabBarItem];
+    UITabBarItem *recentTab = [wallPostsNavController tabBarItem];
     [recentTab setTitle:@"Recent Items"];
     [recentTab setImage: [UIImage imageNamed:@"recentmessages"]];
 
@@ -104,8 +93,6 @@
 
 
 
-
-
 // if push notification registration is successful
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // Store the deviceToken in the current installation and save it to Parse.
@@ -117,6 +104,7 @@
     [currentInstallation saveInBackground];
     NSLog(@"Registered for push");
 }
+
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
