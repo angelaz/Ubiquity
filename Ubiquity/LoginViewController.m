@@ -3,9 +3,9 @@
 #import "LoginViewController.h"
 #import "UserDetailsViewController.h"
 #import <Parse/Parse.h>
-#import "RecentViewController.h"
 #import "AppDelegate.h"
 #import "LoginView.h"
+#import "WallPostsViewController.h"
 
 @implementation LoginViewController
 
@@ -51,9 +51,7 @@
             NSLog(@"User with facebook signed up and logged in!");
             [self pullMyFBDataAndOrganize];
             
-            [self dismissViewControllerAnimated:YES completion:nil];
-//            self.navigationController.navigationBarHidden = NO;
-//            [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
+            [self.navigationController pushViewController:[[WallPostsViewController alloc] init] animated:YES];
             
         } else {
             NSLog(@"User with facebook logged in!");
@@ -65,8 +63,7 @@
 
         }
     }];
-    RecentViewController *recent = [[RecentViewController alloc] init];
-    [recent startStandardUpdates];
+    WallPostsViewController *wallPosts = [[WallPostsViewController alloc] init];
     
     [_activityIndicator startAnimating]; // Show loading indicator until login is finished
 }

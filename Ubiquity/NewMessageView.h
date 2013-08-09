@@ -30,6 +30,7 @@
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIView *tapView;
+@property (nonatomic, strong) UIButton *pictureButton;
 
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 

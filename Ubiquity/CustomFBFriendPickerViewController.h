@@ -14,5 +14,4 @@
 @property (retain, nonatomic) UISearchBar *searchBar;
 @property (retain, nonatomic) NSString *searchText;
 
-- (void)addSearchBarToFriendPickerView;
 @end

@@ -24,7 +24,4 @@
     BOOL userLoggedIn; //needed because fvc is init-ed before user actually logs in (for navigation)
 
 }
-
-- (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect;
-
 @end

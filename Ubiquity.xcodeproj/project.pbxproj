@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		20F8F2A617A1F0F000594994 /* RecentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A517A1F0F000594994 /* RecentViewController.m */; };
+		200052E317B331FA00B9C14E /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 200052E217B331FA00B9C14E /* LoginView.m */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
@@ -40,6 +40,7 @@
 		824EB77917A735A00006AA5D /* options.png in Resources */ = {isa = PBXBuildFile; fileRef = 824EB77817A735A00006AA5D /* options.png */; };
 		825733BB17A8690D0046AA3D /* default.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 825733BA17A8690D0046AA3D /* default.jpg */; };
 		82855A5617A9A023007B44CA /* friends.png in Resources */ = {isa = PBXBuildFile; fileRef = 82855A5517A9A023007B44CA /* friends.png */; };
+		829ED75F17B3135A006AD7D5 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 829ED75E17B3135A006AD7D5 /* camera.png */; };
 		82C7577617A322580094EB15 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C7577517A322570094EB15 /* FriendsViewController.m */; };
 		82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577717A3225D0094EB15 /* FriendsViewController.xib */; };
 		82C7577A17A325C50094EB15 /* newMessage.png in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577917A325C50094EB15 /* newMessage.png */; };
@@ -83,13 +84,6 @@
 		86928EE817B180F7001BB026 /* SelfPostBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */; };
 		869BEC9D17B0143E00437EA0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869BEC8517B0119D00437EA0 /* SenTestingKit.framework */; };
 		86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A66C2C17A316A000DB5752 /* NewMessageView.m */; };
-		86DF11D217B2CC7D00CD66F8 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DF11D117B2CC7D00CD66F8 /* LoginView.m */; };
-		86DF11D617B2DC3B00CD66F8 /* LoginBg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DF11D517B2DC3B00CD66F8 /* LoginBg@2x.png */; };
-		86DF11D817B2F87A00CD66F8 /* ubi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DF11D717B2F87A00CD66F8 /* ubi@2x.png */; };
-		86DF11DA17B3075A00CD66F8 /* recentmessages@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DF11D917B3075A00CD66F8 /* recentmessages@2x.png */; };
-		86DF11DC17B3095200CD66F8 /* newMessage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DF11DB17B3095200CD66F8 /* newMessage@2x.png */; };
-		86DF11DE17B30A8600CD66F8 /* friends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DF11DD17B30A8600CD66F8 /* friends@2x.png */; };
-		86DF11E017B30C4300CD66F8 /* options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DF11DF17B30C4300CD66F8 /* options@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,8 +97,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		20F8F2A417A1F0F000594994 /* RecentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecentViewController.h; sourceTree = "<group>"; };
-		20F8F2A517A1F0F000594994 /* RecentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecentViewController.m; sourceTree = "<group>"; };
+		200052E117B331FA00B9C14E /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		200052E217B331FA00B9C14E /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
 		20F8F2A817A1F0F600594994 /* WallPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostsViewController.m; sourceTree = "<group>"; };
 		20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -143,6 +137,7 @@
 		824EB77817A735A00006AA5D /* options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = options.png; sourceTree = "<group>"; };
 		825733BA17A8690D0046AA3D /* default.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = default.jpg; sourceTree = "<group>"; };
 		82855A5517A9A023007B44CA /* friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = friends.png; sourceTree = "<group>"; };
+		829ED75E17B3135A006AD7D5 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		82C7577417A322520094EB15 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
 		82C7577517A322570094EB15 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
 		82C7577717A3225D0094EB15 /* FriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FriendsViewController.xib; sourceTree = "<group>"; };
@@ -198,14 +193,6 @@
 		869BEC8517B0119D00437EA0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		86A66C2B17A316A000DB5752 /* NewMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageView.h; sourceTree = "<group>"; };
 		86A66C2C17A316A000DB5752 /* NewMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageView.m; sourceTree = "<group>"; };
-		86DF11D017B2CC7D00CD66F8 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
-		86DF11D117B2CC7D00CD66F8 /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
-		86DF11D517B2DC3B00CD66F8 /* LoginBg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LoginBg@2x.png"; sourceTree = "<group>"; };
-		86DF11D717B2F87A00CD66F8 /* ubi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ubi@2x.png"; sourceTree = "<group>"; };
-		86DF11D917B3075A00CD66F8 /* recentmessages@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "recentmessages@2x.png"; sourceTree = "<group>"; };
-		86DF11DB17B3095200CD66F8 /* newMessage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "newMessage@2x.png"; sourceTree = "<group>"; };
-		86DF11DD17B30A8600CD66F8 /* friends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "friends@2x.png"; sourceTree = "<group>"; };
-		86DF11DF17B30C4300CD66F8 /* options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "options@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -313,16 +300,14 @@
 			children = (
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
+				200052E117B331FA00B9C14E /* LoginView.h */,
+				200052E217B331FA00B9C14E /* LoginView.m */,
 				82E931B717A07A8800B3958B /* LoginViewController.h */,
 				82E931B817A07A8800B3958B /* LoginViewController.m */,
-				86DF11D017B2CC7D00CD66F8 /* LoginView.h */,
-				86DF11D117B2CC7D00CD66F8 /* LoginView.m */,
 				82E931BC17A07B0B00B3958B /* UserDetailsViewController.h */,
 				82E931BD17A07B0B00B3958B /* UserDetailsViewController.m */,
 				82E931BE17A07B0B00B3958B /* UserDetailsViewController.xib */,
 				82E931BF17A07B0B00B3958B /* TableHeaderView.xib */,
-				20F8F2A417A1F0F000594994 /* RecentViewController.h */,
-				20F8F2A517A1F0F000594994 /* RecentViewController.m */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
 				20F8F2A817A1F0F600594994 /* WallPostsViewController.m */,
 				6097BED817A6DC650012A36A /* LocationController.h */,
@@ -351,12 +336,7 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				86DF11DF17B30C4300CD66F8 /* options@2x.png */,
-				86DF11DD17B30A8600CD66F8 /* friends@2x.png */,
-				86DF11DB17B3095200CD66F8 /* newMessage@2x.png */,
-				86DF11D917B3075A00CD66F8 /* recentmessages@2x.png */,
-				86DF11D717B2F87A00CD66F8 /* ubi@2x.png */,
-				86DF11D517B2DC3B00CD66F8 /* LoginBg@2x.png */,
+				829ED75E17B3135A006AD7D5 /* camera.png */,
 				86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */,
 				86928EE517B1789B001BB026 /* PostBackground@2x.png */,
 				8626C10417A9C7B6009F6AA7 /* pixel.png */,
@@ -485,7 +465,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
-				86DF11D617B2DC3B00CD66F8 /* LoginBg@2x.png in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
 				824EB77917A735A00006AA5D /* options.png in Resources */,
 				82E931EE17A093C600B3958B /* Default-568h@2x.png in Resources */,
@@ -500,22 +479,18 @@
 				82E931EC17A093C600B3958B /* login-button-small.png in Resources */,
 				82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */,
 				6097BEE117A71FEA0012A36A /* grayBubble.png in Resources */,
-				86DF11DE17B30A8600CD66F8 /* friends@2x.png in Resources */,
 				60C0B47617A1E44A00DC0F92 /* GoogleMaps.bundle in Resources */,
-				86DF11D817B2F87A00CD66F8 /* ubi@2x.png in Resources */,
 				866C6BBD17A6F2B000CF8449 /* CloseButton.png in Resources */,
 				6097BEDE17A71FDE0012A36A /* blueBubble@2x.png in Resources */,
 				82C7577A17A325C50094EB15 /* newMessage.png in Resources */,
 				82E9317317A079C600B3958B /* InfoPlist.strings in Resources */,
-				86DF11E017B30C4300CD66F8 /* options@2x.png in Resources */,
 				82E931F317A093D500B3958B /* icon.png in Resources */,
+				829ED75F17B3135A006AD7D5 /* camera.png in Resources */,
 				82E931EF17A093C600B3958B /* Default.png in Resources */,
 				82E931ED17A093C600B3958B /* login-button-small@2x.png in Resources */,
-				86DF11DC17B3095200CD66F8 /* newMessage@2x.png in Resources */,
 				86928EE617B1789B001BB026 /* PostBackground@2x.png in Resources */,
 				82E931C117A07B0B00B3958B /* UserDetailsViewController.xib in Resources */,
 				86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */,
-				86DF11DA17B3075A00CD66F8 /* recentmessages@2x.png in Resources */,
 				6097BEDD17A71FDE0012A36A /* blueBubble.png in Resources */,
 				86928EE817B180F7001BB026 /* SelfPostBackground@2x.png in Resources */,
 				82E931A717A07A3700B3958B /* FacebookSDKResources.bundle in Resources */,
@@ -545,13 +520,12 @@
 				82C7577617A322580094EB15 /* FriendsViewController.m in Sources */,
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
-				86DF11D217B2CC7D00CD66F8 /* LoginView.m in Sources */,
+				200052E317B331FA00B9C14E /* LoginView.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,
 				82148F3217AADD140066C69A /* Geocoding.m in Sources */,
-				20F8F2A617A1F0F000594994 /* RecentViewController.m in Sources */,
 				8626C10317A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m in Sources */,
 				6097BEDA17A6DC650012A36A /* LocationController.m in Sources */,
 				86894B6217A0A72800F7146B /* TextMessage.m in Sources */,

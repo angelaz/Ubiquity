@@ -9,11 +9,11 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "LoginViewController.h"
-#import "RecentViewController.h"
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
 #import "FriendsViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import "WallPostsViewController.h"
 
 
 @interface AppDelegate ()
@@ -38,9 +38,9 @@
     
     //[UINavigationBar appearance].tintColor = mainThemeColor;
     
-    RecentViewController *rvc = [[RecentViewController alloc] init];
-    UINavigationController *recentNavController = [[UINavigationController alloc]
-                                                   initWithRootViewController:rvc];
+    WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
+    UINavigationController *wallPostsNavController = [[UINavigationController alloc]
+                                                   initWithRootViewController:wpvc];
     [UIView  beginAnimations: @"Showinfo"context: nil];
     
     
@@ -67,11 +67,11 @@
     
 
 
-    [self.tabBarController setViewControllers:@[recentNavController, newMessageNavController,
+    [self.tabBarController setViewControllers:@[wallPostsNavController, newMessageNavController,
                                                 
                                                 friendsNavController, optionsNavController]];
-    UITabBarItem *recentTab = [recentNavController tabBarItem];
-    [recentTab setTitle:@"Recent Items"];
+    UITabBarItem *recentTab = [wallPostsNavController tabBarItem];
+    [recentTab setTitle:@"Recent Posts"];
     [recentTab setImage: [UIImage imageNamed:@"recentmessages"]]
     ;
     UITabBarItem *newMessageTab = [newMessageNavController
