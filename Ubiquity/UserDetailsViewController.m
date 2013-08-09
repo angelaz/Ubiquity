@@ -84,8 +84,13 @@
                 userProfile[@"pictureURL"] = [pictureURL absoluteString];
             }
             
-            [[PFUser currentUser] setObject:userProfile forKey:@"profile"];
-            [[PFUser currentUser] saveInBackground];
+            PFObject *userDataObject = [PFObject objectWithClassName:@"UserData"];
+            [userDataObject setObject:userProfile forKey:@"profile"];
+            [userDataObject setObject:facebookID forKey:@"facebookId"];
+            [userDataObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [[PFUser currentUser] setObject:userDataObject forKey:@"userData"];
+                [[PFUser currentUser] saveInBackground];
+            }];
             
             [self updateProfile];
         } else if ([[[[error userInfo] objectForKey:@"error"] objectForKey:@"type"]
