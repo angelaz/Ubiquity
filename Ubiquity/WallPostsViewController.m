@@ -390,10 +390,24 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
 	textLabel.backgroundColor = [UIColor clearColor];
     
+    
 	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:kPAWCellLocationLabelTag];
-    locationLabel.text = @"Facebook HQ, 1601 Willow Road";
+    locationLabel.text = @"Unknown Location";
     locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
     locationLabel.backgroundColor = [UIColor clearColor];
+    
+    PFGeoPoint *coordinates = [object objectForKey:@"location"];
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude);
+    GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
+    [geocoder reverseGeocodeCoordinate:location completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
+        if (!error) {
+            NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
+            locationLabel.text = reverseGeocodedLocation;
+        } else {
+            NSLog(@"Error in reverse geocoding: %@", error);
+        }
+        
+    }];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
     NSDate *sentAt = object.createdAt;
@@ -402,6 +416,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     NSString *sentAtString = [df stringFromDate:sentAt];
     sentDate.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
+    
     
     
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
@@ -414,7 +429,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     photoView.contentMode = UIViewContentModeScaleAspectFill;
     additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
     [photoView setImage:photo];
-    
     
     //TODO Remove
     PFUser *sender = [object objectForKey:@"sender"];
