@@ -72,7 +72,7 @@
         [self addSubview:self.messageTextView];
         
         
-        self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 20, SCREEN_HEIGHT - 120, 260.0, LINE_HEIGHT)];
+        self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(LEFT_PADDING - 20, SCREEN_HEIGHT - 125, 250.0, LINE_HEIGHT)];
         self.locationSearchTextField.placeholder = @"Search for a location";
         self.locationSearchTextField.borderStyle = UITextBorderStyleRoundedRect;
         [self addSubview:self.locationSearchTextField];
@@ -82,7 +82,7 @@
         self.locationSearchButton = [UIButton buttonWithType:UIButtonTypeCustom];
         UIImage *btnImage = [UIImage imageNamed:@"searchbutton"];
         [self.locationSearchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
-        self.locationSearchButton.frame = CGRectMake(SCREEN_WIDTH - 40, SCREEN_HEIGHT - 122, LINE_HEIGHT, LINE_HEIGHT);
+        self.locationSearchButton.frame = CGRectMake(SCREEN_WIDTH - 50, SCREEN_HEIGHT - 130, LINE_HEIGHT*1.2, LINE_HEIGHT*1.2);
         
         [self addSubview:self.locationSearchButton];
         

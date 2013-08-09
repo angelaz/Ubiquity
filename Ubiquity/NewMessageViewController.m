@@ -15,7 +15,6 @@
 #import "Geocoding.h"
 
 #define kOFFSET_FOR_KEYBOARD 190.0
-#define kOFFSET_FOR_KEYBOARD 180.0
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
 
 
@@ -117,6 +116,11 @@
     
     self.friendPickerController = nil;
     _nmv.searchBar = nil;
+    
+    UISwipeGestureRecognizer *swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
+    [swipeUp setDirection:UISwipeGestureRecognizerDirectionUp];
+    [self.view addGestureRecognizer:swipeUp];
+
     
 }
 
@@ -231,8 +235,25 @@
     [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation: locationController.location.coordinate];
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self.tabBarController setSelectedIndex: 0];
+    
+    int controllerIndex = 1;
+    UIView * fromView = self.tabBarController.selectedViewController.view;
+    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
+    
+    // Transition using a page curl.
+    [UIView transitionFromView:fromView toView:toView duration:0.75
+                       options: UIViewAnimationOptionTransitionCurlUp
+     
+                    completion:^(BOOL finished) {
+                        
+                        if (finished) {
+                            self.tabBarController.selectedIndex = controllerIndex;
+                        }
+                        
+                    }];
+    
+    
+    [self.tabBarController setSelectedIndex: controllerIndex];
 
 }
 

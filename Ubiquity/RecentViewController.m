@@ -26,7 +26,14 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    if (self.tabBarController.selectedIndex == 1)
+        _firstTime = false;
     [super viewWillAppear:animated];
+    if (_firstTime)
+        self.wallPostsViewController.view.frame = CGRectMake(0.f, 0.f, 320.f, super.view.bounds.size.height);
+
+    else
+        self.wallPostsViewController.view.frame = CGRectMake(0.f, 0.f, 320.f, super.view.bounds.size.height - self.tabBarController.tabBar.frame.size.height);
 }
 
 - (id)init
@@ -46,6 +53,7 @@
                     forControlEvents:UIControlEventValueChanged];
         
         nav.titleView = _segmentedControl;
+        _firstTime = true;
         
     }
     
@@ -81,6 +89,8 @@
 	return self;
 }
 
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -94,7 +104,9 @@
                                                object:nil];
     
     self.wallPostsViewController = [[WallPostsViewController alloc] init];
-    self.wallPostsViewController.view.frame = CGRectMake(0.f, 0.f, 320.f, super.view.frame.size.height);
+    self.wallPostsViewController.view.frame = CGRectMake(0.f, 0.f, 320.f, super.view.bounds.size.height);
+
+
     
     // Add the WallPostsViewController as a child of RecentViewController
     [self addChildViewController:self.wallPostsViewController];
@@ -109,17 +121,33 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     [self startStandardUpdates];
     
-    if ([PFUser currentUser]) {
-//        LocationController* locationController = [LocationController sharedLocationController];
-//        locationController.av = [[UIAlertView alloc] initWithTitle:@"Loading Data" message:@"" delegate:self cancelButtonTitle:nil otherButtonTitles:nil];
-//        UIActivityIndicatorView *ActInd = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//        [ActInd startAnimating];
-//        [ActInd setFrame:CGRectMake(125, 60, 37, 37)];
-//        [locationController.av addSubview:ActInd];
-//        [locationController.av show];
-    }
+    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [self.view addGestureRecognizer:swipeLeft];
 }
 
+- (void)nextTab:(id)sender
+{
+    
+    int controllerIndex = 2;
+    UIView * fromView = self.tabBarController.selectedViewController.view;
+    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
+    
+    // Transition using a page curl.
+    [UIView transitionFromView:fromView toView:toView duration:0.5
+                       options: UIViewAnimationOptionTransitionFlipFromRight
+     
+                    completion:^(BOOL finished) {
+                        
+                        if (finished) {
+                            self.tabBarController.selectedIndex = controllerIndex;
+                        }
+                        
+                    }];
+    
+    [self.tabBarController setSelectedIndex: controllerIndex];
+
+}
 
 - (void)queryForAllPostsNearLocation:(CLLocation *)currentLocation
                   withNearbyDistance:(CLLocationAccuracy)nearbyDistance

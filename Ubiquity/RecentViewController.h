@@ -15,6 +15,7 @@ static int indexNumber = 0;
 @class WallPostsViewController;
 
 @interface RecentViewController : UIViewController
+@property  BOOL firstTime;
 
 - (void)startStandardUpdates;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;

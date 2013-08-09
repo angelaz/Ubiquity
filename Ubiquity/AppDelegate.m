@@ -67,17 +67,17 @@
     
 
 
-    [self.tabBarController setViewControllers:@[recentNavController, newMessageNavController,
+    [self.tabBarController setViewControllers:@[newMessageNavController, recentNavController,
                                                 
                                                 friendsNavController, optionsNavController]];
-    UITabBarItem *recentTab = [recentNavController tabBarItem];
-    [recentTab setTitle:@"Recent Items"];
-    [recentTab setImage: [UIImage imageNamed:@"recentmessages"]]
-    ;
     UITabBarItem *newMessageTab = [newMessageNavController
                                    tabBarItem];
     [newMessageTab setTitle:@"New Message"];
     [newMessageTab setImage:[UIImage imageNamed:@"newMessage.png"]];
+    UITabBarItem *recentTab = [recentNavController tabBarItem];
+    [recentTab setTitle:@"Recent Items"];
+    [recentTab setImage: [UIImage imageNamed:@"recentmessages"]];
+
     UITabBarItem *friendsTab = [friendsNavController tabBarItem];
     [friendsTab setTitle:@"Friends"];
     [friendsTab setImage:[UIImage imageNamed:@"friends.png"]];
@@ -101,6 +101,10 @@
     
     return YES;
 }
+
+
+
+
 
 // if push notification registration is successful
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
