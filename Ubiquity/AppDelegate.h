@@ -75,5 +75,11 @@ static NSString * const kNMMonthy = @"Every Month";
 @property (strong,nonatomic) UITabBarController *tabBarController;
 - (void)presentLoginViewController;
 
++ (void) linkOrStoreUserDetails:(NSObject *)userData
+                           toId:(id)facebookID
+                         toUser:(PFUser *)user
+          andStoreUnderRelation:(NSString *)relationLabel
+                       toObject:(PFObject *) object
+                     finalBlock:(void(^)(PFObject *made))finalBlock;
 
 @end

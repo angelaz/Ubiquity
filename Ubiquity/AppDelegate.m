@@ -161,5 +161,77 @@
     //	self.window.rootViewController = navController;
 }
 
++ (void) linkOrStoreUserDetails:(NSObject *)userData        //Dict of info
+                           toId:(id)facebookID              //FB ID
+                         toUser:(PFUser *)user              //If there's already a user, add it to them
+          andStoreUnderRelation:(NSString *)relationLabel   //If there's a relation to store under, called this
+                       toObject:(PFObject *) object         //Related under this object
+                     finalBlock:(void(^)(PFObject *made))finalBlock   //Then do this after finishing
+    {
+    
+    //Check for data which needs linking
+    
+    PFQuery *checkIfExists = [PFQuery queryWithClassName:@"UserData"];
+    NSLog(@"%@", [PFUser currentUser]);
+    
+    [checkIfExists whereKey:@"facebookId" equalTo:facebookID];
+    [checkIfExists findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            //If the user already has a stub
+            if([objects count] > 0) {
+                for(PFObject *o in objects) {
+                    //Update the profile
+                    [o setObject:userData forKey:@"profile"];
+                    [o setObject:facebookID forKey:@"facebookId"];
+                    
+                    //Link that profile to this one
+                    //Also serves to update existing accounts
+                    if(user != nil) {
+                        [user setObject:o   forKey:@"userData"];
+                        [user setObject:facebookID forKey:@"fbId"];
+                        [user saveInBackgroundWithBlock:^(BOOL suceeded, NSError *error){
+                            
+                        }];
+                    }
+                    
+                    if (relationLabel != nil) {
+                        PFRelation *relation = [user relationforKey:relationLabel];
+                        [relation addObject:object];
+                        [object saveInBackgroundWithBlock:^(BOOL suceeded, NSError *error) {
+                            finalBlock(o);
+                        }];
+                    }
+                    
+                }
+            
+                //If the user is brand new, no stub found for them
+            } else {
+                //Make new user data object
+                PFObject *userDataObject = [PFObject objectWithClassName:@"UserData"];
+                [userDataObject setObject:userData forKey:@"profile"];
+                [userDataObject setObject:facebookID forKey:@"facebookId"];
+                [userDataObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    //Once you make it, save the link
+                    if(user != nil) {
+                        [user setObject:userDataObject forKey:@"userData"];
+                        [user setObject:facebookID forKey:@"fbId"];
+                        [user saveInBackgroundWithBlock:^(BOOL suceeded, NSError *error){
+                            finalBlock(userDataObject);
+                        }];
+                    }
+                    if (relationLabel != nil) {
+                        PFRelation *relation = [object relationforKey:relationLabel];
+                        [relation addObject:userDataObject];
+                        [object saveInBackgroundWithBlock:^(BOOL suceeded, NSError *error) {
+                            finalBlock(userDataObject);
+                        }];
+                    }
+                    
+                }];
+            }
+        }
+    }];
+}
+
 
 @end

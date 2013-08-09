@@ -31,7 +31,9 @@
 @property (nonatomic, strong) UIButton *closeButton;
 @property (nonatomic, strong) UIView *tapView;
 @property (nonatomic, strong) UIButton *pictureButton;
-
+@property (nonatomic, strong) UIImagePickerController *imagePicker;
+@property (nonatomic, strong) UIImage *thumbnailImage;
+@property (nonatomic, strong) UIImageView *thumbnailImageView;
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
 @end

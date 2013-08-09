@@ -44,13 +44,14 @@
             
             NSLog(@"the current user is %@", [PFUser currentUser]);
 
-            PFRelation *relation = [[PFUser currentUser] relationforKey:@"follows"];
+            PFRelation *relation = [[[PFUser currentUser] objectForKey:@"userData"] relationforKey:@"friendList"];
             PFQuery *query = [relation query];
             
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (!error) {   // The find succeeded.
                     if ([objects count] > 0) {      //Saved friend list exists
                         selectedFriends = [[NSMutableArray alloc] initWithArray:objects];
+                        [self sortSelectedFriends];
                     } else {    //No saved friend list. No need to instantiate anything though
                         NSLog(@"No saved friends");
                     }
@@ -104,7 +105,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:NO];
-    NSLog(@"Currently logged in: %@", [PFUser currentUser]);
     [[self tableView] reloadData];
 }
 - (id)initWithStyle:(UITableViewStyle)style
@@ -136,9 +136,9 @@
     NSDictionary *userData = [selectedFriends objectAtIndex:indexPath.row];
 
     
-    NSString *facebookID = [userData objectForKey:@"fbId"];//userData[@"id"];
+    NSString *facebookID = [userData objectForKey:@"facebookId"];//userData[@"id"];
     NSString *name = [userData objectForKey:@"profile"][@"name"];//userData[@"name"];
-    NSLog(@"Current user: %@", name);
+    
     FBProfilePictureView *profilePictureView = [[FBProfilePictureView alloc] init];
     profilePictureView.frame = CGRectMake(0.0, 0.0, 45.0, 45.0);
     profilePictureView.profileID = facebookID;
@@ -147,24 +147,46 @@
     cell.textLabel.text = name;
     
     //Gray out a cell if that friend doesn't use Parse
-    if ([PFAnonymousUtils isLinkedWithUser:[selectedFriends objectAtIndex:indexPath.row]]) { //Anonymous user, not registered for Parse!
-        cell.textLabel.textColor = [UIColor lightGrayColor];
-        UIButton *inviteFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        inviteFriendButton.frame = CGRectMake(cell.bounds.size.width - 60, 5.0f, 60.0f, 44.0f);
-        [inviteFriendButton setTitle:@"Invite" forState:UIControlStateNormal];
-        [inviteFriendButton addTarget:self
-                               action:@selector(inviteFriendforUser:)
-                     forControlEvents:UIControlEventTouchUpInside];
-        [cell addSubview:inviteFriendButton];
-    }
+    PFQuery *findUsers = [PFQuery queryWithClassName:@"_User"];
+    [findUsers whereKey:@"fbId" equalTo:facebookID];
+    [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {   // The find succeeded.
+            if (objects.count == 0) {               //This user doesn't use Ubiquity
+                cell.textLabel.textColor = [UIColor lightGrayColor];
+                UIButton *inviteFriendButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+                inviteFriendButton.frame = CGRectMake(cell.bounds.size.width - 60, 5.0f, 60.0f, 44.0f);
+                [inviteFriendButton setTitle:@"Invite" forState:UIControlStateNormal];
+                [inviteFriendButton addTarget:self
+                                       action:@selector(inviteFriendforUser:)
+                             forControlEvents:UIControlEventTouchUpInside];
+                [cell addSubview:inviteFriendButton];
+            }
+        } else {        // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+    
     return cell;
 }
 
+
+// gets cropped FB profile pic sized image (not scaled though)
+- (UIImage*) getSubImageFrom: (UIImage*) img WithRect: (CGRect) rect {
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGRect drawRect = CGRectMake(-rect.origin.x, -rect.origin.y, img.size.width, img.size.height);
+    CGContextClipToRect(context, CGRectMake(0, 0, rect.size.width, rect.size.height));
+    [img drawInRect:drawRect];
+    UIImage* subImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return subImage;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     /* Implement loading/viewing/selecting a friend's saved public locations here */
@@ -316,66 +338,36 @@
         //If it doesn't occur already in selected friends...
         if(![self friendWithIdAlreadyAdded:[user id]]) {
             
-            PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-            [query whereKey:@"fbId" equalTo:[user id]];
-
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if (!error) {
-                    // The find succeeded.
-                    //NSLog(@"Successfully retrieved %d friends.", objects.count);
-                    // Do something with the found objects
-                    if(objects.count > 0) {
-                        //There really should be only one return here, max
-                        for (PFObject *object in objects) {
-                                
-                            PFObject *me = [PFUser currentUser];
-                            PFRelation *relation = [me relationforKey:@"follows"];
-                            [relation addObject:object];
-                            [me saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                if (!error) {
-                                    //NSLog(@"Success saving relation");
-                                    [selectedFriends addObject:object];
-                                } else {
-                                    //NSLog(@"Error saving relation");
-                                }
-                            }];
-                            //NSLog(@"Saved relation");
-                        }
-                    } else {
-//                            [PFAnonymousUtils logInWithBlock:^(PFUser *newGuy, NSError *e) {
-//                                if(!e) {
-//                                    [newGuy setObject:user.id forKey:@"fbId"];
-//                                    [newGuy setObject:user    forKey:@"profile"];
-//                                    [newGuy saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//                                        if(!error) {
-//                                            [selectedFriends addObject:newGuy];
-//                                            
-//                                            PFObject *me = [PFUser currentUser];
-//                                            PFRelation *relation = [me relationforKey:@"follows"];
-//                                            [relation addObject:newGuy];
-//                                            [me saveInBackgroundWithBlock:nil];
-//                                            
-//                                        } else { g
-//                                            NSLog(@"%@", e);
-//                                        }
-//                                    }];
-//                                } else {
-//                                    NSLog(@"%@", e);
-//                                }
-//
-//                            }];
-                        }
-                }
-            }];
+            [AppDelegate linkOrStoreUserDetails:user
+                                           toId:[user id]
+                                         toUser:nil
+                          andStoreUnderRelation:@"friendList"
+                                       toObject:[[PFUser currentUser] objectForKey:@"userData"]
+                                     finalBlock:^(PFObject *made){
+                                         [selectedFriends addObject:made];
+                                         
+                                         //Sort selected friends
+                                         [self sortSelectedFriends];
+                                     }];
         }
     }
     
     NSLog(@"%@", [PFUser currentUser]);
 }
-             
+
+- (void) sortSelectedFriends{
+    selectedFriends = [selectedFriends sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSDate *first = [a objectForKey:@"profile"][@"name"];
+        NSDate *second = [b objectForKey:@"profile"][@"name"];
+        return [first compare:second];
+    }];
+    
+}
+
+
 - (BOOL)friendWithIdAlreadyAdded:(NSString *)checkId {
     for(PFUser *friend in selectedFriends) {
-        if([[friend objectForKey:@"fbId"] isEqualToString:checkId]) {
+        if([[friend objectForKey:@"facebookId"] isEqualToString:checkId]) {
             return YES;
         }
     }
