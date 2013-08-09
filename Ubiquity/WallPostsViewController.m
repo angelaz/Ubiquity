@@ -376,10 +376,24 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
 	textLabel.backgroundColor = [UIColor clearColor];
     
+    
 	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:kPAWCellLocationLabelTag];
-    locationLabel.text = @"Facebook HQ, 1601 Willow Road";
+    locationLabel.text = @"Unknown Location";
     locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
     locationLabel.backgroundColor = [UIColor clearColor];
+    
+    PFGeoPoint *coordinates = [object objectForKey:@"location"];
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude);
+    GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
+    [geocoder reverseGeocodeCoordinate:location completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
+        if (!error) {
+            NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
+            locationLabel.text = reverseGeocodedLocation;
+        } else {
+            NSLog(@"Error in reverse geocoding: %@", error);
+        }
+        
+    }];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
     NSDate *sentAt = object.createdAt;
@@ -390,15 +404,18 @@ static NSInteger kPAWCellLocationLabelTag = 7;
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
     
+    
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
-    //HI WINNIE THIS IS THE LOADING PHOTO SECTION
+    
     NSData *photoData = [[object objectForKey:@"photo"] getData];
-    UIImage *photo = [[UIImage alloc] initWithData:photoData];
-    UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
-    [cell.contentView addSubview:photoView];
+    if (photoData) {
+        UIImage *photo = [[UIImage alloc] initWithData:photoData];
+        UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
+        [cell.contentView addSubview:photoView];
+    }
     
     //TODO Remove
     PFUser *sender = [object objectForKey:@"sender"];
