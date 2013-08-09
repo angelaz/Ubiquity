@@ -343,6 +343,9 @@
                           andStoreUnderRelation:@"friendList"
                                        toObject:[[PFUser currentUser] objectForKey:@"userData"]
                                      finalBlock:^(PFObject *made){
+                                         NSLog(@"%@", made);
+                                         NSLog(@"%@", selectedFriends);
+                                         
                                          [selectedFriends addObject:made];
                                          
                                          //Sort selected friends
@@ -355,11 +358,11 @@
 }
 
 - (void) sortSelectedFriends{
-    selectedFriends = [selectedFriends sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+    selectedFriends = [NSMutableArray arrayWithArray:[selectedFriends sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
         NSDate *first = [a objectForKey:@"profile"][@"name"];
         NSDate *second = [b objectForKey:@"profile"][@"name"];
         return [first compare:second];
-    }];
+    }]];
     
 }
 
