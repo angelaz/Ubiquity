@@ -42,7 +42,7 @@
             
             NSLog(@"the current user is %@", [PFUser currentUser]);
 
-            PFRelation *relation = [[PFUser currentUser] relationforKey:@"follows"];
+            PFRelation *relation = [[[PFUser currentUser] objectForKey:@"userData"] relationforKey:@"friendList"];
             PFQuery *query = [relation query];
             
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -50,6 +50,7 @@
                     //NSLog(@"Successfully retrieved %d relationships.", objects.count);
                     if ([objects count] > 0) {      //Saved friend list exists
                         selectedFriends = [[NSMutableArray alloc] initWithArray:objects];
+                        [self sortSelectedFriends];
                     } else {    //No saved friend list. No need to instantiate anything though
                         NSLog(@"No saved friends");
                     }
@@ -103,7 +104,7 @@
     NSDictionary *userData = [selectedFriends objectAtIndex:indexPath.row];
     NSLog(@"%@", userData);
     
-    NSString *facebookID = [userData objectForKey:@"fbId"];//userData[@"id"];
+    NSString *facebookID = [userData objectForKey:@"facebookId"];//userData[@"id"];
     NSString *name = [userData objectForKey:@"profile"][@"name"];//userData[@"name"];
     
     FBProfilePictureView *profilePictureView = [[FBProfilePictureView alloc] init];
@@ -160,6 +161,7 @@
 {
     return 1;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     /* Implement loading/viewing/selecting a friend's saved public locations here */
@@ -294,66 +296,36 @@
         //If it doesn't occur already in selected friends...
         if(![self friendWithIdAlreadyAdded:[user id]]) {
             
-            PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-            [query whereKey:@"fbId" equalTo:[user id]];
-
-            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if (!error) {
-                    // The find succeeded.
-                    //NSLog(@"Successfully retrieved %d friends.", objects.count);
-                    // Do something with the found objects
-                    if(objects.count > 0) {
-                        //There really should be only one return here, max
-                        for (PFObject *object in objects) {
-                                
-                            PFObject *me = [PFUser currentUser];
-                            PFRelation *relation = [me relationforKey:@"follows"];
-                            [relation addObject:object];
-                            [me saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                if (!error) {
-                                    //NSLog(@"Success saving relation");
-                                    [selectedFriends addObject:object];
-                                } else {
-                                    //NSLog(@"Error saving relation");
-                                }
-                            }];
-                            //NSLog(@"Saved relation");
-                        }
-                    } else {
-//                            [PFAnonymousUtils logInWithBlock:^(PFUser *newGuy, NSError *e) {
-//                                if(!e) {
-//                                    [newGuy setObject:user.id forKey:@"fbId"];
-//                                    [newGuy setObject:user    forKey:@"profile"];
-//                                    [newGuy saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//                                        if(!error) {
-//                                            [selectedFriends addObject:newGuy];
-//                                            
-//                                            PFObject *me = [PFUser currentUser];
-//                                            PFRelation *relation = [me relationforKey:@"follows"];
-//                                            [relation addObject:newGuy];
-//                                            [me saveInBackgroundWithBlock:nil];
-//                                            
-//                                        } else {
-//                                            NSLog(@"%@", e);
-//                                        }
-//                                    }];
-//                                } else {
-//                                    NSLog(@"%@", e);
-//                                }
-//
-//                            }];
-                        }
-                }
-            }];
+            [AppDelegate linkOrStoreUserDetails:user
+                                           toId:[user id]
+                                         toUser:nil
+                          andStoreUnderRelation:@"friendList"
+                                       toObject:[[PFUser currentUser] objectForKey:@"userData"]
+                                     finalBlock:^(PFObject *made){
+                                         [selectedFriends addObject:made];
+                                         
+                                         //Sort selected friends
+                                         [self sortSelectedFriends];
+                                     }];
         }
     }
     
     NSLog(@"%@", [PFUser currentUser]);
 }
-             
+
+- (void) sortSelectedFriends{
+    selectedFriends = [selectedFriends sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSDate *first = [a objectForKey:@"profile"][@"name"];
+        NSDate *second = [b objectForKey:@"profile"][@"name"];
+        return [first compare:second];
+    }];
+    
+}
+
+
 - (BOOL)friendWithIdAlreadyAdded:(NSString *)checkId {
     for(PFUser *friend in selectedFriends) {
-        if([[friend objectForKey:@"fbId"] isEqualToString:checkId]) {
+        if([[friend objectForKey:@"facebookId"] isEqualToString:checkId]) {
             return YES;
         }
     }
