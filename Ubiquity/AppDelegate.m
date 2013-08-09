@@ -194,8 +194,8 @@
                     }
                     
                     if (relationLabel != nil) {
-                        PFRelation *relation = [user relationforKey:relationLabel];
-                        [relation addObject:object];
+                        PFRelation *relation = [object relationforKey:relationLabel];
+                        [relation addObject:o];
                         [object saveInBackgroundWithBlock:^(BOOL suceeded, NSError *error) {
                             finalBlock(o);
                         }];

@@ -328,58 +328,19 @@
         [_nmv.thumbnailImageView removeFromSuperview];
     }
     imagePicked = NO;
-    
-    //For each person we are sending to
-    for (id<FBGraphUser> user in recipientsList) {
-        NSLog(@"Adding somebody");
-        
-        //Add the relation that they are a receiver of the message
-        PFRelation *relation = [postObject relationforKey:@"receivers"];
-        
-        //Query for thulkcefvgelhucljkllnfibnrlrgduuekem, if they already exist or not
-        PFQuery *findUsers = [PFQuery queryWithClassName:@"_User"];
-        [findUsers whereKey:@"fbId" equalTo:[user id]];
-        [findUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if(!error) {
-                //This is an existing user (temp, or actual user)
-                if([objects count] > 0) {
-                    //Should only be one
-                    for(PFObject *obj in objects) {
-                        [relation addObject:obj];
-                        [postObject saveInBackgroundWithBlock:nil];
-                        //NSLog(@"Sent to existing user");
-                    }
-                    
-                } else {
-                    //They are not in our db (yet)
-                    //TODO Make this a function, instead of fully typed out. Ick.
-     
-//                    [PFAnonymousUtils logInWithBlock:^(PFUser *newGuy, NSError *e) {
-//                        if(!e) {
-//                            [newGuy setObject:user.id forKey:@"fbId"];
-//                            [newGuy setObject:user    forKey:@"profile"];
-//                            [relation addObject:newGuy];
-//                            [newGuy saveInBackgroundWithBlock:nil];
-//                            [postObject saveInBackgroundWithBlock:nil];
-//                            //NSLog(@"Added the new guy");
-//                            
-//                            [self logBackIn];
-//                            
-//                            NSLog(@"%@", [PFUser currentUser]);
-//                        } else {
-//                            NSLog(@"%@", e);
-//                        }
-//                    }];
-                    
-                }
-                
-            } else {
-                //Something went wrong (weird) :-(
-                NSLog(@"%@", error);
-            }
-        }];
-    }
-    
+    [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        //For each person we are sending to
+        for (id<FBGraphUser> user in recipientsList) {
+            
+            
+            [AppDelegate linkOrStoreUserDetails:user
+                                           toId:[user id]
+                                         toUser:nil
+                          andStoreUnderRelation:@"receivers"
+                                       toObject:postObject
+                                     finalBlock:^(PFObject *made){}];
+        }
+    }];
     
     // Set the access control list on the postObject to restrict future modifications
     // to this object
