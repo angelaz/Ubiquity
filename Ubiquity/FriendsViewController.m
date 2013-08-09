@@ -86,8 +86,7 @@
     UIView * fromView = self.tabBarController.selectedViewController.view;
     UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
     
-    // Transition using a page curl.
-    [UIView transitionFromView:fromView toView:toView duration:0.5
+    [UIView transitionFromView:fromView toView:toView duration:2.0
                        options: (controllerIndex > self.tabBarController.selectedIndex ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft)
                     completion:^(BOOL finished) {
                         

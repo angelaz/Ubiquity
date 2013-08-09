@@ -129,7 +129,6 @@
 		82148F3017AADD140066C69A /* Geocoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geocoding.h; sourceTree = "<group>"; };
 		82148F3117AADD140066C69A /* Geocoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Geocoding.m; sourceTree = "<group>"; };
 		82148F3317AADEE80066C69A /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
-		82148F3517AAE2A10066C69A /* Xcode5-DP3.app */ = {isa = PBXFileReference; lastKnownFileType = wrapper.application; name = "Xcode5-DP3.app"; path = "../../../../../Applications/Xcode5-DP3.app"; sourceTree = "<group>"; };
 		824EB77817A735A00006AA5D /* options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = options.png; sourceTree = "<group>"; };
 		82855A5517A9A023007B44CA /* friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = friends.png; sourceTree = "<group>"; };
 		829ED75E17B3135A006AD7D5 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
@@ -264,7 +263,6 @@
 			isa = PBXGroup;
 			children = (
 				869BEC8517B0119D00437EA0 /* SenTestingKit.framework */,
-				82148F3517AAE2A10066C69A /* Xcode5-DP3.app */,
 				82148F3317AADEE80066C69A /* CoreFoundation.framework */,
 				8624CD2017A2E99800F32DE8 /* StoreKit.framework */,
 				60C0B47717A1E4F000DC0F92 /* GMSCoreResources.bundle */,

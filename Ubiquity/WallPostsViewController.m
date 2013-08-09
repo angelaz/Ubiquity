@@ -11,6 +11,9 @@ static CGFloat const kPAWWallPostTableViewFontSizeText = 15.f;
 static CGFloat const kPawWallPostTableViewFontSizeDate = 12.f;
 
 static CGFloat const kPAWWallPostTableViewCellWidth = 280.f; // subject to change.
+static CGFloat const kPAWCellMaxImageHeight = 300.f; // subject to change.
+
+
 
 // Cell dimension and positioning constants
 static CGFloat const kPAWCellPaddingTop = 10.0f;
@@ -31,6 +34,8 @@ static NSInteger kPAWCellNameLabelTag = 4;
 static NSInteger kPAWCellSentDateLabelTag = 5;
 static NSInteger kPAWCellReceivedDateLabelTag = 6;
 static NSInteger kPAWCellLocationLabelTag = 7;
+static NSInteger kPAWCellAttachedPhotoTag = 8;
+
 
 
 #import "WallPostsViewController.h"
@@ -41,7 +46,11 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 #import "NewMessageViewController.h"
 
 @interface WallPostsViewController ()
-
+{
+    CGFloat additionalPhotoHeight;
+    CGFloat additionalPhotoWidth;
+    BOOL photoAttachmentExists;
+}
 
 @property (nonatomic, strong) FriendsViewController *friendsViewController;
 
@@ -98,7 +107,7 @@ static NSInteger kPAWCellLocationLabelTag = 7;
     UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
     
     self.navigationItem.rightBarButtonItem = newMessage;
-
+    
 }
 
 - (void) openNewMessageView
@@ -279,19 +288,19 @@ static NSInteger kPAWCellLocationLabelTag = 7;
         // THIS IS WHERE WE NEED TO IMPLEMENT JUST FRIENDS SHOWING UP!!!!!
         
         NSLog(@"Order was changed to just friends (actually just text alphabetical)");
-
+        
         [query orderByDescending:@"createdAt"];
     } else
-    if (self.indexing == 1) {
-        [query orderByDescending:@"createdAt"];
-        NSLog(@"Order was changed to date");
-    } else if (self.indexing == 2) {
-        
-        // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
-        
-        [query orderByDescending:@"updatedAt"];
-        NSLog(@"Order was changed to favorites (not really)");
-    }
+        if (self.indexing == 1) {
+            [query orderByDescending:@"createdAt"];
+            NSLog(@"Order was changed to date");
+        } else if (self.indexing == 2) {
+            
+            // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
+            
+            [query orderByDescending:@"updatedAt"];
+            NSLog(@"Order was changed to favorites (not really)");
+        }
     
 	return query;
 }
@@ -326,7 +335,7 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     [tableView setSeparatorColor: [UIColor clearColor]];
     [tableView setBackgroundColor: [UIColor lightGrayColor]];
-
+    
 	// Reuse identifiers for left and right cells
 	static NSString *LeftCellIdentifier = @"LeftCell";
     
@@ -362,12 +371,17 @@ static NSInteger kPAWCellLocationLabelTag = 7;
         UILabel *locationLabel = [[UILabel alloc] init];
         [locationLabel setTag: kPAWCellLocationLabelTag];
         [cell.contentView addSubview:locationLabel];
+        
+        UIImageView *photoView = [[UIImageView alloc] init];
+        [photoView setTag: kPAWCellAttachedPhotoTag];
+        [cell.contentView addSubview:photoView];
+        
     }
     
     
 	
 	// Configure the cell content
-
+    
     
 	UILabel *textLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellTextLabelTag];
 	textLabel.text = [object objectForKey:kPAWParseTextKey];
@@ -376,10 +390,24 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
 	textLabel.backgroundColor = [UIColor clearColor];
     
+    
 	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:kPAWCellLocationLabelTag];
-    locationLabel.text = @"Facebook HQ, 1601 Willow Road";
+    locationLabel.text = @"Unknown Location";
     locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
     locationLabel.backgroundColor = [UIColor clearColor];
+    
+    PFGeoPoint *coordinates = [object objectForKey:@"location"];
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude);
+    GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
+    [geocoder reverseGeocodeCoordinate:location completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
+        if (!error) {
+            NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
+            locationLabel.text = reverseGeocodedLocation;
+        } else {
+            NSLog(@"Error in reverse geocoding: %@", error);
+        }
+        
+    }];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
     NSDate *sentAt = object.createdAt;
@@ -390,15 +418,17 @@ static NSInteger kPAWCellLocationLabelTag = 7;
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
     
+    
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
-    //HI WINNIE THIS IS THE LOADING PHOTO SECTION
     NSData *photoData = [[object objectForKey:@"photo"] getData];
     UIImage *photo = [[UIImage alloc] initWithData:photoData];
-    UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
-    [cell.contentView addSubview:photoView];
+    UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
+    photoView.contentMode = UIViewContentModeScaleAspectFill;
+    additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
+    [photoView setImage:photo];
     
     //TODO Remove
     PFUser *sender = [object objectForKey:@"sender"];
@@ -450,13 +480,12 @@ static NSInteger kPAWCellLocationLabelTag = 7;
                                        kPAWCellPaddingTop+kPAWCellTextPaddingTop*3,
                                        locationLabelSize.width,
                                        locationLabelSize.height)];
-
+    
     [sentDate setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*5,
                                   sentDateSize.width,
                                   sentDateSize.height)];
-    [receivedDate setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
-                                      kPAWCellPaddingTop+kPAWCellTextPaddingTop+nameSize.height*4+textSize.height,
+    [receivedDate setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides, kPAWCellPaddingTop+kPAWCellTextPaddingTop * 12+ textSize.height + additionalPhotoHeight,
                                       receivedDateSize.width,
                                       receivedDateSize.height)];
     
@@ -464,12 +493,19 @@ static NSInteger kPAWCellLocationLabelTag = 7;
                                    kPAWCellPaddingTop+kPAWCellTextPaddingTop*9,
                                    textSize.width,
                                    textSize.height)];
-
+    
+    [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
+                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
+                                   additionalPhotoWidth,
+                                   additionalPhotoHeight)];
+    
     
     [backgroundImage setFrame:CGRectMake(kPAWCellPaddingSides,
                                          kPAWCellPaddingTop,
                                          self.tableView.frame.size.width - kPAWCellPaddingSides*2,
                                          cellHeight-kPAWCellPaddingTop-kPAWCellPaddingBottom)];
+    
+    
     
     
     
@@ -512,7 +548,18 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
 	// And return this height plus cell padding and the offset of the bubble image height (without taking into account the text height twice)
-	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height * 5 + kPAWCellBkgdOffset + kPAWCellPaddingTop;
+    NSData *photoData = [[object objectForKey:@"photo"] getData];
+    UIImage *photo = [[UIImage alloc] initWithData:photoData];
+    if (photo)
+        photoAttachmentExists = true;
+    else
+        photoAttachmentExists = false;
+    additionalPhotoHeight = 0;
+    if (photoAttachmentExists)
+        additionalPhotoHeight = 150;
+
+	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height * 5 + kPAWCellBkgdOffset + kPAWCellPaddingTop + additionalPhotoHeight;
+    
 	return rowHeight;
 }
 
