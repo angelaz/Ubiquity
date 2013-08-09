@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-#import "RecentViewController.h"
 
 @interface WallPostsViewController : PFQueryTableViewController
 
 @property (nonatomic) int indexing;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+
+@property (nonatomic, copy) NSString *className;
 
 @end

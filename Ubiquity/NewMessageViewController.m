@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 #import <Parse/Parse.h>
 #import "NewMessageView.h"
-#import "RecentViewController.h"
+#import "WallPostsViewController.h"
 #import "LocationController.h"
 #import "Geocoding.h"
 
