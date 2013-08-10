@@ -320,7 +320,7 @@
     // Create a PFObject using the Post class and set the values we extracted above
     PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
-    [postObject setObject:user forKey:@"sender"];
+    [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     [postObject setObject: [NSString stringWithFormat: @"%@", _nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     if (imagePicked == YES) { //There's an image to be included with this post!

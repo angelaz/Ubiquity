@@ -431,10 +431,10 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [photoView setImage:photo];
     
     //TODO Remove
-    PFUser *sender = [object objectForKey:@"sender"];
+    PFObject *sender = [object objectForKey:kPAWParseSenderKey];
     NSString *prof = [sender objectForKey:@"profile"];
     
-	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName];

@@ -21,7 +21,7 @@
 
 @property (nonatomic, strong) PFObject *message;
 @property (nonatomic, strong) PFGeoPoint *geopoint;
-@property (nonatomic, strong) PFUser *sender;
+@property (nonatomic, strong) PFObject *sender;
 @property (nonatomic, assign) MKPinAnnotationColor pinColor;
 
 
@@ -49,7 +49,7 @@
     
 	CLLocationCoordinate2D aCoordinate = CLLocationCoordinate2DMake(self.geopoint.latitude, self.geopoint.longitude);
 	NSString *aTitle = [anObject objectForKey:kPAWParseTextKey];
-	NSString *aAddress = [self.sender objectForKey:kPAWParseUsernameKey];
+	NSString *aAddress = [self.sender objectForKey:@"facebookId"];
     
 	return [self initWithCoordinate:aCoordinate andTitle:aTitle andAddress:aAddress];
 }
