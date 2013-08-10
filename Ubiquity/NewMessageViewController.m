@@ -324,6 +324,7 @@
     if (imagePicked == YES) { //There's an image to be included with this post!
         [postObject setObject:photoFile forKey:@"photo"];
         [_nmv.thumbnailImageView removeFromSuperview];
+        [postObject setObject:@150 forKey:@"photoHeight"];
     }
     imagePicked = NO;
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
