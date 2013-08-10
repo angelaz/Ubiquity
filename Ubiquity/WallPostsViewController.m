@@ -406,7 +406,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         } else {
             NSLog(@"Error in reverse geocoding: %@", error);
         }
-        
     }];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
