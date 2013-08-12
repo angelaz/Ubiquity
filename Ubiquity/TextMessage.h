@@ -22,7 +22,7 @@
 
 @property (nonatomic, readonly, strong) PFObject *message;
 @property (nonatomic, readonly, strong) PFGeoPoint *geopoint;
-@property (nonatomic, readonly, strong) PFUser *sender;
+@property (nonatomic, readonly, strong) PFObject *sender;
 @property (nonatomic, assign) BOOL animatesDrop;
 @property (nonatomic, readonly) MKPinAnnotationColor pinColor;
 

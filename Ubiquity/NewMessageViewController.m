@@ -22,6 +22,7 @@
 {
     BOOL imagePicked;
     PFFile *photoFile;
+    GMSMarker *marker;;
 }
 @end
 
@@ -71,6 +72,7 @@
                                                                                     target:self
                                                                                     action:@selector(closeNewMessage:)];
         [[self navigationItem] setLeftBarButtonItem:backButton];
+        marker = [[GMSMarker alloc] init];
     }
     return self;
 }
@@ -229,7 +231,7 @@
     [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
     imagePicked = NO;
     LocationController* locationController = [LocationController sharedLocationController];
-    [self updateLocation: locationController.location.coordinate];
+    [self updateLocation:locationController.location.coordinate];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
@@ -240,7 +242,6 @@
     double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
     double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
     
-    GMSMarker *marker = [[GMSMarker alloc] init];
     CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
     marker.position = geolocation;
     marker.title = [gs.geocode objectForKey:@"address"];
@@ -297,11 +298,7 @@
 {
     // Dismiss keyboard and capture any auto-correct
     [_nmv.messageTextView resignFirstResponder];
-    
-    // Get user's current location
-    LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
+
     // Get the post's message
     NSString *postMessage = _nmv.messageTextView.text;
     
@@ -312,20 +309,22 @@
     //Get the currently logged in PFUser
     PFUser *user = [PFUser currentUser];
     
-    // Create a PFGeoPoint using the user's location
-    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude
-                                                      longitude:currentCoordinate.longitude];
+    //Get and set the marker's location as where the post should be
+    CLLocationCoordinate2D postLocation = marker.position;
+    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude
+                                                      longitude:postLocation.longitude];
     
     
     // Create a PFObject using the Post class and set the values we extracted above
     PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
-    [postObject setObject:user forKey:@"sender"];
+    [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     [postObject setObject: [NSString stringWithFormat: @"%@", _nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     if (imagePicked == YES) { //There's an image to be included with this post!
         [postObject setObject:photoFile forKey:@"photo"];
         [_nmv.thumbnailImageView removeFromSuperview];
+        [postObject setObject:@150 forKey:@"photoHeight"];
     }
     imagePicked = NO;
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -517,13 +516,12 @@
     NSLog(@"New location");
     NSLog(@"Long: %f", currentCoordinate.longitude);
     NSLog(@"Lat: %f", currentCoordinate.latitude);
-    
+    //NSLog(@"%@", [LocationController sharedLocationController].location.coordinate);
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.003
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:15];
     [_nmv.map setCamera:camera];
-    // Creates a marker in the center of the map.
-    GMSMarker *marker = [[GMSMarker alloc] init];
+    
     marker.position = currentCoordinate;
     marker.title = @"Here";
     marker.snippet = @"My location";

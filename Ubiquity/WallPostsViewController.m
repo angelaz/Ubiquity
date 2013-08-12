@@ -421,7 +421,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         } else {
             NSLog(@"Error in reverse geocoding: %@", error);
         }
-        
     }];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
@@ -437,19 +436,13 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
-    
-    NSData *photoData = [[object objectForKey:@"photo"] getData];
-    UIImage *photo = [[UIImage alloc] initWithData:photoData];
-    UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
-    photoView.contentMode = UIViewContentModeScaleAspectFill;
-    additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
-    [photoView setImage:photo];
-    
+
+
     //TODO Remove
-    PFUser *sender = [object objectForKey:@"sender"];
+    PFObject *sender = [object objectForKey:kPAWParseSenderKey];
     NSString *prof = [sender objectForKey:@"profile"];
     
-	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName];
@@ -509,10 +502,20 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                                    textSize.width,
                                    textSize.height)];
     
-    [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
-                                   additionalPhotoWidth,
-                                   additionalPhotoHeight)];
+    
+    [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
+        UIImage *photo = [[UIImage alloc] initWithData:photoData];
+        UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
+        photoView.contentMode = UIViewContentModeScaleAspectFill;
+        additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
+        [photoView setImage:photo];
+        
+        [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
+                                       kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
+                                       additionalPhotoWidth,
+                                       additionalPhotoHeight)];
+        
+    }];
     
     
     [backgroundImage setFrame:CGRectMake(kPAWCellPaddingSides,
@@ -563,16 +566,14 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
 	// And return this height plus cell padding and the offset of the bubble image height (without taking into account the text height twice)
-    NSData *photoData = [[object objectForKey:@"photo"] getData];
-    UIImage *photo = [[UIImage alloc] initWithData:photoData];
-    if (photo)
+    
+    additionalPhotoHeight = [[object objectForKey:@"photoHeight"] floatValue];
+    
+    if (additionalPhotoHeight > 0)
         photoAttachmentExists = true;
     else
         photoAttachmentExists = false;
-    additionalPhotoHeight = 0;
-    if (photoAttachmentExists)
-        additionalPhotoHeight = 150;
-
+ 
 	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height * 5 + kPAWCellBkgdOffset + kPAWCellPaddingTop + additionalPhotoHeight;
     
 	return rowHeight;
