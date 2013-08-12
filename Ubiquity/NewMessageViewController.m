@@ -14,7 +14,7 @@
 #import "LocationController.h"
 #import "Geocoding.h"
 
-#define kOFFSET_FOR_KEYBOARD 190.0
+#define kOFFSET_FOR_KEYBOARD 100.0
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
 
 
@@ -34,25 +34,40 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [self hideTabBar];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [super viewWillAppear:animated];
-
+    
 }
 
 
 -(void) viewWillDisappear:(BOOL)animated
 {
-    [self showTabBar];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
     
     [super viewWillDisappear:animated];
+    
+}
 
+- (void)hideTabBar {
+    UITabBar *tabBar = self.tabBarController.tabBar;
+    UIView *parent = tabBar.superview; // UILayoutContainerView
+    UIView *content = [parent.subviews objectAtIndex:0]; // UITransitionView
+    UIView *window = parent.superview;
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         CGRect tabFrame = tabBar.frame;
+                         tabFrame.origin.y = CGRectGetMaxY(window.bounds);
+                         tabBar.frame = tabFrame;
+                         content.frame = parent.bounds;
+                     }];
+    
 }
 
 
@@ -62,7 +77,7 @@
     if (self) {
         
         self.title = @"New Message";
-
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(locationDidChange:)
                                                      name:kPAWLocationChangeNotification
@@ -80,6 +95,45 @@
     return self;
 }
 
+
+
+- (void) setupScrollView: (UIScrollView *) scrollView
+{
+    scrollView.clipsToBounds = NO;
+    scrollView.scrollEnabled = YES;
+    
+    NSUInteger nimages = 0;
+    NSInteger tot=0;
+    CGFloat cx = 0;
+    for (; ; nimages++) {
+        NSString *imageName = [NSString stringWithFormat:@"image%d.jpg", (nimages + 1)];
+        UIImage *image = [UIImage imageNamed:imageName];
+        if (tot==15) {
+            break;
+        }
+        if (4==nimages) {
+            nimages=0;
+        }
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        
+        CGRect rect = imageView.frame;
+        rect.size.height = 40;
+        rect.size.width = 40;
+        rect.origin.x = cx;
+        rect.origin.y = 0;
+        
+        imageView.frame = rect;
+        
+        [scrollView addSubview:imageView];
+        
+        cx += imageView.frame.size.width+5;
+        tot++;
+    }
+    
+    [scrollView setContentSize:CGSizeMake(cx, [scrollView bounds].size.height)];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -90,6 +144,7 @@
     
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
+    [_nmv.map setUserInteractionEnabled:NO];
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -97,39 +152,32 @@
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
     
-    _nmv.toRecipientTextField.delegate = self;
-    
+    _nmv.addressTitle.delegate = self;
     _nmv.messageTextView.delegate = self;
-    _nmv.locationSearchTextField.delegate = self;
+    _nmv.friendScroller.delegate = self;
     
-    [_nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *doneButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                               target:self
+                                                                               action:@selector(sendMessage:)];
+    [[self navigationItem] setRightBarButtonItem:doneButton];
     
-    [_nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    [_nmv.toRecipientButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    
-    LocationController* locationController = [LocationController sharedLocationController];
-    [self updateLocation:locationController.location.coordinate];
+    [_nmv.addFriendsButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     _nmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
     [_nmv addGestureRecognizer:_nmv.tapRecognizer];
-
-    
     
     [_nmv.pictureButton addTarget:self action:@selector(choosePicture:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _nmv.map.delegate = self;
-    
     self.friendPickerController = nil;
     _nmv.searchBar = nil;
     
-    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
-    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
-    [self.view addGestureRecognizer:swipeDown];
-
-    _nmv.imagePicker = [[UIImagePickerController alloc] init];
-    _nmv.imagePicker.delegate = self;
+    
+    //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
+    //    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
+    //    [self.view addGestureRecognizer:swipeDown];
+    //
+    //    _nmv.imagePicker = [[UIImagePickerController alloc] init];
+    //    _nmv.imagePicker.delegate = self;
     
 }
 
@@ -161,18 +209,14 @@
     [self updateLocation:coord];
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView
-{
-    [_nmv.map setUserInteractionEnabled:NO];
-}
+
 
 -(void) hideKeyboard: (id) sender
 {
+    
+    [_nmv.addressTitle resignFirstResponder];
     [_nmv.messageTextView resignFirstResponder];
-    [_nmv.locationSearchTextField resignFirstResponder];
-    [_nmv.toRecipientTextField resignFirstResponder];
-    [_nmv.map setUserInteractionEnabled:YES];
-
+    
 }
 -(void)keyboardWillHide {
     if (self.view.frame.origin.y > 0)
@@ -185,9 +229,9 @@
     }
 }
 
--(void)textFieldDidBeginEditing:(UITextField *)sender
+-(void)textViewDidBeginEditing:(UITextView *)sender
 {
-    if ([sender isEqual:_nmv.locationSearchTextField])
+    if ([sender isEqual:_nmv.messageTextView])
     {
         //move the main view, so that the keyboard does not hide it.
         if  (self.view.frame.origin.y >= 0)
@@ -196,7 +240,7 @@
         }
     }
     [_nmv.map setUserInteractionEnabled:NO];
-
+    
     
 }
 
@@ -231,7 +275,6 @@
         [_nmv.thumbnailImageView removeFromSuperview];
     }
     [_nmv.messageTextView setText: @""];
-    [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
     imagePicked = NO;
     LocationController* locationController = [LocationController sharedLocationController];
     [self updateLocation:locationController.location.coordinate];
@@ -240,74 +283,48 @@
     [self.tabBarController setSelectedIndex: 0];
 }
 
-- (void)addMarker{
-    
-    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
-    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
-    
-    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
-    marker.position = geolocation;
-    marker.title = [gs.geocode objectForKey:@"address"];
-    NSLog(@"%@", marker.title);
-    NSLog(@"%f, %f", lat, lng);
-    
-    marker.map = _nmv.map;
-    
-    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
-    [_nmv.map animateWithCameraUpdate:geoLocateCam];
-    
-}
+//- (void)addMarker{
+//
+//    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
+//    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
+//
+//    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
+//    marker.position = geolocation;
+//    marker.title = [gs.geocode objectForKey:@"address"];
+//    NSLog(@"%@", marker.title);
+//    NSLog(@"%f, %f", lat, lng);
+//
+//    marker.map = _nmv.map;
+//
+//    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
+//    [_nmv.map animateWithCameraUpdate:geoLocateCam];
+//
+//}
 
-- (void) startSearch: (id) sender
-{
-    NSLog(@"searching for: %@", _nmv.locationSearchTextField.text);
-    LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
-    //Not a perfect solution for keeping the map at the same place
-    //TODO: Fix it so map doesn't shift at all when search for invalid address
-    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
-   [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
-}
+//- (void) startSearch: (id) sender
+//{
+////    NSLog(@"searching for: %@", _nmv.locationSearchTextField.text);
+////    LocationController* locationController = [LocationController sharedLocationController];
+////    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+////    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
+////    //Not a perfect solution for keeping the map at the same place
+////    //TODO: Fix it so map doesn't shift at all when search for invalid address
+////    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
+//////   [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
+//}
 
 
-- (void) setPickedValueForPickerButton
-{
-    NSString *selectedTitle = [self pickerView:_nmv.repeatTimesPicker titleForRow:[_nmv.repeatTimesPicker selectedRowInComponent:0] forComponent:0];
-    [_nmv.showRepeatPickerButton setTitle: selectedTitle forState:UIControlStateNormal];
-}
-
-- (void) pickerDoneClicked : (id) sender
-{
-    [_nmv.pickerToolbar removeFromSuperview];
-    [_nmv.repeatTimesPicker removeFromSuperview];
-    [_nmv addSubview:_nmv.sendButton];
-    [self setPickedValueForPickerButton];
-    [_nmv addSubview:_nmv.showRepeatPickerButton];
-    [_nmv.tapRecognizer setEnabled:YES];
-}
-
-- (void) showPicker: (id) sender
-{
-    [sender removeFromSuperview];
-    [_nmv.sendButton removeFromSuperview];
-    [_nmv addSubview:_nmv.pickerToolbar];
-    [_nmv addSubview: _nmv.repeatTimesPicker];
-    [_nmv.tapRecognizer setEnabled:NO];
-
-}
 
 - (void) sendMessage: (id) sender
 {
+    
     // Dismiss keyboard and capture any auto-correct
     [_nmv.messageTextView resignFirstResponder];
-
+    
     // Get the post's message
     NSString *postMessage = _nmv.messageTextView.text;
     
     [_nmv.messageTextView setText: @""];
-    [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
-
     
     //Get the currently logged in PFUser
     PFUser *user = [PFUser currentUser];
@@ -324,7 +341,6 @@
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
     [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
-    [postObject setObject: [NSString stringWithFormat: @"%@", _nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
     if (imagePicked == YES) { //There's an image to be included with this post!
         [postObject setObject:photoFile forKey:@"photo"];
         [_nmv.thumbnailImageView removeFromSuperview];
@@ -354,7 +370,7 @@
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
             
-
+            
             [AppDelegate linkOrStoreUserDetails:user
                                            toId:[user id]
                                          toUser:nil
@@ -465,76 +481,13 @@
     return NO;
 }
 
-/* Start Picker Methods */
-- (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
-    // Handle the selection
-}
-
-// tell the picker how many rows are available for a given component
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    
-    
-    return [self.repeatOptions count];
-}
-
-// tell the picker how many components it will have
-- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-    return 1;
-}
-
-// tell the picker the title for a given component
-- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    
-    return [self.repeatOptions objectAtIndex: row];
-}
-
-// tell the picker the width of each row for a given component
-- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
-    int sectionWidth = 300;
-    
-    return sectionWidth;
-}
-
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void)hideTabBar {
-    UITabBar *tabBar = self.tabBarController.tabBar;
-    UIView *parent = tabBar.superview; // UILayoutContainerView
-    UIView *content = [parent.subviews objectAtIndex:0];  // UITransitionView
-    UIView *window = parent.superview;
-    
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         CGRect tabFrame = tabBar.frame;
-                         tabFrame.origin.y = CGRectGetMaxY(window.bounds);
-                         tabBar.frame = tabFrame;
-                         content.frame = parent.bounds;
-                     }];
-    
-}
 
-
-- (void)showTabBar {
-    UITabBar *tabBar = self.tabBarController.tabBar;
-    UIView *parent = tabBar.superview; // UILayoutContainerView
-    UIView *content = [parent.subviews objectAtIndex:0];  // UITransitionView
-    UIView *window = parent.superview;
-    
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         CGRect tabFrame = tabBar.frame;
-                         tabFrame.origin.y = CGRectGetMaxY(window.bounds) - CGRectGetHeight(tabBar.frame);
-                         tabBar.frame = tabFrame;
-                         
-                         CGRect contentFrame = content.frame;
-                         contentFrame.size.height -= tabFrame.size.height;
-                     }];
-}
 
 
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
@@ -569,18 +522,18 @@
 
 - (void) handlePickerDone
 {
-    [self dismissViewControllerAnimated:NO completion:nil];
     [self hideTabBar];
-
+    [self dismissViewControllerAnimated:NO completion:nil];
+    
 }
 
-//ADA
+////ADA
 - (IBAction)selectFriendsButtonAction:(id)sender {
     if (self.friendPickerController == nil) {
         // Create friend picker, and get data loaded into it.
         self.friendPickerController = [[FBFriendPickerViewController alloc] init];
         self.friendPickerController.title = @"Select Friends";
-
+        
         self.friendPickerController.delegate = self;
     }
     [self.friendPickerController loadData];
@@ -596,38 +549,56 @@
 - (void)facebookViewControllerCancelWasPressed:(id)sender
 {
     NSLog(@"Friend selection cancelled.");
-
+    
     [self handlePickerDone];
 }
 
 - (void)facebookViewControllerDoneWasPressed:(id)sender
 {
     [recipientsList removeAllObjects];
-
+    
     
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
         [recipientsList addObject: user];
-
+        
         NSLog(@"Person is %@", user);
     }
-    NSMutableString *names = [[NSMutableString alloc] initWithString:@" "];
+    //    NSMutableString *names = [[NSMutableString alloc] initWithString:@" "];
     
-    for (id <FBGraphUser> user in recipientsList)
+    for (int i = 0; i < recipientsList.count; i ++)
     {
-        names = [names stringByAppendingString: (@"%@", [user name])];
-        names = [names stringByAppendingString: (@", ")];
-    }
-    [_nmv.toRecipientButton setTitle:names forState: UIControlStateNormal];
+        id <FBGraphUser> user = [recipientsList objectAtIndex: i];
+        int iconDimensions = 30.0;
+        CGFloat xOrigin = i * (iconDimensions + 5);
+        NSString *facebookID = [user objectForKey:@"id"];//userData[@"id"];
+        FBProfilePictureView *profilePictureView = [[FBProfilePictureView alloc] init];
+        profilePictureView.frame = CGRectMake(xOrigin, 0.0, iconDimensions, iconDimensions);
+        profilePictureView.profileID = facebookID;
+        [_nmv.friendScroller addSubview:profilePictureView];
 
+    }
+    _nmv.friendScroller.contentSize = CGSizeMake(30.0 *
+                                             recipientsList.count,
+                                             30.0);
+    
+    
+   
+    
     countNumber = [recipientsList count];
     readReceipts = [[NSMutableDictionary alloc] initWithCapacity:countNumber];
     
     [self handlePickerDone];
 }
 
+- (void) refreshScrollViewWith
+{
+    _nmv.friendScroller.pagingEnabled = YES;
+    
+}
+
 - (void) handleSearch:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
-    _nmv.searchText = searchBar.text;
+    //    _nmv.searchText = searchBar.text;
     [self.friendPickerController updateView];
 }
 
@@ -637,7 +608,7 @@
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-    _nmv.searchText = nil;
+    //    _nmv.searchText = nil;
     [searchBar resignFirstResponder];
 }
 
@@ -645,19 +616,19 @@
                  shouldIncludeUser:(id<FBGraphUser>)user
 {
     //TODO: Trim this list to just show FB friends who are members of this app
-    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
-        NSRange result = [user.name
-                          rangeOfString:_nmv.searchText
-                          options:NSCaseInsensitiveSearch];
-        
-        if (result.location != NSNotFound) {
-            return YES;
-        } else {
-            return NO;
-        }
-    } else {
-        return YES;
-    }
+    //    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
+    //        NSRange result = [user.name
+    //                          rangeOfString:_nmv.searchText
+    //                          options:NSCaseInsensitiveSearch];
+    //
+    //        if (result.location != NSNotFound) {
+    //            return YES;
+    //        } else {
+    //            return NO;
+    //        }
+    //    } else {
+    //        return YES;
+    //    }
     return YES;
 }
 
