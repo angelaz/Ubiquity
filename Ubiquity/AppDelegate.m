@@ -151,7 +151,7 @@
 
 - (void)presentLoginViewController {
 	// Go to the welcome screen and have them log in or create an account.
-	LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+	LoginViewController *loginViewController = [[LoginViewController alloc] init];
 	loginViewController.title = @"Welcome to Ubi!";
     [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
 	
