@@ -37,7 +37,7 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 static NSInteger kPAWCellAttachedPhotoTag = 8;
 
 
-
+#import "HomeMapViewController.h"
 #import "WallPostsViewController.h"
 #import "AppDelegate.h"
 #import "TextMessage.h"
@@ -107,6 +107,21 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
     
     self.navigationItem.rightBarButtonItem = newMessage;
+    
+    
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                         target:self
+                                                                         action:@selector(openHMV)];
+    [[self navigationItem] setLeftBarButtonItem:bbi];
+    
+    
+}
+- (void) openHMV
+{
+    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
+    UINavigationController *hmvcnav = [[UINavigationController alloc]
+                                       initWithRootViewController:hmvc];
+    [self.navigationController presentViewController:hmvcnav animated:YES completion:nil ];
     
 }
 
@@ -421,8 +436,8 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
-
-
+    
+    
     //TODO Remove
     PFObject *sender = [object objectForKey:kPAWParseSenderKey];
     NSString *prof = [sender objectForKey:@"profile"];
@@ -487,20 +502,21 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                                    textSize.width,
                                    textSize.height)];
     
-    
+    UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
+
     [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
         UIImage *photo = [[UIImage alloc] initWithData:photoData];
-        UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
         photoView.contentMode = UIViewContentModeScaleAspectFill;
         additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
         [photoView setImage:photo];
-        
-        [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                       kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
-                                       additionalPhotoWidth,
-                                       additionalPhotoHeight)];
-        
     }];
+    
+    
+    [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
+                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
+                                   additionalPhotoWidth,
+                                   additionalPhotoHeight)];
+    
     
     
     [backgroundImage setFrame:CGRectMake(kPAWCellPaddingSides,
@@ -557,8 +573,11 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     if (additionalPhotoHeight > 0)
         photoAttachmentExists = true;
     else
+    {
         photoAttachmentExists = false;
- 
+        additionalPhotoHeight = 0;
+    }
+    
 	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height * 5 + kPAWCellBkgdOffset + kPAWCellPaddingTop + additionalPhotoHeight;
     
 	return rowHeight;
