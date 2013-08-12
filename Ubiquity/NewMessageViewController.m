@@ -311,6 +311,7 @@
     
     //Get and set the marker's location as where the post should be
     CLLocationCoordinate2D postLocation = marker.position;
+    
     PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude
                                                       longitude:postLocation.longitude];
     
@@ -326,8 +327,21 @@
         [_nmv.thumbnailImageView removeFromSuperview];
         [postObject setObject:@150 forKey:@"photoHeight"];
     }
+    
     imagePicked = NO;
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        //Get started determining where exactly that is and storing
+        GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
+        [geocoder reverseGeocodeCoordinate:postLocation completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
+            if (!error) {
+                NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
+                
+                [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
+            } else {
+                NSLog(@"Error in reverse geocoding: %@", error);
+            }
+        }];
+        
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
             
