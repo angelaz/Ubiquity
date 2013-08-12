@@ -19,7 +19,7 @@
 {
     GMSMapView *mapView;
     NSMutableArray *recipientsList;
-    
+    NSMutableDictionary *readReceipts;
 }
 
 @property (retain, nonatomic) FBFriendPickerViewController *friendPickerController;

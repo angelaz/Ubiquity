@@ -22,7 +22,8 @@
 {
     BOOL imagePicked;
     PFFile *photoFile;
-    GMSMarker *marker;;
+    GMSMarker *marker;
+    NSUInteger countNumber;
 }
 @end
 
@@ -67,6 +68,8 @@
                                                      name:kPAWLocationChangeNotification
                                                    object:nil];
         recipientsList = [[NSMutableArray alloc] init];
+        
+        countNumber = 0;
         
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                     target:self
@@ -329,6 +332,9 @@
     }
     
     imagePicked = NO;
+    
+    NSString *readReceiptDate = [NSString stringWithFormat:@"%@", [NSDate date]];
+    
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         //Get started determining where exactly that is and storing
         GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
@@ -342,18 +348,26 @@
             }
         }];
         
+        
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
             
-            
+
             [AppDelegate linkOrStoreUserDetails:user
                                            toId:[user id]
                                          toUser:nil
                           andStoreUnderRelation:@"receivers"
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
+            
+            NSString *username = [user objectForKey:@"id"];
+            [readReceipts setValue:readReceiptDate forKey:username];
+            [postObject setObject:readReceipts forKey:@"readReceipts"];
+            
         }
     }];
+    
+    [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
     
     // Set the access control list on the postObject to restrict future modifications
     // to this object
@@ -605,6 +619,8 @@
     }
     [_nmv.toRecipientButton setTitle:names forState: UIControlStateNormal];
 
+    countNumber = [recipientsList count];
+    readReceipts = [[NSMutableDictionary alloc] initWithCapacity:countNumber];
     
     [self handlePickerDone];
 }
