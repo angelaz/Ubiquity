@@ -14,7 +14,7 @@
 //@property (nonatomic, strong) UITextField *toRecipientTextField;
 @property (nonatomic, strong) UIButton *addFriendsButton;
 //
-//@property (strong, nonatomic) UISearchBar *searchBar;
+@property (strong, nonatomic) UISearchBar *searchBar;
 //@property (strong, nonatomic) NSString *searchText;
 //
 @property (nonatomic, strong) UILabel *toLabel;

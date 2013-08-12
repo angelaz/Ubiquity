@@ -104,7 +104,7 @@ int const LINE_HEIGHT = 30;
     self.addressTitle = [[UITextView alloc] initWithFrame: CGRectMake(w/2 - addressWidth/2, h-self.envelope.frame.size.height+ ADDRESS_PADDING, addressWidth, addressHeight)];
     self.addressTitle.textAlignment = NSTextAlignmentCenter;
     self.addressTitle.font = [UIFont systemFontOfSize: kHeaderFontSize];
-    self.addressTitle.text = @"Address";
+    self.addressTitle.text = @"<INSERT ADDRESS>";
     self.addressTitle.scrollEnabled = NO;
     // self.addressTitle.backgroundColor = [UIColor greenColor];
     self.addressTitle.backgroundColor = [UIColor clearColor];
@@ -124,7 +124,7 @@ int const LINE_HEIGHT = 30;
 
 - (void) createMessageWithWidth: (int) w andHeight: (int) h
 {
-    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 2;
+    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 2.5;
     int width = WIDEST_POINT;
     int height = self.envelope.frame.size.height * 2 / 5;
     int innerFrameLeftMargin = w/2 - width/2;
@@ -143,7 +143,7 @@ int const LINE_HEIGHT = 30;
     int innerFrameLeftMargin = w/2 - width/2;
     int innerFrameTopMargin = h - TOP_PADDING * 9.5;
     self.fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
-    self.fromLabel.text = @"Catherine Morrison";
+    self.fromLabel.text = @"<INSERT SENDERS NAME>";
     self.fromLabel.textAlignment = NSTextAlignmentRight;
     self.fromLabel.font = [UIFont systemFontOfSize: kFromFontSize];
     [self addSubview:self.fromLabel];
@@ -192,11 +192,11 @@ int const LINE_HEIGHT = 30;
 - (void) createScrollViewWithWidth: (int)w andHeight:(int)h
 {
     int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 65;
-    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75 + 1;
-    int width = WIDEST_POINT;
+    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75;
     self.friendScroller = [[UIScrollView alloc] initWithFrame: CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, w * 5/11, 30)];
-    self.friendScroller.backgroundColor = [UIColor greenColor];
-    
+    self.friendScroller.contentSize = self.friendScroller.frame.size;
+  //  self.friendScroller.backgroundColor = [UIColor greenColor];
+    [self.friendScroller setScrollEnabled:YES];
     [self addSubview: self.friendScroller];
 }
 

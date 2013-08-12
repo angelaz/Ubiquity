@@ -22,7 +22,8 @@
 {
     BOOL imagePicked;
     PFFile *photoFile;
-    GMSMarker *marker;;
+    GMSMarker *marker;
+    NSUInteger countNumber;
 }
 @end
 
@@ -33,13 +34,13 @@
 - (void) viewWillAppear:(BOOL)animated
 {
     [self hideTabBar];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [super viewWillAppear:animated];
-
+    
 }
 
 
@@ -50,7 +51,7 @@
                                                   object:nil];
     
     [super viewWillDisappear:animated];
-
+    
 }
 
 - (void)hideTabBar {
@@ -76,12 +77,14 @@
     if (self) {
         
         self.title = @"New Message";
-
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(locationDidChange:)
                                                      name:kPAWLocationChangeNotification
                                                    object:nil];
         recipientsList = [[NSMutableArray alloc] init];
+        
+        countNumber = 0;
         
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                     target:self
@@ -94,6 +97,43 @@
 
 
 
+- (void) setupScrollView: (UIScrollView *) scrollView
+{
+    scrollView.clipsToBounds = NO;
+    scrollView.scrollEnabled = YES;
+    
+    NSUInteger nimages = 0;
+    NSInteger tot=0;
+    CGFloat cx = 0;
+    for (; ; nimages++) {
+        NSString *imageName = [NSString stringWithFormat:@"image%d.jpg", (nimages + 1)];
+        UIImage *image = [UIImage imageNamed:imageName];
+        if (tot==15) {
+            break;
+        }
+        if (4==nimages) {
+            nimages=0;
+        }
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+        
+        CGRect rect = imageView.frame;
+        rect.size.height = 40;
+        rect.size.width = 40;
+        rect.origin.x = cx;
+        rect.origin.y = 0;
+        
+        imageView.frame = rect;
+        
+        [scrollView addSubview:imageView];
+        
+        cx += imageView.frame.size.width+5;
+        tot++;
+    }
+    
+    [scrollView setContentSize:CGSizeMake(cx, [scrollView bounds].size.height)];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -105,7 +145,7 @@
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
     [_nmv.map setUserInteractionEnabled:NO];
-
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(locationDidChange:)
@@ -117,63 +157,52 @@
     _nmv.friendScroller.delegate = self;
     
     UIBarButtonItem *doneButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                         target:self
-                                                                         action:@selector(sendMessage:)];
+                                                                               target:self
+                                                                               action:@selector(sendMessage:)];
     [[self navigationItem] setRightBarButtonItem:doneButton];
     
-
-//
-//    [_nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    
-//    [_nmv.toRecipientButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    LocationController* locationController = [LocationController sharedLocationController];
-//    [self updateLocation:locationController.location.coordinate];
-//    
+    
+    [_nmv.addFriendsButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    
     _nmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
     [_nmv addGestureRecognizer:_nmv.tapRecognizer];
-//
-//    
-//    
-//    [_nmv.pictureButton addTarget:self action:@selector(choosePicture:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    _nmv.map.delegate = self;
-//    
-//    self.friendPickerController = nil;
-//    _nmv.searchBar = nil;
-//    
-//    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
-//    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
-//    [self.view addGestureRecognizer:swipeDown];
-//
-//    _nmv.imagePicker = [[UIImagePickerController alloc] init];
-//    _nmv.imagePicker.delegate = self;
+    
+    [_nmv.pictureButton addTarget:self action:@selector(choosePicture:) forControlEvents:UIControlEventTouchUpInside];
+    self.friendPickerController = nil;
+    _nmv.searchBar = nil;
+    
+    
+    //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
+    //    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
+    //    [self.view addGestureRecognizer:swipeDown];
+    //
+    //    _nmv.imagePicker = [[UIImagePickerController alloc] init];
+    //    _nmv.imagePicker.delegate = self;
     
 }
 
-//- (void)addSearchBarToFriendPickerView
-//{
-//    if (_nmv.searchBar == nil) {
-//        CGFloat searchBarHeight = 44.0;
-//        _nmv.searchBar =
-//        [[UISearchBar alloc]
-//         initWithFrame:
-//         CGRectMake(0,0,
-//                    self.view.bounds.size.width,
-//                    searchBarHeight)];
-//        _nmv.searchBar.autoresizingMask = _nmv.searchBar.autoresizingMask |
-//        UIViewAutoresizingFlexibleWidth;
-//        _nmv.searchBar.delegate = self;
-//        _nmv.searchBar.showsCancelButton = YES;
-//        
-//        [self.friendPickerController.canvasView addSubview:_nmv.searchBar];
-//        CGRect newFrame = self.friendPickerController.view.bounds;
-//        newFrame.size.height -= searchBarHeight;
-//        newFrame.origin.y = searchBarHeight;
-//        self.friendPickerController.tableView.frame = newFrame;
-//    }
-//}
+- (void)addSearchBarToFriendPickerView
+{
+    if (_nmv.searchBar == nil) {
+        CGFloat searchBarHeight = 44.0;
+        _nmv.searchBar =
+        [[UISearchBar alloc]
+         initWithFrame:
+         CGRectMake(0,0,
+                    self.view.bounds.size.width,
+                    searchBarHeight)];
+        _nmv.searchBar.autoresizingMask = _nmv.searchBar.autoresizingMask |
+        UIViewAutoresizingFlexibleWidth;
+        _nmv.searchBar.delegate = self;
+        _nmv.searchBar.showsCancelButton = YES;
+        
+        [self.friendPickerController.canvasView addSubview:_nmv.searchBar];
+        CGRect newFrame = self.friendPickerController.view.bounds;
+        newFrame.size.height -= searchBarHeight;
+        newFrame.origin.y = searchBarHeight;
+        self.friendPickerController.tableView.frame = newFrame;
+    }
+}
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
 {
@@ -187,7 +216,7 @@
     
     [_nmv.addressTitle resignFirstResponder];
     [_nmv.messageTextView resignFirstResponder];
-
+    
 }
 -(void)keyboardWillHide {
     if (self.view.frame.origin.y > 0)
@@ -211,7 +240,7 @@
         }
     }
     [_nmv.map setUserInteractionEnabled:NO];
-
+    
     
 }
 
@@ -242,219 +271,190 @@
 
 -(void) closeNewMessage: (id) sender
 {
-//    if (imagePicked == YES) {
-//        [_nmv.thumbnailImageView removeFromSuperview];
-//    }
-//    [_nmv.messageTextView setText: @""];
-//    [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
-//    imagePicked = NO;
-//    LocationController* locationController = [LocationController sharedLocationController];
-//    [self updateLocation:locationController.location.coordinate];
-//    
+    if (imagePicked == YES) {
+        [_nmv.thumbnailImageView removeFromSuperview];
+    }
+    [_nmv.messageTextView setText: @""];
+    imagePicked = NO;
+    LocationController* locationController = [LocationController sharedLocationController];
+    [self updateLocation:locationController.location.coordinate];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
 }
 
-- (void)addMarker{
-    
-    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
-    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
-    
-    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
-    marker.position = geolocation;
-    marker.title = [gs.geocode objectForKey:@"address"];
-    NSLog(@"%@", marker.title);
-    NSLog(@"%f, %f", lat, lng);
-    
-    marker.map = _nmv.map;
-    
-    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
-    [_nmv.map animateWithCameraUpdate:geoLocateCam];
-    
-}
+//- (void)addMarker{
+//
+//    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
+//    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
+//
+//    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
+//    marker.position = geolocation;
+//    marker.title = [gs.geocode objectForKey:@"address"];
+//    NSLog(@"%@", marker.title);
+//    NSLog(@"%f, %f", lat, lng);
+//
+//    marker.map = _nmv.map;
+//
+//    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
+//    [_nmv.map animateWithCameraUpdate:geoLocateCam];
+//
+//}
 
-- (void) startSearch: (id) sender
-{
-//    NSLog(@"searching for: %@", _nmv.locationSearchTextField.text);
-//    LocationController* locationController = [LocationController sharedLocationController];
-//    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-//    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
-//    //Not a perfect solution for keeping the map at the same place
-//    //TODO: Fix it so map doesn't shift at all when search for invalid address
-//    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
-////   [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
-}
+//- (void) startSearch: (id) sender
+//{
+////    NSLog(@"searching for: %@", _nmv.locationSearchTextField.text);
+////    LocationController* locationController = [LocationController sharedLocationController];
+////    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+////    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
+////    //Not a perfect solution for keeping the map at the same place
+////    //TODO: Fix it so map doesn't shift at all when search for invalid address
+////    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
+//////   [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
+//}
 
 
 
 - (void) sendMessage: (id) sender
 {
-//
-//    // Dismiss keyboard and capture any auto-correct
-//    [_nmv.messageTextView resignFirstResponder];
-//
-//    // Get the post's message
-//    NSString *postMessage = _nmv.messageTextView.text;
-//    
-//    [_nmv.messageTextView setText: @""];
-//    [_nmv.toRecipientButton setTitle: @"Select Recipient" forState:UIControlStateNormal];
-//
-//    
-//    //Get the currently logged in PFUser
-//    PFUser *user = [PFUser currentUser];
-//    
-//    //Get and set the marker's location as where the post should be
-//    CLLocationCoordinate2D postLocation = marker.position;
-//    
-//    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude
-//                                                      longitude:postLocation.longitude];
-//    
-//    
-//    // Create a PFObject using the Post class and set the values we extracted above
-//    PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
-//    [postObject setObject:postMessage forKey:kPAWParseTextKey];
-//    [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
-//    [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
-//    [postObject setObject: [NSString stringWithFormat: @"%@", _nmv.showRepeatPickerButton.titleLabel] forKey:kNMFrequencyKey];
-//    if (imagePicked == YES) { //There's an image to be included with this post!
-//        [postObject setObject:photoFile forKey:@"photo"];
-//        [_nmv.thumbnailImageView removeFromSuperview];
-//        [postObject setObject:@150 forKey:@"photoHeight"];
-//    }
-//    
-//    imagePicked = NO;
-//    [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//        //Get started determining where exactly that is and storing
-//        GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
-//        [geocoder reverseGeocodeCoordinate:postLocation completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
-//            if (!error) {
-//                NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
-//                
-//                [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
-//            } else {
-//                NSLog(@"Error in reverse geocoding: %@", error);
-//            }
-//        }];
-//        
-//        //For each person we are sending to
-//        for (id<FBGraphUser> user in recipientsList) {
-//            
-//            
-//            [AppDelegate linkOrStoreUserDetails:user
-//                                           toId:[user id]
-//                                         toUser:nil
-//                          andStoreUnderRelation:@"receivers"
-//                                       toObject:postObject
-//                                     finalBlock:^(PFObject *made){}];
-//        }
-//    }];
-//    
-//    // Set the access control list on the postObject to restrict future modifications
-//    // to this object
-//    PFACL *readOnlyACL = [PFACL ACL];
-//    [readOnlyACL setPublicReadAccess:YES]; // Create read-only permissions
-//    [readOnlyACL setWriteAccess:YES forUser:[PFUser currentUser]];
-//    
-//    [postObject setACL:readOnlyACL]; // Set the permissions on the postObject
-//    
-//    [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
-//     {
-//         if (error) // Failed to save, show an alert view with the error message
-//         {
-//             UIAlertView *alertView =
-//             [[UIAlertView alloc] initWithTitle:[[error userInfo] objectForKey:@"error"]
-//                                        message:nil
-//                                       delegate:self
-//                              cancelButtonTitle:nil
-//                              otherButtonTitles:@"Ok", nil];
-//             [alertView show];
-//             return;
-//         }
-//         if (succeeded) // Successfully saved, post a notification to tell other view controllers
-//         {
-//             dispatch_async(dispatch_get_main_queue(), ^{
-//                 [[NSNotificationCenter defaultCenter] postNotificationName:kPAWPostCreatedNotification
-//                                                                     object:nil];
-//             });
-//         }
-//     }];
-//    
-//    
-//    NSLog(@"Message sent!");
-//    
-//    [self closeNewMessage:self];
+    
+    // Dismiss keyboard and capture any auto-correct
+    [_nmv.messageTextView resignFirstResponder];
+    
+    // Get the post's message
+    NSString *postMessage = _nmv.messageTextView.text;
+    
+    [_nmv.messageTextView setText: @""];
+    
+    //Get the currently logged in PFUser
+    PFUser *user = [PFUser currentUser];
+    
+    //Get and set the marker's location as where the post should be
+    CLLocationCoordinate2D postLocation = marker.position;
+    
+    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude
+                                                      longitude:postLocation.longitude];
+    
+    
+    // Create a PFObject using the Post class and set the values we extracted above
+    PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
+    [postObject setObject:postMessage forKey:kPAWParseTextKey];
+    [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
+    [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
+    if (imagePicked == YES) { //There's an image to be included with this post!
+        [postObject setObject:photoFile forKey:@"photo"];
+        [_nmv.thumbnailImageView removeFromSuperview];
+        [postObject setObject:@150 forKey:@"photoHeight"];
+    }
+    
+    imagePicked = NO;
+    
+    NSString *readReceiptDate = [NSString stringWithFormat:@"%@", [NSDate date]];
+    
+    [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        //Get started determining where exactly that is and storing
+        GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
+        [geocoder reverseGeocodeCoordinate:postLocation completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
+            if (!error) {
+                NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
+                
+                [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
+            } else {
+                NSLog(@"Error in reverse geocoding: %@", error);
+            }
+        }];
+        
+        
+        //For each person we are sending to
+        for (id<FBGraphUser> user in recipientsList) {
+            
+            
+            [AppDelegate linkOrStoreUserDetails:user
+                                           toId:[user id]
+                                         toUser:nil
+                          andStoreUnderRelation:@"receivers"
+                                       toObject:postObject
+                                     finalBlock:^(PFObject *made){}];
+            
+            NSString *username = [user objectForKey:@"id"];
+            [readReceipts setValue:readReceiptDate forKey:username];
+            [postObject setObject:readReceipts forKey:@"readReceipts"];
+            
+        }
+    }];
+    
+    [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
+    
+    // Set the access control list on the postObject to restrict future modifications
+    // to this object
+    PFACL *readOnlyACL = [PFACL ACL];
+    [readOnlyACL setPublicReadAccess:YES]; // Create read-only permissions
+    [readOnlyACL setWriteAccess:YES forUser:[PFUser currentUser]];
+    
+    [postObject setACL:readOnlyACL]; // Set the permissions on the postObject
+    
+    [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error)
+     {
+         if (error) // Failed to save, show an alert view with the error message
+         {
+             UIAlertView *alertView =
+             [[UIAlertView alloc] initWithTitle:[[error userInfo] objectForKey:@"error"]
+                                        message:nil
+                                       delegate:self
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"Ok", nil];
+             [alertView show];
+             return;
+         }
+         if (succeeded) // Successfully saved, post a notification to tell other view controllers
+         {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 [[NSNotificationCenter defaultCenter] postNotificationName:kPAWPostCreatedNotification
+                                                                     object:nil];
+             });
+         }
+     }];
+    
+    
+    NSLog(@"Message sent!");
+    
+    [self closeNewMessage:self];
 }
 
 - (void) choosePicture: (id) sender
 {
-//    NSLog(@"Trying to attach a picture!");
-//    
-//    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-//        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-//    } else {
-//        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-//    }
-//    
-//    [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
+    NSLog(@"Trying to attach a picture!");
+    
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+    } else {
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    }
+    
+    [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
     
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-//    [picker dismissViewControllerAnimated:YES completion:nil];
-//    imagePicked = NO;
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    imagePicked = NO;
 }
-
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
-//    [picker dismissViewControllerAnimated:YES completion:nil];
-//    UIImage *newImage = [info valueForKey:UIImagePickerControllerOriginalImage];
-//    NSData *imageData = UIImageJPEGRepresentation(newImage, 1.0f);
-//    photoFile = [PFFile fileWithData:imageData];
-//    imagePicked = YES;
-//    //Make a thumbnail appear so user can see the image they attached!
-//    _nmv.thumbnailImage = [self getThumbnailFromImage:newImage];
-//    _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
-//    float x = _nmv.messageTextView.frame.origin.x + 230 - _nmv.thumbnailImage.size.width;
-//    float y = _nmv.messageTextView.frame.origin.y + 130 - _nmv.thumbnailImage.size.height;
-//    _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
-//    [_nmv addSubview:_nmv.thumbnailImageView];
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    UIImage *newImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+    NSData *imageData = UIImageJPEGRepresentation(newImage, 1.0f);
+    photoFile = [PFFile fileWithData:imageData];
+    imagePicked = YES;
+    //Make a thumbnail appear so user can see the image they attached!
+    _nmv.thumbnailImage = [self getThumbnailFromImage:newImage];
+    _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
+    float x = _nmv.messageTextView.frame.origin.x + 230 - _nmv.thumbnailImage.size.width;
+    float y = _nmv.messageTextView.frame.origin.y + 130 - _nmv.thumbnailImage.size.height;
+    _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
+    [_nmv addSubview:_nmv.thumbnailImageView];
 }
-//
-//- (void) choosePicture: (id) sender
-//{
-//    NSLog(@"Trying to attach a picture!");
-//    
-//    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-//        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
-//    } else {
-//        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-//    }
-//    
-//    [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
-//    
-//}
-//
-//- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-//{
-//    [picker dismissViewControllerAnimated:YES completion:nil];
-//    imagePicked = NO;
-//}
-//- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-//{
-//    [picker dismissViewControllerAnimated:YES completion:nil];
-//    UIImage *newImage = [info valueForKey:UIImagePickerControllerOriginalImage];
-//    NSData *imageData = UIImageJPEGRepresentation(newImage, 1.0f);
-//    photoFile = [PFFile fileWithData:imageData];
-//    imagePicked = YES;
-//    //Make a thumbnail appear so user can see the image they attached!
-//    _nmv.thumbnailImage = [self getThumbnailFromImage:newImage];
-//    _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
-//    float x = _nmv.messageTextView.frame.origin.x + 230 - _nmv.thumbnailImage.size.width;
-//    float y = _nmv.messageTextView.frame.origin.y + 130 - _nmv.thumbnailImage.size.height;
-//    _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
-//    [_nmv addSubview:_nmv.thumbnailImageView];
-//}
 
 - (UIImage *)getThumbnailFromImage:(UIImage *)image {
     CGRect newRect = CGRectIntegral(CGRectMake(0, 0, 20, 20));
@@ -522,62 +522,83 @@
 
 - (void) handlePickerDone
 {
+    [self hideTabBar];
     [self dismissViewControllerAnimated:NO completion:nil];
-
+    
 }
 
 ////ADA
-//- (IBAction)selectFriendsButtonAction:(id)sender {
-//    if (self.friendPickerController == nil) {
-//        // Create friend picker, and get data loaded into it.
-//        self.friendPickerController = [[FBFriendPickerViewController alloc] init];
-//        self.friendPickerController.title = @"Select Friends";
-//
-//        self.friendPickerController.delegate = self;
-//    }
-//    [self.friendPickerController loadData];
-//    [self.friendPickerController clearSelection];
-//    [self presentViewController:self.friendPickerController
-//                       animated:YES
-//                     completion:^(void){
-//                         [self addSearchBarToFriendPickerView];
-//                     }
-//     ];
-//    
-//}
+- (IBAction)selectFriendsButtonAction:(id)sender {
+    if (self.friendPickerController == nil) {
+        // Create friend picker, and get data loaded into it.
+        self.friendPickerController = [[FBFriendPickerViewController alloc] init];
+        self.friendPickerController.title = @"Select Friends";
+        
+        self.friendPickerController.delegate = self;
+    }
+    [self.friendPickerController loadData];
+    [self.friendPickerController clearSelection];
+    [self presentViewController:self.friendPickerController
+                       animated:YES
+                     completion:^(void){
+                         [self addSearchBarToFriendPickerView];
+                     }
+     ];
+    
+}
 - (void)facebookViewControllerCancelWasPressed:(id)sender
 {
     NSLog(@"Friend selection cancelled.");
-
+    
     [self handlePickerDone];
 }
 
 - (void)facebookViewControllerDoneWasPressed:(id)sender
 {
     [recipientsList removeAllObjects];
-
+    
     
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
         [recipientsList addObject: user];
-
+        
         NSLog(@"Person is %@", user);
     }
-    NSMutableString *names = [[NSMutableString alloc] initWithString:@" "];
+    //    NSMutableString *names = [[NSMutableString alloc] initWithString:@" "];
     
-    for (id <FBGraphUser> user in recipientsList)
+    for (int i = 0; i < recipientsList.count; i ++)
     {
-        names = [names stringByAppendingString: (@"%@", [user name])];
-        names = [names stringByAppendingString: (@", ")];
-    }
-//    [_nmv.toRecipientButton setTitle:names forState: UIControlStateNormal];
+        id <FBGraphUser> user = [recipientsList objectAtIndex: i];
+        int iconDimensions = 30.0;
+        CGFloat xOrigin = i * (iconDimensions + 5);
+        NSString *facebookID = [user objectForKey:@"id"];//userData[@"id"];
+        FBProfilePictureView *profilePictureView = [[FBProfilePictureView alloc] init];
+        profilePictureView.frame = CGRectMake(xOrigin, 0.0, iconDimensions, iconDimensions);
+        profilePictureView.profileID = facebookID;
+        [_nmv.friendScroller addSubview:profilePictureView];
 
+    }
+    _nmv.friendScroller.contentSize = CGSizeMake(30.0 *
+                                             recipientsList.count,
+                                             30.0);
+    
+    
+   
+    
+    countNumber = [recipientsList count];
+    readReceipts = [[NSMutableDictionary alloc] initWithCapacity:countNumber];
     
     [self handlePickerDone];
 }
 
+- (void) refreshScrollViewWith
+{
+    _nmv.friendScroller.pagingEnabled = YES;
+    
+}
+
 - (void) handleSearch:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
-//    _nmv.searchText = searchBar.text;
+    //    _nmv.searchText = searchBar.text;
     [self.friendPickerController updateView];
 }
 
@@ -587,7 +608,7 @@
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-//    _nmv.searchText = nil;
+    //    _nmv.searchText = nil;
     [searchBar resignFirstResponder];
 }
 
@@ -595,19 +616,19 @@
                  shouldIncludeUser:(id<FBGraphUser>)user
 {
     //TODO: Trim this list to just show FB friends who are members of this app
-//    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
-//        NSRange result = [user.name
-//                          rangeOfString:_nmv.searchText
-//                          options:NSCaseInsensitiveSearch];
-//        
-//        if (result.location != NSNotFound) {
-//            return YES;
-//        } else {
-//            return NO;
-//        }
-//    } else {
-//        return YES;
-//    }
+    //    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
+    //        NSRange result = [user.name
+    //                          rangeOfString:_nmv.searchText
+    //                          options:NSCaseInsensitiveSearch];
+    //
+    //        if (result.location != NSNotFound) {
+    //            return YES;
+    //        } else {
+    //            return NO;
+    //        }
+    //    } else {
+    //        return YES;
+    //    }
     return YES;
 }
 

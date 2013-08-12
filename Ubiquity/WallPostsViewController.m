@@ -71,7 +71,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         UINavigationItem *nav = [self navigationItem];
         // [nav setTitle:@"Recent"];
         
-        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Friends", @"Public", @"Favorites"]];
+        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Personal", @"Friends", @"Public"]];
         
         _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
         [_segmentedControl setSelectedSegmentIndex:0];
@@ -297,25 +297,19 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
+    [query orderByDescending:@"createdAt"];
     
     if (self.indexing == 0) {
-        
-        // THIS IS WHERE WE NEED TO IMPLEMENT JUST FRIENDS SHOWING UP!!!!!
-        
-        NSLog(@"Order was changed to just friends (actually just text alphabetical)");
-        
-        [query orderByDescending:@"createdAt"];
-    } else
-        if (self.indexing == 1) {
-            [query orderByDescending:@"createdAt"];
-            NSLog(@"Order was changed to date");
-        } else if (self.indexing == 2) {
-            
-            // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
-            
-            [query orderByDescending:@"updatedAt"];
-            NSLog(@"Order was changed to favorites (not really)");
-        }
+        NSLog(@"Only shows notes from self");
+        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (self.indexing == 1) {
+        NSLog(@"Shows notes from friends");
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (self.indexing == 2) {
+        NSLog(@"Shows public notes");
+        [query whereKey:@"receivers" equalTo:[NSNull null]];
+    }
     
 	return query;
 }
@@ -411,17 +405,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
     locationLabel.backgroundColor = [UIColor clearColor];
     
-    PFGeoPoint *coordinates = [object objectForKey:@"location"];
-    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude);
-    GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
-    [geocoder reverseGeocodeCoordinate:location completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
-        if (!error) {
-            NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
-            locationLabel.text = reverseGeocodedLocation;
-        } else {
-            NSLog(@"Error in reverse geocoding: %@", error);
-        }
-    }];
+    locationLabel.text = [object objectForKey:@"locationAddress"];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
     NSDate *sentAt = object.createdAt;
@@ -431,16 +415,9 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     sentDate.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
-    
-    
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
-    
-    
-    //TODO Remove
-    PFObject *sender = [object objectForKey:kPAWParseSenderKey];
-    NSString *prof = [sender objectForKey:@"profile"];
     
 	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];

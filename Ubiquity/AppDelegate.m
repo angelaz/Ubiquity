@@ -62,7 +62,7 @@
     
 
 
-    [self.tabBarController setViewControllers:@[newMessageNav, wallPostsNavController,
+    [self.tabBarController setViewControllers:@[wallPostsNavController,
                                                 
                                                 friendsNavController, optionsNavController]];
     UITabBarItem *recentTab = [wallPostsNavController tabBarItem];
