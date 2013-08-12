@@ -598,7 +598,7 @@
 
 - (void) handleSearch:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
-    //    _nmv.searchText = searchBar.text;
+    _nmv.searchText = searchBar.text;
     [self.friendPickerController updateView];
 }
 
@@ -608,7 +608,7 @@
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-    //    _nmv.searchText = nil;
+    _nmv.searchText = nil;
     [searchBar resignFirstResponder];
 }
 
@@ -616,19 +616,19 @@
                  shouldIncludeUser:(id<FBGraphUser>)user
 {
     //TODO: Trim this list to just show FB friends who are members of this app
-    //    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
-    //        NSRange result = [user.name
-    //                          rangeOfString:_nmv.searchText
-    //                          options:NSCaseInsensitiveSearch];
-    //
-    //        if (result.location != NSNotFound) {
-    //            return YES;
-    //        } else {
-    //            return NO;
-    //        }
-    //    } else {
-    //        return YES;
-    //    }
+    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
+        NSRange result = [user.name
+                          rangeOfString:_nmv.searchText
+                          options:NSCaseInsensitiveSearch];
+
+        if (result.location != NSNotFound) {
+            return YES;
+        } else {
+            return NO;
+        }
+    } else {
+        return YES;
+    }
     return YES;
 }
 
@@ -668,6 +668,37 @@
                                                   }];
     
 
+}
+
+
+/* Start Picker Methods */
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
+    // Handle the selection
+}
+
+// tell the picker how many rows are available for a given component
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    
+    
+    return [self.repeatOptions count];
+}
+
+// tell the picker how many components it will have
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+// tell the picker the title for a given component
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    
+    return [self.repeatOptions objectAtIndex: row];
+}
+
+// tell the picker the width of each row for a given component
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
+    int sectionWidth = 300;
+    
+    return sectionWidth;
 }
 
 

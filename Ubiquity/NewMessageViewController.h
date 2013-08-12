@@ -30,7 +30,6 @@
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate;
 
 - (void) sendMessage: (id) sender;
-- (void) startSearch: (id) sender;
 
 - (void) sendInvitesViaFacebook:(NSMutableArray *)facebookFriends atAddress:(NSString *)address;
 
