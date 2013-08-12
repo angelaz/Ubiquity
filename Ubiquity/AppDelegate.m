@@ -53,6 +53,8 @@
     UINavigationController *optionsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:ovc];
 
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    UINavigationController *newMessageNav = [[UINavigationController alloc] initWithRootViewController: nmvc];
     
     
     self.tabBarController = [[UITabBarController alloc] init];
@@ -60,7 +62,7 @@
     
 
 
-    [self.tabBarController setViewControllers:@[wallPostsNavController,
+    [self.tabBarController setViewControllers:@[newMessageNav, wallPostsNavController,
                                                 
                                                 friendsNavController, optionsNavController]];
     UITabBarItem *recentTab = [wallPostsNavController tabBarItem];

@@ -14,7 +14,7 @@
 #import "LocationController.h"
 #import "Geocoding.h"
 
-#define kOFFSET_FOR_KEYBOARD 190.0
+#define kOFFSET_FOR_KEYBOARD 100.0
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
 
 
@@ -32,6 +32,7 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
+    [self hideTabBar];
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillHide)
@@ -50,6 +51,22 @@
     
     [super viewWillDisappear:animated];
 
+}
+
+- (void)hideTabBar {
+    UITabBar *tabBar = self.tabBarController.tabBar;
+    UIView *parent = tabBar.superview; // UILayoutContainerView
+    UIView *content = [parent.subviews objectAtIndex:0]; // UITransitionView
+    UIView *window = parent.superview;
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         CGRect tabFrame = tabBar.frame;
+                         tabFrame.origin.y = CGRectGetMaxY(window.bounds);
+                         tabBar.frame = tabFrame;
+                         content.frame = parent.bounds;
+                     }];
+    
 }
 
 
@@ -95,13 +112,17 @@
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
     
-//    _nmv.toRecipientTextField.delegate = self;
-//    
     _nmv.addressTitle.delegate = self;
-//    _nmv.locationSearchTextField.delegate = self;
-//    
-//    [_nmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
-//    
+    _nmv.messageTextView.delegate = self;
+    _nmv.friendScroller.delegate = self;
+    
+    UIBarButtonItem *doneButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                         target:self
+                                                                         action:@selector(sendMessage:)];
+    [[self navigationItem] setRightBarButtonItem:doneButton];
+    
+
+//
 //    [_nmv.sendButton addTarget:self action:@selector(sendMessage:) forControlEvents:UIControlEventTouchUpInside];
 //    
 //    
@@ -165,10 +186,8 @@
 {
     
     [_nmv.addressTitle resignFirstResponder];
-//    [_nmv.locationSearchTextField resignFirstResponder];
-//    [_nmv.toRecipientTextField resignFirstResponder];
-//    [_nmv.map setUserInteractionEnabled:YES];
-//
+    [_nmv.messageTextView resignFirstResponder];
+
 }
 -(void)keyboardWillHide {
     if (self.view.frame.origin.y > 0)
@@ -181,16 +200,16 @@
     }
 }
 
--(void)textFieldDidBeginEditing:(UITextField *)sender
+-(void)textViewDidBeginEditing:(UITextView *)sender
 {
-//    if ([sender isEqual:_nmv.locationSearchTextField])
-//    {
-//        //move the main view, so that the keyboard does not hide it.
-//        if  (self.view.frame.origin.y >= 0)
-//        {
-//            [self setViewMovedUp:YES];
-//        }
-//    }
+    if ([sender isEqual:_nmv.messageTextView])
+    {
+        //move the main view, so that the keyboard does not hide it.
+        if  (self.view.frame.origin.y >= 0)
+        {
+            [self setViewMovedUp:YES];
+        }
+    }
     [_nmv.map setUserInteractionEnabled:NO];
 
     
@@ -270,7 +289,7 @@
 
 - (void) sendMessage: (id) sender
 {
-
+//
 //    // Dismiss keyboard and capture any auto-correct
 //    [_nmv.messageTextView resignFirstResponder];
 //
