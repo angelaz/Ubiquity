@@ -334,6 +334,7 @@
     imagePicked = NO;
     
     NSString *readReceiptDate = [NSString stringWithFormat:@"%@", [NSDate date]];
+    [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         //Get started determining where exactly that is and storing
@@ -348,6 +349,7 @@
             }
         }];
         
+        // NEED TO REMEMBER TO IMPLEMENT READRECEIPTS AND PUSH NOTIFICATIONS FOR SELF ONCE IT IS CONFIGURED!!!!!
         
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
@@ -366,8 +368,6 @@
             
         }
     }];
-    
-    [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
     
     // Set the access control list on the postObject to restrict future modifications
     // to this object
