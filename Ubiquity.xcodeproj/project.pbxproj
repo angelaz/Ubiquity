@@ -69,6 +69,8 @@
 		864C053F17B5702C000B5A52 /* friends.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C053D17B5702C000B5A52 /* friends.png */; };
 		864C054017B5702C000B5A52 /* friends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C053E17B5702C000B5A52 /* friends@2x.png */; };
 		864C054217B5704B000B5A52 /* options@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 864C054117B5704B000B5A52 /* options@2x.png */; };
+		864C054717B5BF79000B5A52 /* HomeMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C054617B5BF79000B5A52 /* HomeMapViewController.m */; };
+		864C054A17B5BF99000B5A52 /* HomeMapView.m in Sources */ = {isa = PBXBuildFile; fileRef = 864C054917B5BF99000B5A52 /* HomeMapView.m */; };
 		865FBE4717B4061B00A3F7E2 /* LoginBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4617B4061B00A3F7E2 /* LoginBg.png */; };
 		865FBE4917B4063600A3F7E2 /* recentmessages.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4817B4063600A3F7E2 /* recentmessages.png */; };
 		865FBE4B17B4064300A3F7E2 /* ubi.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4A17B4064300A3F7E2 /* ubi.png */; };
@@ -174,6 +176,10 @@
 		864C053D17B5702C000B5A52 /* friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = friends.png; sourceTree = "<group>"; };
 		864C053E17B5702C000B5A52 /* friends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "friends@2x.png"; sourceTree = "<group>"; };
 		864C054117B5704B000B5A52 /* options@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "options@2x.png"; sourceTree = "<group>"; };
+		864C054517B5BF79000B5A52 /* HomeMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeMapViewController.h; sourceTree = "<group>"; };
+		864C054617B5BF79000B5A52 /* HomeMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeMapViewController.m; sourceTree = "<group>"; };
+		864C054817B5BF99000B5A52 /* HomeMapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeMapView.h; sourceTree = "<group>"; };
+		864C054917B5BF99000B5A52 /* HomeMapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeMapView.m; sourceTree = "<group>"; };
 		865FBE4317B4031400A3F7E2 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
 		865FBE4417B4031400A3F7E2 /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
 		865FBE4617B4061B00A3F7E2 /* LoginBg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LoginBg.png; sourceTree = "<group>"; };
@@ -302,6 +308,10 @@
 				865FBE4417B4031400A3F7E2 /* LoginView.m */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
+				864C054517B5BF79000B5A52 /* HomeMapViewController.h */,
+				864C054617B5BF79000B5A52 /* HomeMapViewController.m */,
+				864C054817B5BF99000B5A52 /* HomeMapView.h */,
+				864C054917B5BF99000B5A52 /* HomeMapView.m */,
 				200052E117B331FA00B9C14E /* LoginView.h */,
 				200052E217B331FA00B9C14E /* LoginView.m */,
 				82E931B717A07A8800B3958B /* LoginViewController.h */,
@@ -528,6 +538,8 @@
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,
 				82148F3217AADD140066C69A /* Geocoding.m in Sources */,
+				864C054717B5BF79000B5A52 /* HomeMapViewController.m in Sources */,
+				864C054A17B5BF99000B5A52 /* HomeMapView.m in Sources */,
 				8626C10317A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m in Sources */,
 				6097BEDA17A6DC650012A36A /* LocationController.m in Sources */,
 				86894B6217A0A72800F7146B /* TextMessage.m in Sources */,

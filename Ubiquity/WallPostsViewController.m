@@ -37,7 +37,7 @@ static NSInteger kPAWCellLocationLabelTag = 7;
 static NSInteger kPAWCellAttachedPhotoTag = 8;
 
 
-
+#import "HomeMapViewController.h"
 #import "WallPostsViewController.h"
 #import "AppDelegate.h"
 #import "TextMessage.h"
@@ -108,6 +108,21 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     
     self.navigationItem.rightBarButtonItem = newMessage;
     
+    
+    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                                                         target:self
+                                                                         action:@selector(openHMV)];
+    [[self navigationItem] setLeftBarButtonItem:bbi];
+
+    
+}
+- (void) openHMV
+{
+    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
+    UINavigationController *hmvcnav = [[UINavigationController alloc]
+                                                       initWithRootViewController:hmvc];
+    [self.navigationController presentViewController:hmvcnav animated:YES completion:nil ];
+
 }
 
 - (void) openNewMessageView
