@@ -14,12 +14,12 @@
 #import "AppDelegate.h"
 #import "CustomFBFriendPickerViewController.h"
 
-@interface NewMessageViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate, FBFriendPickerDelegate>
+@interface NewMessageViewController : UIViewController <UITextFieldDelegate, UITextViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate, FBFriendPickerDelegate, UIScrollViewDelegate>
 
 {
     GMSMapView *mapView;
     NSMutableArray *recipientsList;
-    
+    NSMutableDictionary *readReceipts;
 }
 
 @property (retain, nonatomic) FBFriendPickerViewController *friendPickerController;

@@ -71,7 +71,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         UINavigationItem *nav = [self navigationItem];
         // [nav setTitle:@"Recent"];
         
-        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Friends", @"Public", @"Favorites"]];
+        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Personal", @"Friends", @"Public"]];
         
         _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
         [_segmentedControl setSelectedSegmentIndex:0];
@@ -297,25 +297,19 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
+    [query orderByDescending:@"createdAt"];
     
     if (self.indexing == 0) {
-        
-        // THIS IS WHERE WE NEED TO IMPLEMENT JUST FRIENDS SHOWING UP!!!!!
-        
-        NSLog(@"Order was changed to just friends (actually just text alphabetical)");
-        
-        [query orderByDescending:@"createdAt"];
-    } else
-        if (self.indexing == 1) {
-            [query orderByDescending:@"createdAt"];
-            NSLog(@"Order was changed to date");
-        } else if (self.indexing == 2) {
-            
-            // THIS IS WHERE WE NEED TO IMPLEMENT FAVORITES SHOWING UP!!!!!
-            
-            [query orderByDescending:@"updatedAt"];
-            NSLog(@"Order was changed to favorites (not really)");
-        }
+        NSLog(@"Only shows notes from self");
+        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (self.indexing == 1) {
+        NSLog(@"Shows notes from friends");
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (self.indexing == 2) {
+        NSLog(@"Shows public notes");
+        [query whereKey:@"receivers" equalTo:[NSNull null]];
+    }
     
 	return query;
 }

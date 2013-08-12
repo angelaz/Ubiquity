@@ -86,6 +86,8 @@
 		86928EE817B180F7001BB026 /* SelfPostBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */; };
 		869BEC9D17B0143E00437EA0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869BEC8517B0119D00437EA0 /* SenTestingKit.framework */; };
 		86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A66C2C17A316A000DB5752 /* NewMessageView.m */; };
+		86D1F43217B956BC003B7FED /* envelope@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F43117B956BC003B7FED /* envelope@2x.png */; };
+		86D1F43417B985B3003B7FED /* addFriend@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F43317B985B3003B7FED /* addFriend@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +200,8 @@
 		869BEC8517B0119D00437EA0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		86A66C2B17A316A000DB5752 /* NewMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageView.h; sourceTree = "<group>"; };
 		86A66C2C17A316A000DB5752 /* NewMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageView.m; sourceTree = "<group>"; };
+		86D1F43117B956BC003B7FED /* envelope@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "envelope@2x.png"; sourceTree = "<group>"; };
+		86D1F43317B985B3003B7FED /* addFriend@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addFriend@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,6 +348,8 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				86D1F43317B985B3003B7FED /* addFriend@2x.png */,
+				86D1F43117B956BC003B7FED /* envelope@2x.png */,
 				864C053917B57003000B5A52 /* newMessage@2x.png */,
 				865FBE4817B4063600A3F7E2 /* recentmessages.png */,
 				864C053B17B57018000B5A52 /* recentmessages@2x.png */,
@@ -478,6 +484,7 @@
 				865FBE4E17B4069000A3F7E2 /* Default.png in Resources */,
 				824EB77917A735A00006AA5D /* options.png in Resources */,
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
+				86D1F43217B956BC003B7FED /* envelope@2x.png in Resources */,
 				82855A5617A9A023007B44CA /* friends.png in Resources */,
 				86894B6917A1EB2D00F7146B /* SpeechBubble.png in Resources */,
 				86894B6517A1E96200F7146B /* searchbutton.png in Resources */,
@@ -492,6 +499,7 @@
 				82C7577A17A325C50094EB15 /* newMessage.png in Resources */,
 				82E9317317A079C600B3958B /* InfoPlist.strings in Resources */,
 				82E931F317A093D500B3958B /* icon.png in Resources */,
+				86D1F43417B985B3003B7FED /* addFriend@2x.png in Resources */,
 				829ED75F17B3135A006AD7D5 /* camera.png in Resources */,
 				865FBE4B17B4064300A3F7E2 /* ubi.png in Resources */,
 				82E931ED17A093C600B3958B /* login-button-small@2x.png in Resources */,
