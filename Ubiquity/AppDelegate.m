@@ -36,7 +36,7 @@
 
     //    if ([PFUser currentUser]) {
     
-    // [UINavigationBar appearance].tintColor = mainThemeColor;
+    [UINavigationBar appearance].tintColor = mainThemeColor;
     
     WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
     UINavigationController *wallPostsNavController = [[UINavigationController alloc]
