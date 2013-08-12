@@ -411,17 +411,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
     locationLabel.backgroundColor = [UIColor clearColor];
     
-    PFGeoPoint *coordinates = [object objectForKey:@"location"];
-    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(coordinates.latitude, coordinates.longitude);
-    GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
-    [geocoder reverseGeocodeCoordinate:location completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
-        if (!error) {
-            NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
-            locationLabel.text = reverseGeocodedLocation;
-        } else {
-            NSLog(@"Error in reverse geocoding: %@", error);
-        }
-    }];
+    locationLabel.text = [object objectForKey:@"locationAddress"];
     
     UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
     NSDate *sentAt = object.createdAt;
@@ -431,16 +421,9 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     sentDate.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
-    
-    
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
-    
-    
-    //TODO Remove
-    PFObject *sender = [object objectForKey:kPAWParseSenderKey];
-    NSString *prof = [sender objectForKey:@"profile"];
     
 	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
