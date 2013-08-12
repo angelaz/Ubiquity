@@ -652,7 +652,7 @@
                                      [idArray componentsJoinedByString:@","], @"to",    nil];
     
     [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session]
-                                                  message:@"You've received a message on Ubiquity! Install the "
+                                                  message:[NSString stringWithFormat:@"You've received a note near %@ on Ubiquity! Install the app to find it!", address]
                                                     title:@"Use Ubiquity"
                                                parameters:params
                                                   handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
