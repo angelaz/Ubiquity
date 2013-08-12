@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad
 {
-    _hmv = [[HomeMapView alloc] init];
+    _hmv = [[HomeMapView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _hmv];
 }
 

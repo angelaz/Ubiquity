@@ -11,14 +11,11 @@
 #import "LocationController.h"
 
 
-#define SCREEN_WIDTH self.frame.size.width;
-#define SCREEN_HEIGHT self.frame.size.height;
 int const LEFT_PADDING = 30;
 int const LINE_HEIGHT = 30;
 
 @interface HomeMapView ()
 
-@property (nonatomic, strong) GMSMapView *map;
 
 @end
 @implementation HomeMapView
@@ -28,11 +25,15 @@ int const LINE_HEIGHT = 30;
 {
     self = [super initWithFrame:frame];
     if (self) {
+        int const SCREEN_WIDTH = frame.size.width;
+        int const SCREEN_HEIGHT = frame.size.height;
+
+        [self setUpMapWithWidth: SCREEN_WIDTH andHeight: SCREEN_HEIGHT];
     }
     return self;
 }
 
-- (void) setUpMap
+- (void) setUpMapWithWidth: (int) w andHeight: (int) h
 {
     LocationController* locationController = [LocationController sharedLocationController];
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
@@ -42,7 +43,7 @@ int const LINE_HEIGHT = 30;
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 2
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:6];
-    self.map = [GMSMapView mapWithFrame: self.frame camera:camera];
+    self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = currentCoordinate;
     marker.animated = YES;

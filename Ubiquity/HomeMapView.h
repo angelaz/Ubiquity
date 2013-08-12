@@ -12,4 +12,6 @@
 
 @interface HomeMapView : UIView
 
+@property (nonatomic, strong) GMSMapView *map;
+
 @end
