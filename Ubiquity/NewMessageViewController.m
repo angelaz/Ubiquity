@@ -270,6 +270,7 @@
 
 - (void) sendMessage: (id) sender
 {
+
 //    // Dismiss keyboard and capture any auto-correct
 //    [_nmv.messageTextView resignFirstResponder];
 //
@@ -285,6 +286,7 @@
 //    
 //    //Get and set the marker's location as where the post should be
 //    CLLocationCoordinate2D postLocation = marker.position;
+//    
 //    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude
 //                                                      longitude:postLocation.longitude];
 //    
@@ -300,8 +302,21 @@
 //        [_nmv.thumbnailImageView removeFromSuperview];
 //        [postObject setObject:@150 forKey:@"photoHeight"];
 //    }
+//    
 //    imagePicked = NO;
 //    [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//        //Get started determining where exactly that is and storing
+//        GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
+//        [geocoder reverseGeocodeCoordinate:postLocation completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
+//            if (!error) {
+//                NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
+//                
+//                [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
+//            } else {
+//                NSLog(@"Error in reverse geocoding: %@", error);
+//            }
+//        }];
+//        
 //        //For each person we are sending to
 //        for (id<FBGraphUser> user in recipientsList) {
 //            
@@ -349,6 +364,42 @@
 //    NSLog(@"Message sent!");
 //    
 //    [self closeNewMessage:self];
+}
+
+- (void) choosePicture: (id) sender
+{
+//    NSLog(@"Trying to attach a picture!");
+//    
+//    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+//        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+//    } else {
+//        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+//    }
+//    
+//    [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
+    
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+//    [picker dismissViewControllerAnimated:YES completion:nil];
+//    imagePicked = NO;
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+//    [picker dismissViewControllerAnimated:YES completion:nil];
+//    UIImage *newImage = [info valueForKey:UIImagePickerControllerOriginalImage];
+//    NSData *imageData = UIImageJPEGRepresentation(newImage, 1.0f);
+//    photoFile = [PFFile fileWithData:imageData];
+//    imagePicked = YES;
+//    //Make a thumbnail appear so user can see the image they attached!
+//    _nmv.thumbnailImage = [self getThumbnailFromImage:newImage];
+//    _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
+//    float x = _nmv.messageTextView.frame.origin.x + 230 - _nmv.thumbnailImage.size.width;
+//    float y = _nmv.messageTextView.frame.origin.y + 130 - _nmv.thumbnailImage.size.height;
+//    _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
+//    [_nmv addSubview:_nmv.thumbnailImageView];
 }
 //
 //- (void) choosePicture: (id) sender

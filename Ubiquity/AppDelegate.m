@@ -36,7 +36,7 @@
 
     //    if ([PFUser currentUser]) {
     
-    // [UINavigationBar appearance].tintColor = mainThemeColor;
+    [UINavigationBar appearance].tintColor = mainThemeColor;
     
     WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
     UINavigationController *wallPostsNavController = [[UINavigationController alloc]
@@ -151,7 +151,7 @@
 
 - (void)presentLoginViewController {
 	// Go to the welcome screen and have them log in or create an account.
-	LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
+	LoginViewController *loginViewController = [[LoginViewController alloc] init];
 	loginViewController.title = @"Welcome to Ubi!";
     [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
 	
