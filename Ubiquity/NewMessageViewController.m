@@ -27,7 +27,6 @@
 @end
 
 @implementation NewMessageViewController
-
 @synthesize gs;
 
 - (void) viewWillAppear:(BOOL)animated
@@ -311,9 +310,7 @@
     
     //Get and set the marker's location as where the post should be
     CLLocationCoordinate2D postLocation = marker.position;
-    
-    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude
-                                                      longitude:postLocation.longitude];
+    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude longitude:postLocation.longitude];
     
     
     // Create a PFObject using the Post class and set the values we extracted above
@@ -337,6 +334,10 @@
                 NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
                 
                 [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
+                [postObject saveInBackground];
+                
+                [self sendInvitesViaFacebook:recipientsList atAddress:reverseGeocodedLocation];
+                
             } else {
                 NSLog(@"Error in reverse geocoding: %@", error);
             }
@@ -344,7 +345,6 @@
         
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
-            
             
             [AppDelegate linkOrStoreUserDetails:user
                                            toId:[user id]
@@ -644,5 +644,46 @@
     }
     return YES;
 }
+
+- (void) sendInvitesViaFacebook:(NSMutableArray *)facebookFriends atAddress:(NSString *)address {
+    
+    //Make an array of the ids listed here for Parse
+    NSMutableArray * idArray = [NSMutableArray arrayWithCapacity: [facebookFriends count]];
+    [facebookFriends enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+        [idArray addObject: [obj id]];
+    }];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query whereKey:@"fbId" containedIn:idArray];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        for (PFObject *priorUser in objects) {
+            [idArray removeObjectIdenticalTo:[priorUser objectForKey:@"facebookId"]];
+        }
+    }];
+    
+    NSMutableDictionary* params =   [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                     [idArray componentsJoinedByString:@","], @"to",    nil];
+    
+    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session]
+                                                  message:@"You've received a message on Ubiquity! Install the "
+                                                    title:@"Use Ubiquity"
+                                               parameters:params
+                                                  handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                                      if (error) {
+                                                          // Case A: Error launching the dialog or sending request.
+                                                      } else {
+                                                          if (result == FBWebDialogResultDialogNotCompleted) {
+                                                              //Case B: User clicked the "x" icon
+                                                          } else {
+                                                              //Case C: Dialog shown and the user clicks Cancel or Send
+                                                          }
+                                                      }
+                                                  }];
+    
+
+}
+
+
+
 
 @end
