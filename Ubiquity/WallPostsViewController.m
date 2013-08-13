@@ -201,33 +201,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
 	// Do any additional setup after loading the view.
     
-    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
-    [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self.view addGestureRecognizer:swipeLeft];
-    
-}
-
-- (void)nextTab:(id)sender
-{
-    
-    int controllerIndex = 1;
-    UIView * fromView = self.tabBarController.selectedViewController.view;
-    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
-    
-    // Transition using a page curl.
-    [UIView transitionFromView:fromView toView:toView duration:0.5
-                       options: UIViewAnimationOptionTransitionFlipFromRight
-     
-                    completion:^(BOOL finished) {
-                        
-                        if (finished) {
-                            self.tabBarController.selectedIndex = controllerIndex;
-                        }
-                        
-                    }];
-    
-    [self.tabBarController setSelectedIndex: controllerIndex];
-    
 }
 
 

@@ -13,6 +13,7 @@
 #import "WallPostsViewController.h"
 #import "OptionsViewController.h"
 #import "NoteViewController.h"
+#import "LocationController.h"
 
 @interface HomeMapViewController ()
 @property (nonatomic, strong) HomeMapView *hmv;
@@ -27,11 +28,67 @@
     [self setView: _hmv];
     
     [self initNewMessageButton];
-
+    self.objects = [[NSMutableArray alloc] init];
+    [self loadPins];
     
 }
 
+- (void) loadPins
+{
+    PFQuery *getPosts = [self getParseQuery];
+    [self deployParseQuery: getPosts];
+    
+    for (PFObject *post in )
+    
+}
 
+- (void) deployParseQuery: (PFQuery *) query
+{
+    [self.objects removeAllObjects];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %d scores.", objects.count);
+            // Do something with the found objects
+            for (PFObject *object in objects) {
+                NSLog(@"%@", object.objectId);
+                [self.objects addObject: object];
+            }
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+- (PFQuery *) getParseQuery
+{
+    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
+    if ([self.objects count] == 0) {
+		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+	}
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
+    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    
+    if ([self.segmentedControl selectedSegmentIndex] == 0) {
+        NSLog(@"Only shows notes from self");
+        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if ([self.segmentedControl selectedSegmentIndex] == 1) {
+        NSLog(@"Shows notes from friends");
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if ([self.segmentedControl selectedSegmentIndex] == 2) {
+        NSLog(@"Shows public notes");
+        [query whereKey:@"receivers" equalTo:[NSNull null]];
+    }
+    
+    return query;
+}
 - (void) openNewMessageView
 {
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
@@ -128,10 +185,13 @@
     NSInteger value = [sender selectedSegmentIndex];
     if (value == 0) {
         NSLog(@"Changed value to 0");
+        [self loadPins];
     } else if (value == 1) {
         NSLog(@"Changed value to 1");
+        [self loadPins];
     } else if (value == 2) {
         NSLog(@"Changed value to 2");
+        [self loadPins];
     }
 }
 

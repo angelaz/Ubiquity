@@ -111,6 +111,7 @@ int const PUBLIC = 2;
     [_nmv.addFriendsButton removeFromSuperview];
     [_nmv.friendScroller removeFromSuperview];
     [_nmv.toButton addTarget:self action:@selector(recipientSwitcher:) forControlEvents:UIControlEventTouchUpInside];
+
     
     
     //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
