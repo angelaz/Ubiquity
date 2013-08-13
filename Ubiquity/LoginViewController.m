@@ -52,7 +52,7 @@
             NSLog(@"User with facebook signed up and logged in!");
             [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
                 [self dismissViewControllerAnimated:YES completion:nil];
-                [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
+                //[self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
             }];
             
         } else {
@@ -60,7 +60,7 @@
 
             [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
                 [self dismissViewControllerAnimated:YES completion:nil];
-                [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
+                //[self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
             }];
             
 
