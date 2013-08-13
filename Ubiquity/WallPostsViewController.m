@@ -343,7 +343,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [queryUserDate includeKey:kPAWParseSenderKey];
     [queryUserDate orderByDescending:@"createdAt"];
     [queryUserDate whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    [queryUserDate includeKey:@"readReceipts"];
+    //[queryUserDate includeKey:@"readReceipts"];
     [queryUserDate findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
     
         NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
