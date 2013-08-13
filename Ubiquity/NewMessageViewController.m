@@ -284,10 +284,10 @@ int const PUBLIC = 2;
     CLLocationCoordinate2D postLocation = locationController.marker.position;
     PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude longitude:postLocation.longitude];
     
-    
     // Create a PFObject using the Post class and set the values we extracted above
     PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
+    [postObject setObject:_nmv.addressTitle.text forKey:@"locationAddress"];
     [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     if (imagePicked == YES) { //There's an image to be included with this post!
@@ -302,23 +302,7 @@ int const PUBLIC = 2;
     [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        //Get started determining where exactly that is and storing
-        GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
-        [geocoder reverseGeocodeCoordinate:postLocation completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
-            if (!error) {
-                NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
-                
-                [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
-                [postObject saveInBackground];
-                
-                [self sendInvitesViaFacebook:recipientsList atAddress:reverseGeocodedLocation];
-                
-            } else {
-                NSLog(@"Error in reverse geocoding: %@", error);
-            }
-        }];
-        
-        // NEED TO REMEMBER TO IMPLEMENT READRECEIPTS AND PUSH NOTIFICATIONS FOR SELF ONCE IT IS CONFIGURED!!!!!
+        [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
         
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
@@ -335,6 +319,7 @@ int const PUBLIC = 2;
             [postObject setObject:readReceipts forKey:@"readReceipts"];
             
         }
+    
     }];
     
     // Set the access control list on the postObject to restrict future modifications
@@ -366,7 +351,6 @@ int const PUBLIC = 2;
              });
          }
      }];
-    
     
     NSLog(@"Message sent!");
     
