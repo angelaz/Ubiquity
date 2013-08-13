@@ -18,12 +18,16 @@
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
 #define isiPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
 
+int const ME = 0;
+int const FRIENDS = 1;
+int const PUBLIC = 2;
 
 @interface NewMessageViewController ()
 {
     BOOL imagePicked;
     PFFile *photoFile;
     NSUInteger countNumber;
+    int recipient;
 }
 @end
 
@@ -103,11 +107,44 @@
     _nmv.imagePicker = [[UIImagePickerController alloc] init];
     _nmv.imagePicker.delegate = self;
     
+    recipient = ME;
+    [_nmv.addFriendsButton removeFromSuperview];
+    [_nmv.friendScroller removeFromSuperview];
+    [_nmv.toButton addTarget:self action:@selector(recipientSwitcher:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
     //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
     //    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
     //    [self.view addGestureRecognizer:swipeDown];
     //
     
+}
+
+- (void) recipientSwitcher: (id) sender
+{
+    if (recipient == ME)
+    {
+        [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToFriends"] forState:UIControlStateNormal];
+        recipient = FRIENDS;
+        [_nmv addSubview: _nmv.addFriendsButton];
+        [_nmv addSubview: _nmv.friendScroller];
+        _nmv.recipientLabel.text = @"Add Friends";
+
+    } else if (recipient == FRIENDS)
+    {
+        [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToPublic"] forState:UIControlStateNormal];
+        recipient = PUBLIC;
+        [_nmv.addFriendsButton removeFromSuperview];
+        [_nmv.friendScroller removeFromSuperview];
+        _nmv.recipientLabel.text = @"Note for Everyone";
+
+
+    } else {
+        [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToMe"] forState:UIControlStateNormal];
+        recipient = ME;
+        _nmv.recipientLabel.text = @"Note for Myself";
+
+    }
 }
 
 - (void)addSearchBarToFriendPickerView
@@ -491,6 +528,8 @@
     
     
     countNumber = [recipientsList count];
+    if (countNumber > 0)
+        _nmv.recipientLabel.text = @"";
     readReceipts = [[NSMutableDictionary alloc] initWithCapacity:countNumber];
     
     [self handlePickerDone];

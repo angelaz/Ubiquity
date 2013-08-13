@@ -22,7 +22,9 @@ extern int const LINE_HEIGHT;
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) NSString *searchText;
 
-@property (nonatomic, strong) UILabel *toLabel;
+
+@property (nonatomic, strong) UILabel *recipientLabel;
+@property (nonatomic, strong) UIButton *toButton;
 @property (nonatomic, strong) UILabel *fromLabel;
 @property (nonatomic, strong) UILabel *sentLabel;
 
@@ -36,6 +38,5 @@ extern int const LINE_HEIGHT;
 @property (nonatomic, strong) UIImage *thumbnailImage;
 @property (nonatomic, strong) UIImageView *thumbnailImageView;
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
-
 
 @end

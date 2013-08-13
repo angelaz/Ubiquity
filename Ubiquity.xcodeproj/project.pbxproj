@@ -93,6 +93,9 @@
 		86D1F44317BA9D31003B7FED /* NoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1F44217BA9D31003B7FED /* NoteView.m */; };
 		86D1F44517BAA0DB003B7FED /* UnreadNote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44417BAA0DB003B7FED /* UnreadNote@2x.png */; };
 		86D1F44817BAB2B5003B7FED /* NoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1F44717BAB2B5003B7FED /* NoteViewController.m */; };
+		86D1F44C17BAB90A003B7FED /* ToFriends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44917BAB90A003B7FED /* ToFriends@2x.png */; };
+		86D1F44D17BAB90A003B7FED /* ToMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44A17BAB90A003B7FED /* ToMe@2x.png */; };
+		86D1F44E17BAB90A003B7FED /* ToPublic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44B17BAB90A003B7FED /* ToPublic@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -214,6 +217,9 @@
 		86D1F44417BAA0DB003B7FED /* UnreadNote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UnreadNote@2x.png"; sourceTree = "<group>"; };
 		86D1F44617BAB2B5003B7FED /* NoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteViewController.h; sourceTree = "<group>"; };
 		86D1F44717BAB2B5003B7FED /* NoteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteViewController.m; sourceTree = "<group>"; };
+		86D1F44917BAB90A003B7FED /* ToFriends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToFriends@2x.png"; sourceTree = "<group>"; };
+		86D1F44A17BAB90A003B7FED /* ToMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToMe@2x.png"; sourceTree = "<group>"; };
+		86D1F44B17BAB90A003B7FED /* ToPublic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToPublic@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -364,6 +370,9 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				86D1F44917BAB90A003B7FED /* ToFriends@2x.png */,
+				86D1F44A17BAB90A003B7FED /* ToMe@2x.png */,
+				86D1F44B17BAB90A003B7FED /* ToPublic@2x.png */,
 				86D1F44417BAA0DB003B7FED /* UnreadNote@2x.png */,
 				86D1F43C17B9BA1B003B7FED /* me@2x.png */,
 				86D1F43D17B9BA1B003B7FED /* public@2x.png */,
@@ -525,12 +534,15 @@
 				865FBE4B17B4064300A3F7E2 /* ubi.png in Resources */,
 				82E931ED17A093C600B3958B /* login-button-small@2x.png in Resources */,
 				86D1F44517BAA0DB003B7FED /* UnreadNote@2x.png in Resources */,
+				86D1F44E17BAB90A003B7FED /* ToPublic@2x.png in Resources */,
 				865FBE4717B4061B00A3F7E2 /* LoginBg.png in Resources */,
 				86928EE617B1789B001BB026 /* PostBackground@2x.png in Resources */,
+				86D1F44C17BAB90A003B7FED /* ToFriends@2x.png in Resources */,
 				82E931C117A07B0B00B3958B /* UserDetailsViewController.xib in Resources */,
 				86894B6A17A1EB2D00F7146B /* SpeechBubble@2x.png in Resources */,
 				86928EE817B180F7001BB026 /* SelfPostBackground@2x.png in Resources */,
 				82E931A717A07A3700B3958B /* FacebookSDKResources.bundle in Resources */,
+				86D1F44D17BAB90A003B7FED /* ToMe@2x.png in Resources */,
 				865FBE4917B4063600A3F7E2 /* recentmessages.png in Resources */,
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
