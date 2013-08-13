@@ -23,7 +23,6 @@
 {
     BOOL imagePicked;
     PFFile *photoFile;
-    GMSMarker *marker;
     NSUInteger countNumber;
 }
 @end
@@ -90,7 +89,6 @@
                                                                                     target:self
                                                                                     action:@selector(closeNewMessage:)];
         [[self navigationItem] setLeftBarButtonItem:backButton];
-        marker = [[GMSMarker alloc] init];
     }
     return self;
 }
@@ -283,35 +281,17 @@
     [self.tabBarController setSelectedIndex: 0];
 }
 
-//- (void)addMarker{
-//
-//    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
-//    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
-//
-//    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
-//    marker.position = geolocation;
-//    marker.title = [gs.geocode objectForKey:@"address"];
-//    NSLog(@"%@", marker.title);
-//    NSLog(@"%f, %f", lat, lng);
-//
-//    marker.map = _nmv.map;
-//
-//    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
-//    [_nmv.map animateWithCameraUpdate:geoLocateCam];
-//
-//}
-
-//- (void) startSearch: (id) sender
-//{
-////    NSLog(@"searching for: %@", _nmv.locationSearchTextField.text);
-////    LocationController* locationController = [LocationController sharedLocationController];
-////    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-////    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
-////    //Not a perfect solution for keeping the map at the same place
-////    //TODO: Fix it so map doesn't shift at all when search for invalid address
-////    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
-//////   [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
-//}
+- (void) startSearch: (id) sender
+{
+//    NSLog(@"searching for: %@", _nmv.locationSearchTextField.text);
+//    LocationController* locationController = [LocationController sharedLocationController];
+//    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+//    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
+//    //Not a perfect solution for keeping the map at the same place
+//    //TODO: Fix it so map doesn't shift at all when search for invalid address
+//    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
+////   [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
+}
 
 
 
@@ -330,7 +310,9 @@
     PFUser *user = [PFUser currentUser];
     
     //Get and set the marker's location as where the post should be
-    CLLocationCoordinate2D postLocation = marker.position;
+    LocationController *locationController = [LocationController sharedLocationController];
+    
+    CLLocationCoordinate2D postLocation = locationController.marker.position;
     PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude longitude:postLocation.longitude];
     
     
@@ -494,30 +476,6 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-
-
-
-- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate {
-    
-    [_nmv.map clear];
-    
-    NSLog(@"New location");
-    NSLog(@"Long: %f", currentCoordinate.longitude);
-    NSLog(@"Lat: %f", currentCoordinate.latitude);
-    //NSLog(@"%@", [LocationController sharedLocationController].location.coordinate);
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.003
-                                                            longitude:currentCoordinate.longitude
-                                                                 zoom:15];
-    [_nmv.map setCamera:camera];
-    
-    marker.position = currentCoordinate;
-    marker.title = @"Here";
-    marker.snippet = @"My location";
-    marker.animated = YES;
-    marker.map = _nmv.map;
-}
-
 
 - (void)locationDidChange:(NSNotification *)note{
     LocationController* locationController = [LocationController sharedLocationController];

@@ -7,11 +7,12 @@
 
 #import "LocationController.h"
 #import "AppDelegate.h"
+#import "Geocoding.h"
 
 @implementation LocationController
 
-//@synthesize locationManager = _locationManager;
-//@synthesize delegate = _delegate;
+@synthesize locationManager = _locationManager;
+@synthesize delegate = _delegate;
 //@synthesize location = _location;
 
 #pragma mark - Singleton implementation in ARC
@@ -43,12 +44,16 @@
         
         [locationManager startUpdatingLocation];
         NSLog(@"Location updates started");
-        
     }
     return self;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    
+    if(self.marker == nil) {
+        self.marker = [[GMSMarker alloc] init];
+        self.marker.position = [[locations lastObject] coordinate];
+    }
     
     NSLog(@"%f is the accuracy level", locationManager
            .location.horizontalAccuracy);
@@ -59,11 +64,50 @@
      object:self];
     
     NSLog(@"latitude %+.6f, longitude %+.6f\n", _location.coordinate.latitude,   _location.coordinate.longitude);
-    
-//    if([self.delegate conformsToProtocol:@protocol(CLLocationManagerDelegate)]) {
-//        [self.delegate locationManager:manager didUpdateLocations:locations];
-//    }
 
 }
+
+//Example block
+//GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
+//[_nmv.map animateWithCameraUpdate:geoLocateCam];
+
+- (void)moveMarkerToGeocode:(Geocoding*)gs withMap:(GMSMapView*)map then:(void(^)(void)) block {
+    
+    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
+    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
+    
+    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
+    self.marker.position = geolocation;
+    self.marker.title = [gs.geocode objectForKey:@"address"];
+    
+    NSLog(@"%@", self.marker.title);
+    NSLog(@"%f, %f", lat, lng);
+    
+    self.marker.map = map;
+    
+    block;
+    
+}
+
+- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate withMap:(GMSMapView*)map{
+    
+    //[_nmv.map clear];
+    
+    NSLog(@"New location");
+    NSLog(@"Long: %f", currentCoordinate.longitude);
+    NSLog(@"Lat: %f", currentCoordinate.latitude);
+    //NSLog(@"%@", [LocationController sharedLocationController].location.coordinate);
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.003
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:15];
+    //[_nmv.map setCamera:camera];
+    
+    self.marker.position = currentCoordinate;
+    self.marker.title = @"Here";
+    self.marker.snippet = @"My location";
+    self.marker.animated = YES;
+    self.marker.map = map;
+}
+
 
 @end

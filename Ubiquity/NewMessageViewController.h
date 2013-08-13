@@ -14,7 +14,7 @@
 #import "AppDelegate.h"
 #import "CustomFBFriendPickerViewController.h"
 
-@interface NewMessageViewController : UIViewController <UITextViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate, FBFriendPickerDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate>
+@interface NewMessageViewController : UIViewController <UITextViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate, FBFriendPickerDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 {
     GMSMapView *mapView;

@@ -310,6 +310,8 @@
 			children = (
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
+				6097BED817A6DC650012A36A /* LocationController.h */,
+				6097BED917A6DC650012A36A /* LocationController.m */,
 				8205692317B95876006A2000 /* LoginView.m */,
 				8254637417B953BE00019C24 /* LoginView.h */,
 				864C054517B5BF79000B5A52 /* HomeMapViewController.h */,
@@ -324,8 +326,6 @@
 				82E931BF17A07B0B00B3958B /* TableHeaderView.xib */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
 				20F8F2A817A1F0F600594994 /* WallPostsViewController.m */,
-				6097BED817A6DC650012A36A /* LocationController.h */,
-				6097BED917A6DC650012A36A /* LocationController.m */,
 				20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */,
 				20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */,
 				82C7577417A322520094EB15 /* FriendsViewController.h */,
