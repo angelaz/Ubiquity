@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <GoogleMaps/GoogleMaps.h>
 
 // protocol for sending location updates to another view controller
 @protocol LocationControllerDelegate
@@ -24,7 +25,10 @@
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic, strong) CLLocation* location;
-//@property CLLocationAccuracy filterDistance;
+
+@property (nonatomic, strong) GMSMarker *marker;
+
+//@property (nonatomic, strong) CLLocation* markerLocation;
 
 @property (nonatomic, strong) UIAlertView *av;
 

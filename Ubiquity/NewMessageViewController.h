@@ -14,7 +14,7 @@
 #import "AppDelegate.h"
 #import "CustomFBFriendPickerViewController.h"
 
-@interface NewMessageViewController : UIViewController <UITextViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate, FBFriendPickerDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate>
+@interface NewMessageViewController : UIViewController <UITextViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate, FBFriendPickerDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 {
     GMSMapView *mapView;
@@ -26,8 +26,6 @@
 @property (nonatomic, strong) NSArray *repeatOptions;
 @property (nonatomic, strong) NSArray *friendsOnApp;
 @property (nonatomic, strong) NewMessageView *nmv;
-
-- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate;
 
 - (void) sendMessage: (id) sender;
 

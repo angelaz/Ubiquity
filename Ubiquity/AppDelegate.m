@@ -55,9 +55,6 @@
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc]
                                                     initWithRootViewController:ovc];
-
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    UINavigationController *newMessageNav = [[UINavigationController alloc] initWithRootViewController: nmvc];
     
     
     self.tabBarController = [[UITabBarController alloc] init];

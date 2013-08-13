@@ -78,7 +78,10 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 
 - (void)initSegmentedControl
 {
-    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Public", @"Friends", @"Only Me"]];
+    
+    NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"me"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"public"], nil];
+    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
+    self.segmentedControl.frame = CGRectMake(0,0,150,30);
     self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [self.segmentedControl setSelectedSegmentIndex:0];
     [self.segmentedControl addTarget:self
@@ -86,6 +89,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                     forControlEvents:UIControlEventValueChanged];
     [[self navigationItem] setTitleView:self.segmentedControl];
 }
+
 
 - (void)initButtons
 {
@@ -372,6 +376,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
             }
         }
     }];
+
     //    // change this to _postsToPush array
     ////    for (TextMessage *newPost in postsToNotify)
     ////    {
@@ -689,7 +694,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if([PFUser currentUser] != nil && (self.objects == nil)) {
+    if([PFUser currentUser] != nil) {
         [self loadObjects];
     }
 }
