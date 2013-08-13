@@ -170,14 +170,6 @@ int const PUBLIC = 2;
     }
 }
 
--(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
-{
-    //TODO
-    //[self updateLocation:coord];
-}
-
-
-
 -(void) hideKeyboard: (id) sender
 {
     

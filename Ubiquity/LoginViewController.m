@@ -18,7 +18,7 @@
     self.title = @"Facebook Profile";
     LoginView *view = [[LoginView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: view];
-    [view.loginButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside]
+    [view.loginButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 

@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GoogleMaps/GoogleMaps.h>
 
-@interface HomeMapViewController : UIViewController
+@interface HomeMapViewController : UIViewController <CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UINavigationControllerDelegate>
+
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UIButton *optionsButton;
 @end

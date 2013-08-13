@@ -35,5 +35,5 @@
 @property (nonatomic, weak) id  delegate;
 
 + (LocationController*)sharedLocationController;
-
+- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate withMap:(GMSMapView*)map;
 @end
