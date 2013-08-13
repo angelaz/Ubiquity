@@ -29,7 +29,6 @@
 @end
 
 @implementation NewMessageViewController
-
 @synthesize gs;
 
 - (void) viewWillAppear:(BOOL)animated
@@ -332,9 +331,7 @@
     
     //Get and set the marker's location as where the post should be
     CLLocationCoordinate2D postLocation = marker.position;
-    
-    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude
-                                                      longitude:postLocation.longitude];
+    PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude longitude:postLocation.longitude];
     
     
     // Create a PFObject using the Post class and set the values we extracted above
@@ -351,6 +348,7 @@
     imagePicked = NO;
     
     NSString *readReceiptDate = [NSString stringWithFormat:@"%@", [NSDate date]];
+    [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         //Get started determining where exactly that is and storing
@@ -360,15 +358,19 @@
                 NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
                 
                 [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
+                [postObject saveInBackground];
+                
+                [self sendInvitesViaFacebook:recipientsList atAddress:reverseGeocodedLocation];
+                
             } else {
                 NSLog(@"Error in reverse geocoding: %@", error);
             }
         }];
         
+        // NEED TO REMEMBER TO IMPLEMENT READRECEIPTS AND PUSH NOTIFICATIONS FOR SELF ONCE IT IS CONFIGURED!!!!!
         
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
-            
             
             [AppDelegate linkOrStoreUserDetails:user
                                            toId:[user id]
@@ -383,8 +385,6 @@
             
         }
     }];
-    
-    [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
     
     // Set the access control list on the postObject to restrict future modifications
     // to this object
@@ -606,7 +606,7 @@
 
 - (void) handleSearch:(UISearchBar *)searchBar {
     [searchBar resignFirstResponder];
-    //    _nmv.searchText = searchBar.text;
+    _nmv.searchText = searchBar.text;
     [self.friendPickerController updateView];
 }
 
@@ -616,7 +616,7 @@
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *) searchBar {
-    //    _nmv.searchText = nil;
+    _nmv.searchText = nil;
     [searchBar resignFirstResponder];
 }
 
@@ -624,20 +624,92 @@
                  shouldIncludeUser:(id<FBGraphUser>)user
 {
     //TODO: Trim this list to just show FB friends who are members of this app
-    //    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
-    //        NSRange result = [user.name
-    //                          rangeOfString:_nmv.searchText
-    //                          options:NSCaseInsensitiveSearch];
-    //
-    //        if (result.location != NSNotFound) {
-    //            return YES;
-    //        } else {
-    //            return NO;
-    //        }
-    //    } else {
-    //        return YES;
-    //    }
+    if (_nmv.searchText && ![_nmv.searchText isEqualToString:@""]) {
+        NSRange result = [user.name
+                          rangeOfString:_nmv.searchText
+                          options:NSCaseInsensitiveSearch];
+
+        if (result.location != NSNotFound) {
+            return YES;
+        } else {
+            return NO;
+        }
+    } else {
+        return YES;
+    }
     return YES;
 }
+
+- (void) sendInvitesViaFacebook:(NSMutableArray *)facebookFriends atAddress:(NSString *)address {
+    
+    //Make an array of the ids listed here for Parse
+    NSMutableArray * idArray = [NSMutableArray arrayWithCapacity: [facebookFriends count]];
+    [facebookFriends enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+        [idArray addObject: [obj id]];
+    }];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query whereKey:@"fbId" containedIn:idArray];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        for (PFObject *priorUser in objects) {
+            [idArray removeObjectIdenticalTo:[priorUser objectForKey:@"facebookId"]];
+        }
+    }];
+    
+    NSMutableDictionary* params =   [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                     [idArray componentsJoinedByString:@","], @"to",    nil];
+    
+    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session]
+                                                  message:[NSString stringWithFormat:@"You've received a note near %@ on Ubiquity! Install the app to find it!", address]
+                                                    title:@"Use Ubiquity"
+                                               parameters:params
+                                                  handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                                      if (error) {
+                                                          // Case A: Error launching the dialog or sending request.
+                                                      } else {
+                                                          if (result == FBWebDialogResultDialogNotCompleted) {
+                                                              //Case B: User clicked the "x" icon
+                                                          } else {
+                                                              //Case C: Dialog shown and the user clicks Cancel or Send
+                                                          }
+                                                      }
+                                                  }];
+    
+
+}
+
+
+/* Start Picker Methods */
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow: (NSInteger)row inComponent:(NSInteger)component {
+    // Handle the selection
+}
+
+// tell the picker how many rows are available for a given component
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    
+    
+    return [self.repeatOptions count];
+}
+
+// tell the picker how many components it will have
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+// tell the picker the title for a given component
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    
+    return [self.repeatOptions objectAtIndex: row];
+}
+
+// tell the picker the width of each row for a given component
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
+    int sectionWidth = 300;
+    
+    return sectionWidth;
+}
+
+
+
 
 @end

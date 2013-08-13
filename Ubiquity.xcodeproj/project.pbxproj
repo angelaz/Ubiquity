@@ -308,10 +308,10 @@
 		82E9316E17A079C600B3958B /* Ubiquity */ = {
 			isa = PBXGroup;
 			children = (
-				8205692317B95876006A2000 /* LoginView.m */,
-				8254637417B953BE00019C24 /* LoginView.h */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
+				8205692317B95876006A2000 /* LoginView.m */,
+				8254637417B953BE00019C24 /* LoginView.h */,
 				864C054517B5BF79000B5A52 /* HomeMapViewController.h */,
 				864C054617B5BF79000B5A52 /* HomeMapViewController.m */,
 				864C054817B5BF99000B5A52 /* HomeMapView.h */,

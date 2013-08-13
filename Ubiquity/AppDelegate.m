@@ -32,9 +32,8 @@
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
     [PFFacebookUtils initializeFacebook];
-    
-    //self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-    
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+
     [UINavigationBar appearance].tintColor = mainThemeColor;
     
     HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
