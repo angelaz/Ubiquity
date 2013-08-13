@@ -14,7 +14,7 @@
 #import "FriendsViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import "WallPostsViewController.h"
-
+#import "HomeMapViewController.h"
 
 @interface AppDelegate ()
 
@@ -27,22 +27,26 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
     //Set up Parse/Facebook interfacing
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
-    
     [PFFacebookUtils initializeFacebook];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
-
-    //    if ([PFUser currentUser]) {
+    
+    //self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
     
     [UINavigationBar appearance].tintColor = mainThemeColor;
+    
+    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
+    UINavigationController *mapNavController = [[UINavigationController alloc]
+                                                initWithRootViewController:hmvc];
     
     WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
     UINavigationController *wallPostsNavController = [[UINavigationController alloc]
                                                    initWithRootViewController:wpvc];
     [UIView  beginAnimations: @"Showinfo"context: nil];
     
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
     
     FriendsViewController *fvc = [[FriendsViewController alloc] init];
     UINavigationController *friendsNavController = [[UINavigationController alloc]
@@ -92,7 +96,6 @@
     
     return YES;
 }
-
 
 
 // if push notification registration is successful

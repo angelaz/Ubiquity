@@ -126,7 +126,7 @@ int const LINE_HEIGHT = 30;
 {
     int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 2.5;
     int width = WIDEST_POINT;
-    int height = self.envelope.frame.size.height * 2 / 5;
+    int height = h * 2 / 5 ;
     int innerFrameLeftMargin = w/2 - width/2;
     self.messageTextView = [[UITextView alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, height)];
     //  self.messageTextView.backgroundColor = [UIColor greenColor];
