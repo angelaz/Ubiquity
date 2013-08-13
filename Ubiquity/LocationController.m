@@ -75,8 +75,6 @@
 }
 
 //Example block
-//GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
-//[_nmv.map animateWithCameraUpdate:geoLocateCam];
 
 - (void)moveMarkerToGeocode:(Geocoding*)gs then:(void(^)(void)) block {
     
@@ -106,10 +104,9 @@
         }
         
         self.marker.map = self.map;
-        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:newCoordinate.latitude
-                                                                longitude:newCoordinate.longitude
-                                                                     zoom:15];
-        [self.map setCamera:camera];
+        
+        GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:newCoordinate];
+        [self.map animateWithCameraUpdate:geoLocateCam];
     }];
 
     
