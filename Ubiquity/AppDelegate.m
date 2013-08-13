@@ -193,7 +193,7 @@
                         [user setObject:o   forKey:@"userData"];
                         [user setObject:facebookID forKey:@"fbId"];
                         [user saveInBackgroundWithBlock:^(BOOL suceeded, NSError *error){
-                            
+                            finalBlock(o);
                         }];
                     }
                     
