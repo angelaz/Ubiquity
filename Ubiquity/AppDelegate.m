@@ -32,6 +32,9 @@
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
     [PFFacebookUtils initializeFacebook];
+    [PFTwitterUtils initializeWithConsumerKey:@"bk8P1pWhDoqSeQrbCo1A"
+                               consumerSecret:@"p3A2h5FavogvCu2eBh7Jyegf9fAYpk9zTVW4ZBq7KA"];
+    
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
 
     [UINavigationBar appearance].tintColor = mainThemeColor;
