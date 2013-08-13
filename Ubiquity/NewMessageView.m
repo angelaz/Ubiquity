@@ -138,6 +138,8 @@ int const LINE_HEIGHT = 30;
     int innerFrameLeftMargin = w/2 - width/2;
     int innerFrameTopMargin = h - TOP_PADDING * 9.5;
     self.fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
+    NSLog(@"%@", [PFUser currentUser]);
+    
     self.fromLabel.text = [[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"] objectForKey:@"name"];
     self.fromLabel.textAlignment = NSTextAlignmentRight;
     self.fromLabel.font = [UIFont systemFontOfSize: kFromFontSize];
