@@ -59,54 +59,60 @@
            .location.horizontalAccuracy);
     _location = [locations lastObject];
     
+    NSLog(@"latitude %+.6f, longitude %+.6f\n", _location.coordinate.latitude,   _location.coordinate.longitude);
+
+    if(hasReceivedFirstUpdate == NO) {
+        hasReceivedFirstUpdate = YES;
+        
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName: KPAWInitialLocationFound
+         object:self];
+    }
+    
     [[NSNotificationCenter defaultCenter]
      postNotificationName: kPAWLocationChangeNotification
      object:self];
-    
-    NSLog(@"latitude %+.6f, longitude %+.6f\n", _location.coordinate.latitude,   _location.coordinate.longitude);
-
 }
 
 //Example block
 //GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
 //[_nmv.map animateWithCameraUpdate:geoLocateCam];
 
-- (void)moveMarkerToGeocode:(Geocoding*)gs withMap:(GMSMapView*)map then:(void(^)(void)) block {
-    
-    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
-    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
-    
-    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
-    self.marker.position = geolocation;
-    self.marker.title = [gs.geocode objectForKey:@"address"];
-    
-    NSLog(@"%@", self.marker.title);
-    NSLog(@"%f, %f", lat, lng);
-    
-    self.marker.map = map;
-    
-    block;
+- (void)moveMarkerToGeocode:(Geocoding*)gs then:(void(^)(void)) block {
     
 }
 
-- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate withMap:(GMSMapView*)map
-{    
-    //[_nmv.map clear];
+- (void) moveMarkerToLocation:(CLLocationCoordinate2D)newCoordinate
+{
     
-    NSLog(@"New location");
-    NSLog(@"Long: %f", currentCoordinate.longitude);
-    NSLog(@"Lat: %f", currentCoordinate.latitude);
-    //NSLog(@"%@", [LocationController sharedLocationController].location.coordinate);
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude + 0.003
-                                                            longitude:currentCoordinate.longitude
-                                                                 zoom:15];
-    //[_nmv.map setCamera:camera];
+    self.marker.position = newCoordinate;
     
-    self.marker.position = currentCoordinate;
     self.marker.title = @"Here";
     self.marker.snippet = @"My location";
     self.marker.animated = YES;
-    self.marker.map = map;
+    
+    [self.map clear];
+    
+    GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
+    [geocoder reverseGeocodeCoordinate:newCoordinate completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
+        if (!error) {
+            NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
+            
+            self.markerLatestAddress = reverseGeocodedLocation;
+            
+        } else {
+            NSLog(@"Error in reverse geocoding: %@", error);
+            self.markerLatestAddress = @"";
+        }
+        
+        self.marker.map = self.map;
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:newCoordinate.latitude
+                                                                longitude:newCoordinate.longitude
+                                                                     zoom:15];
+        [self.map setCamera:camera];
+    }];
+
+    
 }
 
 

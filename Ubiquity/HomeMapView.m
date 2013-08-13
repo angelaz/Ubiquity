@@ -40,7 +40,10 @@
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:15];
+    
     self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
+    locationController.map = self.map;
+    
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = currentCoordinate;
     marker.animated = YES;

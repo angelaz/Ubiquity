@@ -10,8 +10,10 @@
 #import <MapKit/MapKit.h>
 #import <GoogleMaps/GoogleMaps.h>
 
-@interface HomeMapView : UIView
+@interface HomeMapView : UIView <UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) GMSMapView *map;
+
+@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
 @end
