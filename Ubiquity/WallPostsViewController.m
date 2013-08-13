@@ -79,7 +79,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 - (void)initSegmentedControl
 {
     
-    NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"public"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"me"], nil];
+    NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"me"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"public"], nil];
     self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
     self.segmentedControl.frame = CGRectMake(0,0,150,30);
     self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
