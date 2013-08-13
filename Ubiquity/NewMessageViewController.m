@@ -16,6 +16,7 @@
 
 #define kOFFSET_FOR_KEYBOARD 100.0
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
+#define isiPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
 
 
 @interface NewMessageViewController ()
@@ -171,13 +172,13 @@
     self.friendPickerController = nil;
     _nmv.searchBar = nil;
     
+    _nmv.imagePicker = [[UIImagePickerController alloc] init];
+    _nmv.imagePicker.delegate = self;
     
     //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
     //    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
     //    [self.view addGestureRecognizer:swipeDown];
     //
-    //    _nmv.imagePicker = [[UIImagePickerController alloc] init];
-    //    _nmv.imagePicker.delegate = self;
     
 }
 
@@ -448,10 +449,17 @@
     photoFile = [PFFile fileWithData:imageData];
     imagePicked = YES;
     //Make a thumbnail appear so user can see the image they attached!
+    if (_nmv.thumbnailImage == nil && !isiPhone5)
+    {
+        CGRect newFrame = _nmv.messageTextView.frame;
+        newFrame.size.height -= 40;
+        _nmv.messageTextView.frame = newFrame;
+    }
+
     _nmv.thumbnailImage = [self getThumbnailFromImage:newImage];
     _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
-    float x = _nmv.messageTextView.frame.origin.x + 230 - _nmv.thumbnailImage.size.width;
-    float y = _nmv.messageTextView.frame.origin.y + 130 - _nmv.thumbnailImage.size.height;
+       float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 30;
+    float y = _nmv.messageTextView.frame.origin.y + _nmv.messageTextView.frame.size.height + 5;
     _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
     [_nmv addSubview:_nmv.thumbnailImageView];
 }
@@ -575,14 +583,14 @@
         profilePictureView.frame = CGRectMake(xOrigin, 0.0, iconDimensions, iconDimensions);
         profilePictureView.profileID = facebookID;
         [_nmv.friendScroller addSubview:profilePictureView];
-
+        
     }
     _nmv.friendScroller.contentSize = CGSizeMake(30.0 *
-                                             recipientsList.count,
-                                             30.0);
+                                                 recipientsList.count,
+                                                 30.0);
     
     
-   
+    
     
     countNumber = [recipientsList count];
     readReceipts = [[NSMutableDictionary alloc] initWithCapacity:countNumber];
