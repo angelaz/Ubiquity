@@ -23,7 +23,6 @@
         userLoggedIn = NO;
         if ([PFUser currentUser])
         {
-            NSLog(@"init: %@", [PFUser currentUser]);
             userLoggedIn = YES;
             UINavigationItem *nav = [self navigationItem];
             [nav setTitle:@"Friends"];
@@ -41,8 +40,6 @@
             self.tableView.scrollEnabled = YES;
             
             selectedFriends = [[NSMutableArray alloc] init];
-            
-            NSLog(@"the current user is %@", [PFUser currentUser]);
 
             PFRelation *relation = [[[PFUser currentUser] objectForKey:@"userData"] relationforKey:@"friendList"];
             PFQuery *query = [relation query];
@@ -53,7 +50,7 @@
                         selectedFriends = [[NSMutableArray alloc] initWithArray:objects];
                         [self sortSelectedFriends];
                     } else {    //No saved friend list. No need to instantiate anything though
-                        NSLog(@"No saved friends");
+                        //NSLog(@"No saved friends");
                     }
                 } else {        // Log details of the failure
                     NSLog(@"Error: %@ %@", error, [error userInfo]);
@@ -195,7 +192,6 @@
 - (void)inviteFriendforUser:(PFUser *) user
 {
     /* Implement inviting friends to the Ubiquity app here */
-    NSLog(@"Trying to invite friend!");
     NSMutableDictionary* params =   [NSMutableDictionary dictionaryWithObjectsAndKeys:nil];
     [FBWebDialogs presentRequestsDialogModallyWithSession:nil
                                                   message:[NSString stringWithFormat:@"Join Ubiquity so you can send and receive messages from me!"]
@@ -213,7 +209,6 @@
                                                               NSLog(@"Request Sent.");
                                                           }
                                                       }}];
-    NSLog(@"Heyyo. You tried to invite a friend but this isn't implemented yet. Sadface.");
 }
 
 - (void)removeFriends
@@ -221,15 +216,8 @@
     
     if (self.tableView.editing == NO) {
         [self.tableView setEditing:YES animated:YES];
-
     } else {
         [self.tableView setEditing:NO animated:YES];
-        //TODO
-        //REMOVE FRIENDS WHEN REMOVED
-        
-//        [ubiquityFriends setObject:selectedFriends forKey:@"friends"];
-//        [ubiquityFriends saveInBackground];
-
     }
     
 }
@@ -343,18 +331,12 @@
                           andStoreUnderRelation:@"friendList"
                                        toObject:[[PFUser currentUser] objectForKey:@"userData"]
                                      finalBlock:^(PFObject *made){
-                                         NSLog(@"%@", made);
-                                         NSLog(@"%@", selectedFriends);
-                                         
                                          [selectedFriends addObject:made];
-                                         
                                          //Sort selected friends
                                          [self sortSelectedFriends];
                                      }];
         }
     }
-    
-    NSLog(@"%@", [PFUser currentUser]);
 }
 
 - (void) sortSelectedFriends{
@@ -379,16 +361,7 @@
              
              
 - (void)facebookViewControllerDoneWasPressed:(id)sender {
-    //Save friends
-    //selectedFriends = friendPickerController.selection;
-    
-    
-//    [ubiquityFriends setObject:friendPickerController.selection forKey:@"friends"];
-//
-//    [ubiquityFriends saveInBackground];
-    // Dismiss the friend picker
-    //[self.navigationController popToRootViewControllerAnimated:YES];
-//    NSLog(@"object ID is:%@", ubiquityFriends.objectId);
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
 @end
