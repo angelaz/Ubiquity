@@ -48,5 +48,4 @@
     [self addSubview:self.map];
     
 }
-
 @end

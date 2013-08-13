@@ -89,8 +89,8 @@
     
 }
 
-- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate withMap:(GMSMapView*)map{
-    
+- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate withMap:(GMSMapView*)map
+{    
     //[_nmv.map clear];
     
     NSLog(@"New location");

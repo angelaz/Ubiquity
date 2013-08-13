@@ -30,12 +30,15 @@
     
     //Set up Parse/Facebook interfacing
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
+    
+    [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
+    
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
     [PFFacebookUtils initializeFacebook];
     [PFTwitterUtils initializeWithConsumerKey:@"bk8P1pWhDoqSeQrbCo1A"
                                consumerSecret:@"p3A2h5FavogvCu2eBh7Jyegf9fAYpk9zTVW4ZBq7KA"];
     
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
 
     [UINavigationBar appearance].tintColor = mainThemeColor;
 
@@ -47,7 +50,7 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    if ([PFUser currentUser] == nil) {
+    if (![PFUser currentUser]) {
         [self presentLoginViewController];
     }
     
@@ -115,12 +118,8 @@
 	// Go to the welcome screen and have them log in or create an account.
 	LoginViewController *loginViewController = [[LoginViewController alloc] init];
 	loginViewController.title = @"Welcome to Ubi!";
-    [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
-	
-    //	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
-    //	navController.navigationBarHidden = YES;
-    //
-    //	self.window.rootViewController = navController;
+    UINavigationController *loginNavController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+    [self.window.rootViewController presentViewController:loginNavController animated:NO completion:nil];
 }
 
 + (void) linkOrStoreUserDetails:(NSObject *)userData        //Dict of info

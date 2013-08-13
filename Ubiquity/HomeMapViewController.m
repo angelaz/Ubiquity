@@ -246,4 +246,12 @@
     UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];
     [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
 }
+
+-(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
+{
+    NSLog(@"A long press!");
+    LocationController* locationController = [LocationController sharedLocationController];
+    [locationController updateLocation:coord withMap:self.hmv.map];
+    
+}
 @end

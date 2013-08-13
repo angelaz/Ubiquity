@@ -19,11 +19,6 @@
     LoginView *view = [[LoginView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: view];
     [view.loginButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
-
-    // Check if user is cached and linked to Facebook, if so, bypass login
-//    if ([PFUser currentUser] && [PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-//        [self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
-//    }
 }
 
 
@@ -52,7 +47,6 @@
             NSLog(@"User with facebook signed up and logged in!");
             [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
                 [self dismissViewControllerAnimated:YES completion:nil];
-                [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
             }];
             
         } else {
@@ -60,11 +54,7 @@
 
             [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
                 [self dismissViewControllerAnimated:YES completion:nil];
-                [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
             }];
-            
-
-
         }
     }];
     
