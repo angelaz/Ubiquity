@@ -687,7 +687,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    if([PFUser currentUser] != nil && (self.objects == nil)) {
+    if([PFUser currentUser] != nil) {
         [self loadObjects];
     }
 }
