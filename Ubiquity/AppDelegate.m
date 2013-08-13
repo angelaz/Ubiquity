@@ -115,7 +115,7 @@
 	// Go to the welcome screen and have them log in or create an account.
 	LoginViewController *loginViewController = [[LoginViewController alloc] init];
 	loginViewController.title = @"Welcome to Ubi!";
-    [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
+    [self.window.rootViewController presentViewController:loginViewController animated:NO completion:nil];
 	
     //	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
     //	navController.navigationBarHidden = YES;

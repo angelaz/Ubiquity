@@ -72,9 +72,9 @@ static NSString * const kNMMonthy = @"Every Month";
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong,nonatomic) UITabBarController *tabBarController;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UINavigationController *navigationController;
+
 - (void)presentLoginViewController;
 
 + (void) linkOrStoreUserDetails:(NSObject *)userData
