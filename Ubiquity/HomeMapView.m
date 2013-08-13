@@ -11,9 +11,6 @@
 #import "LocationController.h"
 
 
-int const LEFT_PADDING = 30;
-int const LINE_HEIGHT = 30;
-
 @interface HomeMapView ()
 
 

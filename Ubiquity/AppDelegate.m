@@ -48,7 +48,41 @@
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
     
-    // Register for push notifications
+    FriendsViewController *fvc = [[FriendsViewController alloc] init];
+    UINavigationController *friendsNavController = [[UINavigationController alloc]
+                                                    initWithRootViewController:fvc];
+
+    
+    OptionsViewController *ovc = [[OptionsViewController alloc] init];
+    UINavigationController *optionsNavController = [[UINavigationController alloc]
+                                                    initWithRootViewController:ovc];
+
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    UINavigationController *newMessageNav = [[UINavigationController alloc] initWithRootViewController: nmvc];
+    
+    
+    self.tabBarController = [[UITabBarController alloc] init];
+    //self.tabBarController.tabBar.tintColor = tabBarColor;
+    
+
+
+    [self.tabBarController setViewControllers:@[wallPostsNavController,
+                                                
+                                                friendsNavController, optionsNavController]];
+    UITabBarItem *recentTab = [wallPostsNavController tabBarItem];
+    [recentTab setTitle:@"Recent Items"];
+    [recentTab setImage: [UIImage imageNamed:@"recentmessages"]];
+
+    UITabBarItem *friendsTab = [friendsNavController tabBarItem];
+    [friendsTab setTitle:@"Friends"];
+    [friendsTab setImage:[UIImage imageNamed:@"friends.png"]];
+    UITabBarItem *optionsTab = [optionsNavController tabBarItem];
+    [optionsTab setTitle:@"Options"];
+    [optionsTab setImage:[UIImage imageNamed:@"options.png"]];
+    
+    [self.window setRootViewController:self.tabBarController];
+    
+    // register for push notifications
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeBadge |
      UIRemoteNotificationTypeAlert |
