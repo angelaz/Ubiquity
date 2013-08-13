@@ -92,6 +92,7 @@
 		86D1F44017B9BA1B003B7FED /* public@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F43D17B9BA1B003B7FED /* public@2x.png */; };
 		86D1F44317BA9D31003B7FED /* NoteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1F44217BA9D31003B7FED /* NoteView.m */; };
 		86D1F44517BAA0DB003B7FED /* UnreadNote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44417BAA0DB003B7FED /* UnreadNote@2x.png */; };
+		86D1F44817BAB2B5003B7FED /* NoteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D1F44717BAB2B5003B7FED /* NoteViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -211,6 +212,8 @@
 		86D1F44117BA9D31003B7FED /* NoteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteView.h; sourceTree = "<group>"; };
 		86D1F44217BA9D31003B7FED /* NoteView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteView.m; sourceTree = "<group>"; };
 		86D1F44417BAA0DB003B7FED /* UnreadNote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UnreadNote@2x.png"; sourceTree = "<group>"; };
+		86D1F44617BAB2B5003B7FED /* NoteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoteViewController.h; sourceTree = "<group>"; };
+		86D1F44717BAB2B5003B7FED /* NoteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoteViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -342,6 +345,8 @@
 				8626C10217A9C5E4009F6AA7 /* CustomFBFriendPickerViewController.m */,
 				86894B5D17A096FF00F7146B /* NewMessageViewController.h */,
 				86894B5E17A096FF00F7146B /* NewMessageViewController.m */,
+				86D1F44617BAB2B5003B7FED /* NoteViewController.h */,
+				86D1F44717BAB2B5003B7FED /* NoteViewController.m */,
 				86A66C2B17A316A000DB5752 /* NewMessageView.h */,
 				86A66C2C17A316A000DB5752 /* NewMessageView.m */,
 				86894B6017A0A72800F7146B /* TextMessage.h */,
@@ -566,6 +571,7 @@
 				86D1F44317BA9D31003B7FED /* NoteView.m in Sources */,
 				86894B6217A0A72800F7146B /* TextMessage.m in Sources */,
 				82E931BA17A07A8800B3958B /* LoginViewController.m in Sources */,
+				86D1F44817BAB2B5003B7FED /* NoteViewController.m in Sources */,
 				20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

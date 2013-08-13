@@ -32,10 +32,9 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self hideTabBar];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide)
+                                             selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [super viewWillAppear:animated];
@@ -53,22 +52,6 @@
     
 }
 
-- (void)hideTabBar {
-    UITabBar *tabBar = self.tabBarController.tabBar;
-    UIView *parent = tabBar.superview; // UILayoutContainerView
-    UIView *content = [parent.subviews objectAtIndex:0]; // UITransitionView
-    UIView *window = parent.superview;
-    
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         CGRect tabFrame = tabBar.frame;
-                         tabFrame.origin.y = CGRectGetMaxY(window.bounds);
-                         tabBar.frame = tabFrame;
-                         content.frame = parent.bounds;
-                     }];
-    
-}
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -77,10 +60,6 @@
         
         self.title = @"New Message";
         
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(locationDidChange:)
-                                                     name:kPAWLocationChangeNotification
-                                                   object:nil];
         recipientsList = [[NSMutableArray alloc] init];
         
         countNumber = 0;
@@ -93,60 +72,14 @@
     return self;
 }
 
-
-
-- (void) setupScrollView: (UIScrollView *) scrollView
-{
-    scrollView.clipsToBounds = NO;
-    scrollView.scrollEnabled = YES;
-    
-    NSUInteger nimages = 0;
-    NSInteger tot=0;
-    CGFloat cx = 0;
-    for (; ; nimages++) {
-        NSString *imageName = [NSString stringWithFormat:@"image%d.jpg", (nimages + 1)];
-        UIImage *image = [UIImage imageNamed:imageName];
-        if (tot==15) {
-            break;
-        }
-        if (4==nimages) {
-            nimages=0;
-        }
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        
-        CGRect rect = imageView.frame;
-        rect.size.height = 40;
-        rect.size.width = 40;
-        rect.origin.x = cx;
-        rect.origin.y = 0;
-        
-        imageView.frame = rect;
-        
-        [scrollView addSubview:imageView];
-        
-        cx += imageView.frame.size.width+5;
-        tot++;
-    }
-    
-    [scrollView setContentSize:CGSizeMake(cx, [scrollView bounds].size.height)];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     
     // Do any additional setup after loading the view.
-    self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
-    
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(locationDidChange:)
-                                                 name:kPAWLocationChangeNotification
-                                               object:nil];
     
     _nmv.addressTitle.delegate = self;
     _nmv.messageTextView.delegate = self;
@@ -215,7 +148,7 @@
     [_nmv.messageTextView resignFirstResponder];
     
 }
--(void)keyboardWillHide {
+-(void)keyboardWillHide: (id) sender {
     if (self.view.frame.origin.y > 0)
     {
         [self setViewMovedUp:YES];
@@ -272,13 +205,20 @@
     }
     [_nmv.messageTextView setText: @""];
     imagePicked = NO;
-    LocationController* locationController = [LocationController sharedLocationController];
+    self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
+                     }];
+
     
-    //TODO
-    //[self updateLocation:locationController.location.coordinate];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self.tabBarController setSelectedIndex: 0];
+    [self performSelector:@selector(dismissMessageView) withObject:self afterDelay:0.25];
+
+}
+
+- (void) dismissMessageView
+{
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void) startSearch: (id) sender
@@ -489,7 +429,6 @@
 
 - (void) handlePickerDone
 {
-    [self hideTabBar];
     [self dismissViewControllerAnimated:NO completion:nil];
     
 }

@@ -12,7 +12,7 @@
 #import "NewMessageViewController.h"
 #import "WallPostsViewController.h"
 #import "OptionsViewController.h"
-#import "NoteView.h"
+#import "NoteViewController.h"
 
 @interface HomeMapViewController ()
 @property (nonatomic, strong) HomeMapView *hmv;
@@ -35,17 +35,15 @@
 - (void) openNewMessageView
 {
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-   // UINavigationController *newMessageNavController = [[UINavigationController alloc]
-    //                                                   initWithRootViewController:nmvc];
-    //[self.navigationController presentViewController:newMessageNavController animated:YES completion:nil];
-    
-    nmvc.view.opaque = NO;
-    [self.view addSubview:nmvc.view];
+    UINavigationController *newMessageNavController = [[UINavigationController alloc]
+                                                       initWithRootViewController:nmvc];
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:newMessageNavController animated:YES completion:nil];
     
     nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
-    [UIView animateWithDuration:100.0
+    [UIView animateWithDuration:0.25
                      animations:^{
-                         nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, 0, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
+                         nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
                      }];
 
 }
@@ -86,15 +84,18 @@
 
 - (void) readNote: (id) sender
 {
-    NoteView *noteView = [[NoteView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    noteView.opaque = NO;
-    [self.view addSubview:noteView];
+    NoteViewController *nvc = [[NoteViewController alloc] init];
+    UINavigationController *noteViewNavController = [[UINavigationController alloc]
+                                                       initWithRootViewController:nvc];
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:noteViewNavController animated:YES completion:nil];
     
-    noteView.frame = CGRectMake(noteView.frame.origin.x, self.view.frame.size.height, noteView.frame.size.width, noteView.frame.size.height);
-    [UIView animateWithDuration:100.0
+    nvc.view.frame = CGRectMake(nvc.view.frame.origin.x, self.view.frame.size.height, nvc.view.frame.size.width, nvc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
                      animations:^{
-                         noteView.frame = CGRectMake(noteView.frame.origin.x, 0, noteView.frame.size.width, noteView.frame.size.height);
+                         nvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nvc.view.frame.size.width, nvc.self.view.frame.size.height);
                      }];
+    
 }
 
 - (id)init{
