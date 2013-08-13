@@ -35,7 +35,7 @@
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
 
     //    if ([PFUser currentUser]) {
-    
+
     [UINavigationBar appearance].tintColor = mainThemeColor;
     
     WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];

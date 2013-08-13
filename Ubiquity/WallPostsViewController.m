@@ -359,8 +359,8 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     for (PFObject *obj in postsToNotify) {
         NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [obj objectForKey:@"sender"]];
                 // Send push notification to query
-                   [PFPush sendPushMessageToQueryInBackground:pushQuery
-                                               withMessage:pushMessage];
+        [PFPush sendPushMessageToQueryInBackground:pushQuery
+                                       withMessage:pushMessage];
     }
 
     //    // change this to _postsToPush array
