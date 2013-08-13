@@ -50,17 +50,20 @@
             }
         } else if (user.isNew) {
             NSLog(@"User with facebook signed up and logged in!");
-            [self pullMyFBDataAndOrganize];
-            
-            [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
+            [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
+                [self dismissViewControllerAnimated:YES completion:nil];
+                [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
+            }];
             
         } else {
             NSLog(@"User with facebook logged in!");
 
-            [self pullMyFBDataAndOrganize];
+            [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
+                [self dismissViewControllerAnimated:YES completion:nil];
+                [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
+            }];
             
-            [self dismissViewControllerAnimated:YES completion:nil];
-            self.tabBarController.selectedIndex = 0;
+
 
         }
     }];
@@ -70,7 +73,7 @@
 
 
 
-- (void) pullMyFBDataAndOrganize {
+- (void) pullMyFBDataAndOrganizeWithBlock:(void (^)(PFObject* user))block {
     // Send request to Facebook
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
@@ -93,7 +96,7 @@
                                          toUser:[PFUser currentUser]
                           andStoreUnderRelation:nil
                                        toObject:nil
-                                     finalBlock:nil
+                                     finalBlock:block
              ];
             
             
