@@ -115,6 +115,7 @@
 		20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		6097BED817A6DC650012A36A /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
 		6097BED917A6DC650012A36A /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
+		60B3A23217BACD9F00CBCE51 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -385,6 +386,7 @@
 				865FBE4617B4061B00A3F7E2 /* LoginBg.png */,
 				865FBE4C17B4069000A3F7E2 /* Default.png */,
 				865FBE4D17B4069000A3F7E2 /* Default@2x.png */,
+				60B3A23217BACD9F00CBCE51 /* Default-568h@2x.png */,
 				829ED75E17B3135A006AD7D5 /* camera.png */,
 				864C053E17B5702C000B5A52 /* friends@2x.png */,
 				86928EE717B180F7001BB026 /* SelfPostBackground@2x.png */,
