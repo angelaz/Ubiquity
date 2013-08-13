@@ -60,7 +60,7 @@ static CGFloat const kMessageFontSize = 11.f;
 {
     int width = WIDEST_POINT;
     int innerFrameLeftMargin = w/2 - width/2;
-    int innerFrameTopMargin = h - TOP_PADDING * 8;
+    int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING/2;
     self.sentLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
     self.sentLabel.text = @"10:20 AM, 03 August 2013";
     // self.sentLabel.backgroundColor = [UIColor greenColor];
@@ -77,7 +77,7 @@ static CGFloat const kMessageFontSize = 11.f;
 {
     int addressWidth = WIDEST_POINT;
     int addressHeight = HEADER_HEIGHT;
-    self.addressTitle = [[UILabel alloc] initWithFrame: CGRectMake(w/2 - addressWidth/2, h-self.envelope.frame.size.height+ ADDRESS_PADDING, addressWidth, addressHeight)];
+    self.addressTitle = [[UILabel alloc] initWithFrame: CGRectMake(w/2 - addressWidth/2, h-self.envelope.frame.size.height+ ADDRESS_PADDING*3, addressWidth, addressHeight)];
     self.addressTitle.textAlignment = NSTextAlignmentCenter;
     self.addressTitle.font = [UIFont systemFontOfSize: kHeaderFontSize];
     self.addressTitle.text = @"<INSERT ADDRESS>";
@@ -90,7 +90,7 @@ static CGFloat const kMessageFontSize = 11.f;
 
 - (void) createMessageWithWidth: (int) w andHeight: (int) h
 {
-    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 2.5;
+    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 1.5;
     int width = WIDEST_POINT;
     int height = h * 2 / 5 ;
     int innerFrameLeftMargin = w/2 - width/2;
