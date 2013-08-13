@@ -344,27 +344,31 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [queryUserDate orderByDescending:@"createdAt"];
     [queryUserDate whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     [queryUserDate includeKey:@"readReceipts"];
-    NSArray *posts = [queryUserDate findObjects];
-    NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
-
-    for (PFObject *post in posts) {
-        NSMutableDictionary *receipts = [post objectForKey:@"readReceipts"];
-        NSString *date = [NSString stringWithFormat:@"%@", [receipts valueForKey:[[PFUser currentUser] objectForKey:@"id"]]];
-        if (date == [post objectForKey:@"readReceiptDate"]) {
-            [postsToNotify addObject:post];
-            [post setObject:[NSDate date] forKey:@"readReceiptDate"];
+    [queryUserDate findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+    
+        NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
+        
+        for (PFObject *post in posts) {
+            NSMutableDictionary *receipts = [post objectForKey:@"readReceipts"];
+            NSString *date = [NSString stringWithFormat:@"%@", [receipts valueForKey:[[PFUser currentUser] objectForKey:@"id"]]];
+            if (date == [post objectForKey:@"readReceiptDate"]) {
+                [postsToNotify addObject:post];
+                [post setObject:[NSDate date] forKey:@"readReceiptDate"];
+            }
         }
-    }
+        
+        PFQuery *pushQuery = [PFInstallation query];
+        [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+        
+        for (PFObject *obj in postsToNotify) {
+            NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [obj objectForKey:@"sender"]];
+            // Send push notification to query
+            [PFPush sendPushMessageToQueryInBackground:pushQuery
+                                           withMessage:pushMessage];
+        }
+        
+    }];
     
-    PFQuery *pushQuery = [PFInstallation query];
-    [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
-    
-    for (PFObject *obj in postsToNotify) {
-        NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [obj objectForKey:@"sender"]];
-                // Send push notification to query
-        [PFPush sendPushMessageToQueryInBackground:pushQuery
-                                       withMessage:pushMessage];
-    }
 
     //    // change this to _postsToPush array
     ////    for (TextMessage *newPost in postsToNotify)
