@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface HomeMapViewController : UIViewController
-
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
+@property (nonatomic, strong) UIButton *optionsButton;
 @end

@@ -88,6 +88,7 @@
 		86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A66C2C17A316A000DB5752 /* NewMessageView.m */; };
 		86D1F43217B956BC003B7FED /* envelope@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F43117B956BC003B7FED /* envelope@2x.png */; };
 		86D1F43417B985B3003B7FED /* addFriend@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F43317B985B3003B7FED /* addFriend@2x.png */; };
+		86D1F43A17B9B6D6003B7FED /* gear@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F43917B9B6D6003B7FED /* gear@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -202,6 +203,7 @@
 		86A66C2C17A316A000DB5752 /* NewMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageView.m; sourceTree = "<group>"; };
 		86D1F43117B956BC003B7FED /* envelope@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "envelope@2x.png"; sourceTree = "<group>"; };
 		86D1F43317B985B3003B7FED /* addFriend@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "addFriend@2x.png"; sourceTree = "<group>"; };
+		86D1F43917B9B6D6003B7FED /* gear@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gear@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -348,6 +350,7 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				86D1F43917B9B6D6003B7FED /* gear@2x.png */,
 				86D1F43317B985B3003B7FED /* addFriend@2x.png */,
 				86D1F43117B956BC003B7FED /* envelope@2x.png */,
 				864C053917B57003000B5A52 /* newMessage@2x.png */,
@@ -481,6 +484,7 @@
 				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
 				864C053A17B57003000B5A52 /* newMessage@2x.png in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
+				86D1F43A17B9B6D6003B7FED /* gear@2x.png in Resources */,
 				865FBE4E17B4069000A3F7E2 /* Default.png in Resources */,
 				824EB77917A735A00006AA5D /* options.png in Resources */,
 				82E931C217A07B0B00B3958B /* TableHeaderView.xib in Resources */,
