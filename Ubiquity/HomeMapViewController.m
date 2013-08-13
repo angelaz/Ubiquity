@@ -12,6 +12,7 @@
 #import "NewMessageViewController.h"
 #import "WallPostsViewController.h"
 #import "OptionsViewController.h"
+#import "NoteViewController.h"
 
 @interface HomeMapViewController ()
 @property (nonatomic, strong) HomeMapView *hmv;
@@ -24,6 +25,77 @@
 {
     _hmv = [[HomeMapView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _hmv];
+    
+    [self initNewMessageButton];
+
+    
+}
+
+
+- (void) openNewMessageView
+{
+    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+    UINavigationController *newMessageNavController = [[UINavigationController alloc]
+                                                       initWithRootViewController:nmvc];
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:newMessageNavController animated:YES completion:nil];
+    
+    nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
+                     }];
+
+}
+
+- (void) initNewMessageButton
+{
+    UIImage *image = [UIImage imageNamed:@"newMessage"];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
+    
+    button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+    
+    [button addTarget:self action:@selector(openNewMessageView)    forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height) ];
+    
+    [v addSubview:button];
+    
+    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
+    
+    self.navigationItem.rightBarButtonItem = newMessage;
+    
+    
+}
+
+- (void)initUnreadNoteButton
+{
+    int const SCREEN_WIDTH = self.view.frame.size.width;
+    int const SCREEN_HEIGHT = self.view.frame.size.height;
+    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *pictureButtonImage = [UIImage imageNamed:@"UnreadNote"];
+    [newButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
+    newButton.frame = CGRectMake(SCREEN_WIDTH/2 - 25, SCREEN_HEIGHT/2 - 70, 50.0, 40.0);
+    [newButton addTarget:self action:@selector(readNote:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:newButton];
+}
+
+- (void) readNote: (id) sender
+{
+    NoteViewController *nvc = [[NoteViewController alloc] init];
+    UINavigationController *noteViewNavController = [[UINavigationController alloc]
+                                                       initWithRootViewController:nvc];
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:noteViewNavController animated:YES completion:nil];
+    
+    nvc.view.frame = CGRectMake(nvc.view.frame.origin.x, self.view.frame.size.height, nvc.view.frame.size.width, nvc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         nvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nvc.view.frame.size.width, nvc.self.view.frame.size.height);
+                     }];
+    
 }
 
 - (id)init{
@@ -32,6 +104,7 @@
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
+        [self initUnreadNoteButton];
     }
     return self;
 }

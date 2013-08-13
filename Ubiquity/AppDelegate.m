@@ -47,10 +47,9 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    if ([PFUser currentUser] == nil) {
+    if (![PFUser currentUser]) {
         [self presentLoginViewController];
     }
-    
     return YES;
 }
 
@@ -115,12 +114,8 @@
 	// Go to the welcome screen and have them log in or create an account.
 	LoginViewController *loginViewController = [[LoginViewController alloc] init];
 	loginViewController.title = @"Welcome to Ubi!";
-    [self.window.rootViewController presentViewController:loginViewController animated:NO completion:nil];
-	
-    //	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
-    //	navController.navigationBarHidden = YES;
-    //
-    //	self.window.rootViewController = navController;
+    UINavigationController *loginNavController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+    [self.window.rootViewController presentViewController:loginNavController animated:NO completion:nil];
 }
 
 + (void) linkOrStoreUserDetails:(NSObject *)userData        //Dict of info

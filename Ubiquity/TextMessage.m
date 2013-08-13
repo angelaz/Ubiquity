@@ -8,8 +8,6 @@
 
 #import "TextMessage.h"
 
-/* see .h file for wtf is going on
- */
 
 @interface TextMessage ()
 
