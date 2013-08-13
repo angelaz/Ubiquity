@@ -75,9 +75,9 @@ int const LINE_HEIGHT = 30;
     
     NSLog(@"Long: %f", c.longitude);
     NSLog(@"Lat: %f", c.latitude);
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:c.latitude + 2
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:c.latitude
                                                             longitude:c.longitude
-                                                                 zoom:6];
+                                                                 zoom:15];
     self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
     GMSMarker *marker = [[GMSMarker alloc] init];
     marker.position = c;
