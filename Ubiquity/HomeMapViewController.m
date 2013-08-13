@@ -12,6 +12,7 @@
 #import "NewMessageViewController.h"
 #import "WallPostsViewController.h"
 #import "OptionsViewController.h"
+#import "NoteView.h"
 
 @interface HomeMapViewController ()
 @property (nonatomic, strong) HomeMapView *hmv;
@@ -34,9 +35,19 @@
 - (void) openNewMessageView
 {
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    UINavigationController *newMessageNavController = [[UINavigationController alloc]
-                                                       initWithRootViewController:nmvc];
-    [self.navigationController presentViewController:newMessageNavController animated:YES completion:nil];
+   // UINavigationController *newMessageNavController = [[UINavigationController alloc]
+    //                                                   initWithRootViewController:nmvc];
+    //[self.navigationController presentViewController:newMessageNavController animated:YES completion:nil];
+    
+    nmvc.view.opaque = NO;
+    [self.view addSubview:nmvc.view];
+    
+    nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
+    [UIView animateWithDuration:100.0
+                     animations:^{
+                         nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, 0, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
+                     }];
+
 }
 
 - (void) initNewMessageButton
@@ -61,12 +72,38 @@
     
 }
 
+- (void)initUnreadNoteButton
+{
+    int const SCREEN_WIDTH = self.view.frame.size.width;
+    int const SCREEN_HEIGHT = self.view.frame.size.height;
+    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *pictureButtonImage = [UIImage imageNamed:@"UnreadNote"];
+    [newButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
+    newButton.frame = CGRectMake(SCREEN_WIDTH/2 - 25, SCREEN_HEIGHT/2 - 70, 50.0, 40.0);
+    [newButton addTarget:self action:@selector(readNote:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:newButton];
+}
+
+- (void) readNote: (id) sender
+{
+    NoteView *noteView = [[NoteView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    noteView.opaque = NO;
+    [self.view addSubview:noteView];
+    
+    noteView.frame = CGRectMake(noteView.frame.origin.x, self.view.frame.size.height, noteView.frame.size.width, noteView.frame.size.height);
+    [UIView animateWithDuration:100.0
+                     animations:^{
+                         noteView.frame = CGRectMake(noteView.frame.origin.x, 0, noteView.frame.size.width, noteView.frame.size.height);
+                     }];
+}
+
 - (id)init{
     self = [super init];
     if (self) {
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
+        [self initUnreadNoteButton];
     }
     return self;
 }

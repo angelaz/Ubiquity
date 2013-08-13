@@ -1,33 +1,27 @@
 //
-//  NewMessageView.h
+//  NoteView.h
 //  Ubiquity
 //
-//  Created by Winnie Wu on 7/26/13.
+//  Created by Winnie Wu on 8/13/13.
 //  Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-
-extern int const TOP_PADDING;
-extern int const ADDRESS_PADDING;
-extern int const LEFT_PADDING50;
-extern int const HEADER_HEIGHT;
-extern int const LINE_HEIGHT;
-
-
-@interface NewMessageView : UIView
+@interface NoteView : UIView
 @property (nonatomic, strong) UIButton *addFriendsButton;
 
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) NSString *searchText;
 
-@property (nonatomic, strong) UILabel *toLabel;
 @property (nonatomic, strong) UILabel *fromLabel;
 @property (nonatomic, strong) UILabel *sentLabel;
+@property (nonatomic, strong) UILabel *receivedLabel;
 
-@property (nonatomic, strong) UITextView *messageTextView;
-@property (nonatomic, strong) UITextView *addressTitle;
+
+@property (nonatomic, strong) UILabel *messageTextView;
+@property (nonatomic, strong) UIScrollView *textScroll;
+@property (nonatomic, strong) UILabel *addressTitle;
 @property (nonatomic, strong) UIImageView *envelope;
 @property (nonatomic, strong) UIScrollView *friendScroller;
 
@@ -36,6 +30,5 @@ extern int const LINE_HEIGHT;
 @property (nonatomic, strong) UIImage *thumbnailImage;
 @property (nonatomic, strong) UIImageView *thumbnailImageView;
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
-
 
 @end

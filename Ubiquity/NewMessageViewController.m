@@ -142,8 +142,6 @@
     
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
-    [_nmv.map setUserInteractionEnabled:NO];
-    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(locationDidChange:)
@@ -238,7 +236,6 @@
             [self setViewMovedUp:YES];
         }
     }
-    [_nmv.map setUserInteractionEnabled:NO];
     
     
 }

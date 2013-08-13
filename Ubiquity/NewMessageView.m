@@ -41,12 +41,6 @@ int const LINE_HEIGHT = 30;
         int const SCREEN_HEIGHT = frame.size.height;
         
         
-        LocationController* locationController = [LocationController sharedLocationController];
-        CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-        
-        
-        [self setUpMapWithWidth: SCREEN_WIDTH andHeight:SCREEN_HEIGHT atCoordinate:currentCoordinate];
-        
         [self createEnvelopeBackgroundWithWidth: SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createAddressTitleBarWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
@@ -69,23 +63,6 @@ int const LINE_HEIGHT = 30;
     return self;
 }
 
-
-- (void) setUpMapWithWidth: (int) w andHeight: (int) h atCoordinate: (CLLocationCoordinate2D) c
-{
-    
-    NSLog(@"Long: %f", c.longitude);
-    NSLog(@"Lat: %f", c.latitude);
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:c.latitude
-                                                            longitude:c.longitude
-                                                                 zoom:15];
-    self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
-    GMSMarker *marker = [[GMSMarker alloc] init];
-    marker.position = c;
-    marker.animated = YES;
-    marker.map = self.map;
-    [self addSubview:self.map];
-    
-}
 
 - (void) createEnvelopeBackgroundWithWidth: (int)w andHeight: (int)h
 {
