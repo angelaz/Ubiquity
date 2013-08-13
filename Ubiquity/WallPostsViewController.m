@@ -44,6 +44,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 #import "LocationController.h"
 #import "FriendsViewController.h"
 #import "NewMessageViewController.h"
+#import "OptionsViewController.h"
 
 @interface WallPostsViewController ()
 {
@@ -68,77 +69,75 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 {
     self = [super init];
     if (self) {
-        UINavigationItem *nav = [self navigationItem];
-        // [nav setTitle:@"Recent"];
-        
-        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Friends", @"Public", @"Favorites"]];
-        
-        _segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
-        [_segmentedControl setSelectedSegmentIndex:0];
-        
-        [_segmentedControl addTarget:self
-                              action:@selector(changeSegment:)
-                    forControlEvents:UIControlEventValueChanged];
-        
-        nav.titleView = _segmentedControl;
-        
-        [self initNewMessageButton];
-        
+        [self initButtons];
+        [self initSegmentedControl];
+        [self initOptionsButton];
     }
-    
     return self;
 }
 
-- (void) initNewMessageButton
+- (void)initSegmentedControl
 {
-    UIImage *image = [UIImage imageNamed:@"newMessage"];
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
-    
-    button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
-    
-    [button addTarget:self action:@selector(openNewMessageView)    forControlEvents:UIControlEventTouchUpInside];
-    
-    UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height) ];
-    
-    [v addSubview:button];
-    
-    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
-    
-    self.navigationItem.rightBarButtonItem = newMessage;
-    
-    
-    UIBarButtonItem *bbi = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
-                                                                         target:self
-                                                                         action:@selector(openHMV)];
-    [[self navigationItem] setLeftBarButtonItem:bbi];
-    
-    
-}
-- (void) openHMV
-{
-    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
-    UINavigationController *hmvcnav = [[UINavigationController alloc]
-                                       initWithRootViewController:hmvc];
-    [self.navigationController presentViewController:hmvcnav animated:YES completion:nil ];
-    
+    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Public", @"Friends", @"Only Me"]];
+    self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+    [self.segmentedControl setSelectedSegmentIndex:0];
+    [self.segmentedControl addTarget:self
+                              action:@selector(changeSegment:)
+                    forControlEvents:UIControlEventValueChanged];
+    [[self navigationItem] setTitleView:self.segmentedControl];
 }
 
-- (void) openNewMessageView
+- (void)initButtons
+{
+    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"Map"
+                                                                style:UIBarButtonItemStylePlain
+                                                               target:self
+                                                               action:@selector(launchMapView)];
+    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
+                                                                                target:self
+                                                                                action:@selector(launchNewMessage)];
+    [[self navigationItem] setLeftBarButtonItem:mapList];
+    [[self navigationItem] setRightBarButtonItem:newMessage];
+}
+
+- (void)launchMapView
+{
+    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
+    UINavigationController *mapNavController = [[UINavigationController alloc]
+                                                      initWithRootViewController:hmvc];
+    [self.navigationController presentViewController:mapNavController animated:NO completion:nil];
+}
+
+- (void)launchNewMessage
 {
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
     UINavigationController *newMessageNavController = [[UINavigationController alloc]
                                                        initWithRootViewController:nmvc];
-    [self.navigationController presentViewController:newMessageNavController animated:YES completion:nil ];
+    [self.navigationController presentViewController:newMessageNavController animated:YES completion:nil];
 }
 
+- (void)initOptionsButton
+{
+    int const SCREEN_WIDTH = self.view.frame.size.width;
+    int const SCREEN_HEIGHT = self.view.frame.size.height;
+    self.optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *pictureButtonImage = [UIImage imageNamed:@"gear.png"];
+    [self.optionsButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
+    self.optionsButton.frame = CGRectMake(SCREEN_WIDTH - 25, SCREEN_HEIGHT - 70, 20.0, 20.0);
+    [self.optionsButton addTarget:self action:@selector(launchOptionsMenu) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.optionsButton];
+}
+- (void)launchOptionsMenu
+{
+    OptionsViewController *ovc = [[OptionsViewController alloc] init];
+    UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];
+    [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"Recent Posts";
 		self.className = kPAWParsePostsClassKey;
     }
     return self;

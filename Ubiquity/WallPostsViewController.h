@@ -13,7 +13,7 @@
 
 @property (nonatomic) int indexing;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
-
+@property (nonatomic, strong) UIButton *optionsButton;
 @property (nonatomic, copy) NSString *className;
 
 @end

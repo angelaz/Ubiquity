@@ -6,6 +6,7 @@
 #import "AppDelegate.h"
 #import "LoginView.h"
 #import "WallPostsViewController.h"
+#import "HomeMapViewController.h"
 
 @implementation LoginViewController
 
@@ -51,7 +52,7 @@
             NSLog(@"User with facebook signed up and logged in!");
             [self pullMyFBDataAndOrganize];
             
-            [self.navigationController pushViewController:[[WallPostsViewController alloc] init] animated:YES];
+            [self.navigationController pushViewController:[[HomeMapViewController alloc] init] animated:YES];
             
         } else {
             NSLog(@"User with facebook logged in!");
@@ -63,7 +64,6 @@
 
         }
     }];
-    WallPostsViewController *wallPosts = [[WallPostsViewController alloc] init];
     
     [_activityIndicator startAnimating]; // Show loading indicator until login is finished
 }

@@ -39,6 +39,7 @@
 		82C7577617A322580094EB15 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C7577517A322570094EB15 /* FriendsViewController.m */; };
 		82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577717A3225D0094EB15 /* FriendsViewController.xib */; };
 		82C7577A17A325C50094EB15 /* newMessage.png in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577917A325C50094EB15 /* newMessage.png */; };
+		82D53D5217B9AF31009B41CE /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 82D53D5117B9AF31009B41CE /* gear.png */; };
 		82E9316917A079C600B3958B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316817A079C600B3958B /* Foundation.framework */; };
 		82E9316B17A079C600B3958B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316A17A079C600B3958B /* CoreGraphics.framework */; };
 		82E9316D17A079C600B3958B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316C17A079C600B3958B /* UIKit.framework */; };
@@ -139,6 +140,7 @@
 		82C7577517A322570094EB15 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
 		82C7577717A3225D0094EB15 /* FriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FriendsViewController.xib; sourceTree = "<group>"; };
 		82C7577917A325C50094EB15 /* newMessage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newMessage.png; sourceTree = "<group>"; };
+		82D53D5117B9AF31009B41CE /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
 		82E9316517A079C600B3958B /* Ubiquity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ubiquity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82E9316817A079C600B3958B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		82E9316A17A079C600B3958B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -344,6 +346,7 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				82D53D5117B9AF31009B41CE /* gear.png */,
 				864C053917B57003000B5A52 /* newMessage@2x.png */,
 				865FBE4817B4063600A3F7E2 /* recentmessages.png */,
 				864C053B17B57018000B5A52 /* recentmessages@2x.png */,
@@ -474,6 +477,7 @@
 			files = (
 				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
 				864C053A17B57003000B5A52 /* newMessage@2x.png in Resources */,
+				82D53D5217B9AF31009B41CE /* gear.png in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
 				865FBE4E17B4069000A3F7E2 /* Default.png in Resources */,
 				824EB77917A735A00006AA5D /* options.png in Resources */,
