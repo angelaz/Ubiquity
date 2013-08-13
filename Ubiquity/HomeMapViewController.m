@@ -75,8 +75,11 @@
 
 - (void)initSegmentedControl
 {
-    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Public", @"Friends", @"Only Me"]];
-    self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+    
+    NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"public"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"me"], nil];
+    self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
+    self.segmentedControl.frame = CGRectMake(0,0,150,30);
+        self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [self.segmentedControl setSelectedSegmentIndex:0];
     [self.segmentedControl addTarget:self
                               action:@selector(changeSegment:)
