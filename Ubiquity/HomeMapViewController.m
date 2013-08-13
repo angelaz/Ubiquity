@@ -108,8 +108,6 @@
     return self;
 }
 
-
-
 - (void)initSegmentedControl
 {
     
@@ -142,10 +140,16 @@
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self
                                                                action:@selector(launchPostsView)];
-    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-                                                                                target:self
-                                                                                action:@selector(launchNewMessage)];
     [[self navigationItem] setLeftBarButtonItem:mapList];
+    
+    UIImage *image = [UIImage imageNamed:@"newMessage"];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
+    button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+    [button addTarget:self action:@selector(launchNewMessage)    forControlEvents:UIControlEventTouchUpInside];
+    UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height)];
+    [v addSubview:button];
+    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
     [[self navigationItem] setRightBarButtonItem:newMessage];
 }
 - (void)launchPostsView
