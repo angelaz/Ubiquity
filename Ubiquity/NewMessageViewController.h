@@ -27,8 +27,6 @@
 @property (nonatomic, strong) NSArray *friendsOnApp;
 @property (nonatomic, strong) NewMessageView *nmv;
 
-- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate;
-
 - (void) sendMessage: (id) sender;
 
 - (void) sendInvitesViaFacebook:(NSMutableArray *)facebookFriends atAddress:(NSString *)address;

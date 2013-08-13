@@ -204,7 +204,8 @@
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
 {
-    [self updateLocation:coord];
+    //TODO
+    //[self updateLocation:coord];
 }
 
 
@@ -275,7 +276,9 @@
     [_nmv.messageTextView setText: @""];
     imagePicked = NO;
     LocationController* locationController = [LocationController sharedLocationController];
-    [self updateLocation:locationController.location.coordinate];
+    
+    //TODO
+    //[self updateLocation:locationController.location.coordinate];
     
     [self dismissViewControllerAnimated:YES completion:nil];
     [self.tabBarController setSelectedIndex: 0];
@@ -480,7 +483,8 @@
 - (void)locationDidChange:(NSNotification *)note{
     LocationController* locationController = [LocationController sharedLocationController];
     NSLog(@"Did update locations");
-    [self updateLocation:locationController.location.coordinate];
+    //TODO
+    //[self updateLocation:locationController.location.coordinate];
     
     [locationController.av dismissWithClickedButtonIndex:0 animated:YES];
     locationController.av = nil;
@@ -609,31 +613,35 @@
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query whereKey:@"fbId" containedIn:idArray];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        for (PFObject *priorUser in objects) {
-            [idArray removeObjectIdenticalTo:[priorUser objectForKey:@"facebookId"]];
+        NSMutableArray * priorAppUsersArray = [NSMutableArray arrayWithCapacity:[objects count]];
+        [objects enumerateObjectsUsingBlock: ^(id obj, NSUInteger idx, BOOL *stop) {
+            [priorAppUsersArray addObject: [obj objectForKey:@"fbId"]];
+        }];
+        
+        [idArray removeObjectsInArray:priorAppUsersArray];
+        
+        if([idArray count] > 0) {
+            NSMutableDictionary* params =   [NSMutableDictionary dictionaryWithObjectsAndKeys:
+                                             [idArray componentsJoinedByString:@","], @"to",    nil];
+            
+            [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session]
+                                                          message:[NSString stringWithFormat:@"You've received a note near %@ on Ubiquity! Install the app to find it!", address]
+                                                            title:@"Invite Friend to Find Message with Ubiquity!"
+                                                       parameters:params
+                                                          handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+                                                              if (error) {
+                                                                  // Case A: Error launching the dialog or sending request.
+                                                              } else {
+                                                                  if (result == FBWebDialogResultDialogNotCompleted) {
+                                                                      //Case B: User clicked the "x" icon
+                                                                  } else {
+                                                                      //Case C: Dialog shown and the user clicks Cancel or Send
+                                                                  }
+                                                              }
+                                                          }];
         }
-    }];
-    
-    NSMutableDictionary* params =   [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                     [idArray componentsJoinedByString:@","], @"to",    nil];
-    
-    [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session]
-                                                  message:[NSString stringWithFormat:@"You've received a note near %@ on Ubiquity! Install the app to find it!", address]
-                                                    title:@"Use Ubiquity"
-                                               parameters:params
-                                                  handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
-                                                      if (error) {
-                                                          // Case A: Error launching the dialog or sending request.
-                                                      } else {
-                                                          if (result == FBWebDialogResultDialogNotCompleted) {
-                                                              //Case B: User clicked the "x" icon
-                                                          } else {
-                                                              //Case C: Dialog shown and the user clicks Cancel or Send
-                                                          }
-                                                      }
-                                                  }];
-    
 
+        }];
 }
 
 
