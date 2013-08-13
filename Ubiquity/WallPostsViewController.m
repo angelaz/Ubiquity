@@ -299,15 +299,15 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [query orderByDescending:@"createdAt"];
     
     if (self.indexing == 0) {
-        NSLog(@"Only shows notes from self");
-        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        NSLog(@"Shows public notes");
+        [query whereKey:@"receivers" equalTo:[NSNull null]];
     } else if (self.indexing == 1) {
         NSLog(@"Shows notes from friends");
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     } else if (self.indexing == 2) {
-        NSLog(@"Shows public notes");
-        [query whereKey:@"receivers" equalTo:[NSNull null]];
+        NSLog(@"Only shows notes from self");
+        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     }
     
     [self pushNotifications];
