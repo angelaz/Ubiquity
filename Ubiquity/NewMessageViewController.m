@@ -328,14 +328,16 @@ int const PUBLIC = 2;
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
             [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
-            PFObject *obj = [query getFirstObject];
+            [query getFirstObjectInBackgroundWithBlock:^(PFObject *obj, NSError *error) {
+                [AppDelegate linkOrStoreUserDetails:obj
+                                               toId:[obj objectForKey:@"facebookId"]
+                                             toUser:nil
+                              andStoreUnderRelation:@"receivers"
+                                           toObject:postObject
+                                         finalBlock:^(PFObject *made){}];
+            }];
             
-            [AppDelegate linkOrStoreUserDetails:obj
-                                           toId:[obj objectForKey:@"facebookId"]
-                                         toUser:nil
-                          andStoreUnderRelation:@"receivers"
-                                       toObject:postObject
-                                     finalBlock:^(PFObject *made){}];
+            
         }
     }];
     

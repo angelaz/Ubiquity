@@ -73,10 +73,19 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(loadObjects)
+                                                     name:KPAWInitialLocationFound
+                                                   object:nil];
 
         PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
         [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
-        publicUserObj = [query getFirstObject];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            publicUserObj = object;
+        }];
+        
+        
     }
     return self;
 }
@@ -176,6 +185,9 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
             self.pullToRefreshEnabled = YES;
         }
 		
+        [self.tableView setSeparatorColor: [UIColor clearColor]];
+        [self.tableView setBackgroundColor: [UIColor lightGrayColor]];
+        
 		// Whether the built-in pagination is enabled
 		self.paginationEnabled = YES;
         
@@ -371,8 +383,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 // Override to customize the look of a cell representing an object. The default is to display
 // a UITableViewCellStyleDefault style cell with the label being the first key in the object.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-    [tableView setSeparatorColor: [UIColor clearColor]];
-    [tableView setBackgroundColor: [UIColor lightGrayColor]];
     
 	// Reuse identifiers for left and right cells
 	static NSString *LeftCellIdentifier = @"LeftCell";
@@ -510,12 +520,14 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     
     UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
 
-    [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
-        UIImage *photo = [[UIImage alloc] initWithData:photoData];
-        photoView.contentMode = UIViewContentModeScaleAspectFill;
-        additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
-        [photoView setImage:photo];
-    }];
+    if([object objectForKey:@"photoHeight"] > 0) {
+        [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
+            UIImage *photo = [[UIImage alloc] initWithData:photoData];
+            photoView.contentMode = UIViewContentModeScaleAspectFill;
+            additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
+            [photoView setImage:photo];
+        }];
+    }
     
     
     [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
