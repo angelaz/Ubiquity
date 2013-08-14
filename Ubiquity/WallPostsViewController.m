@@ -14,28 +14,26 @@ static CGFloat const kPAWWallPostTableViewCellWidth = 280.f; // subject to chang
 static CGFloat const kPAWCellMaxImageHeight = 300.f; // subject to change.
 
 
-
 // Cell dimension and positioning constants
-static CGFloat const kPAWCellPaddingTop = 10.0f;
-static CGFloat const kPAWCellPaddingBottom = 10.0f;
-static CGFloat const kPAWCellPaddingSides = 10.0f;
-static CGFloat const kPAWCellTextPaddingTop = 10.0f;
-static CGFloat const kPAWCellTextPaddingBottom = 5.0f;
-static CGFloat const kPAWCellTextPaddingSides = 10.0f;
+static CGFloat const cellPaddingTop = 10.0f;
+static CGFloat const cellPaddingBottom = 10.0f;
+static CGFloat const cellPaddingSides = 10.0f;
+static CGFloat const cellTextPaddingTop = 10.0f;
+static CGFloat const cellTextPaddingBottom = 5.0f;
+static CGFloat const cellTextPaddingSides = 10.0f;
 
-static CGFloat const kPAWCellUsernameHeight = 15.0f;
-static CGFloat const kPAWCellBkgdHeight = 32.0f;
-static CGFloat const kPAWCellBkgdOffset = kPAWCellBkgdHeight - kPAWCellUsernameHeight;
+static CGFloat const cellUsernameHeight = 15.0f;
+static CGFloat const cellBGHeight = 32.0f;
+static CGFloat const cellBGOffset = cellBGHeight - cellUsernameHeight;
 
 // TableViewCell ContentView tags
-static NSInteger kPAWCellBackgroundTag = 2;
-static NSInteger kPAWCellTextLabelTag = 3;
-static NSInteger kPAWCellNameLabelTag = 4;
-static NSInteger kPAWCellSentDateLabelTag = 5;
-static NSInteger kPAWCellReceivedDateLabelTag = 6;
-static NSInteger kPAWCellLocationLabelTag = 7;
-static NSInteger kPAWCellAttachedPhotoTag = 8;
-
+static NSInteger cellBackgroundTag = 2;
+static NSInteger cellTextLabelTag = 3;
+static NSInteger cellNameLabelTag = 4;
+static NSInteger cellSentDateLabelTag = 5;
+static NSInteger cellReceivedDateLabelTag = 6;
+static NSInteger cellLocationLabelTag = 7;
+static NSInteger cellAttachedPhotoTag = 8;
 
 #import "HomeMapViewController.h"
 #import "WallPostsViewController.h"
@@ -52,6 +50,10 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     CGFloat additionalPhotoWidth;
     BOOL photoAttachmentExists;
     PFObject *publicUserObj;
+    RDPlayer* _player;
+    BOOL _playing;
+    BOOL _paused;
+    NSMutableArray *_trackKeys;
 }
 
 @property (nonatomic, strong) FriendsViewController *friendsViewController;
@@ -73,26 +75,23 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
-        
+        [self initRdioButton];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(loadObjects)
                                                      name:KPAWInitialLocationFound
                                                    object:nil];
-
         PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
         [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
         [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             publicUserObj = object;
         }];
-        
-        
+        _trackKeys = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (void)initSegmentedControl
 {
-    
     NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"me"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"public"], nil];
     self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
     self.segmentedControl.frame = CGRectMake(0,0,150,30);
@@ -103,7 +102,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                     forControlEvents:UIControlEventValueChanged];
     [[self navigationItem] setTitleView:self.segmentedControl];
 }
-
 
 - (void)initButtons
 {
@@ -151,6 +149,18 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [self.optionsButton addTarget:self action:@selector(launchOptionsMenu) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.optionsButton];
 }
+
+- (void)initRdioButton
+{
+    int const SCREEN_HEIGHT = self.view.frame.size.height;
+    self.rdioButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *rdioButtonImage = [UIImage imageNamed:@"musicNote.png"];
+    [self.rdioButton setBackgroundImage:rdioButtonImage forState:UIControlStateNormal];
+    self.rdioButton.frame = CGRectMake(25, SCREEN_HEIGHT - 70, 20.0, 20.0);
+    [self.rdioButton addTarget:self action:@selector(playMusic) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.rdioButton];
+}
+
 - (void)launchOptionsMenu
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
@@ -391,42 +401,38 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:LeftCellIdentifier];
         
         UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"PostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
-        [backgroundImage setTag:kPAWCellBackgroundTag];
+        [backgroundImage setTag:cellBackgroundTag];
         [cell.contentView addSubview:backgroundImage];
         
-        
         UILabel *nameLabel = [[UILabel alloc] init];
-        [nameLabel setTag:kPAWCellNameLabelTag];
+        [nameLabel setTag:cellNameLabelTag];
         [cell.contentView addSubview:nameLabel];
         
         UILabel *textLabel = [[UILabel alloc] init];
-        [textLabel setTag:kPAWCellTextLabelTag];
+        [textLabel setTag:cellTextLabelTag];
         [cell.contentView addSubview:textLabel];
         
         UILabel *sentDate = [[UILabel alloc] init];
-        [sentDate setTag:kPAWCellSentDateLabelTag];
+        [sentDate setTag:cellSentDateLabelTag];
         [cell.contentView addSubview:sentDate];
         
         UILabel *receivedDate = [[UILabel alloc] init];
-        [receivedDate setTag: kPAWCellReceivedDateLabelTag];
+        [receivedDate setTag: cellReceivedDateLabelTag];
         [cell.contentView addSubview:receivedDate];
         
         UILabel *locationLabel = [[UILabel alloc] init];
-        [locationLabel setTag: kPAWCellLocationLabelTag];
+        [locationLabel setTag: cellLocationLabelTag];
         [cell.contentView addSubview:locationLabel];
         
         UIImageView *photoView = [[UIImageView alloc] init];
-        [photoView setTag: kPAWCellAttachedPhotoTag];
+        [photoView setTag: cellAttachedPhotoTag];
         [cell.contentView addSubview:photoView];
-        
+
     }
-    
-    
 	
 	// Configure the cell content
     
-    
-	UILabel *textLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellTextLabelTag];
+	UILabel *textLabel = (UILabel*) [cell.contentView viewWithTag:cellTextLabelTag];
 	textLabel.text = [object objectForKey:kPAWParseTextKey];
 	textLabel.lineBreakMode = NSLineBreakByWordWrapping;
 	textLabel.numberOfLines = 0;
@@ -434,14 +440,14 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	textLabel.backgroundColor = [UIColor clearColor];
     
     
-	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:kPAWCellLocationLabelTag];
+	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:cellLocationLabelTag];
     locationLabel.text = @"Unknown Location";
     locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
     locationLabel.backgroundColor = [UIColor clearColor];
     
     locationLabel.text = [object objectForKey:@"locationAddress"];
     
-    UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellSentDateLabelTag];
+    UILabel *sentDate = (UILabel *) [cell.contentView viewWithTag:cellSentDateLabelTag];
     NSDate *sentAt = object.createdAt;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"hh:mm a 'on' dd MMMM yyyy"];
@@ -449,12 +455,12 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     sentDate.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
     sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
-    UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:kPAWCellReceivedDateLabelTag];
+    UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:cellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
     receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
     
 	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
-	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:kPAWCellNameLabelTag];
+	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:cellNameLabelTag];
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName];
 	nameLabel.backgroundColor = [UIColor clearColor];
@@ -468,7 +474,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 		nameLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
 	}
 	
-	UIImageView *backgroundImage = (UIImageView*) [cell.contentView viewWithTag:kPAWCellBackgroundTag];
+	UIImageView *backgroundImage = (UIImageView*) [cell.contentView viewWithTag:cellBackgroundTag];
 	
 	// Move cell content to the right position
 	// Calculate the size of the post's text and username
@@ -484,36 +490,36 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     
     
 	
-	CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath] + kPAWCellTextPaddingTop ; // Get the height of the cell
+	CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath] + cellTextPaddingTop ; // Get the height of the cell
 	
 	// Place the content in the correct position depending on the type
     
-    [nameLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
+    [nameLabel setFrame:CGRectMake(cellPaddingSides+cellTextPaddingSides,
                                    
-                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop,
+                                   cellPaddingTop+cellTextPaddingTop,
                                    nameSize.width,
                                    nameSize.height)];
     
     
-    [locationLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
-                                       kPAWCellPaddingTop+kPAWCellTextPaddingTop*3,
+    [locationLabel setFrame:CGRectMake(cellPaddingSides+cellTextPaddingSides,
+                                       cellPaddingTop+cellTextPaddingTop*3,
                                        locationLabelSize.width,
                                        locationLabelSize.height)];
     
-    [sentDate setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
-                                  kPAWCellPaddingTop+kPAWCellTextPaddingTop*5,
+    [sentDate setFrame:CGRectMake(cellPaddingSides+cellTextPaddingSides,
+                                  cellPaddingTop+cellTextPaddingTop*5,
                                   sentDateSize.width,
                                   sentDateSize.height)];
-    [receivedDate setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides, kPAWCellPaddingTop+kPAWCellTextPaddingTop * 12+ textSize.height + additionalPhotoHeight,
+    [receivedDate setFrame:CGRectMake(cellPaddingSides+cellTextPaddingSides, cellPaddingTop+cellTextPaddingTop * 12+ textSize.height + additionalPhotoHeight,
                                       receivedDateSize.width,
                                       receivedDateSize.height)];
     
-    [textLabel setFrame:CGRectMake(kPAWCellPaddingSides+kPAWCellTextPaddingSides,
-                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*9,
+    [textLabel setFrame:CGRectMake(cellPaddingSides+cellTextPaddingSides,
+                                   cellPaddingTop+cellTextPaddingTop*9,
                                    textSize.width,
                                    textSize.height)];
     
-    UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
+    UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:cellAttachedPhotoTag];
 
     if([object objectForKey:@"photoHeight"] > 0) {
         [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
@@ -526,21 +532,20 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     
     
     [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
+                                   cellPaddingTop+cellTextPaddingTop*11+textSize.height,
                                    additionalPhotoWidth,
                                    additionalPhotoHeight)];
     
     
     
-    [backgroundImage setFrame:CGRectMake(kPAWCellPaddingSides,
-                                         kPAWCellPaddingTop,
-                                         self.tableView.frame.size.width - kPAWCellPaddingSides*2,
-                                         cellHeight-kPAWCellPaddingTop-kPAWCellPaddingBottom)];
+    [backgroundImage setFrame:CGRectMake(cellPaddingSides,
+                                         cellPaddingTop,
+                                         self.tableView.frame.size.width - cellPaddingSides*2,
+                                         cellHeight-cellPaddingTop-cellPaddingBottom)];
     
-    
-    
-    
-    
+    if ([object objectForKey:@"trackKey"]) { //This post had a song attached, queue the song to rdio player
+        [_trackKeys addObject:[object objectForKey:@"trackKey"]];
+    }
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
@@ -600,7 +605,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         additionalPhotoHeight = 0;
     }
     
-	CGFloat rowHeight = kPAWCellPaddingTop + textSize.height + nameSize.height * 5 + kPAWCellBkgdOffset + kPAWCellPaddingTop + additionalPhotoHeight;
+	CGFloat rowHeight = cellPaddingTop + textSize.height + nameSize.height * 5 + cellBGOffset + cellPaddingTop + additionalPhotoHeight;
     
 	return rowHeight;
 }
@@ -645,4 +650,30 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [self.view bringSubviewToFront:self.optionsButton];
 }
 
+//rdio player
+- (BOOL)rdioIsPlayingElsewhere
+{
+    return NO;
+}
+- (void)rdioPlayerChangedFromState:(RDPlayerState)fromState toState:(RDPlayerState)state
+{
+    _playing = (state != RDPlayerStateInitializing && state != RDPlayerStateStopped);
+    _paused = (state == RDPlayerStatePaused);
+}
+- (RDPlayer*)getPlayer
+{
+    if (_player == nil) {
+        _player = [AppDelegate rdioInstance].player;
+    }
+    return _player;
+}
+- (void)playMusic
+{
+    if (!_playing) {
+        [_trackKeys addObject:@"t2742133"]; //Just so this doesn't crash for now
+        [[self getPlayer] playSources:_trackKeys];
+    } else {
+        [[self getPlayer] togglePause];
+    }
+}
 @end
