@@ -185,6 +185,9 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
             self.pullToRefreshEnabled = YES;
         }
 		
+        [self.tableView setSeparatorColor: [UIColor clearColor]];
+        [self.tableView setBackgroundColor: [UIColor lightGrayColor]];
+        
 		// Whether the built-in pagination is enabled
 		self.paginationEnabled = YES;
         
@@ -380,8 +383,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 // Override to customize the look of a cell representing an object. The default is to display
 // a UITableViewCellStyleDefault style cell with the label being the first key in the object.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-    [tableView setSeparatorColor: [UIColor clearColor]];
-    [tableView setBackgroundColor: [UIColor lightGrayColor]];
     
 	// Reuse identifiers for left and right cells
 	static NSString *LeftCellIdentifier = @"LeftCell";
