@@ -39,10 +39,11 @@
     
     //[self createPublicUser];
     
+    
     HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
     UINavigationController *mapNavController = [[UINavigationController alloc]
                                                 initWithRootViewController:hmvc];
-
+    
     [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
 
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];

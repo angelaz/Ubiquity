@@ -36,6 +36,7 @@
     
     _hmv.map.delegate = self;
     
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadPins)
                                                  name:KPAWInitialLocationFound
@@ -46,6 +47,7 @@
 
 - (void) loadPins
 {
+    if ([PFUser currentUser] != nil) {
     PFQuery *getPosts = [self getParseQuery];
     [self deployParseQuery: getPosts];
     
@@ -54,6 +56,7 @@
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
 
     _hmv.map.delegate = self;
+    }
 }
 
 - (BOOL)mapView:(GMSMapView*)mapView didTapMarker:(GMSMarker *)marker
