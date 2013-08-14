@@ -552,6 +552,15 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	// call super because we're a custom subclass.
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
     
+    //Flips cell on touch
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [UIView beginAnimations:@"FlipCellAnimation" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:cell cache:YES];
+    [cell removeFromSuperview];
+    [self.tableView addSubview:cell];
+    [UIView commitAnimations];
+    
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
