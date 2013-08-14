@@ -39,7 +39,8 @@ static CGFloat const kMessageFontSize = 11.f;
         [self createFromLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createSentLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
+        [self createPagingLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+
     }
     return self;
 }
@@ -73,6 +74,24 @@ static CGFloat const kMessageFontSize = 11.f;
     [self addSubview:self.sentLabel];
 }
 
+- (void) createPagingLabelWithWidth: (int) w andHeight: (int) h
+{
+    int width = WIDEST_POINT;
+    int innerFrameLeftMargin = w/2 + width/2 - LEFT_PADDING/1.5;
+    int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING/2;
+    self.pagingLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width/5, LINE_HEIGHT)];
+    self.pagingLabel.text = @"1 of 2";
+    // self.sentLabel.backgroundColor = [UIColor greenColor];
+    self.pagingLabel.backgroundColor = [UIColor clearColor];
+    
+    self.pagingLabel.textAlignment = NSTextAlignmentCenter;
+    self.pagingLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
+    [self addSubview:self.pagingLabel];
+}
+
+
+
+
 - (void) createAddressTitleBarWithWidth: (int)w andHeight: (int)h
 {
     int addressWidth = WIDEST_POINT;
@@ -100,6 +119,7 @@ static CGFloat const kMessageFontSize = 11.f;
     self.messageTextView.lineBreakMode = NSLineBreakByWordWrapping;
     self.messageTextView.numberOfLines = 0;
     self.messageTextView.text = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+
     [self.textScroll addSubview: self.messageTextView];
     self.messageTextView.font = [UIFont systemFontOfSize: kMessageFontSize];
     self.messageTextView.backgroundColor = [UIColor clearColor];
