@@ -326,15 +326,17 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                 NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
                 
                 for (PFObject *post in posts) {
-                    NSMutableDictionary *receipts = [post objectForKey:@"readReceipts"];
-                    NSString *date = [NSString stringWithFormat:@"%@", [receipts valueForKey:[[PFUser currentUser] objectForKey:@"fbId"]]];
-                    if ([date isEqualToString:[post objectForKey:@"readReceiptDate"]]) {
-                        [postsToNotify addObject:post];
-                        [receipts setObject:[NSDate date] forKey:[[PFUser currentUser] objectForKey:@"fbId"]];
-                        [post setObject:receipts forKey:@"readReceipts"];
-                        [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                            NSLog(@"saving read receipts error: %@", error);
-                        }];
+                    NSMutableArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
+                    for (PFObject *receipt in receiptsArray) {
+                        if ([receipt objectForKey:@"receiver"] == [[PFUser currentUser] objectForKey:@"fbId"]) {
+                            if ([receipt objectForKey:@"dateOpened"] == [receipt objectForKey:@"createdAt"]) {
+                                [postsToNotify addObject:post];
+                                [receipt setObject:[NSDate date] forKey:@"dateOpened"];
+                                [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                    NSLog(@"saving read receipts error: %@", error);
+                                }];
+                            }
+                        };
                     }
                 }
                 
@@ -549,6 +551,15 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	// call super because we're a custom subclass.
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    
+    //Flips cell on touch
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [UIView beginAnimations:@"FlipCellAnimation" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:cell cache:YES];
+    [cell removeFromSuperview];
+    [self.tableView addSubview:cell];
+    [UIView commitAnimations];
     
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

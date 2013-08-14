@@ -11,7 +11,7 @@
 
 extern int const TOP_PADDING;
 extern int const ADDRESS_PADDING;
-extern int const LEFT_PADDING50;
+extern int const LEFT_PADDING;
 extern int const HEADER_HEIGHT;
 extern int const LINE_HEIGHT;
 
