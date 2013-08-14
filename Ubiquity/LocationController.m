@@ -33,7 +33,7 @@
     self = [super init];
     if(self != nil){
         
-        self.location = [[CLLocation alloc] initWithLatitude:37.4832526 longitude:-122.150037];
+        self.location = [[CLLocation alloc] initWithLatitude:0 longitude:0];
 
         self.locationManager = [[CLLocationManager alloc] init];
         self.locationManager.delegate = self;
@@ -43,7 +43,7 @@
         //self.locationManager.headingFilter = 5;
         
         self.marker = [[GMSMarker alloc] init];
-        self.marker.icon = [GMSMarker markerImageWithColor:[UIColor whiteColor]];
+        self.marker.icon = [GMSMarker markerImageWithColor:[UIColor blueColor]];
         self.marker.animated = YES;
         
         [locationManager startUpdatingLocation];
@@ -62,6 +62,15 @@
 
     if(hasReceivedFirstUpdate == NO) {
         hasReceivedFirstUpdate = YES;
+        
+        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.marker.position.latitude
+                                                                longitude:self.marker.position.longitude
+                                                                     zoom:15];
+        [self.map setCamera:camera];
+        
+        self.marker.map = self.map;
+        [self moveMarkerToLocation:_location.coordinate];
+
         
         [[NSNotificationCenter defaultCenter]
          postNotificationName: KPAWInitialLocationFound
