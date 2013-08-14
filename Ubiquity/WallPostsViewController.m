@@ -288,14 +288,14 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	// Query for posts near our current location.
     
 	// Get our current location:
-//	LocationController* locationController = [LocationController sharedLocationController];
-//    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-//    
-//	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
-//    
-//	// And set the query to look by location
-//	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-//	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+	LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
+    
+	// And set the query to look by location
+	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
     [query orderByDescending:@"createdAt"];
     
@@ -335,46 +335,64 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         if (!error) {   // The find succeeded.
             if ([posts count] > 0) {      //Saved friend list exists
                 NSLog(@"Seeing if new push notifications");
-                NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
-                
-                for (PFObject *post in posts) {
-                    NSMutableArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
-                    for (PFObject *receipt in receiptsArray) {
-                        if ([receipt objectForKey:@"receiver"] == [[PFUser currentUser] objectForKey:@"fbId"]) {
-                            if ([receipt objectForKey:@"dateOpened"] == [receipt objectForKey:@"createdAt"]) {
-                                [postsToNotify addObject:post];
-                                [receipt setObject:[NSDate date] forKey:@"dateOpened"];
-                                [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                    NSLog(@"saving read receipts error: %@", error);
-                                }];
-                            }
-                        };
-                    }
-                }
+                //NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
                 
                 PFQuery *pushQuery = [PFInstallation query];
                 [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+                [pushQuery whereKey:@"owner" equalTo:[PFUser currentUser]];
                 
-                if (postsToNotify) {
-                    NSLog(@"new push notifications!");
-                    for (PFObject *obj in postsToNotify) {
-                        PFObject *senderInfo = [obj objectForKey:@"sender"];
-                        PFObject *profile = [senderInfo objectForKey:@"profile"];
-                        NSString *sender = [NSString stringWithFormat:@"%@",[profile objectForKey:@"name"]];
-                        NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", sender];
-                        NSLog(@"the object id of the post is %@", [obj objectForKey:@"text"]);
-                        // Send push notification to query
-                        [PFPush sendPushMessageToQueryInBackground:pushQuery
-                                                       withMessage:pushMessage];
+                for (PFObject *post in posts) {
+                    NSArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
+                    for (PFObject *receipt in receiptsArray) {
+                        [receipt fetchIfNeeded];
+                       // [receipt fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){
+                            if ([[receipt objectForKey:@"receiver"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+                                if ([[receipt objectForKey:@"updatedAt"] isEqualToDate:[receipt createdAt]]) {
+                                    //[postsToNotify addObject:post];
+                                    
+                                    PFObject *senderInfo = [post objectForKey:@"sender"];
+                                    PFObject *profile = [senderInfo objectForKey:@"profile"];
+                                    NSString *sender = [NSString stringWithFormat:@"%@",[profile objectForKey:@"name"]];
+                                    NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", sender];
+                                    NSLog(@"the object id of the post is %@", [post objectForKey:@"text"]);
+                                    // Send push notification to query
+                                    [PFPush sendPushMessageToQueryInBackground:pushQuery
+                                                                   withMessage:pushMessage];
+                                    
+                                    
+                                    [receipt setObject:[NSDate date] forKey:@"dateOpened"];
+                                    [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                        NSLog(@"saving read receipts error: %@", error);
+                                    }];
+                                }
+                            };
+                       // }];
                     }
-                } else {
-                    NSLog(@"no new push notifications");
                 }
+
                 
-                [postsToNotify removeAllObjects];
+                // NEED TO IMPLEMENT SENDING TO SPECIFIC PHONES
+                
+//                if ([postsToNotify count] > 0) {
+//                    NSLog(@"new push notifications!");
+//                    for (PFObject *obj in postsToNotify) {
+//                        PFObject *senderInfo = [obj objectForKey:@"sender"];
+//                        PFObject *profile = [senderInfo objectForKey:@"profile"];
+//                        NSString *sender = [NSString stringWithFormat:@"%@",[profile objectForKey:@"name"]];
+//                        NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", sender];
+//                        NSLog(@"the object id of the post is %@", [obj objectForKey:@"text"]);
+//                        // Send push notification to query
+//                        [PFPush sendPushMessageToQueryInBackground:pushQuery
+//                                                       withMessage:pushMessage];
+//                    }
+//                } else {
+//                    NSLog(@"no new push notifications");
+//                }
+//                
+//                [postsToNotify removeAllObjects];
             } else {
                 // Log details of the failure
-                NSLog(@"Error in push notifications: %@", error);
+               // NSLog(@"Error in push notifications: %@", error);
             }
         }
     }];

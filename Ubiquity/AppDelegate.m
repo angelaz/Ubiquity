@@ -39,10 +39,11 @@
     
     //[self createPublicUser];
     
+    
     HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
     UINavigationController *mapNavController = [[UINavigationController alloc]
                                                 initWithRootViewController:hmvc];
-
+    
     [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
 
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
@@ -73,6 +74,7 @@
     
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation setObject:[PFUser currentUser] forKey:@"owner"];
     [currentInstallation saveInBackground];
     NSLog(@"Registered for push");
 }
