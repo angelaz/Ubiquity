@@ -363,6 +363,8 @@ int const PUBLIC = 2;
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+        NSArray* mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        _nmv.imagePicker.mediaTypes = mediaTypes;
     } else {
         [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     }
