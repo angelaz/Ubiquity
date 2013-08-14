@@ -326,15 +326,17 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                 NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
                 
                 for (PFObject *post in posts) {
-                    NSMutableDictionary *receipts = [post objectForKey:@"readReceipts"];
-                    NSString *date = [NSString stringWithFormat:@"%@", [receipts valueForKey:[[PFUser currentUser] objectForKey:@"fbId"]]];
-                    if ([date isEqualToString:[post objectForKey:@"readReceiptDate"]]) {
-                        [postsToNotify addObject:post];
-                        [receipts setObject:[NSDate date] forKey:[[PFUser currentUser] objectForKey:@"fbId"]];
-                        [post setObject:receipts forKey:@"readReceipts"];
-                        [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                            NSLog(@"saving read receipts error: %@", error);
-                        }];
+                    NSMutableArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
+                    for (PFObject *receipt in receiptsArray) {
+                        if ([receipt objectForKey:@"receiver"] == [[PFUser currentUser] objectForKey:@"fbId"]) {
+                            if ([receipt objectForKey:@"dateOpened"] == [receipt objectForKey:@"createdAt"]) {
+                                [postsToNotify addObject:post];
+                                [receipt setObject:[NSDate date] forKey:@"dateOpened"];
+                                [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                    NSLog(@"saving read receipts error: %@", error);
+                                }];
+                            }
+                        };
                     }
                 }
                 
