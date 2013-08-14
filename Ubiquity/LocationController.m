@@ -63,13 +63,13 @@
     if(hasReceivedFirstUpdate == NO) {
         hasReceivedFirstUpdate = YES;
         
-        self.marker.map = self.map;
-        self.marker.position = _location.coordinate;
-        
         GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.marker.position.latitude
                                                                 longitude:self.marker.position.longitude
                                                                      zoom:15];
         [self.map setCamera:camera];
+        
+        self.marker.map = self.map;
+        [self moveMarkerToLocation:_location.coordinate];
 
         
         [[NSNotificationCenter defaultCenter]
