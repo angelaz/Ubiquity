@@ -520,12 +520,14 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     
     UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:kPAWCellAttachedPhotoTag];
 
-    [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
-        UIImage *photo = [[UIImage alloc] initWithData:photoData];
-        photoView.contentMode = UIViewContentModeScaleAspectFill;
-        additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
-        [photoView setImage:photo];
-    }];
+    if([object objectForKey:@"photoHeight"] > 0) {
+        [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
+            UIImage *photo = [[UIImage alloc] initWithData:photoData];
+            photoView.contentMode = UIViewContentModeScaleAspectFill;
+            additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
+            [photoView setImage:photo];
+        }];
+    }
     
     
     [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
