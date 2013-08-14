@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 20B9181717BC375600CC33C2 /* Default-568h@2x.png */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
@@ -115,6 +116,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		20B9181717BC375600CC33C2 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
 		20F8F2A817A1F0F600594994 /* WallPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostsViewController.m; sourceTree = "<group>"; };
 		20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 		82E9315C17A079C600B3958B = {
 			isa = PBXGroup;
 			children = (
+				20B9181717BC375600CC33C2 /* Default-568h@2x.png */,
 				82E9316E17A079C600B3958B /* Ubiquity */,
 				82E9318717A079C600B3958B /* UbiquityTests */,
 				82E9316717A079C600B3958B /* Frameworks */,
@@ -574,6 +577,7 @@
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
 				864C054217B5704B000B5A52 /* options@2x.png in Resources */,
 				8626C10517A9C7B6009F6AA7 /* pixel.png in Resources */,
+				20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

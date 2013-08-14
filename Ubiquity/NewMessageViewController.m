@@ -311,12 +311,12 @@ int const PUBLIC = 2;
             
             NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[NSDate date] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:[readReceiptsObject createdAt] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
         }
         
-        [postObject setObject:readReceiptsArray forKey:@"readReceiptsArray"];
+        [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
         
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
