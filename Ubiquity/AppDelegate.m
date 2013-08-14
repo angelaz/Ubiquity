@@ -30,57 +30,25 @@
     
     //Set up Parse/Facebook interfacing
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
-    [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
-    [PFFacebookUtils initializeFacebook];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[LoginViewController alloc] init]];
 
-    [UINavigationBar appearance].tintColor = mainThemeColor;
-    
     //[self createPublicUser];
     
     HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
     UINavigationController *mapNavController = [[UINavigationController alloc]
                                                 initWithRootViewController:hmvc];
+
+    [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
+
     
-    WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
-    UINavigationController *wallPostsNavController = [[UINavigationController alloc]
-                                                   initWithRootViewController:wpvc];
-    [UIView  beginAnimations: @"Showinfo"context: nil];
+    [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
+    [PFFacebookUtils initializeFacebook];
+    [PFTwitterUtils initializeWithConsumerKey:@"bk8P1pWhDoqSeQrbCo1A"
+                               consumerSecret:@"p3A2h5FavogvCu2eBh7Jyegf9fAYpk9zTVW4ZBq7KA"];
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
-    
-    FriendsViewController *fvc = [[FriendsViewController alloc] init];
-    UINavigationController *friendsNavController = [[UINavigationController alloc]
-                                                    initWithRootViewController:fvc];
 
-    
-    OptionsViewController *ovc = [[OptionsViewController alloc] init];
-    UINavigationController *optionsNavController = [[UINavigationController alloc]
-                                                    initWithRootViewController:ovc];
-    
-    
-    self.tabBarController = [[UITabBarController alloc] init];
-    //self.tabBarController.tabBar.tintColor = tabBarColor;
-    
+    [UINavigationBar appearance].tintColor = mainThemeColor;
 
-
-    [self.tabBarController setViewControllers:@[wallPostsNavController,
-                                                
-                                                friendsNavController, optionsNavController]];
-    UITabBarItem *recentTab = [wallPostsNavController tabBarItem];
-    [recentTab setTitle:@"Recent Items"];
-    [recentTab setImage: [UIImage imageNamed:@"recentmessages"]];
-
-    UITabBarItem *friendsTab = [friendsNavController tabBarItem];
-    [friendsTab setTitle:@"Friends"];
-    [friendsTab setImage:[UIImage imageNamed:@"friends.png"]];
-    UITabBarItem *optionsTab = [optionsNavController tabBarItem];
-    [optionsTab setTitle:@"Options"];
-    [optionsTab setImage:[UIImage imageNamed:@"options.png"]];
-    
-    [self.window setRootViewController:self.tabBarController];
-    
-    
     // register for push notifications
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeBadge |
@@ -89,7 +57,7 @@
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
-    if ([PFUser currentUser] == nil) {
+    if (![PFUser currentUser]) {
         [self presentLoginViewController];
     }
     
@@ -157,12 +125,8 @@
 	// Go to the welcome screen and have them log in or create an account.
 	LoginViewController *loginViewController = [[LoginViewController alloc] init];
 	loginViewController.title = @"Welcome to Ubi!";
-    [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
-	
-    //	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
-    //	navController.navigationBarHidden = YES;
-    //
-    //	self.window.rootViewController = navController;
+    UINavigationController *loginNavController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+    [self.window.rootViewController presentViewController:loginNavController animated:NO completion:nil];
 }
 
 + (void) linkOrStoreUserDetails:(NSObject *)userData        //Dict of info

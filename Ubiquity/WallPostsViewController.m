@@ -102,10 +102,16 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self
                                                                action:@selector(launchMapView)];
-    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose
-                                                                                target:self
-                                                                                action:@selector(launchNewMessage)];
     [[self navigationItem] setLeftBarButtonItem:mapList];
+    
+    UIImage *image = [UIImage imageNamed:@"newMessage"];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
+    button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+    [button addTarget:self action:@selector(launchNewMessage)    forControlEvents:UIControlEventTouchUpInside];
+    UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height)];
+    [v addSubview:button];
+    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
     [[self navigationItem] setRightBarButtonItem:newMessage];
 }
 
@@ -199,33 +205,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
 	// Do any additional setup after loading the view.
-    
-    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
-    [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self.view addGestureRecognizer:swipeLeft];
-    
-}
-
-- (void)nextTab:(id)sender
-{
-    
-    int controllerIndex = 1;
-    UIView * fromView = self.tabBarController.selectedViewController.view;
-    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
-    
-    // Transition using a page curl.
-    [UIView transitionFromView:fromView toView:toView duration:0.5
-                       options: UIViewAnimationOptionTransitionFlipFromRight
-     
-                    completion:^(BOOL finished) {
-                        
-                        if (finished) {
-                            self.tabBarController.selectedIndex = controllerIndex;
-                        }
-                        
-                    }];
-    
-    [self.tabBarController setSelectedIndex: controllerIndex];
     
 }
 

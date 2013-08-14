@@ -41,17 +41,13 @@ int const LINE_HEIGHT = 30;
         int const SCREEN_HEIGHT = frame.size.height;
         
         
-        LocationController* locationController = [LocationController sharedLocationController];
-        CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-        
-        
-        [self setUpMapWithWidth: SCREEN_WIDTH andHeight:SCREEN_HEIGHT atCoordinate:currentCoordinate];
-        
         [self createEnvelopeBackgroundWithWidth: SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createAddressTitleBarWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createToLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        
+        [self createRecipientLabelWithWidth: SCREEN_WIDTH andHeight: SCREEN_HEIGHT];
         
         [self createMessageWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
@@ -70,23 +66,6 @@ int const LINE_HEIGHT = 30;
 }
 
 
-- (void) setUpMapWithWidth: (int) w andHeight: (int) h atCoordinate: (CLLocationCoordinate2D) c
-{
-    
-    NSLog(@"Long: %f", c.longitude);
-    NSLog(@"Lat: %f", c.latitude);
-    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:c.latitude
-                                                            longitude:c.longitude
-                                                                 zoom:15];
-    self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
-    GMSMarker *marker = [[GMSMarker alloc] init];
-    marker.position = c;
-    marker.animated = YES;
-    marker.map = self.map;
-    [self addSubview:self.map];
-    
-}
-
 - (void) createEnvelopeBackgroundWithWidth: (int)w andHeight: (int)h
 {
     int imageWidth = w * 19 / 20;
@@ -104,7 +83,8 @@ int const LINE_HEIGHT = 30;
     self.addressTitle = [[UITextView alloc] initWithFrame: CGRectMake(w/2 - addressWidth/2, h-self.envelope.frame.size.height+ ADDRESS_PADDING, addressWidth, addressHeight)];
     self.addressTitle.textAlignment = NSTextAlignmentCenter;
     self.addressTitle.font = [UIFont systemFontOfSize: kHeaderFontSize];
-    self.addressTitle.text = @"<INSERT ADDRESS>";
+    LocationController *locationController = [LocationController sharedLocationController];
+    self.addressTitle.text = locationController.markerLatestAddress;
     self.addressTitle.scrollEnabled = NO;
     // self.addressTitle.backgroundColor = [UIColor greenColor];
     self.addressTitle.backgroundColor = [UIColor clearColor];
@@ -114,13 +94,29 @@ int const LINE_HEIGHT = 30;
 
 - (void) createToLabelWithWidth: (int) w andHeight: (int) h
 {
+    int iconDimensions = 30;
     int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING;
-    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.5;
-    self.toLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 50, LINE_HEIGHT)];
-    self.toLabel.font = [UIFont systemFontOfSize: kFromFontSize];
-    self.toLabel.text = @"To:";
-    [self addSubview:self.toLabel];
+    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75;
+    self.toButton = [UIButton buttonWithType: UIButtonTypeCustom];
+    [self.toButton setFrame: CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions, iconDimensions)];
+    UIImage *toMe = [UIImage imageNamed: @"ToMe"];
+    [self.toButton setBackgroundImage: toMe forState: UIControlStateNormal];
+    [self addSubview:self.toButton];
 }
+
+- (void) createRecipientLabelWithWidth: (int)w andHeight:(int)h
+{
+    int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 40;
+    int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75;
+    self.recipientLabel = [[UILabel alloc] initWithFrame: CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, w * 5/11, 30)];
+    self.recipientLabel.text = @"Note for Myself";
+    self.recipientLabel.textAlignment = NSTextAlignmentCenter;
+    self.recipientLabel.font = [UIFont systemFontOfSize: kFromFontSize];
+    self.recipientLabel.textColor = mainThemeColor;
+    [self addSubview: self.recipientLabel];
+}
+
+
 
 - (void) createMessageWithWidth: (int) w andHeight: (int) h
 {
@@ -143,7 +139,9 @@ int const LINE_HEIGHT = 30;
     int innerFrameLeftMargin = w/2 - width/2;
     int innerFrameTopMargin = h - TOP_PADDING * 9.5;
     self.fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
-    self.fromLabel.text = @"<INSERT SENDERS NAME>";
+    NSLog(@"%@", [PFUser currentUser]);
+    
+    self.fromLabel.text = [[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"] objectForKey:@"name"];
     self.fromLabel.textAlignment = NSTextAlignmentRight;
     self.fromLabel.font = [UIFont systemFontOfSize: kFromFontSize];
     [self addSubview:self.fromLabel];
@@ -180,10 +178,10 @@ int const LINE_HEIGHT = 30;
 
 - (void) createAddFriendsButtonWithWidth: (int)w andHeight: (int) h
 {
-    int iconDimensions = 30 ;
+    int iconDimensions = 30;
     self.addFriendsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.addFriendsButton setBackgroundImage: [UIImage imageNamed:@"addFriend"] forState:UIControlStateNormal];
-    int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 30;
+    int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 35;
     int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75;
     self.addFriendsButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions, iconDimensions);
     [self addSubview: self.addFriendsButton];
@@ -191,7 +189,7 @@ int const LINE_HEIGHT = 30;
 
 - (void) createScrollViewWithWidth: (int)w andHeight:(int)h
 {
-    int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 65;
+    int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 70;
     int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75;
     self.friendScroller = [[UIScrollView alloc] initWithFrame: CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, w * 5/11, 30)];
     self.friendScroller.contentSize = self.friendScroller.frame.size;

@@ -31,6 +31,15 @@
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                                                     target:self
                                                                                     action:@selector(dismissOptions)];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [button addTarget:self
+                   action:@selector(loginToTwitter)
+         forControlEvents:UIControlEventTouchDown];
+        [button setTitle:@"Twitter" forState:UIControlStateNormal];
+        button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
+        [self.view addSubview:button];
+        
         [[self navigationItem] setLeftBarButtonItem:backButton];
     }
     
@@ -99,6 +108,27 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) loginToTwitter {
+//    [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
+//        if (!user) {
+//            NSLog(@"Uh oh. The user cancelled the Twitter login.");
+//            return;
+//        } else if (user.isNew) {
+//            NSLog(@"User signed up and logged in with Twitter!");
+//        } else {
+//            NSLog(@"User logged in with Twitter!");
+//        }    
+//    }];
+    
+    if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {
+            if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+                NSLog(@"Woohoo, user logged in with Twitter!");
+            }
+        }];
+    }
 }
 
 - (void)save:(id)sender

@@ -18,12 +18,16 @@
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
 #define isiPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
 
+int const ME = 0;
+int const FRIENDS = 1;
+int const PUBLIC = 2;
 
 @interface NewMessageViewController ()
 {
     BOOL imagePicked;
     PFFile *photoFile;
     NSUInteger countNumber;
+    int recipient;
 }
 @end
 
@@ -32,10 +36,9 @@
 
 - (void) viewWillAppear:(BOOL)animated
 {
-    [self hideTabBar];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(keyboardWillHide)
+                                             selector:@selector(keyboardWillHide:)
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [super viewWillAppear:animated];
@@ -53,22 +56,6 @@
     
 }
 
-- (void)hideTabBar {
-    UITabBar *tabBar = self.tabBarController.tabBar;
-    UIView *parent = tabBar.superview; // UILayoutContainerView
-    UIView *content = [parent.subviews objectAtIndex:0]; // UITransitionView
-    UIView *window = parent.superview;
-    
-    [UIView animateWithDuration:0.5
-                     animations:^{
-                         CGRect tabFrame = tabBar.frame;
-                         tabFrame.origin.y = CGRectGetMaxY(window.bounds);
-                         tabBar.frame = tabFrame;
-                         content.frame = parent.bounds;
-                     }];
-    
-}
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -77,10 +64,6 @@
         
         self.title = @"New Message";
         
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(locationDidChange:)
-                                                     name:kPAWLocationChangeNotification
-                                                   object:nil];
         recipientsList = [[NSMutableArray alloc] init];
         
         countNumber = 0;
@@ -93,62 +76,14 @@
     return self;
 }
 
-
-
-- (void) setupScrollView: (UIScrollView *) scrollView
-{
-    scrollView.clipsToBounds = NO;
-    scrollView.scrollEnabled = YES;
-    
-    NSUInteger nimages = 0;
-    NSInteger tot=0;
-    CGFloat cx = 0;
-    for (; ; nimages++) {
-        NSString *imageName = [NSString stringWithFormat:@"image%d.jpg", (nimages + 1)];
-        UIImage *image = [UIImage imageNamed:imageName];
-        if (tot==15) {
-            break;
-        }
-        if (4==nimages) {
-            nimages=0;
-        }
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-        
-        CGRect rect = imageView.frame;
-        rect.size.height = 40;
-        rect.size.width = 40;
-        rect.origin.x = cx;
-        rect.origin.y = 0;
-        
-        imageView.frame = rect;
-        
-        [scrollView addSubview:imageView];
-        
-        cx += imageView.frame.size.width+5;
-        tot++;
-    }
-    
-    [scrollView setContentSize:CGSizeMake(cx, [scrollView bounds].size.height)];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
     
     // Do any additional setup after loading the view.
-    self.repeatOptions = [[NSArray alloc] initWithObjects:kNMNever, kNMDaily, kNMWeekly, kNMMonthy, nil];
-    
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
-    [_nmv.map setUserInteractionEnabled:NO];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(locationDidChange:)
-                                                 name:kPAWLocationChangeNotification
-                                               object:nil];
     
     _nmv.addressTitle.delegate = self;
     _nmv.messageTextView.delegate = self;
@@ -172,11 +107,45 @@
     _nmv.imagePicker = [[UIImagePickerController alloc] init];
     _nmv.imagePicker.delegate = self;
     
+    recipient = ME;
+    [_nmv.addFriendsButton removeFromSuperview];
+    [_nmv.friendScroller removeFromSuperview];
+    [_nmv.toButton addTarget:self action:@selector(recipientSwitcher:) forControlEvents:UIControlEventTouchUpInside];
+
+    
+    
     //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
     //    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
     //    [self.view addGestureRecognizer:swipeDown];
     //
     
+}
+
+- (void) recipientSwitcher: (id) sender
+{
+    if (recipient == ME)
+    {
+        [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToFriends"] forState:UIControlStateNormal];
+        recipient = FRIENDS;
+        [_nmv addSubview: _nmv.addFriendsButton];
+        [_nmv addSubview: _nmv.friendScroller];
+        _nmv.recipientLabel.text = @"Add Friends";
+
+    } else if (recipient == FRIENDS)
+    {
+        [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToPublic"] forState:UIControlStateNormal];
+        recipient = PUBLIC;
+        [_nmv.addFriendsButton removeFromSuperview];
+        [_nmv.friendScroller removeFromSuperview];
+        _nmv.recipientLabel.text = @"Note for Everyone";
+
+
+    } else {
+        [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToMe"] forState:UIControlStateNormal];
+        recipient = ME;
+        _nmv.recipientLabel.text = @"Note for Myself";
+
+    }
 }
 
 - (void)addSearchBarToFriendPickerView
@@ -202,14 +171,6 @@
     }
 }
 
--(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
-{
-    //TODO
-    //[self updateLocation:coord];
-}
-
-
-
 -(void) hideKeyboard: (id) sender
 {
     
@@ -217,7 +178,7 @@
     [_nmv.messageTextView resignFirstResponder];
     
 }
--(void)keyboardWillHide {
+-(void)keyboardWillHide: (id) sender {
     if (self.view.frame.origin.y > 0)
     {
         [self setViewMovedUp:YES];
@@ -238,7 +199,6 @@
             [self setViewMovedUp:YES];
         }
     }
-    [_nmv.map setUserInteractionEnabled:NO];
     
     
 }
@@ -275,13 +235,20 @@
     }
     [_nmv.messageTextView setText: @""];
     imagePicked = NO;
-    LocationController* locationController = [LocationController sharedLocationController];
+    self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
+                     }];
+
     
-    //TODO
-    //[self updateLocation:locationController.location.coordinate];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [self.tabBarController setSelectedIndex: 0];
+    [self performSelector:@selector(dismissMessageView) withObject:self afterDelay:0.25];
+
+}
+
+- (void) dismissMessageView
+{
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void) startSearch: (id) sender
@@ -318,10 +285,10 @@
     CLLocationCoordinate2D postLocation = locationController.marker.position;
     PFGeoPoint *currentPoint = [PFGeoPoint geoPointWithLatitude:postLocation.latitude longitude:postLocation.longitude];
     
-    
     // Create a PFObject using the Post class and set the values we extracted above
     PFObject *postObject = [PFObject objectWithClassName:kPAWParsePostsClassKey];
     [postObject setObject:postMessage forKey:kPAWParseTextKey];
+    [postObject setObject:_nmv.addressTitle.text forKey:@"locationAddress"];
     [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
     if (imagePicked == YES) { //There's an image to be included with this post!
@@ -336,23 +303,7 @@
     [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        //Get started determining where exactly that is and storing
-        GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
-        [geocoder reverseGeocodeCoordinate:postLocation completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {
-            if (!error) {
-                NSString* reverseGeocodedLocation = [NSString stringWithFormat:@"%@, %@", resp.firstResult.addressLine1, resp.firstResult.addressLine2];
-                
-                [postObject setObject:reverseGeocodedLocation forKey:@"locationAddress"];
-                [postObject saveInBackground];
-                
-                [self sendInvitesViaFacebook:recipientsList atAddress:reverseGeocodedLocation];
-                
-            } else {
-                NSLog(@"Error in reverse geocoding: %@", error);
-            }
-        }];
-        
-        // NEED TO REMEMBER TO IMPLEMENT READRECEIPTS AND PUSH NOTIFICATIONS FOR SELF ONCE IT IS CONFIGURED!!!!!
+        [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
         
         //For each person we are sending to
         for (id<FBGraphUser> user in recipientsList) {
@@ -381,7 +332,6 @@
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
         }
-        
     }];
     
     // Set the access control list on the postObject to restrict future modifications
@@ -413,7 +363,6 @@
              });
          }
      }];
-    
     
     NSLog(@"Message sent!");
     
@@ -505,7 +454,6 @@
 
 - (void) handlePickerDone
 {
-    [self hideTabBar];
     [self dismissViewControllerAnimated:NO completion:nil];
     
 }
@@ -568,6 +516,8 @@
     
     
     countNumber = [recipientsList count];
+    if (countNumber > 0)
+        _nmv.recipientLabel.text = @"";
     readReceipts = [[NSMutableDictionary alloc] initWithCapacity:countNumber];
     
     [self handlePickerDone];

@@ -50,6 +50,7 @@ static NSString * const kPAWLocationKey = @"location";
 static NSString * const kPAWFilterDistanceChangeNotification = @"kPAWFilterDistanceChangeNotification";
 static NSString * const kPAWLocationChangeNotification = @"kPAWLocationChangeNotification";
 static NSString * const kPAWPostCreatedNotification = @"kPAWPostCreatedNotification";
+static NSString * const KPAWInitialLocationFound = @"kPAWInitialLocationFound";
 
 // UI strings:
 static NSString * const kPAWWallCantViewPost = @"Can’t view post! Get closer.";
@@ -72,9 +73,9 @@ static NSString * const kNMMonthy = @"Every Month";
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong,nonatomic) UITabBarController *tabBarController;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UINavigationController *navigationController;
+
 - (void)presentLoginViewController;
 
 + (void) linkOrStoreUserDetails:(NSObject *)userData
