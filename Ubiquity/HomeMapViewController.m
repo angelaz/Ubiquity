@@ -35,6 +35,11 @@
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
     
     _hmv.map.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadPins)
+                                                 name:KPAWInitialLocationFound
+                                               object:nil];
 
     
 }
@@ -316,6 +321,7 @@
     [self.optionsButton addTarget:self action:@selector(launchOptionsMenu) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.optionsButton];
 }
+
 - (void)launchOptionsMenu
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
@@ -329,5 +335,6 @@
     LocationController *locationController = [LocationController sharedLocationController];
     [locationController moveMarkerToLocation:coord];
 }
+
 
 @end
