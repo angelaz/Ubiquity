@@ -314,9 +314,10 @@ int const PUBLIC = 2;
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
             
+            NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[NSString stringWithFormat:@"%@", [NSDate date]] forKey:@"dateOpened"];
-            [readReceiptsObject setObject:user forKey:@"receiver"];
+            [readReceiptsObject setObject:[NSDate date] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
         }
         

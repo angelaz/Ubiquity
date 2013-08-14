@@ -328,7 +328,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
                 for (PFObject *post in posts) {
                     NSMutableArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
                     for (PFObject *receipt in receiptsArray) {
-                        if ([receipt objectForKey:@"receiver"] == [PFUser currentUser]) {
+                        if ([receipt objectForKey:@"receiver"] == [[PFUser currentUser] objectForKey:@"fbId"]) {
                             if ([receipt objectForKey:@"dateOpened"] == [receipt objectForKey:@"createdAt"]) {
                                 [postsToNotify addObject:post];
                                 [receipt setObject:[NSDate date] forKey:@"dateOpened"];
