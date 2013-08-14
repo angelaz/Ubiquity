@@ -73,10 +73,19 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(loadObjects)
+                                                     name:KPAWInitialLocationFound
+                                                   object:nil];
 
         PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
         [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
-        publicUserObj = [query getFirstObject];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            publicUserObj = object;
+        }];
+        
+        
     }
     return self;
 }

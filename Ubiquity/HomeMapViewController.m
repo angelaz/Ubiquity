@@ -35,6 +35,11 @@
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
     
     _hmv.map.delegate = self;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadPins)
+                                                 name:KPAWInitialLocationFound
+                                               object:nil];
 
     
 }
