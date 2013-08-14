@@ -10,4 +10,6 @@
 
 @interface NoteViewController : UIViewController
 
+@property (nonatomic, strong) NSArray *notes;
+
 @end

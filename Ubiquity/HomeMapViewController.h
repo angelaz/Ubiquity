@@ -13,4 +13,5 @@
 
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UIButton *optionsButton;
+@property (nonatomic, strong) NSMutableArray *objects;
 @end

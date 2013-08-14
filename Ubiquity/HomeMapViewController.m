@@ -17,6 +17,7 @@
 
 @interface HomeMapViewController ()
 @property (nonatomic, strong) HomeMapView *hmv;
+@property (nonatomic, strong) NSDictionary *markerNotearrayDict;
 @end
 
 @implementation HomeMapViewController
@@ -26,17 +27,117 @@
 {
     _hmv = [[HomeMapView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _hmv];
-    
+    _hmv.map.delegate = self;
     [self initNewMessageButton];
+    self.objects = [[NSMutableArray alloc] init];
+    [self loadPins];
+    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
+    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
+    
+    _hmv.map.delegate = self;
+
+    
+}
+
+- (void) loadPins
+{
+    PFQuery *getPosts = [self getParseQuery];
+    [self deployParseQuery: getPosts];
+    
     
     _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
 
     _hmv.map.delegate = self;
-    
 }
 
+- (BOOL)mapView:(GMSMapView*)mapView didTapMarker:(GMSMarker *)marker
+{
+    [self readNote: marker];
+    return YES;
+}
 
+- (void) deployParseQuery: (PFQuery *) query
+{
+    [self.objects removeAllObjects];
+    [_hmv.map clear];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %d scores.", objects.count);
+            // Do something with the found objects
+            
+            PFGeoPoint *current = [[PFGeoPoint alloc] init];
+            NSMutableArray *allNotes = [[NSMutableArray alloc] init];
+            NSMutableArray *notesForMarker = [[NSMutableArray alloc] init];
+            NSMutableArray *markers = [[NSMutableArray alloc] init];
+            
+            for (PFObject *object in objects) {
+                NSLog(@"%@", object.objectId);
+                PFGeoPoint *gp = [object objectForKey: @"location"];
+                if (![self pointsAreEqualA:current andB:gp withinRange:0.0])
+                {
+                    if (markers.count != 0)
+                        [allNotes addObject: [notesForMarker copy]];
+                    [notesForMarker removeAllObjects];
+                    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
+                    GMSMarker *marker = [GMSMarker markerWithPosition: pinLocation];
+                    marker.icon = [UIImage imageNamed: @"UnreadNote"];
+                    marker.animated = YES;
+                    marker.map = _hmv.map;
+                    
+                    NSLog(@"new pin!");
+                    
+                    [markers addObject: marker];
+                    self.markerNotearrayDict = [[NSMutableDictionary alloc] initWithObjects: @[markers, allNotes] forKeys:@[@"markers", @"arrayOfNotes"]];
+                }
+                [notesForMarker addObject:object];
+                
+                current = gp;
+            }
+            [allNotes addObject: [notesForMarker copy]];
+
+            
+        } else {
+            // Log details of the failure
+            NSLog(@"Error: %@ %@", error, [error userInfo]);
+        }
+    }];
+}
+
+- (BOOL) pointsAreEqualA: (PFGeoPoint *) p1 andB: (PFGeoPoint *) p2 withinRange: (double) d
+{
+    return (p1.latitude + d >= p2.latitude && p1.latitude - d <= p2.latitude && p1.longitude + d >= p2.longitude && p1.longitude - d <= p2.longitude);
+}
+
+- (PFQuery *) getParseQuery
+{
+    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
+    
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = 1000.0f;
+    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    
+    
+    
+    if ([self.segmentedControl selectedSegmentIndex] == 0) {
+        NSLog(@"Only shows notes from self");
+        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if ([self.segmentedControl selectedSegmentIndex] == 1) {
+        NSLog(@"Shows notes from friends");
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if ([self.segmentedControl selectedSegmentIndex] == 2) {
+        NSLog(@"Shows public notes");
+        [query whereKey:@"receivers" equalTo:[NSNull null]];
+    }
+    
+    return query;
+}
 - (void) openNewMessageView
 {
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
@@ -50,7 +151,7 @@
                      animations:^{
                          nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
                      }];
-
+    
 }
 
 - (void) initNewMessageButton
@@ -93,18 +194,42 @@
 
 - (void) readNote: (id) sender
 {
-    NoteViewController *nvc = [[NoteViewController alloc] init];
-    UINavigationController *noteViewNavController = [[UINavigationController alloc]
-                                                       initWithRootViewController:nvc];
-    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    [self presentViewController:noteViewNavController animated:YES completion:nil];
+    GMSMarker *marker = sender;
+    NSArray *notesList = [self getNotesListForMarker:marker];
+    if (notesList)
+    {
+        NSLog(@"%@", notesList);
+        NoteViewController *nvc = [[NoteViewController alloc] init];
+        nvc.notes = notesList;
+        UINavigationController *noteViewNavController = [[UINavigationController alloc]
+                                                         initWithRootViewController:nvc];
+        self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        [self presentViewController:noteViewNavController animated:YES completion:nil];
+        
+        nvc.view.frame = CGRectMake(nvc.view.frame.origin.x, self.view.frame.size.height, nvc.view.frame.size.width, nvc.view.frame.size.height);
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             nvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nvc.view.frame.size.width, nvc.self.view.frame.size.height);
+                         }];
+        
+
+    }
     
-    nvc.view.frame = CGRectMake(nvc.view.frame.origin.x, self.view.frame.size.height, nvc.view.frame.size.width, nvc.view.frame.size.height);
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         nvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nvc.view.frame.size.width, nvc.self.view.frame.size.height);
-                     }];
     
+}
+
+- (NSArray *) getNotesListForMarker: (GMSMarker *) marker
+{
+    NSArray *markersArray = [self.markerNotearrayDict objectForKey:@"markers"];
+    for (int i = 0; i<markersArray.count; i++)
+    {
+        if ([markersArray[i] isEqual: marker])
+        {
+            return [self.markerNotearrayDict objectForKey:@"arrayOfNotes"][i];
+        }
+        
+    }
+    return nil;
 }
 
 - (id)init{
@@ -113,7 +238,6 @@
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
-        [self initUnreadNoteButton];
     }
     return self;
 }
@@ -124,7 +248,7 @@
     NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"me"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"public"], nil];
     self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
     self.segmentedControl.frame = CGRectMake(0,0,150,30);
-        self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
+    self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [self.segmentedControl setSelectedSegmentIndex:0];
     [self.segmentedControl addTarget:self
                               action:@selector(changeSegment:)
@@ -137,10 +261,13 @@
     NSInteger value = [sender selectedSegmentIndex];
     if (value == 0) {
         NSLog(@"Changed value to 0");
+        [self loadPins];
     } else if (value == 1) {
         NSLog(@"Changed value to 1");
+        [self loadPins];
     } else if (value == 2) {
         NSLog(@"Changed value to 2");
+        [self loadPins];
     }
 }
 
