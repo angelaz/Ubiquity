@@ -28,7 +28,11 @@
     [self setView: _hmv];
     
     [self initNewMessageButton];
+    
+    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
+    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
 
+    _hmv.map.delegate = self;
     
 }
 
@@ -69,6 +73,10 @@
     self.navigationItem.rightBarButtonItem = newMessage;
     
     
+}
+
+- (void) doStuff {
+    NSLog(@"Did stuff");
 }
 
 - (void)initUnreadNoteButton
@@ -191,8 +199,8 @@
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
 {
     NSLog(@"A long press!");
-    LocationController* locationController = [LocationController sharedLocationController];
-    [locationController updateLocation:coord withMap:self.hmv.map];
-    
+    LocationController *locationController = [LocationController sharedLocationController];
+    [locationController moveMarkerToLocation:coord];
 }
+
 @end

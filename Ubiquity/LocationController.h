@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <GoogleMaps/GoogleMaps.h>
+#import "Geocoding.h"
 
 // protocol for sending location updates to another view controller
 @protocol LocationControllerDelegate
@@ -21,19 +22,33 @@
     
     CLLocationManager* locationManager;
     __weak id delegate;
+    BOOL hasReceivedFirstUpdate;
 }
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
 @property (nonatomic, strong) CLLocation* location;
 
 @property (nonatomic, strong) GMSMarker *marker;
-
-//@property (nonatomic, strong) CLLocation* markerLocation;
+@property (nonatomic, strong) GMSMapView *map;
+@property (nonatomic, strong) GMSGeocoder *geocoder;
+@property (nonatomic, strong) NSString *markerLatestAddress;
 
 @property (nonatomic, strong) UIAlertView *av;
 
 @property (nonatomic, weak) id  delegate;
 
 + (LocationController*)sharedLocationController;
-- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate withMap:(GMSMapView*)map;
+- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate;
+
+- (void) moveMarkerToLocation:(CLLocationCoordinate2D)newCoordinate;
+
+//+ (CLLocationManager *) locationManager;
+//+ (CLLocation *) location;
+//
+//+ (GMSMarker *) marker;
+//+ (GMSMapView *) map;
+//+ (GMSGeocoder *) geocoder;
+//
+//+ (NSString *) markerLatestAddress;
+
 @end
