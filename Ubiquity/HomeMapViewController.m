@@ -321,6 +321,7 @@
     [self.optionsButton addTarget:self action:@selector(launchOptionsMenu) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.optionsButton];
 }
+
 - (void)launchOptionsMenu
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
@@ -334,5 +335,6 @@
     LocationController *locationController = [LocationController sharedLocationController];
     [locationController moveMarkerToLocation:coord];
 }
+
 
 @end
