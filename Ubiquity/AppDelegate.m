@@ -73,6 +73,7 @@
     
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
+    [currentInstallation setObject:[PFUser currentUser] forKey:@"owner"];
     [currentInstallation saveInBackground];
     NSLog(@"Registered for push");
 }
