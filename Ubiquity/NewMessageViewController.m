@@ -191,6 +191,8 @@ int const PUBLIC = 2;
 
 -(void)textViewDidBeginEditing:(UITextView *)sender
 {
+    if ([sender isEqual: _nmv.addressTitle])
+        [_nmv.addressTitle selectAll:self];
     if ([sender isEqual:_nmv.messageTextView])
     {
         //move the main view, so that the keyboard does not hide it.

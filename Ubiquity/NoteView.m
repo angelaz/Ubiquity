@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
-static CGFloat const kHeaderFontSize = 20.f;
+static CGFloat const kHeaderFontSize = 16.f;
 static CGFloat const kFromFontSize = 15.f;
 static CGFloat const kSentLabelFontSize = 12.f;
 static CGFloat const kMessageFontSize = 11.f;
@@ -40,6 +40,8 @@ static CGFloat const kMessageFontSize = 11.f;
         
         [self createSentLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         [self createPagingLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self createImageViewWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self createPictureButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
 
     }
     return self;
@@ -77,14 +79,14 @@ static CGFloat const kMessageFontSize = 11.f;
 - (void) createPagingLabelWithWidth: (int) w andHeight: (int) h
 {
     int width = WIDEST_POINT;
-    int innerFrameLeftMargin = w/2 + width/2 - LEFT_PADDING/1.5;
+    int innerFrameLeftMargin = w/2 + width/2 - LEFT_PADDING*1.1;
     int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING/2;
-    self.pagingLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width/5, LINE_HEIGHT)];
+    self.pagingLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width/3.5, LINE_HEIGHT)];
     self.pagingLabel.text = @"1 of 2";
     // self.sentLabel.backgroundColor = [UIColor greenColor];
     self.pagingLabel.backgroundColor = [UIColor clearColor];
     
-    self.pagingLabel.textAlignment = NSTextAlignmentCenter;
+    self.pagingLabel.textAlignment = NSTextAlignmentRight;
     self.pagingLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
     [self addSubview:self.pagingLabel];
 }
@@ -114,11 +116,9 @@ static CGFloat const kMessageFontSize = 11.f;
     int height = h * 2 / 5 ;
     int innerFrameLeftMargin = w/2 - width/2;
     self.textScroll = [[UIScrollView alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, height)];
-    self.messageTextView.backgroundColor = [UIColor greenColor];
     self.messageTextView = [[UILabel alloc] initWithFrame: CGRectMake(0, 0, width, height)];
     self.messageTextView.lineBreakMode = NSLineBreakByWordWrapping;
     self.messageTextView.numberOfLines = 0;
-    self.messageTextView.text = @"Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
     [self.textScroll addSubview: self.messageTextView];
     self.messageTextView.font = [UIFont systemFontOfSize: kMessageFontSize];
@@ -156,6 +156,29 @@ static CGFloat const kMessageFontSize = 11.f;
     self.receivedLabel.numberOfLines = 2;
     self.receivedLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
     [self addSubview:self.receivedLabel];
+}
+
+- (void) createImageViewWithWidth: (int) w andHeight: (int) h
+{
+    int width = WIDEST_POINT;
+    int height = self.textScroll.frame.size.height;
+    int innerFrameTopMargin = self.textScroll.frame.origin.y;
+    int innerFrameLeftMargin = self.textScroll.frame.origin.x;
+
+    self.image = [[UIImageView alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, height)];
+    self.image.backgroundColor = [UIColor clearColor];
+
+}
+
+- (void) createPictureButtonWithWidth: (int) w andHeight: (int) h
+{
+    self.pictureButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *pictureButtonImage = [UIImage imageNamed:@"camera"];
+    [self.pictureButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
+    int width = WIDEST_POINT;
+    int innerFrameLeftMargin = w/2 + width/2 - 20.0;
+    int innerFrameTopMargin = h - TOP_PADDING * 10.5;
+    self.pictureButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20.0, 20.0);
 }
 
 

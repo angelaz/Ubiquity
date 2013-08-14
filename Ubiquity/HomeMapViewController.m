@@ -121,6 +121,7 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"createdAt"];
     
     
     

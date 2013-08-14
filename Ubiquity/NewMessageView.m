@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
-static CGFloat const kHeaderFontSize = 20.f;
+static CGFloat const kHeaderFontSize = 16.f;
 static CGFloat const kFromFontSize = 15.f;
 static CGFloat const kSentLabelFontSize = 12.f;
 static CGFloat const kMessageFontSize = 11.f;
