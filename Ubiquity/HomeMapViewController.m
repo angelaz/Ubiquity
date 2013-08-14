@@ -167,18 +167,6 @@
     
 }
 
-- (void)initUnreadNoteButton
-{
-    int const SCREEN_WIDTH = self.view.frame.size.width;
-    int const SCREEN_HEIGHT = self.view.frame.size.height;
-    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *pictureButtonImage = [UIImage imageNamed:@"UnreadNote"];
-    [newButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
-    newButton.frame = CGRectMake(SCREEN_WIDTH/2 - 25, SCREEN_HEIGHT/2 - 70, 50.0, 40.0);
-    [newButton addTarget:self action:@selector(readNote:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:newButton];
-}
-
 - (void) readNote: (id) sender
 {
     GMSMarker *marker = sender;
@@ -187,6 +175,7 @@
     {
         NSLog(@"%@", notesList);
         NoteViewController *nvc = [[NoteViewController alloc] init];
+        nvc.notes = notesList;
         UINavigationController *noteViewNavController = [[UINavigationController alloc]
                                                          initWithRootViewController:nvc];
         self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
@@ -224,7 +213,6 @@
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
-        [self initUnreadNoteButton];
     }
     return self;
 }

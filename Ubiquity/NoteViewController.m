@@ -9,7 +9,15 @@
 #import "NoteViewController.h"
 #import "NoteView.h"
 
+@interface NoteViewController()
+
+@property (nonatomic, strong) NoteView *nv;
+
+@end
+
 @implementation NoteViewController
+
+
 
 - (void)viewDidLoad
 {
@@ -18,8 +26,8 @@
     
     // Do any additional setup after loading the view.
     
-    NoteView *nv = [[NoteView alloc] initWithFrame: [UIScreen mainScreen].bounds];
-    [self setView: nv];
+    _nv = [[NoteView alloc] initWithFrame: [UIScreen mainScreen].bounds];
+    [self setView: _nv];
     
     
     UIBarButtonItem *doneButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
@@ -27,8 +35,15 @@
                                                                                action:@selector(closeNote:)];
     [[self navigationItem] setRightBarButtonItem:doneButton];
     
+    [self loadNotesText];
     
     
+    
+}
+
+- (void) loadNotesText
+{
+    _nv.messageTextView.text = [self.notes[0] objectForKey:@"text"];
 }
 
 -(void) closeNote: (id) sender
