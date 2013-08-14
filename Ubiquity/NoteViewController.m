@@ -121,7 +121,17 @@
 
 - (void) loadNotesText: (int) i
 {
+    
+    CGSize textSize = [[self.notes[i] objectForKey:@"text"] sizeWithFont: _nv.messageTextView.font constrainedToSize:CGSizeMake(_nv.messageTextView.frame.size.width, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+    _nv.textScroll.contentSize = textSize;
+    CGRect newFrame = _nv.messageTextView.frame;
+    if (textSize.height > newFrame.size.height)
+        newFrame.size.height = textSize.height;
+    _nv.messageTextView.frame = newFrame;
     _nv.messageTextView.text = [self.notes[i] objectForKey:@"text"];
+
+    
+    
     _nv.addressTitle.text = [self.notes[i] objectForKey:@"locationAddress"];
     
     NSDate *date = [self.notes[i] objectForKey:@"createdAt"];
