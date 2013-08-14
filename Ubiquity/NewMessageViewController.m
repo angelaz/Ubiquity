@@ -299,8 +299,7 @@ int const PUBLIC = 2;
     
     imagePicked = NO;
     
-    NSString *readReceiptDate = [NSString stringWithFormat:@"%@", [NSDate date]];
-    [postObject setObject:readReceiptDate forKey:@"readReceiptDate"];
+    NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
@@ -315,10 +314,13 @@ int const PUBLIC = 2;
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
             
-            NSString *username = [user objectForKey:@"id"];
-            [readReceipts setValue:readReceiptDate forKey:username];
-            [postObject setObject:readReceipts forKey:@"readReceipts"];
+            PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
+            [readReceiptsObject setObject:[NSString stringWithFormat:@"%@", [NSDate date]] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:user forKey:@"receiver"];
+            [readReceiptsArray addObject:readReceiptsObject];
         }
+        
+        [postObject setObject:readReceiptsArray forKey:@"readReceiptsArray"];
         
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
