@@ -31,9 +31,7 @@ static CGFloat const kMessageFontSize = 11.f;
         [self createEnvelopeBackgroundWithWidth: SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createAddressTitleBarWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
-        [self createReceivedLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
+                
         [self createMessageWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createFromLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
@@ -63,9 +61,9 @@ static CGFloat const kMessageFontSize = 11.f;
 {
     int width = WIDEST_POINT;
     int innerFrameLeftMargin = w/2 - width/2;
-    int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING/2;
+    int innerFrameTopMargin = h - TOP_PADDING * 8;
     self.sentLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
-    self.sentLabel.text = @"10:20 AM, 03 August 2013";
+    self.sentLabel.text = @"10:20 AM, 08 August 2013";
     // self.sentLabel.backgroundColor = [UIColor greenColor];
     self.sentLabel.backgroundColor = [UIColor clearColor];
     
@@ -79,17 +77,26 @@ static CGFloat const kMessageFontSize = 11.f;
 - (void) createPagingLabelWithWidth: (int) w andHeight: (int) h
 {
     int width = WIDEST_POINT;
-    int innerFrameLeftMargin = w/2 + width/2 - LEFT_PADDING*1.1;
-    int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING/2;
-    self.pagingLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width/3.5, LINE_HEIGHT)];
+    int innerFrameLeftMargin = w/2 - width/2;
+    int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING;
+    self.pagingLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
     self.pagingLabel.text = @"1 of 2";
     // self.sentLabel.backgroundColor = [UIColor greenColor];
     self.pagingLabel.backgroundColor = [UIColor clearColor];
     
-    self.pagingLabel.textAlignment = NSTextAlignmentRight;
+    self.pagingLabel.textAlignment = NSTextAlignmentCenter;
     self.pagingLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
     [self addSubview:self.pagingLabel];
+    
+    self.leftArrow = [[UIImageView alloc] initWithFrame: CGRectMake(innerFrameLeftMargin + LEFT_PADDING*1.2, innerFrameTopMargin + 7, 15, 15)];
+    [self.leftArrow setImage: [UIImage imageNamed:@"leftarrow"]];
+    self.rightArrow = [[UIImageView alloc] initWithFrame: CGRectMake(innerFrameLeftMargin + width - LEFT_PADDING * 1.5, innerFrameTopMargin + 7, 15, 15)];
+    [self.rightArrow setImage: [UIImage imageNamed:@"rightarrow"]];
+    [self addSubview: self.rightArrow];
+
 }
+
+
 
 
 
@@ -140,28 +147,10 @@ static CGFloat const kMessageFontSize = 11.f;
 }
 
 
-
-- (void) createReceivedLabelWithWidth: (int) w andHeight: (int) h
-{
-    int width = WIDEST_POINT;
-    int innerFrameLeftMargin = w/2 - width/2;
-    int innerFrameTopMargin = h - TOP_PADDING * 8;
-    self.receivedLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
-    self.receivedLabel.text = @"10:20 AM, 08 August 2013";
-    // self.sentLabel.backgroundColor = [UIColor greenColor];
-    self.receivedLabel.backgroundColor = [UIColor clearColor];
-    
-    self.receivedLabel.textAlignment = NSTextAlignmentCenter;
-    self.receivedLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.receivedLabel.numberOfLines = 2;
-    self.receivedLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
-    [self addSubview:self.receivedLabel];
-}
-
 - (void) createImageViewWithWidth: (int) w andHeight: (int) h
 {
     int width = WIDEST_POINT;
-    int height = self.textScroll.frame.size.height;
+    int height = self.textScroll.frame.size.height*9/10;
     int innerFrameTopMargin = self.textScroll.frame.origin.y;
     int innerFrameLeftMargin = self.textScroll.frame.origin.x;
 

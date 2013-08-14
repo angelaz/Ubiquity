@@ -15,6 +15,7 @@
     UISwipeGestureRecognizer *swipeLeft;
     UISwipeGestureRecognizer *swipeRight;
     BOOL swipedLeft;
+    BOOL showingImage;
     int currentNote;
 }
 
@@ -122,11 +123,19 @@
 
 - (void) loadNotesText: (int) i
 {
+    showingImage = false;
+    [_nv.leftArrow removeFromSuperview];
+    [_nv.rightArrow removeFromSuperview];
+    
+    
     [self loadDates: i];
     [self loadText: i];
     [self loadImages: i];
     
-    
+    if (i > 0)
+        [_nv addSubview:_nv.leftArrow];
+    if (i+1 < self.notes.count)
+        [_nv addSubview:_nv.rightArrow];
     
     _nv.addressTitle.text = [self.notes[i] objectForKey:@"locationAddress"];
     
@@ -165,25 +174,36 @@
 {
     [_nv.image setImage:nil];
     [_nv.pictureButton removeFromSuperview];
-
+    
     PFFile *photoData = [self.notes[i] objectForKey:@"photo"];
     [photoData getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         UIImage *photo = [[UIImage alloc] initWithData:data];
         _nv.image.contentMode = UIViewContentModeScaleAspectFit;
         [_nv.image setImage:photo];
         [_nv addSubview:_nv.pictureButton];
-        [_nv.pictureButton addTarget:self action:@selector(flipAndShowImage:) forControlEvents:UIControlEventTouchUpInside];
+        [_nv.pictureButton addTarget:self action:@selector(toggleImage:) forControlEvents:UIControlEventTouchUpInside];
         
     }];
     
     
 }
 
-- (void) flipAndShowImage: (id) sender
+- (void) toggleImage: (id) sender
 {
-    [_nv addSubview:_nv.image];
+    if (!showingImage)
+    {
+        [_nv addSubview:_nv.image];
+        [_nv.textScroll removeFromSuperview];
+        [_nv.pictureButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
+    } else {
+        [_nv.image removeFromSuperview];
+        [_nv addSubview: _nv.textScroll];
+        [_nv.pictureButton setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
+        
+    }
     
-
+    showingImage = !showingImage;
+    
 }
 
 

@@ -14,8 +14,12 @@
 #import "OptionsViewController.h"
 #import "NoteViewController.h"
 #import "LocationController.h"
+#import <math.h>
 
 @interface HomeMapViewController ()
+{
+    CGFloat zoomLevel;
+}
 @property (nonatomic, strong) HomeMapView *hmv;
 @property (nonatomic, strong) NSDictionary *markerNotearrayDict;
 @end
@@ -28,6 +32,7 @@
     _hmv = [[HomeMapView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _hmv];
     _hmv.map.delegate = self;
+    zoomLevel = _hmv.map.camera.zoom;
     [self initNewMessageButton];
     self.objects = [[NSMutableArray alloc] init];
     [self loadPins];
@@ -40,29 +45,51 @@
                                              selector:@selector(loadPins)
                                                  name:KPAWInitialLocationFound
                                                object:nil];
-
+    
     
 }
+
+- (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
+{
+    
+    if (zoomLevel > mapView.camera.zoom + 0.5 || zoomLevel < mapView.camera.zoom - 0.5)
+    {
+        double newRange = 77.4795 * pow(M_E, -0.683106 * zoomLevel);
+        PFQuery *getPosts = [self getParseQuery];
+        NSLog(@"%f new range", newRange);
+        [self deployParseQuery:getPosts withRange:newRange];
+    }
+    return;
+}
+
+
+
 
 - (void) loadPins
 {
     PFQuery *getPosts = [self getParseQuery];
-    [self deployParseQuery: getPosts];
+    [self deployParseQuery: getPosts withRange: 0.005];
     
     
     _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
-
+    
     _hmv.map.delegate = self;
 }
 
 - (BOOL)mapView:(GMSMapView*)mapView didTapMarker:(GMSMarker *)marker
 {
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         marker.icon = [UIImage imageNamed:@"ReadNote"];
+                     }];
+    
     [self readNote: marker];
     return YES;
 }
 
-- (void) deployParseQuery: (PFQuery *) query
+- (void) deployParseQuery: (PFQuery *) query withRange: (double) range
 {
     [self.objects removeAllObjects];
     [_hmv.map clear];
@@ -80,7 +107,7 @@
             for (PFObject *object in objects) {
                 NSLog(@"%@", object.objectId);
                 PFGeoPoint *gp = [object objectForKey: @"location"];
-                if (![self pointsAreEqualA:current andB:gp withinRange:0.0])
+                if (![self pointsAreEqualA:current andB:gp withinRange:range])
                 {
                     if (markers.count != 0)
                         [allNotes addObject: [notesForMarker copy]];
@@ -90,6 +117,7 @@
                     marker.icon = [UIImage imageNamed: @"UnreadNote"];
                     marker.animated = YES;
                     marker.map = _hmv.map;
+                    zoomLevel = _hmv.map.camera.zoom;
                     
                     NSLog(@"new pin!");
                     
@@ -101,7 +129,7 @@
                 current = gp;
             }
             [allNotes addObject: [notesForMarker copy]];
-
+            
             
         } else {
             // Log details of the failure
@@ -126,9 +154,7 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
-    [query includeKey:@"createdAt"];
-    
-    
+//    [query orderByDescending: @"createdAt"];
     
     if ([self.segmentedControl selectedSegmentIndex] == 0) {
         NSLog(@"Only shows notes from self");
@@ -218,7 +244,7 @@
                              nvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nvc.view.frame.size.width, nvc.self.view.frame.size.height);
                          }];
         
-
+        
     }
     
     

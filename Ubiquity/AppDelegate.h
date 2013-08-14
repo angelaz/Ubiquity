@@ -39,7 +39,6 @@ static NSString * const kPAWParseTextKey = @"text";
 static NSString * const kPAWParseLocationKey = @"location";
 static NSString * const kPAWParseCreatedKey = @"createdAt";
 
-
 static NSString * const kNMFrequencyKey = @"frequency";
 
 // NSNotification userInfo keys:
@@ -51,6 +50,8 @@ static NSString * const kPAWFilterDistanceChangeNotification = @"kPAWFilterDista
 static NSString * const kPAWLocationChangeNotification = @"kPAWLocationChangeNotification";
 static NSString * const kPAWPostCreatedNotification = @"kPAWPostCreatedNotification";
 static NSString * const KPAWInitialLocationFound = @"kPAWInitialLocationFound";
+static NSString * const kPAWCameraZoomChangeNotification = @"kPAWCameraZoomChangeNotification";
+
 
 // UI strings:
 static NSString * const kPAWWallCantViewPost = @"Can’t view post! Get closer.";
