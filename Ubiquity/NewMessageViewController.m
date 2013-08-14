@@ -367,8 +367,21 @@
             NSString *username = [user objectForKey:@"id"];
             [readReceipts setValue:readReceiptDate forKey:username];
             [postObject setObject:readReceipts forKey:@"readReceipts"];
-            
         }
+        
+        if (countNumber == 0) {
+            PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
+            [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
+            PFObject *obj = [query getFirstObject];
+            
+            [AppDelegate linkOrStoreUserDetails:obj
+                                           toId:[obj objectForKey:@"facebookId"]
+                                         toUser:nil
+                          andStoreUnderRelation:@"receivers"
+                                       toObject:postObject
+                                     finalBlock:^(PFObject *made){}];
+        }
+        
     }];
     
     // Set the access control list on the postObject to restrict future modifications

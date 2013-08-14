@@ -36,6 +36,8 @@
 
     [UINavigationBar appearance].tintColor = mainThemeColor;
     
+    //[self createPublicUser];
+    
     HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
     UINavigationController *mapNavController = [[UINavigationController alloc]
                                                 initWithRootViewController:hmvc];
@@ -77,6 +79,7 @@
     [optionsTab setImage:[UIImage imageNamed:@"options.png"]];
     
     [self.window setRootViewController:self.tabBarController];
+    
     
     // register for push notifications
     [application registerForRemoteNotificationTypes:
@@ -234,6 +237,5 @@
         }
     }];
 }
-
 
 @end
