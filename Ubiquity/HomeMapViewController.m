@@ -31,6 +31,11 @@
     [self initNewMessageButton];
     self.objects = [[NSMutableArray alloc] init];
     [self loadPins];
+    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
+    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
+    
+    _hmv.map.delegate = self;
+
     
 }
 
@@ -40,6 +45,10 @@
     [self deployParseQuery: getPosts];
     
     
+    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
+    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
+
+    _hmv.map.delegate = self;
 }
 
 - (BOOL)mapView:(GMSMapView*)mapView didTapMarker:(GMSMarker *)marker
@@ -165,6 +174,22 @@
     self.navigationItem.rightBarButtonItem = newMessage;
     
     
+}
+
+- (void) doStuff {
+    NSLog(@"Did stuff");
+}
+
+- (void)initUnreadNoteButton
+{
+    int const SCREEN_WIDTH = self.view.frame.size.width;
+    int const SCREEN_HEIGHT = self.view.frame.size.height;
+    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *pictureButtonImage = [UIImage imageNamed:@"UnreadNote"];
+    [newButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
+    newButton.frame = CGRectMake(SCREEN_WIDTH/2 - 25, SCREEN_HEIGHT/2 - 70, 50.0, 40.0);
+    [newButton addTarget:self action:@selector(readNote:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:newButton];
 }
 
 - (void) readNote: (id) sender
@@ -301,8 +326,8 @@
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
 {
     NSLog(@"A long press!");
-    LocationController* locationController = [LocationController sharedLocationController];
-    [locationController updateLocation:coord withMap:self.hmv.map];
-    
+    LocationController *locationController = [LocationController sharedLocationController];
+    [locationController moveMarkerToLocation:coord];
 }
+
 @end
