@@ -51,6 +51,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     CGFloat additionalPhotoHeight;
     CGFloat additionalPhotoWidth;
     BOOL photoAttachmentExists;
+    PFObject *publicUserObj;
 }
 
 @property (nonatomic, strong) FriendsViewController *friendsViewController;
@@ -72,6 +73,10 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
+
+        PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
+        [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
+        publicUserObj = [query getFirstObject];
     }
     return self;
 }
@@ -201,33 +206,6 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
 	// Do any additional setup after loading the view.
     
-    UISwipeGestureRecognizer *swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
-    [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [self.view addGestureRecognizer:swipeLeft];
-    
-}
-
-- (void)nextTab:(id)sender
-{
-    
-    int controllerIndex = 1;
-    UIView * fromView = self.tabBarController.selectedViewController.view;
-    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
-    
-    // Transition using a page curl.
-    [UIView transitionFromView:fromView toView:toView duration:0.5
-                       options: UIViewAnimationOptionTransitionFlipFromRight
-     
-                    completion:^(BOOL finished) {
-                        
-                        if (finished) {
-                            self.tabBarController.selectedIndex = controllerIndex;
-                        }
-                        
-                    }];
-    
-    [self.tabBarController setSelectedIndex: controllerIndex];
-    
 }
 
 
@@ -285,6 +263,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 // Override to customize what kind of query to perform on the class. The default is  for
 // all objects ordered by createdAt descending.
 - (PFQuery *)queryForTable {
+    
 	PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
     
     NSLog(@"querying for table called");
@@ -297,14 +276,14 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	// Query for posts near our current location.
     
 	// Get our current location:
-	LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
-	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
-    
-	// And set the query to look by location
-	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+//	LocationController* locationController = [LocationController sharedLocationController];
+//    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+//    
+//	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
+//    
+//	// And set the query to look by location
+//	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+//	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
     [query orderByDescending:@"createdAt"];
     
@@ -317,7 +296,7 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     } else if (self.indexing == 2) {
         NSLog(@"Shows public notes");
-        [query whereKey:@"receivers" equalTo:[NSNull null]];
+        [query whereKey:@"receivers" equalTo:publicUserObj];
     }
     
     [self pushNotifications];
@@ -325,17 +304,8 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 	return query;
 }
 
-
 - (void)pushNotifications {
-    PFQuery *queryUserDate = [PFQuery queryWithClassName:self.parseClassName];
-    
-	// If no objects are loaded in memory, we look to the cache first to fill the table
-	// and then subsequently do a query against the network.
-//	if ([self.objects count] == 0) {
-//		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-//	}
-    
-	// Query for posts near our current location.
+    PFQuery *queryUserDate = [PFQuery queryWithClassName:@"Posts"];
     
 	// Get our current location:
 	LocationController* locationController = [LocationController sharedLocationController];
@@ -349,101 +319,51 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
     [queryUserDate includeKey:kPAWParseSenderKey];
     [queryUserDate orderByDescending:@"createdAt"];
     [queryUserDate whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    //[queryUserDate includeKey:@"readReceipts"];
     [queryUserDate findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
-    
-        NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
-        
-        for (PFObject *post in posts) {
-            NSMutableDictionary *receipts = [post objectForKey:@"readReceipts"];
-            NSString *date = [NSString stringWithFormat:@"%@", [receipts valueForKey:[[PFUser currentUser] objectForKey:@"id"]]];
-            if (date == [post objectForKey:@"readReceiptDate"]) {
-                [postsToNotify addObject:post];
-                [post setObject:[NSDate date] forKey:@"readReceiptDate"];
+        if (!error) {   // The find succeeded.
+            if ([posts count] > 0) {      //Saved friend list exists
+                NSLog(@"Seeing if new push notifications");
+                NSMutableArray *postsToNotify = [[NSMutableArray alloc] initWithCapacity:[posts count]];
+                
+                for (PFObject *post in posts) {
+                    NSMutableDictionary *receipts = [post objectForKey:@"readReceipts"];
+                    NSString *date = [NSString stringWithFormat:@"%@", [receipts valueForKey:[[PFUser currentUser] objectForKey:@"fbId"]]];
+                    if ([date isEqualToString:[post objectForKey:@"readReceiptDate"]]) {
+                        [postsToNotify addObject:post];
+                        [receipts setObject:[NSDate date] forKey:[[PFUser currentUser] objectForKey:@"fbId"]];
+                        [post setObject:receipts forKey:@"readReceipts"];
+                        [post saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            NSLog(@"saving read receipts error: %@", error);
+                        }];
+                    }
+                }
+                
+                PFQuery *pushQuery = [PFInstallation query];
+                [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+                
+                if (postsToNotify) {
+                    NSLog(@"new push notifications!");
+                    for (PFObject *obj in postsToNotify) {
+                        PFObject *senderInfo = [obj objectForKey:@"sender"];
+                        PFObject *profile = [senderInfo objectForKey:@"profile"];
+                        NSString *sender = [NSString stringWithFormat:@"%@",[profile objectForKey:@"name"]];
+                        NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", sender];
+                        NSLog(@"the object id of the post is %@", [obj objectForKey:@"text"]);
+                        // Send push notification to query
+                        [PFPush sendPushMessageToQueryInBackground:pushQuery
+                                                       withMessage:pushMessage];
+                    }
+                } else {
+                    NSLog(@"no new push notifications");
+                }
+                
+                [postsToNotify removeAllObjects];
+            } else {
+                // Log details of the failure
+                NSLog(@"Error in push notifications: %@", error);
             }
         }
-        
-        PFQuery *pushQuery = [PFInstallation query];
-        [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
-        
-        for (PFObject *obj in postsToNotify) {
-            NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [obj objectForKey:@"sender"]];
-            // Send push notification to query
-            [PFPush sendPushMessageToQueryInBackground:pushQuery
-                                           withMessage:pushMessage];
-        }
-        
     }];
-    
-
-    //    // change this to _postsToPush array
-    ////    for (TextMessage *newPost in postsToNotify)
-    ////    {
-    ////        if ([newPost.address isEqualToString:[[PFUser currentUser] objectForKey:@"username"]]) {
-    ////
-    ////            NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [[PFUser currentUser] objectForKey:@"profile"][@"name"]];
-    ////        // Send push notification to query
-    ////            [PFPush sendPushMessageToQueryInBackground:pushQuery
-    ////                                       withMessage:pushMessage];
-    ////        }
-    ////    }
-
-    
-//    PFQuery *query2 = [PFQuery queryWithClassName:self.parseClassName];
-//    
-//	// If no objects are loaded in memory, we look to the cache first to fill the table
-//	// and then subsequently do a query against the network.
-//    //	if ([self.objects count] == 0) {
-//    //		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-//    //	}
-//    
-//	// Query for posts near our current location.
-//    
-//	[query2 whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-//    [query2 includeKey:kPAWParseSenderKey];
-//    [query2 orderByDescending:@"createdAt"];
-//    [query2 whereKey:@"readReceiptDate" matchesQuery:queryUserDate];
-//    [queryUserDate whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-//    [queryUserDate whereKey:@"readReceipts" equalTo:@"readReceiptDate"];
-//    
-//    [queryUserDate findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if (!error) {   // The find succeeded.
-//            if ([objects count] > 0) {      //Saved friend list exists
-//                NSMutableArray *notes = [[NSMutableArray alloc] initWithArray:objects];
-//                NSLog(@"notes array: %@", notes);
-//                
-//                
-//            } else {    //No saved friend list. No need to instantiate anything though
-//                NSLog(@"No new notes");
-//            }
-//        } else {        // Log details of the failure
-//            NSLog(@"Error: %@", error);
-//        }
-//    }];
-//
-////    NSString *username = [[PFUser currentUser] objectForKey:@"id"];
-////    [readReceipts setValue:readReceiptDate forKey:username];
-////    [postObject setObject:readReceipts forKey:@"readReceipts"];
-//
-//    
-//    
-//    // Create our Installation query
-//    
-//   // PFQuery *pushQuery = [PFInstallation query];
-//    //[pushQuery whereKey:@"deviceType" equalTo:@"ios"];
-//    
-//
-//    // change this to _postsToPush array
-////    for (TextMessage *newPost in _allPosts)
-////    {
-////        if ([newPost.address isEqualToString:[[PFUser currentUser] objectForKey:@"username"]]) {
-////
-////            NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", [[PFUser currentUser] objectForKey:@"profile"][@"name"]];
-////        // Send push notification to query
-////            [PFPush sendPushMessageToQueryInBackground:pushQuery
-////                                       withMessage:pushMessage];
-////        }
-////    }
 }
 
 // Override to customize the look of a cell representing an object. The default is to display
