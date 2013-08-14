@@ -526,14 +526,17 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
             photoView.contentMode = UIViewContentModeScaleAspectFill;
             additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
             [photoView setImage:photo];
+        
+            
+            [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
+                                           kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
+                                           additionalPhotoWidth,
+                                           additionalPhotoHeight)];
         }];
+    } else {
+        [photoView setImage:nil];
     }
     
-    
-    [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                   kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
-                                   additionalPhotoWidth,
-                                   additionalPhotoHeight)];
     
     
     
