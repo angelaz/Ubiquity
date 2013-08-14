@@ -39,7 +39,8 @@ static CGFloat const kMessageFontSize = 11.f;
         [self createFromLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createSentLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
+        [self createPagingLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+
     }
     return self;
 }
@@ -72,6 +73,24 @@ static CGFloat const kMessageFontSize = 11.f;
     self.sentLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
     [self addSubview:self.sentLabel];
 }
+
+- (void) createPagingLabelWithWidth: (int) w andHeight: (int) h
+{
+    int width = WIDEST_POINT;
+    int innerFrameLeftMargin = w/2 + width/2 - LEFT_PADDING/1.5;
+    int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING/2;
+    self.pagingLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width/5, LINE_HEIGHT)];
+    self.pagingLabel.text = @"1 of 2";
+    // self.sentLabel.backgroundColor = [UIColor greenColor];
+    self.pagingLabel.backgroundColor = [UIColor clearColor];
+    
+    self.pagingLabel.textAlignment = NSTextAlignmentCenter;
+    self.pagingLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
+    [self addSubview:self.pagingLabel];
+}
+
+
+
 
 - (void) createAddressTitleBarWithWidth: (int)w andHeight: (int)h
 {

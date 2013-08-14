@@ -18,6 +18,9 @@
 @property (nonatomic, strong) UILabel *sentLabel;
 @property (nonatomic, strong) UILabel *receivedLabel;
 
+@property (nonatomic, strong) UILabel *pagingLabel;
+
+
 
 @property (nonatomic, strong) UILabel *messageTextView;
 @property (nonatomic, strong) UIScrollView *textScroll;
