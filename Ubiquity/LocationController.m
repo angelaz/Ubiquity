@@ -42,6 +42,10 @@
         self.locationManager.distanceFilter = 50.0f;
         //self.locationManager.headingFilter = 5;
         
+        self.marker = [[GMSMarker alloc] init];
+        self.marker.icon = [GMSMarker markerImageWithColor:[UIColor whiteColor]];
+        self.marker.animated = YES;
+        
         [locationManager startUpdatingLocation];
         NSLog(@"Location updates started");
     }
@@ -49,11 +53,6 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
-    
-    if(self.marker == nil) {
-        self.marker = [[GMSMarker alloc] init];
-        self.marker.position = [[locations lastObject] coordinate];
-    }
     
     NSLog(@"%f is the accuracy level", locationManager
            .location.horizontalAccuracy);
@@ -88,6 +87,7 @@
     self.marker.title = @"Here";
     self.marker.snippet = @"My location";
     self.marker.animated = YES;
+
     
     [self.map clear];
     

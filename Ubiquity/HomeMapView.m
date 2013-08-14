@@ -43,11 +43,8 @@
     
     self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
     locationController.map = self.map;
+    [locationController moveMarkerToLocation:currentCoordinate];
     
-    GMSMarker *marker = [[GMSMarker alloc] init];
-    marker.position = currentCoordinate;
-    marker.animated = YES;
-    marker.map = self.map;
     [self addSubview:self.map];
     
 }
