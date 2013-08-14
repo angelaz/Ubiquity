@@ -642,8 +642,9 @@ static NSInteger kPAWCellAttachedPhotoTag = 8;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    
     CGRect frame = self.optionsButton.frame;
-    frame.origin.y = scrollView.contentOffset.y + self.tableView.frame.size.height - self.optionsButton.frame.size.height;
+    frame.origin.y = scrollView.contentOffset.y + self.tableView.frame.size.height + self.navigationController.navigationBar.frame.size.height - 70;
     self.optionsButton.frame = frame;
     
     [self.view bringSubviewToFront:self.optionsButton];
