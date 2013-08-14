@@ -316,12 +316,14 @@ int const PUBLIC = 2;
             
             NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[readReceiptsObject createdAt] forKey:@"dateOpened"];
+            //Not opened yet, so don't need this
+            //[readReceiptsObject setObject:[readReceiptsObject createdAt] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
         }
         
         [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
+        [postObject saveInBackground];
         
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
@@ -379,9 +381,9 @@ int const PUBLIC = 2;
     NSLog(@"Trying to attach a picture!");
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
     } else {
-        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
     }
     
     [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
