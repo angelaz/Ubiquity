@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 20B9181717BC375600CC33C2 /* Default-568h@2x.png */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
@@ -34,11 +35,17 @@
 		8205692417B95876006A2000 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8205692317B95876006A2000 /* LoginView.m */; };
 		82148F3217AADD140066C69A /* Geocoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 82148F3117AADD140066C69A /* Geocoding.m */; };
 		824EB77917A735A00006AA5D /* options.png in Resources */ = {isa = PBXBuildFile; fileRef = 824EB77817A735A00006AA5D /* options.png */; };
+		827C7A2917BAE44E000253DF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8624CD2017A2E99800F32DE8 /* StoreKit.framework */; };
 		82855A5617A9A023007B44CA /* friends.png in Resources */ = {isa = PBXBuildFile; fileRef = 82855A5517A9A023007B44CA /* friends.png */; };
 		829ED75F17B3135A006AD7D5 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 829ED75E17B3135A006AD7D5 /* camera.png */; };
+		82AA117C17BADC5F00D570DC /* Rdio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117B17BADC5F00D570DC /* Rdio.framework */; };
+		82AA117E17BADC7A00D570DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117D17BADC7A00D570DC /* AudioToolbox.framework */; };
+		82AA118017BADC8800D570DC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117F17BADC8800D570DC /* Security.framework */; };
 		82C7577617A322580094EB15 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82C7577517A322570094EB15 /* FriendsViewController.m */; };
 		82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577717A3225D0094EB15 /* FriendsViewController.xib */; };
 		82C7577A17A325C50094EB15 /* newMessage.png in Resources */ = {isa = PBXBuildFile; fileRef = 82C7577917A325C50094EB15 /* newMessage.png */; };
+		82CA7C3217BC37DA00F00008 /* musicNote.png in Resources */ = {isa = PBXBuildFile; fileRef = 82CA7C2F17BC37DA00F00008 /* musicNote.png */; };
+		82CA7C3317BC37DA00F00008 /* AddMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */; };
 		82E9316917A079C600B3958B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316817A079C600B3958B /* Foundation.framework */; };
 		82E9316B17A079C600B3958B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316A17A079C600B3958B /* CoreGraphics.framework */; };
 		82E9316D17A079C600B3958B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316C17A079C600B3958B /* UIKit.framework */; };
@@ -113,6 +120,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		20B9181717BC375600CC33C2 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
 		20F8F2A817A1F0F600594994 /* WallPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostsViewController.m; sourceTree = "<group>"; };
 		20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -150,10 +158,16 @@
 		8254637417B953BE00019C24 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
 		82855A5517A9A023007B44CA /* friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = friends.png; sourceTree = "<group>"; };
 		829ED75E17B3135A006AD7D5 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
+		82AA117B17BADC5F00D570DC /* Rdio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Rdio.framework; sourceTree = "<group>"; };
+		82AA117D17BADC7A00D570DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		82AA117F17BADC8800D570DC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		82C7577417A322520094EB15 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
 		82C7577517A322570094EB15 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
 		82C7577717A3225D0094EB15 /* FriendsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FriendsViewController.xib; sourceTree = "<group>"; };
 		82C7577917A325C50094EB15 /* newMessage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = newMessage.png; sourceTree = "<group>"; };
+		82CA7C2F17BC37DA00F00008 /* musicNote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicNote.png; sourceTree = "<group>"; };
+		82CA7C3017BC37DA00F00008 /* AddMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMusicViewController.h; sourceTree = "<group>"; };
+		82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMusicViewController.m; sourceTree = "<group>"; };
 		82E9316517A079C600B3958B /* Ubiquity.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ubiquity.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		82E9316817A079C600B3958B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		82E9316A17A079C600B3958B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -236,13 +250,18 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				827C7A2917BAE44E000253DF /* StoreKit.framework in Frameworks */,
+				82AA118017BADC8800D570DC /* Security.framework in Frameworks */,
 				60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */,
+				60CB90BE17A0872200A9E93A /* CFNetwork.framework in Frameworks */,
+				82AA117E17BADC7A00D570DC /* AudioToolbox.framework in Frameworks */,
 				60CB90BC17A086DB00A9E93A /* QuartzCore.framework in Frameworks */,
 				60C0B47217A1AA6000DC0F92 /* OpenGLES.framework in Frameworks */,
 				60CB90C617A0897E00A9E93A /* libz.dylib in Frameworks */,
 				60C0B47017A1AA5100DC0F92 /* libicucore.dylib in Frameworks */,
 				60C0B46E17A1AA4500DC0F92 /* libc++.dylib in Frameworks */,
 				60C0B46C17A1AA3C00DC0F92 /* ImageIO.framework in Frameworks */,
+				82AA117C17BADC5F00D570DC /* Rdio.framework in Frameworks */,
 				60C0B46A17A1AA3500DC0F92 /* GLKit.framework in Frameworks */,
 				60C0B46817A1AA2E00DC0F92 /* CoreText.framework in Frameworks */,
 				60C0B46617A1AA2700DC0F92 /* CoreLocation.framework in Frameworks */,
@@ -250,7 +269,6 @@
 				60C0B46217A1AA1500DC0F92 /* AVFoundation.framework in Frameworks */,
 				60CB90C817A0899700A9E93A /* libsqlite3.dylib in Frameworks */,
 				60CB90C017A0872F00A9E93A /* MobileCoreServices.framework in Frameworks */,
-				60CB90BE17A0872200A9E93A /* CFNetwork.framework in Frameworks */,
 				60CB90B617A086B500A9E93A /* AdSupport.framework in Frameworks */,
 				60C0B45E17A1A4E400DC0F92 /* GoogleMaps.framework in Frameworks */,
 				82E9316B17A079C600B3958B /* CoreGraphics.framework in Frameworks */,
@@ -278,6 +296,7 @@
 		82E9315C17A079C600B3958B = {
 			isa = PBXGroup;
 			children = (
+				20B9181717BC375600CC33C2 /* Default-568h@2x.png */,
 				82E9316E17A079C600B3958B /* Ubiquity */,
 				82E9318717A079C600B3958B /* UbiquityTests */,
 				82E9316717A079C600B3958B /* Frameworks */,
@@ -297,6 +316,9 @@
 		82E9316717A079C600B3958B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				82AA117F17BADC8800D570DC /* Security.framework */,
+				82AA117D17BADC7A00D570DC /* AudioToolbox.framework */,
+				82AA117B17BADC5F00D570DC /* Rdio.framework */,
 				869BEC8517B0119D00437EA0 /* SenTestingKit.framework */,
 				82148F3317AADEE80066C69A /* CoreFoundation.framework */,
 				8624CD2017A2E99800F32DE8 /* StoreKit.framework */,
@@ -333,6 +355,8 @@
 		82E9316E17A079C600B3958B /* Ubiquity */ = {
 			isa = PBXGroup;
 			children = (
+				82CA7C3017BC37DA00F00008 /* AddMusicViewController.h */,
+				82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
 				82E9317817A079C600B3958B /* AppDelegate.m */,
 				6097BED817A6DC650012A36A /* LocationController.h */,
@@ -383,6 +407,7 @@
 				86D1F45117BC29FE003B7FED /* leftarrow.png */,
 				86D1F45217BC29FE003B7FED /* rightarrow.png */,
 				86D1F44F17BC21EA003B7FED /* close.png */,
+				82CA7C2F17BC37DA00F00008 /* musicNote.png */,
 				86D1F44917BAB90A003B7FED /* ToFriends@2x.png */,
 				86D1F44A17BAB90A003B7FED /* ToMe@2x.png */,
 				86D1F44B17BAB90A003B7FED /* ToPublic@2x.png */,
@@ -541,6 +566,7 @@
 				82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */,
 				60C0B47617A1E44A00DC0F92 /* GoogleMaps.bundle in Resources */,
 				865FBE4F17B4069000A3F7E2 /* Default@2x.png in Resources */,
+				82CA7C3217BC37DA00F00008 /* musicNote.png in Resources */,
 				82C7577A17A325C50094EB15 /* newMessage.png in Resources */,
 				82E9317317A079C600B3958B /* InfoPlist.strings in Resources */,
 				82E931F317A093D500B3958B /* icon.png in Resources */,
@@ -567,6 +593,7 @@
 				864C054217B5704B000B5A52 /* options@2x.png in Resources */,
 				8626C10517A9C7B6009F6AA7 /* pixel.png in Resources */,
 				86D1F45617BC2F3C003B7FED /* ReadNote@2x.png in Resources */,
+				20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,6 +617,7 @@
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
+				82CA7C3317BC37DA00F00008 /* AddMusicViewController.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,

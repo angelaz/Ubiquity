@@ -6,13 +6,15 @@
 // Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
-#import "NewMessageViewController.h"
-#import "AppDelegate.h"
 #import <Parse/Parse.h>
-#import "NewMessageView.h"
-#import "WallPostsViewController.h"
+
+#import "AppDelegate.h"
 #import "LocationController.h"
 #import "Geocoding.h"
+
+#import "NewMessageViewController.h"
+#import "NewMessageView.h"
+#import "WallPostsViewController.h"
 
 #define kOFFSET_FOR_KEYBOARD 100.0
 #define kNAV_OFFSET self.navigationController.navigationBar.bounds.size.height;
@@ -28,6 +30,7 @@ int const PUBLIC = 2;
     PFFile *photoFile;
     NSUInteger countNumber;
     int recipient;
+    NSString *song;
 }
 @end
 
@@ -42,32 +45,24 @@ int const PUBLIC = 2;
                                                  name:UIKeyboardWillHideNotification
                                                object:nil];
     [super viewWillAppear:animated];
-    
 }
-
 
 -(void) viewWillDisappear:(BOOL)animated
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
-    
     [super viewWillDisappear:animated];
-    
 }
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
         self.title = @"New Message";
-        
         recipientsList = [[NSMutableArray alloc] init];
-        
         countNumber = 0;
-        
+        song = @"";
         UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                     target:self
                                                                                     action:@selector(closeNewMessage:)];
@@ -80,8 +75,6 @@ int const PUBLIC = 2;
 {
     [super viewDidLoad];
     
-    
-    // Do any additional setup after loading the view.
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
     
@@ -93,7 +86,6 @@ int const PUBLIC = 2;
                                                                                target:self
                                                                                action:@selector(sendMessage:)];
     [[self navigationItem] setRightBarButtonItem:doneButton];
-    
     
     [_nmv.addFriendsButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -112,7 +104,7 @@ int const PUBLIC = 2;
     [_nmv.friendScroller removeFromSuperview];
     [_nmv.toButton addTarget:self action:@selector(recipientSwitcher:) forControlEvents:UIControlEventTouchUpInside];
 
-    
+    [_nmv.musicButton addTarget:self action:@selector(launchMusicSearch) forControlEvents:UIControlEventTouchUpInside];
     
     //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
     //    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
@@ -201,8 +193,6 @@ int const PUBLIC = 2;
             [self setViewMovedUp:YES];
         }
     }
-    
-    
 }
 
 //method to move the view up/down whenever the keyboard is shown/dismissed
@@ -237,6 +227,7 @@ int const PUBLIC = 2;
     }
     [_nmv.messageTextView setText: @""];
     imagePicked = NO;
+    song = @"";
     self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
     [UIView animateWithDuration:0.25
                      animations:^{
@@ -298,8 +289,12 @@ int const PUBLIC = 2;
         [_nmv.thumbnailImageView removeFromSuperview];
         [postObject setObject:@150 forKey:@"photoHeight"];
     }
-    
     imagePicked = NO;
+    
+    if (![song isEqualToString:@""]) { //There's a song attached to this post!
+        [postObject setObject:song forKey:@"trackKey"];
+    }
+    song = @"";
     
     NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber];
     
@@ -318,12 +313,12 @@ int const PUBLIC = 2;
             
             NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[NSDate date] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
         }
         
-        [postObject setObject:readReceiptsArray forKey:@"readReceiptsArray"];
+        [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
         
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
@@ -382,6 +377,8 @@ int const PUBLIC = 2;
     
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
+        NSArray* mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
+        _nmv.imagePicker.mediaTypes = mediaTypes;
     } else {
         [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
     }
@@ -645,7 +642,18 @@ int const PUBLIC = 2;
     return sectionWidth;
 }
 
+- (void)launchMusicSearch
+{
+    AddMusicViewController *amvc = [[AddMusicViewController alloc] initWithNibName:nil bundle:nil];
+    amvc.delegate = self;
+    UINavigationController *addMusicNavController = [[UINavigationController alloc]
+                                                     initWithRootViewController:amvc];
+    [self.navigationController presentViewController:addMusicNavController animated:YES completion:nil];
+}
 
-
-
+- (void)addMusicViewController:(AddMusicViewController *)controller didFinishSelectingSong:(NSString *)trackKey
+{
+    NSLog(@"Returned from AMVC: %@", trackKey);
+    song = trackKey;
+}
 @end

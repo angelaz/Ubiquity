@@ -42,6 +42,7 @@
     
     _hmv.map.delegate = self;
     
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadPins)
                                                  name:KPAWInitialLocationFound
@@ -60,19 +61,18 @@
 
 - (void) cluster
 {
-    
     if (zoomLevel > _hmv.map.camera.zoom + 0.5 || zoomLevel < _hmv.map.camera.zoom - 0.5)
     {
-    if (!idleMethodBeingCalled)
-    {
-        idleMethodBeingCalled = true;
-        PFQuery *getPosts = [self getParseQuery];
-        double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
-        NSLog(@"%f new range", newRange);
-        [self deployParseQuery:getPosts withRange:newRange];
+        if (!idleMethodBeingCalled)
+        {
+            idleMethodBeingCalled = true;
+            PFQuery *getPosts = [self getParseQuery];
+            double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
+            NSLog(@"%f new range", newRange);
+            [self deployParseQuery:getPosts withRange:newRange];
+        }
     }
-    }
-
+    
 }
 
 
@@ -82,14 +82,16 @@
 
 - (void) loadPins
 {
-    PFQuery *getPosts = [self getParseQuery];
-    [self deployParseQuery: getPosts withRange: 0.005];
-    
-    
-    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
-    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
-    
-    _hmv.map.delegate = self;
+    if ([PFUser currentUser] != nil) {
+        PFQuery *getPosts = [self getParseQuery];
+        [self deployParseQuery: getPosts withRange: 0.005];
+        
+        
+        _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
+        [_hmv addGestureRecognizer:_hmv.tapRecognizer];
+        
+        _hmv.map.delegate = self;
+    }
 }
 
 - (BOOL)mapView:(GMSMapView*)mapView didTapMarker:(GMSMarker *)marker
@@ -147,7 +149,7 @@
             }
             [allNotes addObject: [notesForMarker copy]];
             idleMethodBeingCalled = false;
-
+            
             
         } else {
             // Log details of the failure
@@ -366,6 +368,7 @@
     [self.optionsButton addTarget:self action:@selector(launchOptionsMenu) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.optionsButton];
 }
+
 - (void)launchOptionsMenu
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
@@ -379,5 +382,6 @@
     LocationController *locationController = [LocationController sharedLocationController];
     [locationController moveMarkerToLocation:coord];
 }
+
 
 @end

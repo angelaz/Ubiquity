@@ -68,14 +68,17 @@ static NSString * const kNMMonthy = @"Every Month";
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-#import "LoginViewController.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import <Rdio/Rdio.h>
+
+#import "LoginViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UINavigationController *navigationController;
+@property (readonly) Rdio *rdio;
 
 - (void)presentLoginViewController;
 
@@ -86,5 +89,5 @@ static NSString * const kNMMonthy = @"Every Month";
                        toObject:(PFObject *) object
                      finalBlock:(void(^)(PFObject *made))finalBlock;
 
-
++ (Rdio *)rdioInstance;
 @end

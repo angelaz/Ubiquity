@@ -33,10 +33,24 @@ static AppDelegate *launchedDelegate;
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+<<<<<<< HEAD
+=======
+    //Set up Parse/Facebook interfacing
+    [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
+
+    [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
+    [PFFacebookUtils initializeFacebook];
+    [PFTwitterUtils initializeWithConsumerKey:@"bk8P1pWhDoqSeQrbCo1A"
+                               consumerSecret:@"p3A2h5FavogvCu2eBh7Jyegf9fAYpk9zTVW4ZBq7KA"];
+
+    
+    //[self createPublicUser];
+>>>>>>> 35ba304551a35d3af86110f26a2441c00b2c96fc
     
     //Parse
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
+<<<<<<< HEAD
     [PFFacebookUtils initializeFacebook];
     
     //Google Maps
@@ -50,6 +64,9 @@ static AppDelegate *launchedDelegate;
     launchedDelegate = self;
     rdio = [[Rdio alloc] initWithConsumerKey:@"5zk8jxx8g6kj2yyttbmdvqkt" andSecret:@"fPYZqmPDPG" delegate:nil];
     
+=======
+
+>>>>>>> 35ba304551a35d3af86110f26a2441c00b2c96fc
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
 
     //[UINavigationBar appearance].tintColor = mainThemeColor;

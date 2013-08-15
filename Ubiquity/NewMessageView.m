@@ -40,30 +40,27 @@ int const LINE_HEIGHT = 30;
         int const SCREEN_WIDTH = frame.size.width;
         int const SCREEN_HEIGHT = frame.size.height;
         
-        
         [self createEnvelopeBackgroundWithWidth: SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createAddressTitleBarWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
-        [self createToLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
-        [self createRecipientLabelWithWidth: SCREEN_WIDTH andHeight: SCREEN_HEIGHT];
-        
         [self createMessageWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
+        [self createToLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self createRecipientLabelWithWidth: SCREEN_WIDTH andHeight: SCREEN_HEIGHT];
         [self createFromLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
         [self createSentLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createPictureButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
-         [self createAddFriendsButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self createMusicButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self createAddFriendsButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createScrollViewWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
-        
+ 
     }
     return self;
 }
+
 
 
 - (void) createEnvelopeBackgroundWithWidth: (int)w andHeight: (int)h
@@ -174,6 +171,19 @@ int const LINE_HEIGHT = 30;
     int innerFrameTopMargin = h - TOP_PADDING * 10.5;
     self.pictureButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20.0, 20.0);
     [self addSubview:self.pictureButton];
+}
+
+- (void)createMusicButtonWithWidth:(int)w andHeight:(int) h
+{
+    self.musicButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *musicButtonImage = [UIImage imageNamed:@"musicNote.png"];
+    [self.musicButton setBackgroundImage:musicButtonImage forState:UIControlStateNormal];
+    int width = WIDEST_POINT;
+    int innerFrameLeftMargin = w/2 + width/2 - 20.0;
+    int innerFrameTopMargin = h - TOP_PADDING * 10.5 - 25;
+    CGRect musicFrame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20, 20);
+    [_musicButton setFrame:musicFrame];
+    [self addSubview:self.musicButton];
 }
 
 - (void) createAddFriendsButtonWithWidth: (int)w andHeight: (int) h
