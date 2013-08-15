@@ -308,11 +308,30 @@ int const PUBLIC = 2;
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
             
-            NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
+            NSString *username = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
             [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
+            
+        } else {
+            for (id<FBGraphUser> user in recipientsList) {
+                
+                [AppDelegate linkOrStoreUserDetails:user
+                                               toId:[user id]
+                                             toUser:nil
+                              andStoreUnderRelation:@"receivers"
+                                           toObject:postObject
+                                         finalBlock:^(PFObject *made){}];
+                
+                NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
+                PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
+                [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+                [readReceiptsObject setObject:username forKey:@"receiver"];
+                [readReceiptsArray addObject:readReceiptsObject];
+
+            }
+        
         }
         
         [PFObject saveAllInBackground:readReceipts block:^(BOOL succeeded, NSError *error) {
