@@ -530,7 +530,7 @@ static NSInteger cellAttachedPhotoTag = 8;
         
             
             [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                           kPAWCellPaddingTop+kPAWCellTextPaddingTop*11+textSize.height,
+                                           cellPaddingTop+cellTextPaddingTop*11+textSize.height,
                                            additionalPhotoWidth,
                                            additionalPhotoHeight)];
         }];

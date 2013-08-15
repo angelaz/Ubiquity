@@ -52,7 +52,7 @@ static AppDelegate *launchedDelegate;
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
 
-    //[UINavigationBar appearance].tintColor = mainThemeColor;
+    [UINavigationBar appearance].tintColor = mainThemeColor;
 
     // register for push notifications
     [application registerForRemoteNotificationTypes:
