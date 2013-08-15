@@ -299,11 +299,10 @@ int const PUBLIC = 2;
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
         
-        //For each person we are sending to
-        for (id<FBGraphUser> user in recipientsList) {
-            
-            [AppDelegate linkOrStoreUserDetails:user
-                                           toId:[user id]
+        if (recipient == ME) {
+            countNumber = 1;
+            [AppDelegate linkOrStoreUserDetails:[[PFUser currentUser] objectForKey:@"userData"]
+                                           toId:[[PFUser currentUser] objectForKey:@"fbId"]
                                          toUser:nil
                           andStoreUnderRelation:@"receivers"
                                        toObject:postObject
