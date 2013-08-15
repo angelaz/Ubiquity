@@ -85,6 +85,7 @@
 		8666BB6917BC85B8001EBD23 /* SelectedSeg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6717BC85B8001EBD23 /* SelectedSeg.png */; };
 		8666BB6A17BC85B8001EBD23 /* UnselectedSeg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6817BC85B8001EBD23 /* UnselectedSeg.png */; };
 		8666BB6C17BC944D001EBD23 /* Div.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6B17BC944D001EBD23 /* Div.png */; };
+		8666BB6F17BD3E0D001EBD23 /* GMSMarkerWithCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */; };
 		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
 		86894B6217A0A72800F7146B /* TextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B6117A0A72800F7146B /* TextMessage.m */; };
 		86894B6517A1E96200F7146B /* searchbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6317A1E96200F7146B /* searchbutton.png */; };
@@ -219,6 +220,8 @@
 		8666BB6717BC85B8001EBD23 /* SelectedSeg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectedSeg.png; sourceTree = "<group>"; };
 		8666BB6817BC85B8001EBD23 /* UnselectedSeg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UnselectedSeg.png; sourceTree = "<group>"; };
 		8666BB6B17BC944D001EBD23 /* Div.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Div.png; sourceTree = "<group>"; };
+		8666BB6D17BD3E0D001EBD23 /* GMSMarkerWithCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMSMarkerWithCount.h; sourceTree = "<group>"; };
+		8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMSMarkerWithCount.m; sourceTree = "<group>"; };
 		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
 		86894B5E17A096FF00F7146B /* NewMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageViewController.m; sourceTree = "<group>"; };
 		86894B6017A0A72800F7146B /* TextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMessage.h; sourceTree = "<group>"; };
@@ -381,6 +384,8 @@
 				82E931BF17A07B0B00B3958B /* TableHeaderView.xib */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
 				20F8F2A817A1F0F600594994 /* WallPostsViewController.m */,
+				8666BB6D17BD3E0D001EBD23 /* GMSMarkerWithCount.h */,
+				8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */,
 				20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */,
 				20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */,
 				82C7577417A322520094EB15 /* FriendsViewController.h */,
@@ -629,6 +634,7 @@
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
+				8666BB6F17BD3E0D001EBD23 /* GMSMarkerWithCount.m in Sources */,
 				82CA7C3317BC37DA00F00008 /* AddMusicViewController.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,

@@ -14,6 +14,7 @@
 #import "OptionsViewController.h"
 #import "NoteViewController.h"
 #import "LocationController.h"
+#import "GMSMarkerWithCount.h"
 #import <math.h>
 
 @interface HomeMapViewController ()
@@ -119,7 +120,8 @@
             NSMutableArray *allNotes = [[NSMutableArray alloc] init];
             NSMutableArray *notesForMarker = [[NSMutableArray alloc] init];
             NSMutableArray *markers = [[NSMutableArray alloc] init];
-            
+            GMSMarkerWithCount *marker = nil;
+
             for (PFObject *object in objects) {
                 NSLog(@"%@", object.objectId);
                 PFGeoPoint *gp = [object objectForKey: @"location"];
@@ -129,8 +131,8 @@
                         [allNotes addObject: [notesForMarker copy]];
                     [notesForMarker removeAllObjects];
                     CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
-                    GMSMarker *marker = [GMSMarker markerWithPosition: pinLocation];
-                    marker.icon = [UIImage imageNamed: @"UnreadNote"];
+                    marker = [GMSMarkerWithCount markerWithPosition: pinLocation];
+                  //  marker.icon = [UIImage imageNamed: @"UnreadNote"];
                     marker.animated = YES;
                     marker.map = _hmv.map;
                     zoomLevel = _hmv.map.camera.zoom;
@@ -140,6 +142,7 @@
                     [markers addObject: marker];
                     self.markerNotearrayDict = [[NSMutableDictionary alloc] initWithObjects: @[markers, allNotes] forKeys:@[@"markers", @"arrayOfNotes"]];
                 }
+                [marker updateIcon];
                 [notesForMarker addObject:object];
                 
                 current = gp;
