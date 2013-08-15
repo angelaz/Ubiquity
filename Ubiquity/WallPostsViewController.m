@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
-static CGFloat const kPAWWallPostTableViewFontSizeName = 20.f;
-static CGFloat const kPAWWallPostTableViewFontSizeText = 15.f;
-static CGFloat const kPawWallPostTableViewFontSizeDate = 12.f;
+static CGFloat const nameFontSize = 20.f;
+static CGFloat const textFontSize = 15.f;
+static CGFloat const dateFontSize = 12.f;
 
-static CGFloat const kPAWWallPostTableViewCellWidth = 280.f; // subject to change.
-static CGFloat const kPAWCellMaxImageHeight = 300.f; // subject to change.
+static CGFloat const cellWidth = 280.f; // subject to change.
+static CGFloat const cellMaxImageHeight = 300.f; // subject to change.
 
 
 // Cell dimension and positioning constants
@@ -33,7 +33,9 @@ static NSInteger cellNameLabelTag = 4;
 static NSInteger cellSentDateLabelTag = 5;
 static NSInteger cellReceivedDateLabelTag = 6;
 static NSInteger cellLocationLabelTag = 7;
-static NSInteger cellAttachedPhotoTag = 8;
+static NSInteger cellAttachedMediaTag = 8;
+
+#import <MediaPlayer/MediaPlayer.h>
 
 #import "HomeMapViewController.h"
 #import "WallPostsViewController.h"
@@ -426,9 +428,9 @@ static NSInteger cellAttachedPhotoTag = 8;
         [locationLabel setTag: cellLocationLabelTag];
         [cell.contentView addSubview:locationLabel];
         
-        UIImageView *photoView = [[UIImageView alloc] init];
-        [photoView setTag: cellAttachedPhotoTag];
-        [cell.contentView addSubview:photoView];
+        UIView *mediaView = [[UIView alloc] init];
+        [mediaView setTag: cellAttachedMediaTag];
+        [cell.contentView addSubview:mediaView];
 
     }
 	
@@ -438,13 +440,13 @@ static NSInteger cellAttachedPhotoTag = 8;
 	textLabel.text = [object objectForKey:kPAWParseTextKey];
 	textLabel.lineBreakMode = NSLineBreakByWordWrapping;
 	textLabel.numberOfLines = 0;
-	textLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
+	textLabel.font = [UIFont systemFontOfSize:textFontSize];
 	textLabel.backgroundColor = [UIColor clearColor];
     
     
 	UILabel *locationLabel = (UILabel *) [cell.contentView viewWithTag:cellLocationLabelTag];
     locationLabel.text = @"Unknown Location";
-    locationLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText];
+    locationLabel.font = [UIFont systemFontOfSize:textFontSize];
     locationLabel.backgroundColor = [UIColor clearColor];
     
     locationLabel.text = [object objectForKey:@"locationAddress"];
@@ -455,16 +457,16 @@ static NSInteger cellAttachedPhotoTag = 8;
     [df setDateFormat:@"hh:mm a 'on' dd MMMM yyyy"];
     NSString *sentAtString = [df stringFromDate:sentAt];
     sentDate.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
-    sentDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
+    sentDate.font = [UIFont systemFontOfSize:dateFontSize];
     
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:cellReceivedDateLabelTag];
     receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
-    receivedDate.font = [UIFont systemFontOfSize:kPawWallPostTableViewFontSizeDate];
+    receivedDate.font = [UIFont systemFontOfSize:dateFontSize];
     
 	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:cellNameLabelTag];
 	nameLabel.text = username;
-	nameLabel.font = [UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName];
+	nameLabel.font = [UIFont systemFontOfSize:nameFontSize];
 	nameLabel.backgroundColor = [UIColor clearColor];
 	if (cellIsRight) {
 		nameLabel.textColor = [UIColor colorWithRed:175.0f/255.0f green:172.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
@@ -480,14 +482,14 @@ static NSInteger cellAttachedPhotoTag = 8;
 	
 	// Move cell content to the right position
 	// Calculate the size of the post's text and username
-	CGSize textSize = [[object objectForKey:kPAWParseTextKey] sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText] constrainedToSize:CGSizeMake(kPAWWallPostTableViewCellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+	CGSize textSize = [[object objectForKey:kPAWParseTextKey] sizeWithFont:[UIFont systemFontOfSize:textFontSize] constrainedToSize:CGSizeMake(cellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:nameFontSize] forWidth:cellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
-    CGSize sentDateSize = [sentDate.text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    CGSize sentDateSize = [sentDate.text sizeWithFont:[UIFont systemFontOfSize:nameFontSize] forWidth:cellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
-    CGSize receivedDateSize = [receivedDate.text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    CGSize receivedDateSize = [receivedDate.text sizeWithFont:[UIFont systemFontOfSize:nameFontSize] forWidth:cellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
-    CGSize locationLabelSize = [locationLabel.text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+    CGSize locationLabelSize = [locationLabel.text sizeWithFont:[UIFont systemFontOfSize:nameFontSize] forWidth:cellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
     
     
@@ -522,33 +524,43 @@ static NSInteger cellAttachedPhotoTag = 8;
                                    textSize.height)];
     
     
-    //GENERALIZE TO VIDEOS OR IMAGES
-    UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:cellAttachedPhotoTag];
-
+    UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
+    additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
+    CGRect mediaFrame = CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
+                              cellPaddingTop+cellTextPaddingTop*11+textSize.height,
+                              additionalPhotoWidth,
+                               additionalPhotoHeight);
+    
     if([object objectForKey:@"mediaHeight"] > 0) {
+        mediaView.contentMode = UIViewContentModeScaleAspectFill;
         [[object objectForKey:@"media"] getDataInBackgroundWithBlock:^(NSData *mediaData, NSError *error) {
             UIImage *photo = [[UIImage alloc] initWithData:mediaData];
-            photoView.contentMode = UIViewContentModeScaleAspectFill;
-            additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
-            [photoView setImage:photo];
-        
+            if (photo) {
+                mediaView.contentMode = UIViewContentModeScaleAspectFill;
+                UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
+                [photoView setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
+                [mediaView addSubview:photoView];
+            } else { //photo will be null if mediaData is not valid image data, so movie
+                NSLog(@"look this post has a movie :O");
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsDirectory = [paths objectAtIndex:0];
+                NSString *path = [documentsDirectory stringByAppendingPathComponent:@"postVideo.m4v"];
+                [mediaData writeToFile:path atomically:YES];
+                NSURL *videoURL = [NSURL fileURLWithPath:path];
+                MPMoviePlayerController *player = [[MPMoviePlayerController alloc] init];
+                [player setContentURL:videoURL];
+                [player prepareToPlay];
+                [player.view setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
+                [mediaView addSubview:player.view];
+                [player play];
+            }
             
-            [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                           cellPaddingTop+cellTextPaddingTop*11+textSize.height,
-                                           additionalPhotoWidth,
-                                           additionalPhotoHeight)];
         }];
     } else {
-        [photoView setImage:nil];
+        
     }
     
-    
-    [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                   cellPaddingTop+cellTextPaddingTop*11+textSize.height,
-                                   additionalPhotoWidth,
-                                   additionalPhotoHeight)];
-    
-    
+    [mediaView setFrame:mediaFrame];
     
     [backgroundImage setFrame:CGRectMake(cellPaddingSides,
                                          cellPaddingTop,
@@ -565,7 +577,7 @@ static NSInteger cellAttachedPhotoTag = 8;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [super tableView:tableView cellForNextPageAtIndexPath:indexPath];
-	cell.textLabel.font = [cell.textLabel.font fontWithSize:kPAWWallPostTableViewFontSizeText];
+	cell.textLabel.font = [cell.textLabel.font fontWithSize:textFontSize];
 	return cell;
 }
 
@@ -602,12 +614,12 @@ static NSInteger cellAttachedPhotoTag = 8;
 	NSString *username = [postFromObject.sender objectForKey:@"profile"][@"name"];
 	
 	// Calculate what the frame to fit the post text and the username
-	CGSize textSize = [text sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeText] constrainedToSize:CGSizeMake(kPAWWallPostTableViewCellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:kPAWWallPostTableViewFontSizeName] forWidth:kPAWWallPostTableViewCellWidth lineBreakMode:NSLineBreakByTruncatingTail];
+	CGSize textSize = [text sizeWithFont:[UIFont systemFontOfSize:textFontSize] constrainedToSize:CGSizeMake(cellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+	CGSize nameSize = [username sizeWithFont:[UIFont systemFontOfSize:nameFontSize] forWidth:cellWidth lineBreakMode:NSLineBreakByTruncatingTail];
     
 	// And return this height plus cell padding and the offset of the bubble image height (without taking into account the text height twice)
     
-    additionalPhotoHeight = [[object objectForKey:@"photoHeight"] floatValue];
+    additionalPhotoHeight = [[object objectForKey:@"mediaHeight"] floatValue];
     
     if (additionalPhotoHeight > 0)
         photoAttachmentExists = true;
