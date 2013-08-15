@@ -17,6 +17,9 @@
 #import "GMSMarkerWithCount.h"
 #import <math.h>
 
+#define kOFFSET_FOR_KEYBOARD 190.0
+
+
 @interface HomeMapViewController ()
 {
     CGFloat zoomLevel;
@@ -31,6 +34,7 @@
 @end
 
 @implementation HomeMapViewController
+@synthesize gs;
 
 
 - (void)viewDidLoad
@@ -42,21 +46,21 @@
     [self initNewMessageButton];
     self.objects = [[NSMutableArray alloc] init];
     [self loadPins];
-    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
-    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
     
     _hmv.map.delegate = self;
-    
+    [_hmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadPins)
                                                  name:KPAWInitialLocationFound
                                                object:nil];
     
+    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
+    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
+    
+    
     
 }
-
-
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
 {
@@ -88,11 +92,8 @@
         NSMutableArray *postsToDisplay = [self getParseQuery];
         [self deployParseQuery: postsToDisplay withRange: 0.005];
         
-        
-        _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
-        [_hmv addGestureRecognizer:_hmv.tapRecognizer];
-        
         _hmv.map.delegate = self;
+        _hmv.locationSearchTextField.delegate = self;
     }
 }
 
@@ -133,7 +134,7 @@
             marker.animated = YES;
             marker.map = _hmv.map;
             zoomLevel = _hmv.map.camera.zoom;
-            
+
             NSLog(@"new pin!");
             
             [markers addObject: marker];
@@ -251,10 +252,6 @@
     
 }
 
-- (void) doStuff {
-    NSLog(@"Did stuff");
-}
-
 - (void)initUnreadNoteButton
 {
     int const SCREEN_WIDTH = self.view.frame.size.width;
@@ -359,7 +356,7 @@
                                                                target:self
                                                                action:@selector(launchPostsView)];
     [[self navigationItem] setLeftBarButtonItem:mapList];
-
+    
     
     UIImage *image = [UIImage imageNamed:@"newMessage"];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -413,5 +410,53 @@
     [locationController moveMarkerToLocation:coord];
 }
 
+
+-(void)textFieldDidBeginEditing:(UITextField*)sender
+{
+    [_hmv.map setUserInteractionEnabled:NO];
+}
+
+
+
+
+
+- (void) startSearch: (id) sender
+{
+    NSLog(@"searching for: %@", _hmv.locationSearchTextField.text);
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
+    //Not a perfect solution for keeping the map at the same place
+    //TODO: Fix it so map doesn't shift at all when search for invalid address
+    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
+    [gs geocodeAddress:_hmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
+}
+
+- (void)addMarker{
+    
+    double lat = [[gs.geocode objectForKey:@"lat"] doubleValue];
+    double lng = [[gs.geocode objectForKey:@"lng"] doubleValue];
+    
+    GMSMarker *marker = [[GMSMarker alloc] init];
+    CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
+    marker.position = geolocation;
+    marker.title = [gs.geocode objectForKey:@"address"];
+    NSLog(@"%@", marker.title);
+    NSLog(@"%f, %f", lat, lng);
+    
+    marker.map = _hmv.map;
+    
+    GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
+    [_hmv.map animateWithCameraUpdate:geoLocateCam];
+    
+}
+
+-(void) hideKeyboard: (id) sender
+{
+    
+    [_hmv.locationSearchTextField resignFirstResponder];
+    [_hmv.map setUserInteractionEnabled:YES];
+    
+}
 
 @end

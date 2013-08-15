@@ -24,11 +24,15 @@
     if (self) {
         int const SCREEN_WIDTH = frame.size.width;
         int const SCREEN_HEIGHT = frame.size.height;
-
+        
         [self setUpMapWithWidth: SCREEN_WIDTH andHeight: SCREEN_HEIGHT];
+        [self setUpLocationSearchWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        
     }
     return self;
 }
+
+
 
 - (void) setUpMapWithWidth: (int) w andHeight: (int) h
 {
@@ -45,6 +49,28 @@
     locationController.map = self.map;
     
     [self addSubview:self.map];
+}
+
+- (void) setUpLocationSearchWithWidth: (int)w andHeight: (int)h
+{
+    int width = w * 7/10;
+    int lineHeight = 25;
+    int topMargin = lineHeight/2;
+    
+    self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(w/2 - width/2 - 20,topMargin, width, lineHeight)];
+    
+    self.locationSearchTextField.placeholder = @"Search for a location";
+    self.locationSearchTextField.borderStyle = UITextBorderStyleNone;
+    self.locationSearchTextField.backgroundColor = [UIColor whiteColor];
+    [self addSubview:self.locationSearchTextField];
+    
+    
+    self.locationSearchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *btnImage = [UIImage imageNamed:@"searchbutton"];
+    [self.locationSearchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
+    self.locationSearchButton.frame = CGRectMake(w/2+width/2, topMargin, 25, 25);
+    
+    [self addSubview:self.locationSearchButton];
 }
 
 @end
