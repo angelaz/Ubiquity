@@ -68,7 +68,7 @@
     self.locationSearchButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *btnImage = [UIImage imageNamed:@"searchbutton"];
     [self.locationSearchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
-    self.locationSearchButton.frame = CGRectMake(w/2+width/2, topMargin, 25, 25);
+    self.locationSearchButton.frame = CGRectMake(w/2+width/2-10, topMargin, 25, 25);
     
     [self addSubview:self.locationSearchButton];
 }

@@ -298,7 +298,7 @@ int const PUBLIC = 2;
     }
     song = @"";
     
-    NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber];
+    NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber+1];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
@@ -317,8 +317,9 @@ int const PUBLIC = 2;
             [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
-            
-        } else {
+   
+        } else if (recipient == FRIENDS) {
+
             for (id<FBGraphUser> user in recipientsList) {
                 
                 [AppDelegate linkOrStoreUserDetails:user
@@ -335,10 +336,9 @@ int const PUBLIC = 2;
                 [readReceiptsArray addObject:readReceiptsObject];
 
             }
-        
         }
         
-        [PFObject saveAllInBackground:readReceipts block:^(BOOL succeeded, NSError *error) {
+        [PFObject saveAllInBackground:readReceiptsArray block:^(BOOL succeeded, NSError *error) {
             [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
             [postObject saveInBackground];
         }];
@@ -681,12 +681,28 @@ int const PUBLIC = 2;
     amvc.delegate = self;
     UINavigationController *addMusicNavController = [[UINavigationController alloc]
                                                      initWithRootViewController:amvc];
-    [self.navigationController presentViewController:addMusicNavController animated:YES completion:nil];
+//    [self.navigationController presentViewController:addMusicNavController animated:YES completion:nil];
+    
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:addMusicNavController animated:YES completion:nil];
+    amvc.view.frame = CGRectMake(amvc.view.frame.origin.x, self.view.frame.size.height, amvc.view.frame.size.width, amvc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+
+                         amvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, amvc.view.frame.size.width, amvc.self.view.frame.size.height);
+                     }];
+
 }
 
 - (void)addMusicViewController:(AddMusicViewController *)controller didFinishSelectingSong:(NSString *)trackKey
 {
     NSLog(@"Returned from AMVC: %@", trackKey);
     song = trackKey;
+    if (![song isEqualToString:@""])
+    {
+        [_nmv.musicButton setImage:[UIImage imageNamed:@"musicNoteRed"] forState:UIControlStateNormal];
+        
+    }
+
 }
 @end

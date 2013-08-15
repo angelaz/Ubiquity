@@ -24,6 +24,10 @@
 {
     CGFloat zoomLevel;
     BOOL idleMethodBeingCalled; // async lock for background query method to prevent more than 1 query happening at once
+    PFObject *publicUserObj;
+    NSMutableArray *selfArray;
+    NSMutableArray *friendsArray;
+    NSMutableArray *publicArray;
 }
 @property (nonatomic, strong) HomeMapView *hmv;
 @property (nonatomic, strong) NSDictionary *markerNotearrayDict;
@@ -71,10 +75,10 @@
         if (!idleMethodBeingCalled)
         {
             idleMethodBeingCalled = true;
-            PFQuery *getPosts = [self getParseQuery];
+            NSMutableArray *posts = [self getParseQuery];
             double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
             NSLog(@"%f new range", newRange);
-            [self deployParseQuery:getPosts withRange:newRange];
+            [self deployParseQuery:posts withRange:newRange];
         }
     }
     
@@ -85,8 +89,8 @@
 - (void) loadPins
 {
     if ([PFUser currentUser] != nil) {
-        PFQuery *getPosts = [self getParseQuery];
-        [self deployParseQuery: getPosts withRange: 0.005];
+        NSMutableArray *postsToDisplay = [self getParseQuery];
+        [self deployParseQuery: postsToDisplay withRange: 0.005];
         
         _hmv.map.delegate = self;
         _hmv.locationSearchTextField.delegate = self;
@@ -105,58 +109,44 @@
     return YES;
 }
 
-- (void) deployParseQuery: (PFQuery *) query withRange: (double) range
+- (void) deployParseQuery: (NSMutableArray *) array withRange: (double) range
 {
     [self.objects removeAllObjects];
     [_hmv.map clear];
     
+    PFGeoPoint *current = [[PFGeoPoint alloc] init];
+    NSMutableArray *allNotes = [[NSMutableArray alloc] init];
+    NSMutableArray *notesForMarker = [[NSMutableArray alloc] init];
+    NSMutableArray *markers = [[NSMutableArray alloc] init];
+    GMSMarkerWithCount *marker = nil;
     
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            // The find succeeded.
-            NSLog(@"Successfully retrieved %d scores.", objects.count);
-            // Do something with the found objects
+    for (PFObject *object in array) {
+        NSLog(@"%@", object.objectId);
+        PFGeoPoint *gp = [object objectForKey: @"location"];
+        if (![self pointsAreEqualA:current andB:gp withinRange:range])
+        {
+            if (markers.count != 0)
+                [allNotes addObject: [notesForMarker copy]];
+            [notesForMarker removeAllObjects];
+            CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
+            marker = [GMSMarkerWithCount markerWithPosition: pinLocation];
+            //  marker.icon = [UIImage imageNamed: @"UnreadNote"];
+            marker.animated = YES;
+            marker.map = _hmv.map;
+            zoomLevel = _hmv.map.camera.zoom;
+
+            NSLog(@"new pin!");
             
-            PFGeoPoint *current = [[PFGeoPoint alloc] init];
-            NSMutableArray *allNotes = [[NSMutableArray alloc] init];
-            NSMutableArray *notesForMarker = [[NSMutableArray alloc] init];
-            NSMutableArray *markers = [[NSMutableArray alloc] init];
-            GMSMarkerWithCount *marker = nil;
-            
-            for (PFObject *object in objects) {
-                NSLog(@"%@", object.objectId);
-                PFGeoPoint *gp = [object objectForKey: @"location"];
-                if (![self pointsAreEqualA:current andB:gp withinRange:range])
-                {
-                    if (markers.count != 0)
-                        [allNotes addObject: [notesForMarker copy]];
-                    [notesForMarker removeAllObjects];
-                    CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
-                    marker = [GMSMarkerWithCount markerWithPosition: pinLocation];
-                    //  marker.icon = [UIImage imageNamed: @"UnreadNote"];
-                    marker.animated = YES;
-                    marker.map = _hmv.map;
-                    zoomLevel = _hmv.map.camera.zoom;
-                    
-                    NSLog(@"new pin!");
-                    
-                    [markers addObject: marker];
-                    self.markerNotearrayDict = [[NSMutableDictionary alloc] initWithObjects: @[markers, allNotes] forKeys:@[@"markers", @"arrayOfNotes"]];
-                }
-                [marker updateIcon];
-                [notesForMarker addObject:object];
-                
-                current = gp;
-            }
-            [allNotes addObject: [notesForMarker copy]];
-            idleMethodBeingCalled = false;
-            
-            
-        } else {
-            // Log details of the failure
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
+            [markers addObject: marker];
+            self.markerNotearrayDict = [[NSMutableDictionary alloc] initWithObjects: @[markers, allNotes] forKeys:@[@"markers", @"arrayOfNotes"]];
         }
-    }];
+        [marker updateIcon];
+        [notesForMarker addObject:object];
+        
+        current = gp;
+    }
+    [allNotes addObject: [notesForMarker copy]];
+    idleMethodBeingCalled = false;
 }
 
 - (BOOL) pointsAreEqualA: (PFGeoPoint *) p1 andB: (PFGeoPoint *) p2 withinRange: (double) d
@@ -164,7 +154,7 @@
     return (p1.latitude + d >= p2.latitude && p1.latitude - d <= p2.latitude && p1.longitude + d >= p2.longitude && p1.longitude - d <= p2.longitude);
 }
 
-- (PFQuery *) getParseQuery
+- (NSMutableArray *) getParseQuery
 {
     PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
     
@@ -175,21 +165,54 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
-    //    [query orderByDescending: @"createdAt"];
     
+    if (([self.segmentedControl selectedSegmentIndex] == 0) || ([self.segmentedControl selectedSegmentIndex] == 1)) {
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                // The find succeeded.
+                NSLog(@"Successfully retrieved %d posts.", objects.count);
+                // Do something with the found objects
+                
+                selfArray = [[NSMutableArray alloc] initWithCapacity:[objects count]];
+                friendsArray = [[NSMutableArray alloc] initWithCapacity:[objects count]];
+                
+                for (PFObject *object in objects) {
+                    if ([object objectForKey:@"sender"] == [[PFUser currentUser] objectForKey:@"userData"]) {
+                        [selfArray addObject:object];
+                    } else if ([object objectForKey:@"sender"] != [[PFUser currentUser] objectForKey:@"userData"]) {
+                        [friendsArray addObject:object];
+                    }
+                }
+            } else {
+                NSLog(@"Error in loading self and friends map posts: %@", error);
+            }
+        }];
+    } else if ([self.segmentedControl selectedSegmentIndex] == 2) {
+        [query whereKey:@"receivers" equalTo:publicUserObj];
+        
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                publicArray = [[NSMutableArray alloc] initWithArray:objects];
+            } else {
+                NSLog(@"Error in loading public map posts: %@", error);
+            }
+        }];
+    }
+    NSMutableArray *arrayToSend = [[NSMutableArray alloc] initWithArray:selfArray];
     if ([self.segmentedControl selectedSegmentIndex] == 0) {
         NSLog(@"Only shows notes from self");
-        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        arrayToSend = selfArray;
     } else if ([self.segmentedControl selectedSegmentIndex] == 1) {
         NSLog(@"Shows notes from friends");
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        arrayToSend = friendsArray;
     } else if ([self.segmentedControl selectedSegmentIndex] == 2) {
         NSLog(@"Shows public notes");
-        [query whereKey:@"receivers" equalTo:[NSNull null]];
+        arrayToSend = publicArray;
     }
     
-    return query;
+    return arrayToSend;
 }
 - (void) openNewMessageView
 {
@@ -229,17 +252,6 @@
     
 }
 
-- (void)initUnreadNoteButton
-{
-    int const SCREEN_WIDTH = self.view.frame.size.width;
-    int const SCREEN_HEIGHT = self.view.frame.size.height;
-    UIButton *newButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *pictureButtonImage = [UIImage imageNamed:@"UnreadNote"];
-    [newButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
-    newButton.frame = CGRectMake(SCREEN_WIDTH/2 - 25, SCREEN_HEIGHT/2 - 70, 50.0, 40.0);
-    [newButton addTarget:self action:@selector(readNote:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:newButton];
-}
 
 - (void) readNote: (id) sender
 {
@@ -287,6 +299,12 @@
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
+        
+        PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
+        [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
+        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            publicUserObj = object;
+        }];
     }
     return self;
 }
