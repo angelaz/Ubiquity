@@ -105,7 +105,7 @@ static NSInteger cellAttachedPhotoTag = 8;
 
 - (void)initButtons
 {
-    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"Map"
+    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"< Map"
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self
                                                                action:@selector(launchMapView)];

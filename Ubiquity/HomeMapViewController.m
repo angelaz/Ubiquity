@@ -77,9 +77,6 @@
 
 
 
-
-
-
 - (void) loadPins
 {
     if ([PFUser currentUser] != nil) {
@@ -325,11 +322,12 @@
 
 - (void)initButtons
 {
-    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"List"
+    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"< List"
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self
                                                                action:@selector(launchPostsView)];
     [[self navigationItem] setLeftBarButtonItem:mapList];
+
     
     UIImage *image = [UIImage imageNamed:@"newMessage"];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
