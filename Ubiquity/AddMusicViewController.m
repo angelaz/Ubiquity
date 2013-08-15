@@ -10,12 +10,15 @@ static int const numResults = 5;
 
 #import "AddMusicViewController.h"
 #import "AppDelegate.h"
+#import "HomeMapView.h"
 
 @interface AddMusicViewController ()
 {
     UIButton *_playButton;
     UIButton *_searchButton;
     UITextView *_searchTextView;
+    UITextField *_searchTextField;
+
     BOOL _playing;
     BOOL _paused;
     NSMutableArray *_results;
@@ -32,6 +35,16 @@ static int const numResults = 5;
     [super viewDidLoad];
     Rdio *sharedRdio = [AppDelegate rdioInstance];
     sharedRdio.delegate = self;
+    [self performSelector:@selector(changeBackground) withObject:self afterDelay:0.25];
+}
+
+- (void) changeBackground
+{
+    [UIView animateWithDuration:0.1
+                     animations:^{
+
+    [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+                     }];
 }
 
 - (void)viewDidUnload {
@@ -41,39 +54,100 @@ static int const numResults = 5;
 
 - (void)loadView
 {
+    
     CGRect appFrame = [UIScreen mainScreen].applicationFrame;
+    int w = appFrame.size.width;
+    int h = appFrame.size.height;
     UIView *view = [[UIView alloc] initWithFrame:appFrame];
-    [view setBackgroundColor:[UIColor whiteColor]];
+    //[view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+    [view setBackgroundColor:[UIColor clearColor]];
 
-    CGRect labelFrame = CGRectMake(20, 10, appFrame.size.width - 40, 40);
-    UILabel *searchLabel = [[UILabel alloc] initWithFrame:labelFrame];
-    [searchLabel setText:@"Search for a song"];
-    [searchLabel setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [searchLabel setTextAlignment:NSTextAlignmentCenter];
     
-    _searchTextView = [[UITextView alloc] initWithFrame:CGRectMake(20, 60, appFrame.size.width - 40, 40)];
-    _searchTextView.layer.borderWidth = 1.0f;
-    _searchTextView.layer.borderColor = [[UIColor grayColor] CGColor];
-    [_searchTextView setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     
-    _searchButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [_searchButton setTitle:@"Search" forState:UIControlStateNormal];
-    CGRect searchFrame = CGRectMake(20, 110, appFrame.size.width - 40, 40);
-    [_searchButton setFrame:searchFrame];
-    [_searchButton setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [_searchButton addTarget:self action:@selector(sendSearchRequest) forControlEvents:UIControlEventTouchUpInside];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(20.0, 200.0, [UIScreen mainScreen].applicationFrame.size.width - 40, [UIScreen mainScreen].applicationFrame.size.height - 200.0) style:UITableViewStylePlain];
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    
-    [view addSubview:searchLabel];
-    [view addSubview:_searchTextView];
-    [view addSubview:_searchButton];
-    [view addSubview:_tableView];
     
     self.view = view;
+    
+    [self createJukeboxBackgroundWithFrame:w andHeight:h];
+    [self setUpSearchWithFrame:appFrame];
+    [self setUpTableViewWithFrame:appFrame];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
+    [self.view addGestureRecognizer:tap];
 }
+
+- (void) createJukeboxBackgroundWithFrame: (int)w andHeight: (int)h
+{
+    int imageWidth = w * 19 / 20;
+    int imageHeight = h * 19 / 20;
+    UIImageView *jukebox = [[UIImageView alloc] initWithFrame:CGRectMake(w/2 - imageWidth / 2, h - imageHeight, imageWidth, imageHeight)];
+    jukebox.image = [UIImage imageNamed:@"JukeBox"];
+    [self.view addSubview:jukebox];
+    
+}
+
+
+
+
+- (void) setUpSearchWithFrame: (CGRect) appFrame
+{
+    int width = appFrame.size.width * 5/10;
+    int leftMargin = appFrame.size.width/2 - width/2;
+    UIColor *titleColor = mainThemeColor;
+
+    _searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(leftMargin, 125, width, 25)];
+    _searchTextField.layer.borderWidth = 1.0f;
+    _searchTextField.layer.borderColor = [titleColor CGColor];
+    _searchTextField.placeholder = @"Song or Artist";
+    
+    _searchTextField.textColor = titleColor;
+    _searchTextField.textAlignment = NSTextAlignmentCenter;
+    [_searchTextField setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    
+    
+    int buttonWidth = width * 9/10;
+    int buttonOffset = appFrame.size.width/2 - buttonWidth/2;
+    _searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+  //  _searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+  //  UIImage *btnImage = [UIImage imageNamed:@"JukeBoxSearch"];
+  //  [_searchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
+    _searchButton.frame = CGRectMake(buttonOffset, _searchTextField.frame.origin.y + _searchTextField.frame.size.height + 17, buttonWidth, 35);
+    [_searchButton setTitle:@"Search" forState:UIControlStateNormal];
+    [_searchButton setTitleColor: [UIColor whiteColor] forState:UIControlStateNormal];
+    [_searchButton setBackgroundColor: titleColor];
+    _searchButton.clipsToBounds = YES;
+    _searchButton.layer.cornerRadius = 5.0f;
+    [_searchButton addTarget:self action:@selector(sendSearchRequest) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:_searchTextField];
+    [self.view addSubview:_searchButton];
+
+
+}
+
+
+- (void) setUpTableViewWithFrame: (CGRect) appFrame
+{
+    int width = appFrame.size.width * 3/5;
+    int leftMargin = appFrame.size.width/2 - width/2;
+    int topMargin =_searchButton.frame.origin.y + _searchButton.frame.size.height + 10;
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(leftMargin, topMargin, width, [UIScreen mainScreen].applicationFrame.size.height - topMargin) style:UITableViewStylePlain];
+    self.tableView.dataSource = self;
+    self.tableView.delegate = self;
+    self.tableView.backgroundColor = [UIColor clearColor];
+    
+    [self.view addSubview:_tableView];
+    
+}
+
+
+-(void) hideKeyboard: (id) sender
+{
+    
+    [_searchTextField resignFirstResponder];
+    
+}
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -92,9 +166,23 @@ static int const numResults = 5;
                                                                                 action:@selector(dismissDone)];
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
                                                                                   target:self
-                                                                                  action:@selector(dismiss)];
+                                                                                  action:@selector(closeJukebox)];
     [[self navigationItem] setRightBarButtonItem:doneButton];
     [[self navigationItem] setLeftBarButtonItem:cancelButton];
+}
+
+- (void) closeJukebox
+{
+    self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         
+                         self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
+                     }];
+    
+    
+    [self performSelector:@selector(dismiss) withObject:self afterDelay:0.25];
+
 }
 
 - (void)initResults
@@ -112,7 +200,7 @@ static int const numResults = 5;
 
 - (void)dismiss
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void)dismissDone
@@ -129,9 +217,9 @@ static int const numResults = 5;
 
 - (void)sendSearchRequest
 {
-    [_searchTextView resignFirstResponder];
+    [_searchTextField resignFirstResponder];
     Rdio *sharedRdio = [AppDelegate rdioInstance];
-    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:_searchTextView.text, @"query", @"Track", @"types", [NSString stringWithFormat:@"%d", numResults], @"count", nil];
+    NSDictionary *parameters = [[NSDictionary alloc] initWithObjectsAndKeys:_searchTextField.text, @"query", @"Track", @"types", [NSString stringWithFormat:@"%d", numResults], @"count", nil];
     RDAPIRequestDelegate *APIRequestDelegate = [RDAPIRequestDelegate delegateToTarget:self loadedAction:@selector(rdioRequest:didLoadData:) failedAction:@selector(rdioRequest:didFailWithError:)];
     [sharedRdio callAPIMethod:@"search" withParameters:parameters delegate:APIRequestDelegate];
 }
@@ -168,6 +256,7 @@ static int const numResults = 5;
     }
     
     [[cell textLabel] setText:[[_results objectAtIndex:[indexPath row]] objectForKey:@"name"]];
+    cell.textLabel.textAlignment = NSTextAlignmentCenter;
     
     return cell;
 }
@@ -180,7 +269,9 @@ static int const numResults = 5;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([[_results objectAtIndex:[indexPath row]] objectForKey:@"key"]) {
+        NSLog(@"touched me");
         _trackKey = [[_results objectAtIndex:[indexPath row]] objectForKey:@"key"];
+        
     } else {
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Error:"
                                                           message:@"You haven't searched for any songs yet."
