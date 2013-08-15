@@ -527,7 +527,15 @@ static NSInteger cellAttachedPhotoTag = 8;
             photoView.contentMode = UIViewContentModeScaleAspectFill;
             additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
             [photoView setImage:photo];
+        
+            
+            [photoView setFrame:CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
+                                           cellPaddingTop+cellTextPaddingTop*11+textSize.height,
+                                           additionalPhotoWidth,
+                                           additionalPhotoHeight)];
         }];
+    } else {
+        [photoView setImage:nil];
     }
     
     
