@@ -312,9 +312,13 @@ int const PUBLIC = 2;
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
             
-        } else if (recipient == FRIENDS) {
+            NSString *username = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
+            PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
+            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:username forKey:@"receiver"];
+            [readReceiptsArray addObject:readReceiptsObject];
             
-            //For each person we are sending to
+        } else {
             for (id<FBGraphUser> user in recipientsList) {
                 
                 [AppDelegate linkOrStoreUserDetails:user
@@ -329,13 +333,16 @@ int const PUBLIC = 2;
                 [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
                 [readReceiptsObject setObject:username forKey:@"receiver"];
                 [readReceiptsArray addObject:readReceiptsObject];
+
             }
-            
-            [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
-            
+        
         }
         
-        // for public messages
+        [PFObject saveAllInBackground:readReceipts block:^(BOOL succeeded, NSError *error) {
+            [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
+            [postObject saveInBackground];
+        }];
+        
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
             [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
@@ -393,8 +400,9 @@ int const PUBLIC = 2;
         [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
         NSArray* mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
         _nmv.imagePicker.mediaTypes = mediaTypes;
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
     } else {
-        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+        [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
     }
     [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
 }

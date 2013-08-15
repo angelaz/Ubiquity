@@ -16,4 +16,7 @@
 
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
+@property (nonatomic, strong) UITextField *locationSearchTextField;
+@property (nonatomic, strong) UIButton *locationSearchButton;
+
 @end
