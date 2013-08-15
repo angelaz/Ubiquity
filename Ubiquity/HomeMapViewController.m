@@ -70,18 +70,19 @@
 
 - (void) cluster
 {
-    if (zoomLevel > _hmv.map.camera.zoom + 0.5 || zoomLevel < _hmv.map.camera.zoom - 0.5)
-    {
-        if (!idleMethodBeingCalled)
+    if ([PFUser currentUser] != nil) {
+        if (zoomLevel > _hmv.map.camera.zoom + 0.5 || zoomLevel < _hmv.map.camera.zoom - 0.5)
         {
-            idleMethodBeingCalled = true;
-            NSMutableArray *posts = [self getParseQuery];
-            double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
-            NSLog(@"%f new range", newRange);
-            [self deployParseQuery:posts withRange:newRange];
+            if (!idleMethodBeingCalled)
+            {
+                idleMethodBeingCalled = true;
+                NSMutableArray *posts = [self getParseQuery];
+                double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
+                NSLog(@"%f new range", newRange);
+                [self deployParseQuery:posts withRange:newRange];
+            }
         }
     }
-    
 }
 
 
