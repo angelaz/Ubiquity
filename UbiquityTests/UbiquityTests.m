@@ -8,8 +8,6 @@
 
 #import <XCTest/XCTest.h>
 #import <SenTestingKit/SenTestingKit.h>
-
-#import "RecentViewController.h"
 #import "LoginViewController.h"
 #import "LocationController.h"
 #import "OptionsViewController.h"
@@ -34,7 +32,7 @@
     locationController = [[LocationController alloc] init];
     STAssertTrue( 1 == 2, @"FAIL");
     id nmvc = [[NewMessageViewController alloc] init];
-    [self testNewMessageControllerSend];
+//    [self testNewMessageControllerSend];
     NSLog(@"hi");
 
 
@@ -77,45 +75,45 @@
     STAssertNotNil(locationController, nil);
 }
 
-- (void) testRecentViewController
-{
-    id rvc = [[RecentViewController alloc] init];
-    STAssertNotNil(rvc, nil);
-//    CLLocation *testLocation = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
-//    [locationController setLocation: testLocation];
-//    STAssertNoThrow([rvc queryForAllPostsNearLocation:testLocation withNearbyDistance: 0.0], nil);
-//    testLocation = [[CLLocation alloc] initWithLatitude:300.0 longitude:600.0];
-//    STAssertNoThrow([rvc queryForAllPostsNearLocation:testLocation withNearbyDistance: 0.0], nil);
-}
-
-- (void) testNewMessageControllerInitPosition
-{
-    id nmvc = [[NewMessageViewController alloc] init];
-    STAssertNotNil(nmvc, nil);
-    STAssertEquals([[[[nmvc nmv] map] selectedMarker] position], [[[locationController locationManager] location] coordinate], nil);
-    
-}
-
-- (void) testNewMessageControllerSend
-{
-    id nmvc = [[NewMessageViewController alloc] init];
-    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
-    [[[nmvc nmv] messageTextView] setText: @"Test Message"];
-    STAssertFalse([[[[nmvc nmv] messageTextView] text] isEqualToString: @"1"], nil);
-    [nmvc sendMessage: [[nmvc nmv] sendButton]];
-    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
-    NSLog(@"%@", [[[nmvc nmv] messageTextView] text]);
-    [[[nmvc nmv] messageTextView] setText: @""];
-    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
-
-
-    
-}
-
-- (void) testNewMessageControllerSearch
-{
-    id nmvc = [[NewMessageViewController alloc] init];
-    
-}
-
+//- (void) testRecentViewController
+//{
+//    id rvc = [[RecentViewController alloc] init];
+//    STAssertNotNil(rvc, nil);
+////    CLLocation *testLocation = [[CLLocation alloc] initWithLatitude:0.0 longitude:0.0];
+////    [locationController setLocation: testLocation];
+////    STAssertNoThrow([rvc queryForAllPostsNearLocation:testLocation withNearbyDistance: 0.0], nil);
+////    testLocation = [[CLLocation alloc] initWithLatitude:300.0 longitude:600.0];
+////    STAssertNoThrow([rvc queryForAllPostsNearLocation:testLocation withNearbyDistance: 0.0], nil);
+//}
+//
+//- (void) testNewMessageControllerInitPosition
+//{
+//    id nmvc = [[NewMessageViewController alloc] init];
+//    STAssertNotNil(nmvc, nil);
+//    STAssertEquals([[[[nmvc nmv] map] selectedMarker] position], [[[locationController locationManager] location] coordinate], nil);
+//    
+//}
+//
+//- (void) testNewMessageControllerSend
+//{
+//    id nmvc = [[NewMessageViewController alloc] init];
+//    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
+//    [[[nmvc nmv] messageTextView] setText: @"Test Message"];
+//    STAssertFalse([[[[nmvc nmv] messageTextView] text] isEqualToString: @"1"], nil);
+//    [nmvc sendMessage: [[nmvc nmv] sendButton]];
+//    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
+//    NSLog(@"%@", [[[nmvc nmv] messageTextView] text]);
+//    [[[nmvc nmv] messageTextView] setText: @""];
+//    STAssertNoThrow([nmvc sendMessage: [[nmvc nmv] sendButton]], nil);
+//
+//
+//    
+//}
+//
+//- (void) testNewMessageControllerSearch
+//{
+//    id nmvc = [[NewMessageViewController alloc] init];
+//    
+//}
+//
 @end

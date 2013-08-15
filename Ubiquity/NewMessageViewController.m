@@ -670,12 +670,28 @@ int const PUBLIC = 2;
     amvc.delegate = self;
     UINavigationController *addMusicNavController = [[UINavigationController alloc]
                                                      initWithRootViewController:amvc];
-    [self.navigationController presentViewController:addMusicNavController animated:YES completion:nil];
+//    [self.navigationController presentViewController:addMusicNavController animated:YES completion:nil];
+    
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:addMusicNavController animated:YES completion:nil];
+    amvc.view.frame = CGRectMake(amvc.view.frame.origin.x, self.view.frame.size.height, amvc.view.frame.size.width, amvc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+
+                         amvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, amvc.view.frame.size.width, amvc.self.view.frame.size.height);
+                     }];
+
 }
 
 - (void)addMusicViewController:(AddMusicViewController *)controller didFinishSelectingSong:(NSString *)trackKey
 {
     NSLog(@"Returned from AMVC: %@", trackKey);
     song = trackKey;
+    if (![song isEqualToString:@""])
+    {
+        [_nmv.musicButton setImage:[UIImage imageNamed:@"musicNoteRed"] forState:UIControlStateNormal];
+        
+    }
+
 }
 @end

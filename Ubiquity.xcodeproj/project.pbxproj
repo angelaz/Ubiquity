@@ -86,6 +86,9 @@
 		8666BB6A17BC85B8001EBD23 /* UnselectedSeg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6817BC85B8001EBD23 /* UnselectedSeg.png */; };
 		8666BB6C17BC944D001EBD23 /* Div.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6B17BC944D001EBD23 /* Div.png */; };
 		8666BB6F17BD3E0D001EBD23 /* GMSMarkerWithCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */; };
+		8666BB7117BD590E001EBD23 /* musicNoteRed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB7017BD590E001EBD23 /* musicNoteRed.png */; };
+		8666BB7617BD5F75001EBD23 /* JukeBox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB7517BD5F75001EBD23 /* JukeBox@2x.png */; };
+		8666BB7817BD63D1001EBD23 /* JukeBoxSearch@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB7717BD63D1001EBD23 /* JukeBoxSearch@2x.png */; };
 		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
 		86894B6217A0A72800F7146B /* TextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B6117A0A72800F7146B /* TextMessage.m */; };
 		86894B6517A1E96200F7146B /* searchbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6317A1E96200F7146B /* searchbutton.png */; };
@@ -222,6 +225,9 @@
 		8666BB6B17BC944D001EBD23 /* Div.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Div.png; sourceTree = "<group>"; };
 		8666BB6D17BD3E0D001EBD23 /* GMSMarkerWithCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMSMarkerWithCount.h; sourceTree = "<group>"; };
 		8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMSMarkerWithCount.m; sourceTree = "<group>"; };
+		8666BB7017BD590E001EBD23 /* musicNoteRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicNoteRed.png; sourceTree = "<group>"; };
+		8666BB7517BD5F75001EBD23 /* JukeBox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JukeBox@2x.png"; sourceTree = "<group>"; };
+		8666BB7717BD63D1001EBD23 /* JukeBoxSearch@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JukeBoxSearch@2x.png"; sourceTree = "<group>"; };
 		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
 		86894B5E17A096FF00F7146B /* NewMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageViewController.m; sourceTree = "<group>"; };
 		86894B6017A0A72800F7146B /* TextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMessage.h; sourceTree = "<group>"; };
@@ -414,6 +420,9 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8666BB7717BD63D1001EBD23 /* JukeBoxSearch@2x.png */,
+				8666BB7017BD590E001EBD23 /* musicNoteRed.png */,
+				8666BB7517BD5F75001EBD23 /* JukeBox@2x.png */,
 				8666BB6B17BC944D001EBD23 /* Div.png */,
 				8666BB6717BC85B8001EBD23 /* SelectedSeg.png */,
 				8666BB6817BC85B8001EBD23 /* UnselectedSeg.png */,
@@ -563,6 +572,7 @@
 				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
 				86D1F45317BC29FE003B7FED /* leftarrow.png in Resources */,
 				864C053A17B57003000B5A52 /* newMessage@2x.png in Resources */,
+				8666BB7117BD590E001EBD23 /* musicNoteRed.png in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
 				8666BB6A17BC85B8001EBD23 /* UnselectedSeg.png in Resources */,
 				86D1F43A17B9B6D6003B7FED /* gear@2x.png in Resources */,
@@ -587,6 +597,7 @@
 				82E9317317A079C600B3958B /* InfoPlist.strings in Resources */,
 				82E931F317A093D500B3958B /* icon.png in Resources */,
 				86D1F43417B985B3003B7FED /* addFriend@2x.png in Resources */,
+				8666BB7817BD63D1001EBD23 /* JukeBoxSearch@2x.png in Resources */,
 				86D1F43F17B9BA1B003B7FED /* me@2x.png in Resources */,
 				829ED75F17B3135A006AD7D5 /* camera.png in Resources */,
 				865FBE4B17B4064300A3F7E2 /* ubi.png in Resources */,
@@ -605,6 +616,7 @@
 				86D1F45017BC21EA003B7FED /* close.png in Resources */,
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
 				8666BB6C17BC944D001EBD23 /* Div.png in Resources */,
+				8666BB7617BD5F75001EBD23 /* JukeBox@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
 				864C054217B5704B000B5A52 /* options@2x.png in Resources */,
