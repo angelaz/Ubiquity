@@ -54,6 +54,7 @@ static NSInteger cellAttachedPhotoTag = 8;
     BOOL _playing;
     BOOL _paused;
     NSMutableArray *_trackKeys;
+    PFQuery *pushQuery;
 }
 
 @property (nonatomic, strong) FriendsViewController *friendsViewController;
@@ -228,6 +229,9 @@ static NSInteger cellAttachedPhotoTag = 8;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(postWasCreated:) name:kPAWPostCreatedNotification object:nil];
 	// Do any additional setup after loading the view.
 
+    pushQuery = [PFInstallation query];
+    [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+    [pushQuery whereKey:@"owner" equalTo:[PFUser currentUser]];
     
 }
 
@@ -329,7 +333,8 @@ static NSInteger cellAttachedPhotoTag = 8;
 }
 
 - (void)pushNotifications {
-    PFQuery *queryUserDate = [PFQuery queryWithClassName:@"Posts"];
+    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+	// Query for posts near our current location.
     
 	// Get our current location:
 	LocationController* locationController = [LocationController sharedLocationController];
@@ -339,12 +344,11 @@ static NSInteger cellAttachedPhotoTag = 8;
     
 	// And set the query to look by location
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[queryUserDate whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    [queryUserDate includeKey:kPAWParseSenderKey];
-    [queryUserDate includeKey:@"readReceiptsArray"];
-    [queryUserDate orderByDescending:@"createdAt"];
-    [queryUserDate whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    [queryUserDate findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"readReceiptsArray"];
+    [query orderByDescending:@"createdAt"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
         if (!error) {   // The find succeeded.
             if ([posts count] > 0) {      //Saved friend list exists
                 NSLog(@"Seeing if new push notifications for found posts");
@@ -354,9 +358,6 @@ static NSInteger cellAttachedPhotoTag = 8;
                         if ([[receipt objectForKey:@"receiver"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
                             if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
                                 NSLog(@"New push notifications so new notes!");
-                                PFQuery *pushQuery = [PFInstallation query];
-                                [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
-                                [pushQuery whereKey:@"owner" equalTo:[PFUser currentUser]];
                                 
                                 PFObject *senderInfo = [post objectForKey:@"sender"];
                                 PFObject *profile = [senderInfo objectForKey:@"profile"];
