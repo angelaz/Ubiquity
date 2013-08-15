@@ -314,10 +314,11 @@ static NSInteger cellAttachedPhotoTag = 8;
         NSLog(@"Only shows notes from self");
         [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [self pushNotifications];
     } else if (self.indexing == 1) {
         NSLog(@"Shows notes from friends");
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        [query includeKey:@"readReceiptsArray"];
+        [query whereKey:@"sender" notEqualTo:[[PFUser currentUser] objectForKey:@"userData"]];
         [self pushNotifications];
     } else if (self.indexing == 2) {
         NSLog(@"Shows public notes");

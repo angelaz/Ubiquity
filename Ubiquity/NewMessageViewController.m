@@ -294,7 +294,7 @@ int const PUBLIC = 2;
     }
     song = @"";
     
-    NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber];
+    NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber+1];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
@@ -307,6 +307,12 @@ int const PUBLIC = 2;
                           andStoreUnderRelation:@"receivers"
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
+            
+            NSString *username = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
+            PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
+            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:username forKey:@"receiver"];
+            [readReceiptsArray addObject:readReceiptsObject];
             
         } else if (recipient == FRIENDS) {
             
@@ -326,10 +332,9 @@ int const PUBLIC = 2;
                 [readReceiptsObject setObject:username forKey:@"receiver"];
                 [readReceiptsArray addObject:readReceiptsObject];
             }
-            
-            [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
-            
         }
+        
+        [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
         
         // for public messages
         if (countNumber == 0) {
