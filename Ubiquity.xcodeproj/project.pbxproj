@@ -82,6 +82,10 @@
 		865FBE4B17B4064300A3F7E2 /* ubi.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4A17B4064300A3F7E2 /* ubi.png */; };
 		865FBE4E17B4069000A3F7E2 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4C17B4069000A3F7E2 /* Default.png */; };
 		865FBE4F17B4069000A3F7E2 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 865FBE4D17B4069000A3F7E2 /* Default@2x.png */; };
+		8666BB6917BC85B8001EBD23 /* SelectedSeg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6717BC85B8001EBD23 /* SelectedSeg.png */; };
+		8666BB6A17BC85B8001EBD23 /* UnselectedSeg.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6817BC85B8001EBD23 /* UnselectedSeg.png */; };
+		8666BB6C17BC944D001EBD23 /* Div.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB6B17BC944D001EBD23 /* Div.png */; };
+		8666BB6F17BD3E0D001EBD23 /* GMSMarkerWithCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */; };
 		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
 		86894B6217A0A72800F7146B /* TextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B6117A0A72800F7146B /* TextMessage.m */; };
 		86894B6517A1E96200F7146B /* searchbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6317A1E96200F7146B /* searchbutton.png */; };
@@ -103,6 +107,10 @@
 		86D1F44C17BAB90A003B7FED /* ToFriends@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44917BAB90A003B7FED /* ToFriends@2x.png */; };
 		86D1F44D17BAB90A003B7FED /* ToMe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44A17BAB90A003B7FED /* ToMe@2x.png */; };
 		86D1F44E17BAB90A003B7FED /* ToPublic@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44B17BAB90A003B7FED /* ToPublic@2x.png */; };
+		86D1F45017BC21EA003B7FED /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F44F17BC21EA003B7FED /* close.png */; };
+		86D1F45317BC29FE003B7FED /* leftarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F45117BC29FE003B7FED /* leftarrow.png */; };
+		86D1F45417BC29FE003B7FED /* rightarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F45217BC29FE003B7FED /* rightarrow.png */; };
+		86D1F45617BC2F3C003B7FED /* ReadNote@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F45517BC2F3C003B7FED /* ReadNote@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -209,6 +217,11 @@
 		865FBE4A17B4064300A3F7E2 /* ubi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ubi.png; sourceTree = "<group>"; };
 		865FBE4C17B4069000A3F7E2 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		865FBE4D17B4069000A3F7E2 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		8666BB6717BC85B8001EBD23 /* SelectedSeg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectedSeg.png; sourceTree = "<group>"; };
+		8666BB6817BC85B8001EBD23 /* UnselectedSeg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UnselectedSeg.png; sourceTree = "<group>"; };
+		8666BB6B17BC944D001EBD23 /* Div.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Div.png; sourceTree = "<group>"; };
+		8666BB6D17BD3E0D001EBD23 /* GMSMarkerWithCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMSMarkerWithCount.h; sourceTree = "<group>"; };
+		8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMSMarkerWithCount.m; sourceTree = "<group>"; };
 		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
 		86894B5E17A096FF00F7146B /* NewMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageViewController.m; sourceTree = "<group>"; };
 		86894B6017A0A72800F7146B /* TextMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextMessage.h; sourceTree = "<group>"; };
@@ -235,6 +248,10 @@
 		86D1F44917BAB90A003B7FED /* ToFriends@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToFriends@2x.png"; sourceTree = "<group>"; };
 		86D1F44A17BAB90A003B7FED /* ToMe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToMe@2x.png"; sourceTree = "<group>"; };
 		86D1F44B17BAB90A003B7FED /* ToPublic@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ToPublic@2x.png"; sourceTree = "<group>"; };
+		86D1F44F17BC21EA003B7FED /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
+		86D1F45117BC29FE003B7FED /* leftarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftarrow.png; sourceTree = "<group>"; };
+		86D1F45217BC29FE003B7FED /* rightarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rightarrow.png; sourceTree = "<group>"; };
+		86D1F45517BC2F3C003B7FED /* ReadNote@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ReadNote@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +384,8 @@
 				82E931BF17A07B0B00B3958B /* TableHeaderView.xib */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
 				20F8F2A817A1F0F600594994 /* WallPostsViewController.m */,
+				8666BB6D17BD3E0D001EBD23 /* GMSMarkerWithCount.h */,
+				8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */,
 				20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */,
 				20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */,
 				82C7577417A322520094EB15 /* FriendsViewController.h */,
@@ -395,6 +414,13 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8666BB6B17BC944D001EBD23 /* Div.png */,
+				8666BB6717BC85B8001EBD23 /* SelectedSeg.png */,
+				8666BB6817BC85B8001EBD23 /* UnselectedSeg.png */,
+				86D1F45517BC2F3C003B7FED /* ReadNote@2x.png */,
+				86D1F45117BC29FE003B7FED /* leftarrow.png */,
+				86D1F45217BC29FE003B7FED /* rightarrow.png */,
+				86D1F44F17BC21EA003B7FED /* close.png */,
 				82CA7C2F17BC37DA00F00008 /* musicNote.png */,
 				86D1F44917BAB90A003B7FED /* ToFriends@2x.png */,
 				86D1F44A17BAB90A003B7FED /* ToMe@2x.png */,
@@ -533,9 +559,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86D1F45417BC29FE003B7FED /* rightarrow.png in Resources */,
 				60C0B47817A1E82100DC0F92 /* GMSCoreResources.bundle in Resources */,
+				86D1F45317BC29FE003B7FED /* leftarrow.png in Resources */,
 				864C053A17B57003000B5A52 /* newMessage@2x.png in Resources */,
 				82E931EA17A093C600B3958B /* login-button-small-pressed.png in Resources */,
+				8666BB6A17BC85B8001EBD23 /* UnselectedSeg.png in Resources */,
 				86D1F43A17B9B6D6003B7FED /* gear@2x.png in Resources */,
 				865FBE4E17B4069000A3F7E2 /* Default.png in Resources */,
 				824EB77917A735A00006AA5D /* options.png in Resources */,
@@ -549,6 +578,7 @@
 				864C054017B5702C000B5A52 /* friends@2x.png in Resources */,
 				82E931EC17A093C600B3958B /* login-button-small.png in Resources */,
 				864C053C17B57018000B5A52 /* recentmessages@2x.png in Resources */,
+				8666BB6917BC85B8001EBD23 /* SelectedSeg.png in Resources */,
 				82C7577817A3225D0094EB15 /* FriendsViewController.xib in Resources */,
 				60C0B47617A1E44A00DC0F92 /* GoogleMaps.bundle in Resources */,
 				865FBE4F17B4069000A3F7E2 /* Default@2x.png in Resources */,
@@ -572,11 +602,14 @@
 				82E931A717A07A3700B3958B /* FacebookSDKResources.bundle in Resources */,
 				86D1F44D17BAB90A003B7FED /* ToMe@2x.png in Resources */,
 				865FBE4917B4063600A3F7E2 /* recentmessages.png in Resources */,
+				86D1F45017BC21EA003B7FED /* close.png in Resources */,
 				86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */,
+				8666BB6C17BC944D001EBD23 /* Div.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
 				864C054217B5704B000B5A52 /* options@2x.png in Resources */,
 				8626C10517A9C7B6009F6AA7 /* pixel.png in Resources */,
+				86D1F45617BC2F3C003B7FED /* ReadNote@2x.png in Resources */,
 				20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -601,6 +634,7 @@
 				86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */,
 				82E9317917A079C600B3958B /* AppDelegate.m in Sources */,
 				82E9317517A079C600B3958B /* main.m in Sources */,
+				8666BB6F17BD3E0D001EBD23 /* GMSMarkerWithCount.m in Sources */,
 				82CA7C3317BC37DA00F00008 /* AddMusicViewController.m in Sources */,
 				82E931C017A07B0B00B3958B /* UserDetailsViewController.m in Sources */,
 				86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */,
@@ -672,8 +706,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Angela Zhang (WZV3M3D5S3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Angela Zhang (WZV3M3D5S3)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wei Wu (84PL3ZK5E3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wei Wu (84PL3ZK5E3)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -714,8 +748,8 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Angela Zhang (WZV3M3D5S3)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Angela Zhang (WZV3M3D5S3)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Wei Wu (84PL3ZK5E3)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wei Wu (84PL3ZK5E3)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

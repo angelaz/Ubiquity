@@ -52,7 +52,24 @@ static AppDelegate *launchedDelegate;
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
 
-    //[UINavigationBar appearance].tintColor = mainThemeColor;
+    
+    UIColor *color = lighterThemeColor;
+    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundColor:color];
+    [UINavigationBar appearance].tintColor = color;
+    [[UIBarButtonItem appearance] setBackgroundImage:[[UIImage alloc] init] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:17], UITextAttributeFont,nil] forState:UIControlStateNormal];
+    [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"UnselectedSeg"]
+                                               forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"SelectedSeg"]                                               forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+    
+    [[UISegmentedControl appearance]
+     setDividerImage:[UIImage imageNamed:@"Div"]
+     forLeftSegmentState:UIControlStateNormal
+     rightSegmentState:UIControlStateSelected
+     barMetrics:UIBarMetricsDefault];
+
+
 
     // register for push notifications
     [application registerForRemoteNotificationTypes:
