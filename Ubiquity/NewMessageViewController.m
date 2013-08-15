@@ -311,8 +311,7 @@ int const PUBLIC = 2;
             
             NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            //Not opened yet, so don't need this
-            //[readReceiptsObject setObject:[readReceiptsObject createdAt] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
         }
