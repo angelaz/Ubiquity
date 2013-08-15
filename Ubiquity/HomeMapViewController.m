@@ -19,6 +19,7 @@
 @interface HomeMapViewController ()
 {
     CGFloat zoomLevel;
+    BOOL idleMethodBeingCalled; // async lock for background query method to prevent more than 1 query happening at once
 }
 @property (nonatomic, strong) HomeMapView *hmv;
 @property (nonatomic, strong) NSDictionary *markerNotearrayDict;
@@ -49,18 +50,32 @@
     
 }
 
+
+
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
 {
+    [self performSelector:@selector (cluster) withObject:self afterDelay:0.25];
     
-    if (zoomLevel > mapView.camera.zoom + 0.5 || zoomLevel < mapView.camera.zoom - 0.5)
+}
+
+- (void) cluster
+{
+    
+    if (zoomLevel > _hmv.map.camera.zoom + 0.5 || zoomLevel < _hmv.map.camera.zoom - 0.5)
     {
-        double newRange = 77.4795 * pow(M_E, -0.683106 * zoomLevel);
+    if (!idleMethodBeingCalled)
+    {
+        idleMethodBeingCalled = true;
         PFQuery *getPosts = [self getParseQuery];
+        double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
         NSLog(@"%f new range", newRange);
         [self deployParseQuery:getPosts withRange:newRange];
     }
-    return;
+    }
+
 }
+
+
 
 
 
@@ -93,6 +108,8 @@
 {
     [self.objects removeAllObjects];
     [_hmv.map clear];
+    
+    
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // The find succeeded.
@@ -129,7 +146,8 @@
                 current = gp;
             }
             [allNotes addObject: [notesForMarker copy]];
-            
+            idleMethodBeingCalled = false;
+
             
         } else {
             // Log details of the failure
@@ -154,7 +172,7 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
-//    [query orderByDescending: @"createdAt"];
+    //    [query orderByDescending: @"createdAt"];
     
     if ([self.segmentedControl selectedSegmentIndex] == 0) {
         NSLog(@"Only shows notes from self");
