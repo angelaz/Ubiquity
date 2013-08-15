@@ -7,13 +7,14 @@
 //
 
 #import "AppDelegate.h"
+#import <Parse/Parse.h>
+#import "LoginViewController.h"
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
 #import "FriendsViewController.h"
+#import <GoogleMaps/GoogleMaps.h>
 #import "WallPostsViewController.h"
 #import "HomeMapViewController.h"
-
-static AppDelegate *launchedDelegate;
 
 @interface AppDelegate ()
 
@@ -22,49 +23,31 @@ static AppDelegate *launchedDelegate;
 @implementation AppDelegate
 
 @synthesize window = _window;
-@synthesize rdio;
-
-+ (Rdio *)rdioInstance
-{
-    return launchedDelegate.rdio;
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    //Parse
+    //Set up Parse/Facebook interfacing
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
-    [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
-    [PFFacebookUtils initializeFacebook];
-    
-    //Google Maps
+
     [GMSServices provideAPIKey:@"AIzaSyBTSqQBVPdVVKCPSGHdfTL3GEQQC7Y--hQ"];
-    
-    //Twitter
+    [PFFacebookUtils initializeFacebook];
     [PFTwitterUtils initializeWithConsumerKey:@"bk8P1pWhDoqSeQrbCo1A"
                                consumerSecret:@"p3A2h5FavogvCu2eBh7Jyegf9fAYpk9zTVW4ZBq7KA"];
+
     
-    //Rdio
-    launchedDelegate = self;
-    rdio = [[Rdio alloc] initWithConsumerKey:@"5zk8jxx8g6kj2yyttbmdvqkt" andSecret:@"fPYZqmPDPG" delegate:nil];
+    //[self createPublicUser];
     
+    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
+    UINavigationController *mapNavController = [[UINavigationController alloc]
+                                                initWithRootViewController:hmvc];
+
+    [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
+
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
-    
-    UIColor *color = lighterThemeColor;
-    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setBackgroundColor:color];
-    //[UINavigationBar appearance].tintColor = color;
-    [[UIBarButtonItem appearance] setBackgroundImage:[[UIImage alloc] init] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:17], UITextAttributeFont,nil] forState:UIControlStateNormal];
-    [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"UnselectedSeg"]
-                                               forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"SelectedSeg"]                                               forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-    
-    [[UISegmentedControl appearance] setDividerImage:[UIImage imageNamed:@"Div"]
-                                 forLeftSegmentState:UIControlStateNormal
-                                   rightSegmentState:UIControlStateSelected
-                                          barMetrics:UIBarMetricsDefault];
+
+    [UINavigationBar appearance].tintColor = mainThemeColor;
 
     // register for push notifications
     [application registerForRemoteNotificationTypes:
@@ -90,7 +73,6 @@ static AppDelegate *launchedDelegate;
     
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation setObject:[PFUser currentUser] forKey:@"owner"];
     [currentInstallation saveInBackground];
     NSLog(@"Registered for push");
 }
@@ -219,6 +201,5 @@ static AppDelegate *launchedDelegate;
         }
     }];
 }
-
 
 @end

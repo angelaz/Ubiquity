@@ -6,6 +6,8 @@
 // Copyright (c) 2013 Team Ubi. All rights reserved.
 //
 
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import <Parse/Parse.h>
 
 #import "AppDelegate.h"
@@ -26,8 +28,8 @@ int const PUBLIC = 2;
 
 @interface NewMessageViewController ()
 {
-    BOOL imagePicked;
-    PFFile *photoFile;
+    BOOL mediaPicked;
+    PFFile *mediaFile;
     NSUInteger countNumber;
     int recipient;
     NSString *song;
@@ -222,11 +224,11 @@ int const PUBLIC = 2;
 
 -(void) closeNewMessage: (id) sender
 {
-    if (imagePicked == YES) {
+    if (mediaPicked == YES) {
         [_nmv.thumbnailImageView removeFromSuperview];
     }
     [_nmv.messageTextView setText: @""];
-    imagePicked = NO;
+    mediaPicked = NO;
     song = @"";
     self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
     [UIView animateWithDuration:0.25
@@ -284,12 +286,12 @@ int const PUBLIC = 2;
     [postObject setObject:_nmv.addressTitle.text forKey:@"locationAddress"];
     [postObject setObject:[user objectForKey:@"userData"] forKey:kPAWParseSenderKey];
     [postObject setObject:currentPoint forKey:kPAWParseLocationKey];
-    if (imagePicked == YES) { //There's an image to be included with this post!
-        [postObject setObject:photoFile forKey:@"photo"];
+    if (mediaPicked == YES) {
+        [postObject setObject:mediaFile forKey:@"media"];
         [_nmv.thumbnailImageView removeFromSuperview];
-        [postObject setObject:@150 forKey:@"photoHeight"];
+        [postObject setObject:@150 forKey:@"mediaHeight"];
     }
-    imagePicked = NO;
+    mediaPicked = NO;
     
     if (![song isEqualToString:@""]) { //There's a song attached to this post!
         [postObject setObject:song forKey:@"trackKey"];
@@ -394,8 +396,6 @@ int const PUBLIC = 2;
 
 - (void) choosePicture: (id) sender
 {
-    NSLog(@"Trying to attach a picture!");
-    
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeCamera];
         NSArray* mediaTypes = [UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeCamera];
@@ -404,34 +404,45 @@ int const PUBLIC = 2;
     } else {
         [_nmv.imagePicker setSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum];
     }
-    
     [self presentViewController:_nmv.imagePicker animated:YES completion:nil];
-    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    imagePicked = NO;
+    mediaPicked = NO;
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     [picker dismissViewControllerAnimated:YES completion:nil];
-    UIImage *newImage = [info valueForKey:UIImagePickerControllerOriginalImage];
-    NSData *imageData = UIImageJPEGRepresentation(newImage, 1.0f);
-    photoFile = [PFFile fileWithData:imageData];
-    imagePicked = YES;
-    //Make a thumbnail appear so user can see the image they attached!
+    
+    UIImage *image;
+    NSData *mediaData;
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    if ([mediaType isEqualToString:(NSString *) kUTTypeImage]) {
+        image = [info valueForKey:UIImagePickerControllerOriginalImage];
+        mediaData = UIImageJPEGRepresentation(image, 1.0f);
+    } else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie]) {
+        NSURL *vidURL = [info valueForKey:UIImagePickerControllerMediaURL];
+        mediaData = [NSData dataWithContentsOfURL:vidURL];
+        MPMoviePlayerController *player = [[MPMoviePlayerController alloc] initWithContentURL:vidURL];
+        image = [player thumbnailImageAtTime:1.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+        player = nil;
+    }
+    
+    mediaFile = [PFFile fileWithData:mediaData];
+    mediaPicked = YES;
+    
+    //Make a thumbnail appear so user can see the image/video they attached!
+    _nmv.thumbnailImage = [self getThumbnailFromImage:image];
     if (_nmv.thumbnailImage == nil && !isiPhone5)
     {
         CGRect newFrame = _nmv.messageTextView.frame;
         newFrame.size.height -= 40;
         _nmv.messageTextView.frame = newFrame;
     }
-
-    _nmv.thumbnailImage = [self getThumbnailFromImage:newImage];
     _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
-       float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 30;
+    float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 30;
     float y = _nmv.messageTextView.frame.origin.y + _nmv.messageTextView.frame.size.height + 5;
     _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
     [_nmv addSubview:_nmv.thumbnailImageView];

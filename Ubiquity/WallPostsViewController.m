@@ -521,11 +521,13 @@ static NSInteger cellAttachedPhotoTag = 8;
                                    textSize.width,
                                    textSize.height)];
     
+    
+    //GENERALIZE TO VIDEOS OR IMAGES
     UIImageView *photoView = (UIImageView *) [cell.contentView viewWithTag:cellAttachedPhotoTag];
 
-    if([object objectForKey:@"photoHeight"] > 0) {
-        [[object objectForKey:@"photo"] getDataInBackgroundWithBlock:^(NSData *photoData, NSError *error) {
-            UIImage *photo = [[UIImage alloc] initWithData:photoData];
+    if([object objectForKey:@"mediaHeight"] > 0) {
+        [[object objectForKey:@"media"] getDataInBackgroundWithBlock:^(NSData *mediaData, NSError *error) {
+            UIImage *photo = [[UIImage alloc] initWithData:mediaData];
             photoView.contentMode = UIViewContentModeScaleAspectFill;
             additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
             [photoView setImage:photo];

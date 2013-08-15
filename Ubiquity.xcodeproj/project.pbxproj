@@ -36,6 +36,7 @@
 		82148F3217AADD140066C69A /* Geocoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 82148F3117AADD140066C69A /* Geocoding.m */; };
 		824EB77917A735A00006AA5D /* options.png in Resources */ = {isa = PBXBuildFile; fileRef = 824EB77817A735A00006AA5D /* options.png */; };
 		827C7A2917BAE44E000253DF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8624CD2017A2E99800F32DE8 /* StoreKit.framework */; };
+		827CFE7717BD6A69003ED5AB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 827CFE7617BD6A69003ED5AB /* MediaPlayer.framework */; };
 		82855A5617A9A023007B44CA /* friends.png in Resources */ = {isa = PBXBuildFile; fileRef = 82855A5517A9A023007B44CA /* friends.png */; };
 		829ED75F17B3135A006AD7D5 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 829ED75E17B3135A006AD7D5 /* camera.png */; };
 		82AA117C17BADC5F00D570DC /* Rdio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117B17BADC5F00D570DC /* Rdio.framework */; };
@@ -163,6 +164,7 @@
 		8249ED8B17B9533200541598 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		824EB77817A735A00006AA5D /* options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = options.png; sourceTree = "<group>"; };
 		8254637417B953BE00019C24 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		827CFE7617BD6A69003ED5AB /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		82855A5517A9A023007B44CA /* friends.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = friends.png; sourceTree = "<group>"; };
 		829ED75E17B3135A006AD7D5 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		82AA117B17BADC5F00D570DC /* Rdio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Rdio.framework; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				827CFE7717BD6A69003ED5AB /* MediaPlayer.framework in Frameworks */,
 				827C7A2917BAE44E000253DF /* StoreKit.framework in Frameworks */,
 				82AA118017BADC8800D570DC /* Security.framework in Frameworks */,
 				60CB90BA17A086CF00A9E93A /* SystemConfiguration.framework in Frameworks */,
@@ -331,6 +334,7 @@
 		82E9316717A079C600B3958B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				827CFE7617BD6A69003ED5AB /* MediaPlayer.framework */,
 				82AA117F17BADC8800D570DC /* Security.framework */,
 				82AA117D17BADC7A00D570DC /* AudioToolbox.framework */,
 				82AA117B17BADC5F00D570DC /* Rdio.framework */,

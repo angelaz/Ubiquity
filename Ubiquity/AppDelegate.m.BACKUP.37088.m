@@ -33,6 +33,7 @@ static AppDelegate *launchedDelegate;
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    
     //Parse
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
@@ -49,22 +50,19 @@ static AppDelegate *launchedDelegate;
     launchedDelegate = self;
     rdio = [[Rdio alloc] initWithConsumerKey:@"5zk8jxx8g6kj2yyttbmdvqkt" andSecret:@"fPYZqmPDPG" delegate:nil];
     
+<<<<<<< HEAD
+=======
+    
+    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
+    UINavigationController *mapNavController = [[UINavigationController alloc]
+                                                initWithRootViewController:hmvc];
+    
+    [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
+
+>>>>>>> 9c3527f68d6f40eba6dbdce0987edecbf412680e
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
-    
-    UIColor *color = lighterThemeColor;
-    [[UINavigationBar appearance] setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-    [[UINavigationBar appearance] setBackgroundColor:color];
-    //[UINavigationBar appearance].tintColor = color;
-    [[UIBarButtonItem appearance] setBackgroundImage:[[UIImage alloc] init] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UIBarButtonItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont boldSystemFontOfSize:17], UITextAttributeFont,nil] forState:UIControlStateNormal];
-    [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"UnselectedSeg"]
-                                               forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-    [[UISegmentedControl appearance] setBackgroundImage:[UIImage imageNamed:@"SelectedSeg"]                                               forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
-    
-    [[UISegmentedControl appearance] setDividerImage:[UIImage imageNamed:@"Div"]
-                                 forLeftSegmentState:UIControlStateNormal
-                                   rightSegmentState:UIControlStateSelected
-                                          barMetrics:UIBarMetricsDefault];
+
+    //[UINavigationBar appearance].tintColor = mainThemeColor;
 
     // register for push notifications
     [application registerForRemoteNotificationTypes:
