@@ -39,4 +39,6 @@ extern int const LINE_HEIGHT;
 @property (nonatomic, strong) UIImageView *thumbnailImageView;
 @property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
 
+@property (nonatomic, strong) UIButton *musicButton;
+
 @end

@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "Rdio/Rdio.h"
 
-@interface WallPostsViewController : PFQueryTableViewController
+@interface WallPostsViewController : PFQueryTableViewController <RdioDelegate, RDPlayerDelegate>
 
 @property (nonatomic) int indexing;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UIButton *optionsButton;
+@property (nonatomic, strong) UIButton *rdioButton;
 @property (nonatomic, copy) NSString *className;
 
 @end
