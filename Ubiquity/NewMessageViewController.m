@@ -301,25 +301,39 @@ int const PUBLIC = 2;
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
         
-        //For each person we are sending to
-        for (id<FBGraphUser> user in recipientsList) {
-            
-            [AppDelegate linkOrStoreUserDetails:user
-                                           toId:[user id]
+        if (recipient == ME) {
+            countNumber = 1;
+            [AppDelegate linkOrStoreUserDetails:[[PFUser currentUser] objectForKey:@"userData"]
+                                           toId:[[PFUser currentUser] objectForKey:@"fbId"]
                                          toUser:nil
                           andStoreUnderRelation:@"receivers"
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
             
-            NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
-            PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
-            [readReceiptsObject setObject:username forKey:@"receiver"];
-            [readReceiptsArray addObject:readReceiptsObject];
+        } else if (recipient == FRIENDS) {
+            
+            //For each person we are sending to
+            for (id<FBGraphUser> user in recipientsList) {
+                
+                [AppDelegate linkOrStoreUserDetails:user
+                                               toId:[user id]
+                                             toUser:nil
+                              andStoreUnderRelation:@"receivers"
+                                           toObject:postObject
+                                         finalBlock:^(PFObject *made){}];
+                
+                NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
+                PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
+                [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+                [readReceiptsObject setObject:username forKey:@"receiver"];
+                [readReceiptsArray addObject:readReceiptsObject];
+            }
+            
+            [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
+            
         }
         
-        [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
-        
+        // for public messages
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
             [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
