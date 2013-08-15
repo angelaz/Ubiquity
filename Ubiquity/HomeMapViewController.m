@@ -296,7 +296,7 @@
     
     NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"me"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"public"], nil];
     self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
-    self.segmentedControl.frame = CGRectMake(0,0,150,30);
+    self.segmentedControl.frame = CGRectMake(0,0,150,35);
     self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [self.segmentedControl setSelectedSegmentIndex:0];
     [self.segmentedControl addTarget:self

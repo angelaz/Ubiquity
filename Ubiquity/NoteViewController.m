@@ -9,6 +9,7 @@
 #import "NoteViewController.h"
 #import "NoteView.h"
 #import <Parse/Parse.h>
+#import "TextMessage.h"
 
 @interface NoteViewController()
 {
@@ -131,6 +132,7 @@
     [self loadDates: i];
     [self loadText: i];
     [self loadImages: i];
+    [self loadName: i];
     
     if (i > 0)
         [_nv addSubview:_nv.leftArrow];
@@ -156,6 +158,13 @@
     }
     _nv.messageTextView.text = [self.notes[i] objectForKey:@"text"];
     
+}
+
+- (void) loadName: (int) i
+{
+    TextMessage *postFromObject = [[TextMessage alloc] initWithPFObject:self.notes[i]];
+	NSString *name = [postFromObject.sender objectForKey:@"profile"][@"name"];
+    _nv.fromLabel.text = name;
 }
 
 - (void) loadDates: (int) i
