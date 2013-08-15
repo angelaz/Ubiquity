@@ -316,8 +316,10 @@ int const PUBLIC = 2;
             [readReceiptsArray addObject:readReceiptsObject];
         }
         
-        [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
-        [postObject saveInBackground];
+        [PFObject saveAllInBackground:readReceipts block:^(BOOL succeeded, NSError *error) {
+            [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
+            [postObject saveInBackground];
+        }];
         
         if (countNumber == 0) {
             PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
