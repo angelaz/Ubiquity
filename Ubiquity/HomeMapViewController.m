@@ -14,8 +14,14 @@
 #import "OptionsViewController.h"
 #import "NoteViewController.h"
 #import "LocationController.h"
+#import "GMSMarkerWithCount.h"
+#import <math.h>
 
 @interface HomeMapViewController ()
+{
+    CGFloat zoomLevel;
+    BOOL idleMethodBeingCalled; // async lock for background query method to prevent more than 1 query happening at once
+}
 @property (nonatomic, strong) HomeMapView *hmv;
 @property (nonatomic, strong) NSDictionary *markerNotearrayDict;
 @end
@@ -28,6 +34,7 @@
     _hmv = [[HomeMapView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _hmv];
     _hmv.map.delegate = self;
+    zoomLevel = _hmv.map.camera.zoom;
     [self initNewMessageButton];
     self.objects = [[NSMutableArray alloc] init];
     [self loadPins];
@@ -36,39 +43,73 @@
     
     _hmv.map.delegate = self;
     
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loadPins)
                                                  name:KPAWInitialLocationFound
                                                object:nil];
-
+    
     
 }
+
+
+
+- (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
+{
+    [self performSelector:@selector (cluster) withObject:self afterDelay:0.25];
+    
+}
+
+- (void) cluster
+{
+    if (zoomLevel > _hmv.map.camera.zoom + 0.5 || zoomLevel < _hmv.map.camera.zoom - 0.5)
+    {
+        if (!idleMethodBeingCalled)
+        {
+            idleMethodBeingCalled = true;
+            PFQuery *getPosts = [self getParseQuery];
+            double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
+            NSLog(@"%f new range", newRange);
+            [self deployParseQuery:getPosts withRange:newRange];
+        }
+    }
+    
+}
+
+
 
 - (void) loadPins
 {
     if ([PFUser currentUser] != nil) {
-    PFQuery *getPosts = [self getParseQuery];
-    [self deployParseQuery: getPosts];
-    
-    
-    _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
-    [_hmv addGestureRecognizer:_hmv.tapRecognizer];
-
-    _hmv.map.delegate = self;
+        PFQuery *getPosts = [self getParseQuery];
+        [self deployParseQuery: getPosts withRange: 0.005];
+        
+        
+        _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(doStuff)];
+        [_hmv addGestureRecognizer:_hmv.tapRecognizer];
+        
+        _hmv.map.delegate = self;
     }
 }
 
 - (BOOL)mapView:(GMSMapView*)mapView didTapMarker:(GMSMarker *)marker
 {
+    
+    [UIView animateWithDuration:0.5
+                     animations:^{
+                         marker.icon = [UIImage imageNamed:@"ReadNote"];
+                     }];
+    
     [self readNote: marker];
     return YES;
 }
 
-- (void) deployParseQuery: (PFQuery *) query
+- (void) deployParseQuery: (PFQuery *) query withRange: (double) range
 {
     [self.objects removeAllObjects];
     [_hmv.map clear];
+    
+    
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // The find succeeded.
@@ -79,32 +120,36 @@
             NSMutableArray *allNotes = [[NSMutableArray alloc] init];
             NSMutableArray *notesForMarker = [[NSMutableArray alloc] init];
             NSMutableArray *markers = [[NSMutableArray alloc] init];
-            
+            GMSMarkerWithCount *marker = nil;
+
             for (PFObject *object in objects) {
                 NSLog(@"%@", object.objectId);
                 PFGeoPoint *gp = [object objectForKey: @"location"];
-                if (![self pointsAreEqualA:current andB:gp withinRange:0.0])
+                if (![self pointsAreEqualA:current andB:gp withinRange:range])
                 {
                     if (markers.count != 0)
                         [allNotes addObject: [notesForMarker copy]];
                     [notesForMarker removeAllObjects];
                     CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
-                    GMSMarker *marker = [GMSMarker markerWithPosition: pinLocation];
-                    marker.icon = [UIImage imageNamed: @"UnreadNote"];
+                    marker = [GMSMarkerWithCount markerWithPosition: pinLocation];
+                  //  marker.icon = [UIImage imageNamed: @"UnreadNote"];
                     marker.animated = YES;
                     marker.map = _hmv.map;
+                    zoomLevel = _hmv.map.camera.zoom;
                     
                     NSLog(@"new pin!");
                     
                     [markers addObject: marker];
                     self.markerNotearrayDict = [[NSMutableDictionary alloc] initWithObjects: @[markers, allNotes] forKeys:@[@"markers", @"arrayOfNotes"]];
                 }
+                [marker updateIcon];
                 [notesForMarker addObject:object];
                 
                 current = gp;
             }
             [allNotes addObject: [notesForMarker copy]];
-
+            idleMethodBeingCalled = false;
+            
             
         } else {
             // Log details of the failure
@@ -129,8 +174,7 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
-    
-    
+    //    [query orderByDescending: @"createdAt"];
     
     if ([self.segmentedControl selectedSegmentIndex] == 0) {
         NSLog(@"Only shows notes from self");
@@ -220,7 +264,7 @@
                              nvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nvc.view.frame.size.width, nvc.self.view.frame.size.height);
                          }];
         
-
+        
     }
     
     
@@ -255,7 +299,7 @@
     
     NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"me"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"public"], nil];
     self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
-    self.segmentedControl.frame = CGRectMake(0,0,150,30);
+    self.segmentedControl.frame = CGRectMake(0,0,150,35);
     self.segmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [self.segmentedControl setSelectedSegmentIndex:0];
     [self.segmentedControl addTarget:self
@@ -281,11 +325,12 @@
 
 - (void)initButtons
 {
-    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"List"
+    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"< List"
                                                                 style:UIBarButtonItemStylePlain
                                                                target:self
                                                                action:@selector(launchPostsView)];
     [[self navigationItem] setLeftBarButtonItem:mapList];
+
     
     UIImage *image = [UIImage imageNamed:@"newMessage"];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];

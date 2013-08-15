@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong) UILabel *pagingLabel;
 
-
+@property (nonatomic, strong) UIImageView *image;
 
 @property (nonatomic, strong) UILabel *messageTextView;
 @property (nonatomic, strong) UIScrollView *textScroll;
@@ -29,9 +29,11 @@
 @property (nonatomic, strong) UIScrollView *friendScroller;
 
 @property (nonatomic, strong) UIButton *pictureButton;
-@property (nonatomic, strong) UIImagePickerController *imagePicker;
-@property (nonatomic, strong) UIImage *thumbnailImage;
-@property (nonatomic, strong) UIImageView *thumbnailImageView;
-@property (nonatomic, strong) UIGestureRecognizer *tapRecognizer;
+
+@property (nonatomic, strong) UIImageView *leftArrow;
+@property (nonatomic, strong) UIImageView *rightArrow;
+
+
+- (void) createMessageWithWidth: (int) w andHeight: (int) h;
 
 @end
