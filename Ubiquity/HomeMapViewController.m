@@ -52,14 +52,20 @@
     [_hmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reactionToLocationFound)
+                                             selector:@selector(refreshPins)
                                                  name:KPAWInitialLocationFound
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reactionToLocationFound)
+                                             selector:@selector(refreshPins)
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(refreshPins)
+                                                 name: kPAWPostCreatedNotification
+                                               object:nil];
+
     
     _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
@@ -70,7 +76,7 @@
     }
 }
 
-- (void) reactionToLocationFound
+- (void) refreshPins
 {
     [self loadPins:self.segmentedControl.selectedSegmentIndex];
 }
@@ -104,8 +110,8 @@
 {
     if ([PFUser currentUser] != nil) {
         
-        
-        [self getParseQuery: i withRange: 0.005];
+        double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
+        [self getParseQuery: i withRange: range];
         
         _hmv.map.delegate = self;
         _hmv.locationSearchTextField.delegate = self;
