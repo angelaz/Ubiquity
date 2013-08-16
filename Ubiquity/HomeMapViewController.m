@@ -28,7 +28,7 @@
     NSMutableArray *selfArray;
     NSMutableArray *friendsArray;
     NSMutableArray *publicArray;
-
+    
 }
 @property (nonatomic, strong) HomeMapView *hmv;
 @property (nonatomic, strong) NSDictionary *markerNotearrayDict;
@@ -65,7 +65,7 @@
                                              selector:@selector(refreshPins)
                                                  name: kPAWPostCreatedNotification
                                                object:nil];
-
+    
     
     _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
@@ -98,7 +98,7 @@
                 double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
                 NSLog(@"%f new range", newRange);
                 [self getParseQuery: self.segmentedControl.selectedSegmentIndex withRange: newRange];
-
+                
             }
         }
     }
@@ -129,6 +129,74 @@
     [self readNote: marker];
     return YES;
 }
+
+- (void) getParseQuery: (int) i withRange: (double) r
+{
+    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
+    
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = 1000.0f;
+    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    
+    if (i < 2 )
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    else
+        [query whereKey:@"receivers" equalTo:publicUserObj];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %d posts.", objects.count);
+            // Do something with the found objects
+            
+            selfArray = [[NSMutableArray alloc] init];
+            friendsArray = [[NSMutableArray alloc] init];
+            publicArray = [[NSMutableArray alloc] init];
+            
+            for (PFObject *object in objects) {
+                if (i < 2)
+                {
+                    BOOL selfie = ([[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
+                    
+                    BOOL friendPost = (![[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
+                    
+                    if (selfie) {
+                        [selfArray addObject:object];
+                        
+                    } else if (friendPost) {
+                        [friendsArray addObject:object];
+                        
+                    }
+                }
+                else
+                {
+                    [publicArray addObject:object];
+                }
+                
+                
+            }
+        } else {
+            NSLog(@"Error in loading self and friends map posts: %@", error);
+        }
+        
+        if (i == 0)
+            [self deployParseQuery:selfArray withRange:r];
+        else if (i == 1)
+            [self deployParseQuery:friendsArray withRange:r];
+        else
+            [self deployParseQuery:publicArray withRange:r];
+        
+        [[LocationController sharedLocationController] updateLocation: [LocationController sharedLocationController].location.coordinate];
+
+        
+    }];
+    
+}
+
 
 - (void) deployParseQuery: (NSMutableArray *) array withRange: (double) range
 {
@@ -175,66 +243,6 @@
     return (p1.latitude + d >= p2.latitude && p1.latitude - d <= p2.latitude && p1.longitude + d >= p2.longitude && p1.longitude - d <= p2.longitude);
 }
 
-- (void) getParseQuery: (int) i withRange: (double) r
-{
-    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
-    
-    LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
-	CLLocationAccuracy filterDistance = 1000.0f;
-    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    [query includeKey:kPAWParseSenderKey];
-    
-    if (i < 2 )
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    else
-        [query whereKey:@"receivers" equalTo:publicUserObj];
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            // The find succeeded.
-            NSLog(@"Successfully retrieved %d posts.", objects.count);
-            // Do something with the found objects
-            
-            selfArray = [[NSMutableArray alloc] init];
-            friendsArray = [[NSMutableArray alloc] init];
-            publicArray = [[NSMutableArray alloc] init];
-
-            for (PFObject *object in objects) {
-                if (i < 2)
-                {
-                    BOOL selfie = ([[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    BOOL friendPost = (![[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    if (selfie) {
-                        [selfArray addObject:object];
-                        [self deployParseQuery:selfArray withRange:r];
-
-                    } else if (friendPost) {
-                        [friendsArray addObject:object];
-                        [self deployParseQuery:friendsArray withRange:r];
-
-                    }
-                }
-                else
-                {
-                    [publicArray addObject:object];
-                    [self deployParseQuery:publicArray withRange:r];
-                }
-                
-
-            }
-        } else {
-            NSLog(@"Error in loading self and friends map posts: %@", error);
-        }
-        [[LocationController sharedLocationController] updateLocation: [LocationController sharedLocationController].location.coordinate];
-
-    }];
-    
-}
 - (void) openNewMessageView
 {
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
