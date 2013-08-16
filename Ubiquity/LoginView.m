@@ -27,19 +27,6 @@
         [self.loginButton setTitle: @"Login" forState:UIControlStateNormal];
         [self addSubview: self.loginButton];
         
-        
-        UILabel *loginText = [[UILabel alloc] init];
-        loginText.text = @"Login with Facebook";
-        loginText.lineBreakMode = NSLineBreakByWordWrapping;
-        loginText.numberOfLines = 0;
-        loginText.font = [UIFont systemFontOfSize: 10.f];
-        loginText.textColor = [UIColor whiteColor];
-        loginText.backgroundColor = [UIColor clearColor];
-        CGSize textSize = [[loginText text] sizeWithFont:[UIFont systemFontOfSize:10.f] constrainedToSize:CGSizeMake(SCREEN_WIDTH, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-
-        [loginText setFrame:CGRectMake(SCREEN_WIDTH/2 - textSize.width/2, SCREEN_HEIGHT*4/7 - textSize.height*1.5, textSize.width, textSize.height)];
-
-        [self addSubview:loginText];
         UIImageView *image = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"ubi"]];
         
         [image setFrame: CGRectMake (SCREEN_WIDTH/2 - BUTTON_WIDTH * 0.75, SCREEN_HEIGHT / 4, BUTTON_WIDTH * 1.5, BUTTON_HEIGHT * 4)];
