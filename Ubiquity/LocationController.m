@@ -29,6 +29,12 @@
     return sharedLocationControllerInstance;
 }
 
+- (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate
+{
+    self.marker.map = self.map;
+
+}
+
 -(id) init {
     self = [super init];
     if(self != nil){
@@ -42,8 +48,9 @@
         self.locationManager.distanceFilter = 50.0f;
         //self.locationManager.headingFilter = 5;
         
-        self.marker = [[GMSMarker alloc] init];
-        self.marker.icon = [GMSMarker markerImageWithColor:[UIColor blueColor]];
+        self.marker = [GMSMarker markerWithPosition:self.location.coordinate];
+       // self.marker.icon = [GMSMarker markerImageWithColor:[UIColor blueColor]];
+        self.marker.icon = [UIImage imageNamed:@"CurLocationMarker"];
         self.marker.animated = YES;
         
         [locationManager startUpdatingLocation];
@@ -99,6 +106,10 @@
 
     
     [self.map clear];
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:kPAWLocationChangeNotification
+     object:self];
     
     GMSGeocoder *geocoder = [[GMSGeocoder alloc] init];
     [geocoder reverseGeocodeCoordinate:newCoordinate completionHandler:^(GMSReverseGeocodeResponse *resp, NSError *error) {

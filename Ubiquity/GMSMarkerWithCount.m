@@ -36,7 +36,7 @@
 - (UIImage *) icon
 {
     UIImage *baseImage = [UIImage imageNamed:@"UnreadNote"];
-    baseImage = [self resizeImage: baseImage width:55.0 height:50.0];
+    baseImage = [self resizeImage: baseImage width:60.0 height:70.0];
     NSString *text = [NSString stringWithFormat:@"%d", self.count];
     CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*1/20);
     UIImage *returnImage = [self drawText: text inImage: baseImage atPoint: drawingPoint];
