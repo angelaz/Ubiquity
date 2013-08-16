@@ -30,7 +30,11 @@
     NSMutableArray *publicArray;
 
 }
+
 @property (nonatomic, strong) HomeMapView *hmv;
+@property (nonatomic, strong) WallPostsViewController *wpvc;
+@property (nonatomic, strong) UINavigationController *wallPostsNavController;
+
 @property (nonatomic, strong) NSDictionary *markerNotearrayDict;
 @end
 
@@ -365,11 +369,17 @@
 }
 - (void)launchPostsView
 {
-    WallPostsViewController *wpvc = [[WallPostsViewController alloc] init];
-    UINavigationController *wallPostsNavController = [[UINavigationController alloc]
-                                                      initWithRootViewController:wpvc];
-    [self.navigationController presentViewController:wallPostsNavController animated:NO completion:nil];
+    
+    
+    if(_wpvc == nil) {
+        _wpvc = [[WallPostsViewController alloc] init];
+        _wallPostsNavController = [[UINavigationController alloc]
+                                                      initWithRootViewController:_wpvc];
+    }
+    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
 }
+
 - (void)launchNewMessage
 {
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];

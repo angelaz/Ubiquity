@@ -129,10 +129,7 @@ static NSInteger cellAttachedMediaTag = 9;
 
 - (void)launchMapView
 {
-    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
-    UINavigationController *mapNavController = [[UINavigationController alloc]
-                                                      initWithRootViewController:hmvc];
-    [self.navigationController presentViewController:mapNavController animated:NO completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)launchNewMessage
