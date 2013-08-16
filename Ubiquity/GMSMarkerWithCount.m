@@ -24,9 +24,19 @@
 
 
 
+-(UIImage *)resizeImage:(UIImage *)image width:(CGFloat)resizedWidth height:(CGFloat)resizedHeight
+{
+    UIGraphicsBeginImageContext(CGSizeMake(resizedWidth ,resizedHeight));
+    [image drawInRect:CGRectMake(0, 0, resizedWidth, resizedHeight)];
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return result;
+}
+
 - (UIImage *) icon
 {
     UIImage *baseImage = [UIImage imageNamed:@"UnreadNote"];
+    baseImage = [self resizeImage: baseImage width:60.0 height:70.0];
     NSString *text = [NSString stringWithFormat:@"%d", self.count];
     CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*1/20);
     UIImage *returnImage = [self drawText: text inImage: baseImage atPoint: drawingPoint];

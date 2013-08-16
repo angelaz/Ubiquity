@@ -28,6 +28,7 @@
     NSMutableArray *selfArray;
     NSMutableArray *friendsArray;
     NSMutableArray *publicArray;
+
 }
 @property (nonatomic, strong) HomeMapView *hmv;
 @property (nonatomic, strong) NSDictionary *markerNotearrayDict;
@@ -45,14 +46,19 @@
     zoomLevel = _hmv.map.camera.zoom;
     [self initNewMessageButton];
     self.objects = [[NSMutableArray alloc] init];
-    [self loadPins];
+    [self loadPins: self.segmentedControl.selectedSegmentIndex];
     
     _hmv.map.delegate = self;
     [_hmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(loadPins)
+                                             selector:@selector(reactionToLocationFound)
                                                  name:KPAWInitialLocationFound
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(reactionToLocationFound)
+                                                 name:kPAWLocationChangeNotification
                                                object:nil];
     
     _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
@@ -62,6 +68,11 @@
         [[PFInstallation currentInstallation] setObject:[PFUser currentUser] forKey:@"owner"];
         [[PFInstallation currentInstallation] saveInBackground];
     }
+}
+
+- (void) reactionToLocationFound
+{
+    [self loadPins:self.segmentedControl.selectedSegmentIndex];
 }
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
@@ -78,10 +89,10 @@
             if (!idleMethodBeingCalled)
             {
                 idleMethodBeingCalled = true;
-                NSMutableArray *posts = [self getParseQuery];
                 double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
                 NSLog(@"%f new range", newRange);
-                [self deployParseQuery:posts withRange:newRange];
+                [self getParseQuery: self.segmentedControl.selectedSegmentIndex withRange: newRange];
+
             }
         }
     }
@@ -89,11 +100,12 @@
 
 
 
-- (void) loadPins
+- (void) loadPins: (int) i
 {
     if ([PFUser currentUser] != nil) {
-        NSMutableArray *postsToDisplay = [self getParseQuery];
-        [self deployParseQuery: postsToDisplay withRange: 0.005];
+        
+        
+        [self getParseQuery: i withRange: 0.005];
         
         _hmv.map.delegate = self;
         _hmv.locationSearchTextField.delegate = self;
@@ -137,7 +149,7 @@
             marker.animated = YES;
             marker.map = _hmv.map;
             zoomLevel = _hmv.map.camera.zoom;
-
+            
             NSLog(@"new pin!");
             
             [markers addObject: marker];
@@ -157,7 +169,7 @@
     return (p1.latitude + d >= p2.latitude && p1.latitude - d <= p2.latitude && p1.longitude + d >= p2.longitude && p1.longitude - d <= p2.longitude);
 }
 
-- (NSMutableArray *) getParseQuery
+- (void) getParseQuery: (int) i withRange: (double) r
 {
     PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
     
@@ -169,53 +181,53 @@
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
     
-    if (([self.segmentedControl selectedSegmentIndex] == 0) || ([self.segmentedControl selectedSegmentIndex] == 1)) {
+    if (i < 2 )
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                // The find succeeded.
-                NSLog(@"Successfully retrieved %d posts.", objects.count);
-                // Do something with the found objects
-                
-                selfArray = [[NSMutableArray alloc] initWithCapacity:[objects count]];
-                friendsArray = [[NSMutableArray alloc] initWithCapacity:[objects count]];
-                
-                for (PFObject *object in objects) {
-                    if ([object objectForKey:@"sender"] == [[PFUser currentUser] objectForKey:@"userData"]) {
+    else
+        [query whereKey:@"receivers" equalTo:publicUserObj];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %d posts.", objects.count);
+            // Do something with the found objects
+            
+            selfArray = [[NSMutableArray alloc] init];
+            friendsArray = [[NSMutableArray alloc] init];
+            publicArray = [[NSMutableArray alloc] init];
+
+            for (PFObject *object in objects) {
+                if (i < 2)
+                {
+                    BOOL selfie = ([[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
+                    
+                    BOOL friendPost = (![[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
+                    
+                    if (selfie) {
                         [selfArray addObject:object];
-                    } else if ([object objectForKey:@"sender"] != [[PFUser currentUser] objectForKey:@"userData"]) {
+                        [self deployParseQuery:selfArray withRange:r];
+
+                    } else if (friendPost) {
                         [friendsArray addObject:object];
+                        [self deployParseQuery:friendsArray withRange:r];
+
                     }
                 }
-            } else {
-                NSLog(@"Error in loading self and friends map posts: %@", error);
+                else
+                {
+                    [publicArray addObject:object];
+                    [self deployParseQuery:publicArray withRange:r];
+                }
+                
+
             }
-        }];
-    } else if ([self.segmentedControl selectedSegmentIndex] == 2) {
-        [query whereKey:@"receivers" equalTo:publicUserObj];
-        
-        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                publicArray = [[NSMutableArray alloc] initWithArray:objects];
-            } else {
-                NSLog(@"Error in loading public map posts: %@", error);
-            }
-        }];
-    }
-    NSMutableArray *arrayToSend = [[NSMutableArray alloc] initWithArray:selfArray];
-    if ([self.segmentedControl selectedSegmentIndex] == 0) {
-        NSLog(@"Only shows notes from self");
-        arrayToSend = selfArray;
-    } else if ([self.segmentedControl selectedSegmentIndex] == 1) {
-        NSLog(@"Shows notes from friends");
-        arrayToSend = friendsArray;
-    } else if ([self.segmentedControl selectedSegmentIndex] == 2) {
-        NSLog(@"Shows public notes");
-        arrayToSend = publicArray;
-    }
+        } else {
+            NSLog(@"Error in loading self and friends map posts: %@", error);
+        }
+        [[LocationController sharedLocationController] updateLocation: [LocationController sharedLocationController].location.coordinate];
+
+    }];
     
-    return arrayToSend;
 }
 - (void) openNewMessageView
 {
@@ -329,16 +341,7 @@
 - (void)changeSegment:(UISegmentedControl *)sender
 {
     NSInteger value = [sender selectedSegmentIndex];
-    if (value == 0) {
-        NSLog(@"Changed value to 0");
-        [self loadPins];
-    } else if (value == 1) {
-        NSLog(@"Changed value to 1");
-        [self loadPins];
-    } else if (value == 2) {
-        NSLog(@"Changed value to 2");
-        [self loadPins];
-    }
+    [self loadPins: value];
 }
 
 - (void)initButtons

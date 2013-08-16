@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import <GoogleMaps/GoogleMaps.h>
+#import <Parse/Parse.h>
 #import "Geocoding.h"
 
 // protocol for sending location updates to another view controller
@@ -23,6 +24,7 @@
     CLLocationManager* locationManager;
     __weak id delegate;
     BOOL hasReceivedFirstUpdate;
+    PFQuery *pushQuery;
 }
 
 @property (nonatomic, strong) CLLocationManager* locationManager;
