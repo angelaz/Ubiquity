@@ -356,7 +356,7 @@ static NSInteger cellAttachedPhotoTag = 8;
                     NSArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
                     for (PFObject *receipt in receiptsArray) {
                         if ([[receipt objectForKey:@"receiver"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
-                            if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
+                            //if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
                                 NSLog(@"New push notifications so new notes!");
                                 
                                 PFObject *senderInfo = [post objectForKey:@"sender"];
@@ -373,7 +373,7 @@ static NSInteger cellAttachedPhotoTag = 8;
                                 [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                     NSLog(@"saving read receipts error: %@", error);
                                 }];
-                            }
+                           // }
                         };
                     }
                 }

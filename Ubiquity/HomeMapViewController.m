@@ -58,8 +58,10 @@
     _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
     
-    
-    
+    if ([PFUser currentUser] != nil) {
+        [[PFInstallation currentInstallation] setObject:[PFUser currentUser] forKey:@"owner"];
+        [[PFInstallation currentInstallation] saveInBackground];
+    }
 }
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
