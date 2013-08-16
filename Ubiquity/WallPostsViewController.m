@@ -320,73 +320,16 @@ static NSInteger cellAttachedMediaTag = 8;
         NSLog(@"Only shows notes from self");
         [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        [self pushNotifications];
     } else if (self.indexing == 1) {
         NSLog(@"Shows notes from friends");
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
         [query whereKey:@"sender" notEqualTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        [self pushNotifications];
     } else if (self.indexing == 2) {
         NSLog(@"Shows public notes");
         [query whereKey:@"receivers" equalTo:publicUserObj];
     }
     
 	return query;
-}
-
-- (void)pushNotifications {
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-	// Query for posts near our current location.
-    
-	// Get our current location:
-	LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
-	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
-    
-	// And set the query to look by location
-	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    [query includeKey:kPAWParseSenderKey];
-    [query includeKey:@"readReceiptsArray"];
-    [query orderByDescending:@"createdAt"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
-        if (!error) {   // The find succeeded.
-            if ([posts count] > 0) {      //Saved friend list exists
-                NSLog(@"Seeing if new push notifications for found posts");
-                for (PFObject *post in posts) {
-                    NSArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
-                    for (PFObject *receipt in receiptsArray) {
-                        if ([[receipt objectForKey:@"receiver"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
-                            //if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
-                                NSLog(@"New push notifications so new notes!");
-                                
-                                PFObject *senderInfo = [post objectForKey:@"sender"];
-                                PFObject *profile = [senderInfo objectForKey:@"profile"];
-                                NSString *sender = [NSString stringWithFormat:@"%@",[profile objectForKey:@"name"]];
-                                NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", sender];
-                                
-                                // Send push notification to query
-                                [PFPush sendPushMessageToQueryInBackground:pushQuery
-                                                               withMessage:pushMessage];
-                                
-                                
-                                [receipt setObject:[NSDate date] forKey:@"dateOpened"];
-                                [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                    NSLog(@"saving read receipts error: %@", error);
-                                }];
-                           // }
-                        };
-                    }
-                }
-            } else {
-                // Log details of the failure
-                 NSLog(@"No posts found");
-            }
-        } else {
-            NSLog(@"Error in finding push notifications: %@", error);
-        }
-    }];
 }
 
 // Override to customize the look of a cell representing an object. The default is to display

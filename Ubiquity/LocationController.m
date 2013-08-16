@@ -48,38 +48,61 @@
         
         [locationManager startUpdatingLocation];
         NSLog(@"Location updates started");
+        
+        pushQuery = [PFInstallation query];
+        [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+        [pushQuery whereKey:@"owner" equalTo:[PFUser currentUser]];
     }
     return self;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
     
+    BOOL isInBackground = NO;
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+    {
+        isInBackground = YES;
+    }
+    
+    
     NSLog(@"%f is the accuracy level", locationManager
            .location.horizontalAccuracy);
     _location = [locations lastObject];
     
-    NSLog(@"latitude %+.6f, longitude %+.6f\n", _location.coordinate.latitude,   _location.coordinate.longitude);
-
-    if(hasReceivedFirstUpdate == NO) {
-        hasReceivedFirstUpdate = YES;
+    NSDate* eventDate = _location.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    
+    if (abs(howRecent) < 15.0) {
+        // If the event is recent, do something with it. Otherwise use old location and don't waste battery.
+        NSLog(@"latitude %+.6f, longitude %+.6f\n", _location.coordinate.latitude,   _location.coordinate.longitude);
         
-        GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.marker.position.latitude
-                                                                longitude:self.marker.position.longitude
-                                                                     zoom:15];
-        [self.map setCamera:camera];
-        
-        self.marker.map = self.map;
-        [self moveMarkerToLocation:_location.coordinate];
-
+        if(hasReceivedFirstUpdate == NO) {
+            hasReceivedFirstUpdate = YES;
+            
+            GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:self.marker.position.latitude
+                                                                    longitude:self.marker.position.longitude
+                                                                         zoom:15];
+            [self.map setCamera:camera];
+            
+            self.marker.map = self.map;
+            [self moveMarkerToLocation:_location.coordinate];
+            
+            [[NSNotificationCenter defaultCenter]
+             postNotificationName: KPAWInitialLocationFound
+             object:self];
+        }
         
         [[NSNotificationCenter defaultCenter]
-         postNotificationName: KPAWInitialLocationFound
+         postNotificationName: kPAWLocationChangeNotification
          object:self];
+        
+        [self sendForegroundLocationToServer:_location];
     }
     
-    [[NSNotificationCenter defaultCenter]
-     postNotificationName: kPAWLocationChangeNotification
-     object:self];
+    if (isInBackground)
+    {
+        [self sendBackgroundLocationToServer:_location];
+    }
 }
 
 //Example block
@@ -121,5 +144,137 @@
     
 }
 
+-(void) sendForegroundLocationToServer:(CLLocation *)location
+{
+
+    PFQuery *query = [PFQuery queryWithClassName:@"Posts"];
+	// Query for posts near our current location.
+    
+	// Get our current location:
+    CLLocationCoordinate2D currentCoordinate = location.coordinate;
+	CLLocationAccuracy filterDistance = self.locationManager.distanceFilter;
+    
+	// And set the query to look by location
+	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"readReceiptsArray"];
+    [query orderByDescending:@"createdAt"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+        if (!error) {   // The find succeeded.
+            if ([posts count] > 0) {      //Saved friend list exists
+                NSLog(@"Seeing if new push notifications for found posts");
+                for (PFObject *post in posts) {
+                    NSArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
+                    for (PFObject *receipt in receiptsArray) {
+                        if ([[receipt objectForKey:@"receiver"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+                            if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
+                                NSLog(@"New push notifications so new notes!");
+                                
+                                PFObject *senderInfo = [post objectForKey:@"sender"];
+                                PFObject *profile = [senderInfo objectForKey:@"profile"];
+                                NSString *sender = [NSString stringWithFormat:@"%@",[profile objectForKey:@"name"]];
+                                NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", sender];
+                                
+                                // Send push notification to query
+                                [PFPush sendPushMessageToQueryInBackground:pushQuery
+                                                               withMessage:pushMessage];
+                                
+                                
+                                [receipt setObject:[NSDate date] forKey:@"dateOpened"];
+                                [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                    NSLog(@"saving read receipts error: %@", error);
+                                }];
+                            }
+                        };
+                    }
+                }
+            } else {
+                // Log details of the failure
+                NSLog(@"No posts found");
+            }
+        } else {
+            NSLog(@"Error in finding push notifications: %@", error);
+        }
+    }];
+}
+
+
+-(void) sendBackgroundLocationToServer:(CLLocation *)location
+{
+    // REMEMBER. We are running in the background if this is being executed.
+    // We can't assume normal network access.
+    // bgTask is defined as an instance variable of type UIBackgroundTaskIdentifier
+    
+    // Note that the expiration handler block simply ends the task. It is important that we always
+    // end tasks that we have started.
+    UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication]
+                                         beginBackgroundTaskWithExpirationHandler:
+                                         ^{
+                                             [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                                         }];
+    
+    // ANY CODE WE PUT HERE IS OUR BACKGROUND TASK
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"Posts"];
+	// Query for posts near our current location.
+    
+	// Get our current location:
+    CLLocationCoordinate2D currentCoordinate = location.coordinate;
+	CLLocationAccuracy filterDistance = self.locationManager.distanceFilter;
+    
+	// And set the query to look by location
+	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"readReceiptsArray"];
+    [query orderByDescending:@"createdAt"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *posts, NSError *error) {
+        if (!error) {   // The find succeeded.
+            if ([posts count] > 0) {      //Saved friend list exists
+                NSLog(@"Seeing if new push notifications for found posts");
+                for (PFObject *post in posts) {
+                    NSArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
+                    for (PFObject *receipt in receiptsArray) {
+                        if ([[receipt objectForKey:@"receiver"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+                            if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
+                                NSLog(@"New push notifications so new notes!");
+                                
+                                PFObject *senderInfo = [post objectForKey:@"sender"];
+                                PFObject *profile = [senderInfo objectForKey:@"profile"];
+                                NSString *sender = [NSString stringWithFormat:@"%@",[profile objectForKey:@"name"]];
+                                NSString *pushMessage = [NSString stringWithFormat:@"Received a message from %@", sender];
+                                
+                                // Send push notification to query
+                                [PFPush sendPushMessageToQueryInBackground:pushQuery
+                                                               withMessage:pushMessage];
+                                
+                                
+                                [receipt setObject:[NSDate date] forKey:@"dateOpened"];
+                                [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                    NSLog(@"saving read receipts error: %@", error);
+                                }];
+                            }
+                        };
+                    }
+                }
+            } else {
+                // Log details of the failure
+                NSLog(@"No posts found");
+            }
+        } else {
+            NSLog(@"Error in finding push notifications: %@", error);
+        }
+    }];
+
+    
+    // AFTER ALL THE UPDATES, close the task
+    
+    if (bgTask != UIBackgroundTaskInvalid)
+    {
+        [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
+    }
+}
 
 @end

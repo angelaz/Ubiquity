@@ -7,11 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "OptionsViewController.h"
-#import "NewMessageViewController.h"
-#import "FriendsViewController.h"
-#import "WallPostsViewController.h"
 #import "HomeMapViewController.h"
+#import "LocationController.h"
 
 static AppDelegate *launchedDelegate;
 
@@ -115,6 +112,8 @@ static AppDelegate *launchedDelegate;
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    LocationController* locationController = [LocationController sharedLocationController];
+    [locationController.locationManager startMonitoringSignificantLocationChanges];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -125,6 +124,9 @@ static AppDelegate *launchedDelegate;
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    LocationController* locationController = [LocationController sharedLocationController];
+    [locationController.locationManager stopMonitoringSignificantLocationChanges];
+    [locationController.locationManager startUpdatingLocation];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
