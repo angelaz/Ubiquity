@@ -178,11 +178,9 @@
 
 - (void) loadDates: (int) i
 {
-    // PROBLEM: showing up as (null) because createdAt field is not included in parse query return. How to work around? Will come back to this later.
-    
-    NSDate *date = [self.notes[i] objectForKey:@"createdAt"];
+    NSDate *date = [self.notes[i] createdAt];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"hh:mm a 'on' dd MMMM yyyy"];
+    [df setDateFormat:@"hh:mm a 'on' dd MMM yyyy"];
     NSString *sentAtString = [df stringFromDate:date];
     _nv.sentLabel.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
     
