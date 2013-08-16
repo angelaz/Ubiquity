@@ -108,11 +108,6 @@ int const PUBLIC = 2;
 
     [_nmv.musicButton addTarget:self action:@selector(launchMusicSearch) forControlEvents:UIControlEventTouchUpInside];
     
-    //    UISwipeGestureRecognizer *swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(closeNewMessage:)];
-    //    [swipeDown setDirection:UISwipeGestureRecognizerDirectionDown];
-    //    [self.view addGestureRecognizer:swipeDown];
-    //
-    
 }
 
 - (void) recipientSwitcher: (id) sender
@@ -246,20 +241,6 @@ int const PUBLIC = 2;
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (void) startSearch: (id) sender
-{
-//    NSLog(@"searching for: %@", _nmv.locationSearchTextField.text);
-//    LocationController* locationController = [LocationController sharedLocationController];
-//    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-//    NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
-//    //Not a perfect solution for keeping the map at the same place
-//    //TODO: Fix it so map doesn't shift at all when search for invalid address
-//    gs = [[Geocoding alloc] initWithCurLocation:curLocation];
-////   [gs geocodeAddress:_nmv.locationSearchTextField.text withCallback:@selector(addMarker) withDelegate:self];
-}
-
-
-
 - (void) sendMessage: (id) sender
 {
     
@@ -314,7 +295,7 @@ int const PUBLIC = 2;
             
             NSString *username = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+            //[readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
    
@@ -331,7 +312,7 @@ int const PUBLIC = 2;
                 
                 NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
                 PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-                [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+               // [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
                 [readReceiptsObject setObject:username forKey:@"receiver"];
                 [readReceiptsArray addObject:readReceiptsObject];
 

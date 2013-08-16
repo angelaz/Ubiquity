@@ -39,6 +39,7 @@
         [button setTitle:@"Twitter" forState:UIControlStateNormal];
         button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
         [self.view addSubview:button];
+        self.view.backgroundColor = [UIColor whiteColor];
         
         [[self navigationItem] setLeftBarButtonItem:backButton];
     }

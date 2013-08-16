@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
-#import "FriendsViewController.h"
 #import "WallPostsViewController.h"
 #import "HomeMapViewController.h"
 
@@ -90,7 +89,6 @@ static AppDelegate *launchedDelegate;
     
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    [currentInstallation setObject:[PFUser currentUser] forKey:@"owner"];
     [currentInstallation saveInBackground];
     NSLog(@"Registered for push");
 }

@@ -1,7 +1,6 @@
 //
 
 #import "LoginViewController.h"
-#import "UserDetailsViewController.h"
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
 #import "LoginView.h"

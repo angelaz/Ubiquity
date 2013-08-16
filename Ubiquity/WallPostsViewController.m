@@ -33,16 +33,15 @@ static NSInteger cellNameLabelTag = 4;
 static NSInteger cellSentDateLabelTag = 5;
 static NSInteger cellReceivedDateLabelTag = 6;
 static NSInteger cellLocationLabelTag = 7;
-static NSInteger cellAttachedMediaTag = 8;
+static NSInteger cellAttachedPhotoTag = 8;
+static NSInteger cellAttachedMediaTag = 9;
 
 #import <MediaPlayer/MediaPlayer.h>
-
 #import "HomeMapViewController.h"
 #import "WallPostsViewController.h"
 #import "AppDelegate.h"
 #import "TextMessage.h"
 #import "LocationController.h"
-#import "FriendsViewController.h"
 #import "NewMessageViewController.h"
 #import "OptionsViewController.h"
 
@@ -57,13 +56,16 @@ static NSInteger cellAttachedMediaTag = 8;
     BOOL _paused;
     NSMutableArray *_trackKeys;
     PFQuery *pushQuery;
+    NSString *_trackKey;
+    NSMutableDictionary *songsToCell;
 }
 
-@property (nonatomic, strong) FriendsViewController *friendsViewController;
 
 @end
 
 @implementation WallPostsViewController
+
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -78,7 +80,7 @@ static NSInteger cellAttachedMediaTag = 8;
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
-        [self initRdioButton];
+       // [self initRdioButton];
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(loadObjects)
                                                      name:KPAWInitialLocationFound
@@ -138,7 +140,14 @@ static NSInteger cellAttachedMediaTag = 8;
     NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
     UINavigationController *newMessageNavController = [[UINavigationController alloc]
                                                        initWithRootViewController:nmvc];
-    [self.navigationController presentViewController:newMessageNavController animated:YES completion:nil];
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:newMessageNavController animated:YES completion:nil];
+    
+    nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
+                     }];
 }
 
 - (void)initOptionsButton
@@ -160,7 +169,7 @@ static NSInteger cellAttachedMediaTag = 8;
     UIImage *rdioButtonImage = [UIImage imageNamed:@"musicNote.png"];
     [self.rdioButton setBackgroundImage:rdioButtonImage forState:UIControlStateNormal];
     self.rdioButton.frame = CGRectMake(25, SCREEN_HEIGHT - 70, 20.0, 20.0);
-    [self.rdioButton addTarget:self action:@selector(playMusic) forControlEvents:UIControlEventTouchUpInside];
+    [self.rdioButton addTarget:self action:@selector(playMusic:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.rdioButton];
 }
 
@@ -214,6 +223,8 @@ static NSInteger cellAttachedMediaTag = 8;
 {
     // questionable whether i need to load the super viewdidload
     [super viewDidLoad];
+    
+    songsToCell = [[NSMutableDictionary alloc] init];
     
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.
@@ -358,7 +369,7 @@ static NSInteger cellAttachedMediaTag = 8;
                     NSArray *receiptsArray = [post objectForKey:@"readReceiptsArray"];
                     for (PFObject *receipt in receiptsArray) {
                         if ([[receipt objectForKey:@"receiver"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
-                            if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
+                            //if ([receipt objectForKey:@"dateOpened"] == [NSNull null]) {
                                 NSLog(@"New push notifications so new notes!");
                                 
                                 PFObject *senderInfo = [post objectForKey:@"sender"];
@@ -375,7 +386,7 @@ static NSInteger cellAttachedMediaTag = 8;
                                 [receipt saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                     NSLog(@"saving read receipts error: %@", error);
                                 }];
-                            }
+                           // }
                         };
                     }
                 }
@@ -433,7 +444,13 @@ static NSInteger cellAttachedMediaTag = 8;
         [cell.contentView addSubview:mediaView];
 
     }
-	
+    for (id subview in [cell.contentView subviews])
+    {
+        if ([subview  isKindOfClass:[UIButton class]])
+            [subview removeFromSuperview];
+    }
+    
+    
 	// Configure the cell content
     
 	UILabel *textLabel = (UILabel*) [cell.contentView viewWithTag:cellTextLabelTag];
@@ -523,6 +540,8 @@ static NSInteger cellAttachedMediaTag = 8;
                                    textSize.width,
                                    textSize.height)];
     
+
+    
     
     UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
     additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
@@ -567,9 +586,24 @@ static NSInteger cellAttachedMediaTag = 8;
                                          self.tableView.frame.size.width - cellPaddingSides*2,
                                          cellHeight-cellPaddingTop-cellPaddingBottom)];
     
-    if ([object objectForKey:@"trackKey"]) { //This post had a song attached, queue the song to rdio player
-        [_trackKeys addObject:[object objectForKey:@"trackKey"]];
+    
+    UIButton *musicButton = [UIButton buttonWithType:UIButtonTypeCustom];
+
+
+    if ([object objectForKey:@"trackKey"]) {
+        
+        [songsToCell setObject: [object objectForKey:@"trackKey"] forKey: indexPath];
+
+        UIImage *musicNote = [UIImage imageNamed:@"musicNote"];
+        [musicButton setBackgroundImage:musicNote forState:UIControlStateNormal];
+        [cell.contentView addSubview: musicButton];
+        
+        [musicButton addTarget:self action:@selector (playMusic:) forControlEvents:UIControlEventTouchUpInside];
+        musicButton.frame = CGRectMake(self.tableView.frame.size.width - cellPaddingSides - cellTextPaddingSides*3, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5, 20.0, 20.0);
+
     }
+    
+
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
@@ -691,13 +725,26 @@ static NSInteger cellAttachedMediaTag = 8;
     }
     return _player;
 }
-- (void)playMusic
+- (void)playMusic: (id) sender
 {
-    if (!_playing) {
-        [_trackKeys addObject:@"t2742133"]; //Just so this doesn't crash for now
-        [[self getPlayer] playSources:_trackKeys];
-    } else {
+    UIView *contentView = [sender superview];
+    UITableViewCell *cell = (UITableViewCell *)[contentView superview];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    _trackKey = [songsToCell objectForKey:indexPath];
+    
+    if (!_playing){
+        [[self getPlayer] playSource: _trackKey];
+        [sender setImage: [UIImage imageNamed:@"musicNoteRed"] forState:UIControlStateNormal];
+
+    }
+    else{
+        [sender setImage: [UIImage imageNamed:@"musicNote"] forState:UIControlStateNormal];
+
+    
         [[self getPlayer] togglePause];
     }
+    
 }
+
+
 @end
