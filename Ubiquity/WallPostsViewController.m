@@ -355,7 +355,7 @@ static NSInteger cellAttachedMediaTag = 9;
     
 	UITableViewCell *cell;
     cell = [tableView dequeueReusableCellWithIdentifier:LeftCellIdentifier];
-    if (YES) {//(cell == nil) {
+    if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:LeftCellIdentifier];
         
         UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"PostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
@@ -520,6 +520,8 @@ static NSInteger cellAttachedMediaTag = 9;
         }];
     } else {
         //REMOVE OLD BAD VIEWS STILL ATTACHED
+        
+        [mediaView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     }
     
     [mediaView setFrame:mediaFrame];
@@ -565,14 +567,14 @@ static NSInteger cellAttachedMediaTag = 9;
 	// call super because we're a custom subclass.
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
     
-//    //Flips cell on touch
-//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-//    [UIView beginAnimations:@"FlipCellAnimation" context:nil];
-//    [UIView setAnimationDuration:0.5];
-//    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:cell cache:YES];
-//    [cell removeFromSuperview];
-//    [self.tableView addSubview:cell];
-//    [UIView commitAnimations];
+    //Flips cell on touch
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [UIView beginAnimations:@"FlipCellAnimation" context:nil];
+    [UIView setAnimationDuration:0.5];
+    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:cell cache:YES];
+    [cell removeFromSuperview];
+    [self.tableView addSubview:cell];
+    [UIView commitAnimations];
     
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
