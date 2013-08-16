@@ -56,9 +56,12 @@
         [locationManager startUpdatingLocation];
         NSLog(@"Location updates started");
         
-        pushQuery = [PFInstallation query];
-        [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
-        [pushQuery whereKey:@"owner" equalTo:[PFUser currentUser]];
+        if ([PFUser currentUser] != nil) {
+            pushQuery = [PFInstallation query];
+            [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+            [pushQuery whereKey:@"owner" equalTo:[PFUser currentUser]];
+        }
+
     }
     return self;
 }
