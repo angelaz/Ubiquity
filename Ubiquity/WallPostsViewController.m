@@ -129,10 +129,7 @@ static NSInteger cellAttachedMediaTag = 9;
 
 - (void)launchMapView
 {
-    HomeMapViewController *hmvc = [[HomeMapViewController alloc] init];
-    UINavigationController *mapNavController = [[UINavigationController alloc]
-                                                      initWithRootViewController:hmvc];
-    [self.navigationController presentViewController:mapNavController animated:NO completion:nil];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)launchNewMessage
@@ -232,7 +229,7 @@ static NSInteger cellAttachedMediaTag = 9;
         self.refreshControl = refreshControl;
         self.refreshControl.tintColor = [UIColor colorWithRed:118.0f/255.0f green:117.0f/255.0f blue:117.0f/255.0f alpha:1.0f];
         [self.refreshControl addTarget:self action:@selector(refreshControlValueChanged:) forControlEvents:UIControlEventValueChanged];
-        self.pullToRefreshEnabled = NO;
+        self.pullToRefreshEnabled = YES;
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -297,7 +294,7 @@ static NSInteger cellAttachedMediaTag = 9;
 - (void)objectsWillLoad {
     [super objectsWillLoad];
     NSLog(@"objectsWillLoad");
-    // This method is called before a PFQuery is fired to get more objects
+    // This method is called before a PFh  is fired to get more objects
 }
 
 // Override to customize what kind of query to perform on the class. The default is  for
@@ -512,7 +509,9 @@ static NSInteger cellAttachedMediaTag = 9;
             
         }];
     } else {
+        //REMOVE OLD BAD VIEWS STILL ATTACHED
         
+        [mediaView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     }
     
     [mediaView setFrame:mediaFrame];
