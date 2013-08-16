@@ -40,6 +40,8 @@ static CGFloat const kMessageFontSize = 11.f;
         [self createPagingLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         [self createImageViewWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         [self createPictureButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self createMusicButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+
 
     }
     return self;
@@ -169,6 +171,20 @@ static CGFloat const kMessageFontSize = 11.f;
     int innerFrameTopMargin = h - TOP_PADDING * 10.5;
     self.pictureButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20.0, 20.0);
 }
+
+- (void)createMusicButtonWithWidth:(int)w andHeight:(int) h
+{
+    self.musicButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *musicButtonImage = [UIImage imageNamed:@"musicNote.png"];
+    [self.musicButton setBackgroundImage:musicButtonImage forState:UIControlStateNormal];
+    int width = WIDEST_POINT;
+    int innerFrameLeftMargin = w/2 + width/2 - 20.0;
+    int innerFrameTopMargin = h - TOP_PADDING * 10.5 - 25;
+    CGRect musicFrame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20, 20);
+    [_musicButton setFrame:musicFrame];
+}
+
+
 
 
 

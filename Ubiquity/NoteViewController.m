@@ -18,6 +18,13 @@
     BOOL swipedLeft;
     BOOL showingImage;
     int currentNote;
+    
+    RDPlayer* _player;
+    BOOL _playing;
+    BOOL _paused;
+    NSString *_trackKey;
+    NSMutableArray *_trackKeys;
+    
 }
 
 @property (nonatomic, strong) NoteView *nv;
@@ -54,6 +61,7 @@
     [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
     [self.view addGestureRecognizer:swipeRight];
     
+    _trackKeys = [[NSMutableArray alloc] init];
     
     [self loadNotesText: currentNote];
     
@@ -133,6 +141,7 @@
     [self loadText: i];
     [self loadImages: i];
     [self loadName: i];
+    [self loadRdioMusic:i];
     
     if (i > 0)
         [_nv addSubview:_nv.leftArrow];
@@ -196,6 +205,48 @@
     
     
 }
+
+- (void) loadRdioMusic: (int) i
+{
+    [_trackKeys removeAllObjects];
+    _trackKey = @"";
+    [_nv.musicButton removeFromSuperview];
+    _trackKey = [self.notes[i] objectForKey:@"trackKey"];
+    if (_trackKey)
+    {
+        [_nv addSubview:_nv.musicButton];
+        [_nv.musicButton addTarget:self action:@selector(playMusic) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    
+}
+
+//rdio player
+- (BOOL)rdioIsPlayingElsewhere
+{
+    return NO;
+}
+- (void)rdioPlayerChangedFromState:(RDPlayerState)fromState toState:(RDPlayerState)state
+{
+    _playing = (state != RDPlayerStateInitializing && state != RDPlayerStateStopped && state != RDPlayerStatePaused);
+    _paused = (state == RDPlayerStatePaused);
+}
+- (RDPlayer*)getPlayer
+{
+    if (_player == nil) {
+        _player = [AppDelegate rdioInstance].player;
+    }
+    return _player;
+}
+
+- (void)playMusic
+{
+        [[self getPlayer] playSource: _trackKey];
+    
+        [ _nv.musicButton setImage: [UIImage imageNamed:@"musicNoteRed"] forState:UIControlStateNormal];
+}
+
+
 
 - (void) toggleImage: (id) sender
 {

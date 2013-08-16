@@ -173,6 +173,7 @@ int const LINE_HEIGHT = 30;
     [self addSubview:self.pictureButton];
 }
 
+
 - (void)createMusicButtonWithWidth:(int)w andHeight:(int) h
 {
     self.musicButton = [UIButton buttonWithType:UIButtonTypeCustom];

@@ -12,7 +12,6 @@
 #import "Geocoding.h"
 #import "NewMessageView.h"
 #import "AppDelegate.h"
-#import "CustomFBFriendPickerViewController.h"
 #import "AddMusicViewController.h"
 
 @interface NewMessageViewController : UIViewController <UITextViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UISearchBarDelegate, FBFriendPickerDelegate, UIScrollViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AddMusicViewControllerDelegate>

@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
-#import "FriendsViewController.h"
 #import "WallPostsViewController.h"
 #import "HomeMapViewController.h"
 
@@ -68,7 +67,7 @@ static AppDelegate *launchedDelegate;
      forLeftSegmentState:UIControlStateNormal
      rightSegmentState:UIControlStateSelected
      barMetrics:UIBarMetricsDefault];
-
+    
 
 
     // register for push notifications

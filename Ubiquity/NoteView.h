@@ -33,6 +33,7 @@
 @property (nonatomic, strong) UIImageView *leftArrow;
 @property (nonatomic, strong) UIImageView *rightArrow;
 
+@property (nonatomic, strong) UIButton *musicButton;
 
 - (void) createMessageWithWidth: (int) w andHeight: (int) h;
 
