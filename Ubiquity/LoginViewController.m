@@ -27,7 +27,7 @@
 /* Login to facebook method */
 - (void)loginButtonTouchHandler:(id)sender  {
     // Set permissions required from the facebook user account
-    NSArray *permissionsArray = @[@"user_location"];
+    NSArray *permissionsArray = @[];//[@"user_location"];
     
     // Login PFUser using facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
@@ -54,6 +54,7 @@
 
             [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
                 [self dismissViewControllerAnimated:YES completion:nil];
+                [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
             }];
         }
     }];
