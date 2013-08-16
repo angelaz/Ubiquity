@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "OptionsViewController.h"
+#import "NewMessageViewController.h"
+#import "WallPostsViewController.h"
 #import "HomeMapViewController.h"
 #import "LocationController.h"
 

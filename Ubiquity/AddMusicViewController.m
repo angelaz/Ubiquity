@@ -59,7 +59,6 @@ static int const numResults = 5;
     int w = appFrame.size.width;
     int h = appFrame.size.height;
     UIView *view = [[UIView alloc] initWithFrame:appFrame];
-    //[view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
     [view setBackgroundColor:[UIColor clearColor]];
 
     
@@ -93,9 +92,10 @@ static int const numResults = 5;
 {
     int width = appFrame.size.width * 5/10;
     int leftMargin = appFrame.size.width/2 - width/2;
+    int topMargin = appFrame.size.height*11/40;
     UIColor *titleColor = mainThemeColor;
 
-    _searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(leftMargin, 125, width, 25)];
+    _searchTextField = [[UITextField alloc] initWithFrame:CGRectMake(leftMargin, topMargin, width, 25)];
     _searchTextField.layer.borderWidth = 1.0f;
     _searchTextField.layer.borderColor = [titleColor CGColor];
     _searchTextField.placeholder = @"Song or Artist";
@@ -111,7 +111,7 @@ static int const numResults = 5;
   //  _searchButton = [UIButton buttonWithType:UIButtonTypeCustom];
   //  UIImage *btnImage = [UIImage imageNamed:@"JukeBoxSearch"];
   //  [_searchButton setBackgroundImage: btnImage forState: UIControlStateNormal];
-    _searchButton.frame = CGRectMake(buttonOffset, _searchTextField.frame.origin.y + _searchTextField.frame.size.height + 17, buttonWidth, 35);
+    _searchButton.frame = CGRectMake(buttonOffset, _searchTextField.frame.origin.y + _searchTextField.frame.size.height + 20, buttonWidth, 35);
     [_searchButton setTitle:@"Search" forState:UIControlStateNormal];
     [_searchButton setTitleColor: [UIColor whiteColor] forState:UIControlStateNormal];
     [_searchButton setBackgroundColor: titleColor];
