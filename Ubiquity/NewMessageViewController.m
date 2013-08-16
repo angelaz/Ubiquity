@@ -295,7 +295,7 @@ int const PUBLIC = 2;
             
             NSString *username = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+            //[readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
             [readReceiptsObject setObject:username forKey:@"receiver"];
             [readReceiptsArray addObject:readReceiptsObject];
    
@@ -312,7 +312,7 @@ int const PUBLIC = 2;
                 
                 NSString *username = [NSString stringWithFormat:@"%@", [user objectForKey:@"id"]];
                 PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-                [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+               // [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
                 [readReceiptsObject setObject:username forKey:@"receiver"];
                 [readReceiptsArray addObject:readReceiptsObject];
 
