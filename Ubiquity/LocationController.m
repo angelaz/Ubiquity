@@ -53,7 +53,7 @@
         self.marker.icon = [UIImage imageNamed:@"CurLocationMarker"];
         self.marker.animated = YES;
         
-        [locationManager startUpdatingLocation];
+        [locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"Location updates started");
         
         if ([PFUser currentUser] != nil) {
