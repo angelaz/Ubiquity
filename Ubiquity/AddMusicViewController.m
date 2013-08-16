@@ -257,6 +257,7 @@ static int const numResults = 5;
     
     [[cell textLabel] setText:[[_results objectAtIndex:[indexPath row]] objectForKey:@"name"]];
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    cell.textLabel.font = [UIFont boldSystemFontOfSize: 15.f];
     
     return cell;
 }

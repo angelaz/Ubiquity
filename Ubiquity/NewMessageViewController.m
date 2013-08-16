@@ -415,17 +415,19 @@ int const PUBLIC = 2;
     mediaPicked = YES;
     
     //Make a thumbnail appear so user can see the image/video they attached!
-    _nmv.thumbnailImage = [self getThumbnailFromImage:image];
     if (_nmv.thumbnailImage == nil && !isiPhone5)
     {
         CGRect newFrame = _nmv.messageTextView.frame;
-        newFrame.size.height -= 40;
+        newFrame.size.height -= 50;
         _nmv.messageTextView.frame = newFrame;
     }
+    _nmv.thumbnailImage = [self getThumbnailFromImage:image];
+
     _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
     float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 30;
     float y = _nmv.messageTextView.frame.origin.y + _nmv.messageTextView.frame.size.height + 5;
     _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
+
     [_nmv addSubview:_nmv.thumbnailImageView];
 }
 
