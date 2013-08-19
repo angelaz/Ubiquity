@@ -444,6 +444,7 @@ static NSInteger cellAttachedMediaTag = 8;
     if(receivedAt == nil) {
         receivedAt = [NSDate date];
         [rr setObject:receivedAt forKey:@"dateOpened"];
+        [rr saveInBackground];
     }
     
     
