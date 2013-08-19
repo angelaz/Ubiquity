@@ -124,7 +124,6 @@
 
 - (BOOL)mapView:(GMSMapView*)mapView didTapMarker:(GMSMarker *)marker
 {
-    
     [UIView animateWithDuration:0.5
                      animations:^{
                          marker.icon = [UIImage imageNamed:@"ReadNote"];
@@ -147,10 +146,11 @@
     [query includeKey:kPAWParseSenderKey];
     [query includeKey:@"userData"];
     
-    if (i < 2)
+    if (i < 2) {
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    else
+    } else {
         [query whereKey:@"receivers" equalTo:publicUserObj];
+    }
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
@@ -171,7 +171,6 @@
                     
                     if (selfie) {
                         [selfArray addObject:object];
-                        
                     } else if (friendPost) {
                         [friendsArray addObject:object];
                         
@@ -188,16 +187,15 @@
             NSLog(@"Error in loading self and friends map posts: %@", error);
         }
         
-        if (i == 0)
+        if (i == 0) {
             [self deployParseQuery:selfArray withRange:r];
-        else if (i == 1)
+        } else if (i == 1) {
             [self deployParseQuery:friendsArray withRange:r];
-        else
+        } else {
             [self deployParseQuery:publicArray withRange:r];
-        
-        [[LocationController sharedLocationController] updateLocation: [LocationController sharedLocationController].location.coordinate];
-
-        
+        }
+        LocationController *locationController = [LocationController sharedLocationController];
+        [locationController updateLocation:locationController.location.coordinate];
     }];
     
 }
@@ -261,16 +259,13 @@
                      animations:^{
                          nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
                      }];
-    
 }
 
 - (void) initNewMessageButton
 {
     UIImage *image = [UIImage imageNamed:@"newMessage"];
-    
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
-    
     button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
     
     [button addTarget:self action:@selector(openNewMessageView)    forControlEvents:UIControlEventTouchUpInside];
@@ -393,6 +388,15 @@
     }
     _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
+    LocationController *locController = [LocationController sharedLocationController];
+    if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"
+                                                          message:@"Please go to Settings -> Privacy -> Location Services to turn it on."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+    }
 }
 
 - (void)launchNewMessage
