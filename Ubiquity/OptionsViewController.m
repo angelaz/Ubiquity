@@ -55,7 +55,7 @@
 - (void) setUpBackgroundWithWidth: (int) w andHeight: (int) h
 {
     int imageWidth = w * 4/5;
-    int imageHeight = h * 4/5;
+    int imageHeight = h * 3/5;
     UIImageView *frame = [[UIImageView alloc] initWithFrame:CGRectMake(w/2 - imageWidth / 2, h/2 - imageHeight/2 - 22, imageWidth, imageHeight)];
     frame.image = [UIImage imageNamed:@"OptionsFrame"];
     [self.view addSubview:frame];

@@ -33,8 +33,7 @@ static NSInteger cellNameLabelTag = 4;
 static NSInteger cellSentDateLabelTag = 5;
 static NSInteger cellReceivedDateLabelTag = 6;
 static NSInteger cellLocationLabelTag = 7;
-static NSInteger cellAttachedPhotoTag = 8;
-static NSInteger cellAttachedMediaTag = 9;
+static NSInteger cellAttachedMediaTag = 8;
 
 #import <MediaPlayer/MediaPlayer.h>
 #import "HomeMapViewController.h"
