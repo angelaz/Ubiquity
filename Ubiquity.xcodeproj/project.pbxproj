@@ -32,7 +32,6 @@
 		60CB90C017A0872F00A9E93A /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */; };
 		60CB90C617A0897E00A9E93A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90C517A0897E00A9E93A /* libz.dylib */; };
 		60CB90C817A0899700A9E93A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 60CB90C717A0899700A9E93A /* libsqlite3.dylib */; };
-		60F4439717BEDBDC00C86E7E /* bluewood.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 60F4439617BEDBDC00C86E7E /* bluewood.jpg */; };
 		8205692417B95876006A2000 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8205692317B95876006A2000 /* LoginView.m */; };
 		82148F3217AADD140066C69A /* Geocoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 82148F3117AADD140066C69A /* Geocoding.m */; };
 		827C7A2917BAE44E000253DF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8624CD2017A2E99800F32DE8 /* StoreKit.framework */; };
@@ -89,6 +88,7 @@
 		8666BB6F17BD3E0D001EBD23 /* GMSMarkerWithCount.m in Sources */ = {isa = PBXBuildFile; fileRef = 8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */; };
 		8666BB7117BD590E001EBD23 /* musicNoteRed.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB7017BD590E001EBD23 /* musicNoteRed.png */; };
 		8666BB7617BD5F75001EBD23 /* JukeBox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8666BB7517BD5F75001EBD23 /* JukeBox@2x.png */; };
+		866D059417BEF9F400803974 /* OptionsFrame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 866D059317BEF9F400803974 /* OptionsFrame@2x.png */; };
 		86730A0E17BEB048001CF1C1 /* CurLocationMarker.png in Resources */ = {isa = PBXBuildFile; fileRef = 86730A0D17BEB048001CF1C1 /* CurLocationMarker.png */; };
 		86730A1017BEB09C001CF1C1 /* CurLocationMarker@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86730A0F17BEB09C001CF1C1 /* CurLocationMarker@2x.png */; };
 		86894B5F17A096FF00F7146B /* NewMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B5E17A096FF00F7146B /* NewMessageViewController.m */; };
@@ -154,7 +154,6 @@
 		60CB90BF17A0872F00A9E93A /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		60CB90C517A0897E00A9E93A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		60CB90C717A0899700A9E93A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		60F4439617BEDBDC00C86E7E /* bluewood.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bluewood.jpg; sourceTree = "<group>"; };
 		8205692317B95876006A2000 /* LoginView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
 		82148F3017AADD140066C69A /* Geocoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Geocoding.h; sourceTree = "<group>"; };
 		82148F3117AADD140066C69A /* Geocoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Geocoding.m; sourceTree = "<group>"; };
@@ -223,6 +222,7 @@
 		8666BB6E17BD3E0D001EBD23 /* GMSMarkerWithCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMSMarkerWithCount.m; sourceTree = "<group>"; };
 		8666BB7017BD590E001EBD23 /* musicNoteRed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicNoteRed.png; sourceTree = "<group>"; };
 		8666BB7517BD5F75001EBD23 /* JukeBox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JukeBox@2x.png"; sourceTree = "<group>"; };
+		866D059317BEF9F400803974 /* OptionsFrame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "OptionsFrame@2x.png"; sourceTree = "<group>"; };
 		86730A0D17BEB048001CF1C1 /* CurLocationMarker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CurLocationMarker.png; sourceTree = "<group>"; };
 		86730A0F17BEB09C001CF1C1 /* CurLocationMarker@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CurLocationMarker@2x.png"; sourceTree = "<group>"; };
 		86894B5D17A096FF00F7146B /* NewMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageViewController.h; sourceTree = "<group>"; };
@@ -406,7 +406,7 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				60F4439617BEDBDC00C86E7E /* bluewood.jpg */,
+				866D059317BEF9F400803974 /* OptionsFrame@2x.png */,
 				86730A0D17BEB048001CF1C1 /* CurLocationMarker.png */,
 				86730A0F17BEB09C001CF1C1 /* CurLocationMarker@2x.png */,
 				860A83EC17BD8B4D00DFB58A /* addFriend.png */,
@@ -611,7 +611,7 @@
 				860A83E817BD8B4300DFB58A /* envelope.png in Resources */,
 				86D1F45617BC2F3C003B7FED /* ReadNote@2x.png in Resources */,
 				20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */,
-				60F4439717BEDBDC00C86E7E /* bluewood.jpg in Resources */,
+				866D059417BEF9F400803974 /* OptionsFrame@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

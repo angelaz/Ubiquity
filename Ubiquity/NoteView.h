@@ -30,8 +30,8 @@
 
 @property (nonatomic, strong) UIButton *pictureButton;
 
-@property (nonatomic, strong) UIImageView *leftArrow;
-@property (nonatomic, strong) UIImageView *rightArrow;
+@property (nonatomic, strong) UIButton *leftArrow;
+@property (nonatomic, strong) UIButton *rightArrow;
 
 @property (nonatomic, strong) UIButton *musicButton;
 

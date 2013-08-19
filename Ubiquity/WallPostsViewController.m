@@ -33,8 +33,7 @@ static NSInteger cellNameLabelTag = 4;
 static NSInteger cellSentDateLabelTag = 5;
 static NSInteger cellReceivedDateLabelTag = 6;
 static NSInteger cellLocationLabelTag = 7;
-static NSInteger cellAttachedPhotoTag = 8;
-static NSInteger cellAttachedMediaTag = 9;
+static NSInteger cellAttachedMediaTag = 8;
 
 #import <MediaPlayer/MediaPlayer.h>
 #import "HomeMapViewController.h"
@@ -354,15 +353,13 @@ static NSInteger cellAttachedMediaTag = 9;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     
 	// Reuse identifiers for left and right cells
-	static NSString *LeftCellIdentifier = @"LeftCell";
+	static NSString *CellIdentifier = @"Cell";
     
 	// Try to reuse a cell
-	BOOL cellIsRight = [[[object objectForKey:kPAWParseSenderKey] objectForKey:kPAWParseUsernameKey] isEqualToString:[[PFUser currentUser] objectForKey:@"username"]];
-    
 	UITableViewCell *cell;
-    cell = [tableView dequeueReusableCellWithIdentifier:LeftCellIdentifier];
+    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:LeftCellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         
         UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"PostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
         [backgroundImage setTag:cellBackgroundTag];
@@ -393,6 +390,8 @@ static NSInteger cellAttachedMediaTag = 9;
         [cell.contentView addSubview:mediaView];
 
     }
+    
+    // so we don't get floating music buttons in random places they shouldn't be
     for (id subview in [cell.contentView subviews])
     {
         if ([subview  isKindOfClass:[UIButton class]])
@@ -434,15 +433,9 @@ static NSInteger cellAttachedMediaTag = 9;
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:nameFontSize];
 	nameLabel.backgroundColor = [UIColor clearColor];
-	if (cellIsRight) {
-		nameLabel.textColor = [UIColor colorWithRed:175.0f/255.0f green:172.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
-		nameLabel.shadowColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.35f];
-		nameLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
-	} else {
-		nameLabel.textColor = [UIColor blackColor];
-		nameLabel.shadowColor = [UIColor colorWithRed:0.9f green:0.9f blue:0.9f alpha:0.35f];
-		nameLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
-	}
+    nameLabel.textColor = [UIColor blackColor];
+    nameLabel.shadowColor = [UIColor colorWithRed:0.9f green:0.9f blue:0.9f alpha:0.35f];
+    nameLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
 	
 	UIImageView *backgroundImage = (UIImageView*) [cell.contentView viewWithTag:cellBackgroundTag];
 	
@@ -459,7 +452,6 @@ static NSInteger cellAttachedMediaTag = 9;
     
     
     
-	
 	CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath] + cellTextPaddingTop ; // Get the height of the cell
 	
 	// Place the content in the correct position depending on the type
