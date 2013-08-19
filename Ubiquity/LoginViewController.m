@@ -14,12 +14,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"Facebook Profile";
+    self.navigationController.navigationBarHidden = YES;
     LoginView *view = [[LoginView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: view];
     [view.loginButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+- (id) init
+{
+    self = [super init];
+    if (self)
+    {
+        
+    }
+    return self;
+}
 
 #pragma mark - Login mehtods
 
@@ -52,9 +61,10 @@
             NSLog(@"User with facebook logged in!");
 
             [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
-                [self dismissViewControllerAnimated:YES completion:nil];
                 [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
             }];
+            [self dismissViewControllerAnimated:YES completion:nil];
+
         }
     }];
     

@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
 @interface OptionsViewController ()
+@property (nonatomic, strong) UIButton *optionsButton;
 
 @end
 
@@ -24,7 +25,8 @@
 {
     self = [super init];
     if (self) {
-            }
+        [self initOptionsButton];
+    }
     
     return self;
 }
@@ -51,6 +53,18 @@
     [[self navigationItem] setLeftBarButtonItem:backButton];
 
 }
+
+- (void)initOptionsButton
+{
+    int const SCREEN_WIDTH = self.view.frame.size.width;
+    int const SCREEN_HEIGHT = self.view.frame.size.height;
+    self.optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *pictureButtonImage = [UIImage imageNamed:@"gear"];
+    [self.optionsButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
+    self.optionsButton.frame = CGRectMake(SCREEN_WIDTH - 25, SCREEN_HEIGHT - 70, 20.0, 20.0);
+    [self.optionsButton addTarget:self action:@selector(closeOptions:) forControlEvents:UIControlEventTouchUpInside];
+}
+
 
 - (void) setUpBackgroundWithWidth: (int) w andHeight: (int) h
 {
@@ -100,11 +114,14 @@
     {
         NSLog(@"Successfully Logged out");
         //[self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
-        LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-        [self.tabBarController setSelectedIndex:0];
-        [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
+        LoginViewController *loginViewController = [[LoginViewController alloc] init];
+        UINavigationController *loginNavController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+        [self presentViewController:loginNavController animated:YES completion:nil];
+        
     }
 }
+
+
 - (void)dismissOptions
 {
     [self dismissViewControllerAnimated:NO completion:nil];
@@ -128,26 +145,20 @@
     [UIView animateWithDuration:0.1
                      animations:^{
                          
-                         [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.25]];
+                         [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+                         [self.view addSubview:self.optionsButton];
+
                      }];
 }
 
 
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     [self performSelector:@selector(changeBackground) withObject:self afterDelay:0.25];
+
 
 }
 

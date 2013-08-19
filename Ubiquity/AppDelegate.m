@@ -36,6 +36,8 @@ static AppDelegate *launchedDelegate;
     //Parse
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
+    [[[PFUser currentUser] objectForKey:@"facebookId"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
+
     [PFFacebookUtils initializeFacebook];
     
     //Google Maps
@@ -65,15 +67,15 @@ static AppDelegate *launchedDelegate;
                                  forLeftSegmentState:UIControlStateNormal
                                    rightSegmentState:UIControlStateSelected
                                           barMetrics:UIBarMetricsDefault];
-
+    
     // register for push notifications
     [application registerForRemoteNotificationTypes:
      UIRemoteNotificationTypeBadge |
      UIRemoteNotificationTypeAlert |
      UIRemoteNotificationTypeSound];
     
-    //self.window.backgroundColor = [UIColor whiteColor];
-    [self.window setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bluewood.jpg"]]];
+    self.window.backgroundColor = [UIColor grayColor];
+    //[self.window setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bluewood.jpg"]]];
     
     [self.window makeKeyAndVisible];
     if (![PFUser currentUser]) {
@@ -148,7 +150,6 @@ static AppDelegate *launchedDelegate;
 - (void)presentLoginViewController {
 	// Go to the welcome screen and have them log in or create an account.
 	LoginViewController *loginViewController = [[LoginViewController alloc] init];
-	loginViewController.title = @"Welcome to Ubi!";
     UINavigationController *loginNavController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
     [self.window.rootViewController presentViewController:loginNavController animated:NO completion:nil];
 }
@@ -159,12 +160,11 @@ static AppDelegate *launchedDelegate;
           andStoreUnderRelation:(NSString *)relationLabel   //If there's a relation to store under, called this
                        toObject:(PFObject *) object         //Related under this object
                      finalBlock:(void(^)(PFObject *made))finalBlock   //Then do this after finishing
-    {
+{
     
     //Check for data which needs linking
     
     PFQuery *checkIfExists = [PFQuery queryWithClassName:@"UserData"];
-    
     [checkIfExists whereKey:@"facebookId" equalTo:facebookID];
     [checkIfExists findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
@@ -194,7 +194,7 @@ static AppDelegate *launchedDelegate;
                     }
                     
                 }
-            
+                
                 //If the user is brand new, no stub found for them
             } else {
                 //Make new user data object
@@ -224,6 +224,8 @@ static AppDelegate *launchedDelegate;
             }
         }
     }];
+    
+    
 }
 
 

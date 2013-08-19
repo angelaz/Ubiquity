@@ -77,6 +77,7 @@ int const PUBLIC = 2;
 {
     [super viewDidLoad];
     
+    
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
     
@@ -108,6 +109,7 @@ int const PUBLIC = 2;
 
 
     [_nmv.musicButton addTarget:self action:@selector(launchMusicSearch) forControlEvents:UIControlEventTouchUpInside];
+    
     
 }
 

@@ -68,9 +68,11 @@
     _trackKeys = [[NSMutableArray alloc] init];
     
     [self loadNotesText: currentNote];
+
     
     
 }
+
 
 - (void) swipeController: (id) sender
 {
@@ -171,6 +173,7 @@
     {
         CGRect newFrame = _nv.messageTextView.frame;
         newFrame.size.height = textSize.height;
+        
         _nv.messageTextView.frame = newFrame;
     }
     _nv.messageTextView.text = [self.notes[i] objectForKey:@"text"];
