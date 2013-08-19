@@ -16,7 +16,6 @@
 #import "LocationController.h"
 #import "GMSMarkerWithCount.h"
 #import <math.h>
-#import "Reachability.h"
 
 #define kOFFSET_FOR_KEYBOARD 190.0
 
@@ -71,14 +70,6 @@
                                                  name: kPAWPostCreatedNotification
                                                object:nil];
     
-    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == NotReachable) {
-        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Error: No Internet Connection"
-                                                          message:nil
-                                                         delegate:nil
-                                                cancelButtonTitle:@"OK"
-                                                otherButtonTitles:nil];
-        [message show];
-    }
     
     _hmv.tapRecognizer = [[UITapGestureRecognizer alloc]  initWithTarget:self action:@selector(hideKeyboard:)];
     [_hmv addGestureRecognizer:_hmv.tapRecognizer];
@@ -122,7 +113,6 @@
 - (void) loadPins: (int) i
 {
     if ([PFUser currentUser] != nil) {
-        
         double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
         [self getParseQuery: i withRange: range];
         
@@ -155,7 +145,11 @@
     [query includeKey:kPAWParseSenderKey];
     [query includeKey:@"userData"];
     
-    if (i < 2) {
+<<<<<<< HEAD
+    if (i < 2 ) {
+=======
+    if (i < 2)
+>>>>>>> 375bbcb95ad8f7f6723798d1dfabe2a3f3b8e5cf
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     } else {
         [query whereKey:@"receivers" equalTo:publicUserObj];
@@ -276,14 +270,20 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
     button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+    
     [button addTarget:self action:@selector(openNewMessageView)    forControlEvents:UIControlEventTouchUpInside];
     
     UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height) ];
+    
     [v addSubview:button];
     
     UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
+    
     self.navigationItem.rightBarButtonItem = newMessage;
+    
+    
 }
+
 
 - (void) readNote: (id) sender
 {
@@ -304,7 +304,11 @@
                          animations:^{
                              nvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nvc.view.frame.size.width, nvc.self.view.frame.size.height);
                          }];
+        
+        
     }
+    
+    
 }
 
 - (NSArray *) getNotesListForMarker: (GMSMarker *) marker
@@ -339,6 +343,7 @@
 
 - (void)initSegmentedControl
 {
+    
     NSArray *itemArray = [NSArray arrayWithObjects: [UIImage imageNamed:@"me"], [UIImage imageNamed:@"friends"], [UIImage imageNamed:@"public"], nil];
     self.segmentedControl = [[UISegmentedControl alloc] initWithItems:itemArray];
     self.segmentedControl.frame = CGRectMake(0,0,150,35);
@@ -364,6 +369,7 @@
                                                                action:@selector(launchPostsView)];
     [[self navigationItem] setLeftBarButtonItem:mapList];
     
+    
     UIImage *image = [UIImage imageNamed:@"newMessage"];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
@@ -376,6 +382,8 @@
 }
 - (void)launchPostsView
 {
+    
+    
     if(_wpvc == nil) {
         _wpvc = [[WallPostsViewController alloc] init];
         _wallPostsNavController = [[UINavigationController alloc]
@@ -419,6 +427,7 @@
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];
+//    [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
     
     self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
     [self presentViewController:optionsNavController animated:YES completion:nil];
@@ -433,6 +442,7 @@
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
 {
+    NSLog(@"A long press!");
     LocationController *locationController = [LocationController sharedLocationController];
     [locationController moveMarkerToLocation:coord];
 }
@@ -446,6 +456,7 @@
 
 - (void) startSearch: (id) sender
 {
+    NSLog(@"searching for: %@", _hmv.locationSearchTextField.text);
     LocationController* locationController = [LocationController sharedLocationController];
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     NSDictionary *curLocation = [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithDouble:currentCoordinate.latitude],@"lat",[NSNumber numberWithDouble:currentCoordinate.longitude],@"lng",@"",@"address",nil];
@@ -464,6 +475,8 @@
     CLLocationCoordinate2D geolocation = CLLocationCoordinate2DMake(lat,lng);
     marker.position = geolocation;
     marker.title = [gs.geocode objectForKey:@"address"];
+    NSLog(@"%@", marker.title);
+    NSLog(@"%f, %f", lat, lng);
     
     marker.map = _hmv.map;
     
@@ -474,8 +487,10 @@
 
 -(void) hideKeyboard: (id) sender
 {
+    
     [_hmv.locationSearchTextField resignFirstResponder];
     [_hmv.map setUserInteractionEnabled:YES];
+    
 }
 
 @end

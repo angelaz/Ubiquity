@@ -13,6 +13,7 @@
 #import "HomeMapViewController.h"
 #import "LocationController.h"
 
+
 static AppDelegate *launchedDelegate;
 
 @interface AppDelegate ()
@@ -32,7 +33,7 @@ static AppDelegate *launchedDelegate;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
     //Parse
     [Parse setApplicationId:@"yCZ5bGegG7VMoZ4eYqXwiXAmFz1sU0yKLYpA0F9R" clientKey:@"XaJTZmXmJ3Hq1WjWuWACdTT549svsOo4BY7koW4C"];
     [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error){}];
