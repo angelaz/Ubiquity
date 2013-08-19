@@ -10,6 +10,8 @@
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
+		60B6D1CA17C2CCDC00A46B06 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 60B6D1C817C2CCDC00A46B06 /* facebook.png */; };
+		60B6D1CB17C2CCDC00A46B06 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 60B6D1C917C2CCDC00A46B06 /* twitter.png */; };
 		60C0B45E17A1A4E400DC0F92 /* GoogleMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */; };
 		60C0B46017A1A9EF00DC0F92 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */; };
 		60C0B46217A1AA1500DC0F92 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */; };
@@ -135,6 +137,8 @@
 		6097BED817A6DC650012A36A /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
 		6097BED917A6DC650012A36A /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
 		60B3A23217BACD9F00CBCE51 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		60B6D1C817C2CCDC00A46B06 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		60B6D1C917C2CCDC00A46B06 /* twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter.png; sourceTree = "<group>"; };
 		60C0B45D17A1A4E400DC0F92 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMaps.framework; sourceTree = "<group>"; };
 		60C0B45F17A1A9EF00DC0F92 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		60C0B46117A1AA1500DC0F92 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -422,6 +426,8 @@
 		82E9316F17A079C600B3958B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				60B6D1C817C2CCDC00A46B06 /* facebook.png */,
+				60B6D1C917C2CCDC00A46B06 /* twitter.png */,
 				60F4439617BEDBDC00C86E7E /* bluewood.jpg */,
 				866D059317BEF9F400803974 /* OptionsFrame@2x.png */,
 				866D059917C2C92C00803974 /* PostBackground.png */,
@@ -585,6 +591,7 @@
 				8666BB6A17BC85B8001EBD23 /* UnselectedSeg.png in Resources */,
 				860A83D717BD8B1A00DFB58A /* UnreadNote.png in Resources */,
 				86D1F43A17B9B6D6003B7FED /* gear@2x.png in Resources */,
+				60B6D1CA17C2CCDC00A46B06 /* facebook.png in Resources */,
 				86730A0E17BEB048001CF1C1 /* CurLocationMarker.png in Resources */,
 				866D059C17C2C92C00803974 /* PostBackground@2x.png in Resources */,
 				865FBE4E17B4069000A3F7E2 /* Default.png in Resources */,
@@ -629,10 +636,10 @@
 				8666BB7617BD5F75001EBD23 /* JukeBox@2x.png in Resources */,
 				82E9317B17A079C600B3958B /* Images.xcassets in Resources */,
 				82E931F417A093D500B3958B /* icon@2x.png in Resources */,
+				60B6D1CB17C2CCDC00A46B06 /* twitter.png in Resources */,
 				860A83E817BD8B4300DFB58A /* envelope.png in Resources */,
 				86D1F45617BC2F3C003B7FED /* ReadNote@2x.png in Resources */,
 				60F4439717BEDBDC00C86E7E /* bluewood.jpg in Resources */,
-				20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */,
 				866D059417BEF9F400803974 /* OptionsFrame@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
