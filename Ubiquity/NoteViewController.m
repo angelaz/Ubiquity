@@ -70,9 +70,6 @@
     [self loadNotesText: currentNote];
     
     
-    
-    
-    
 }
 
 - (void) swipeController: (id) sender

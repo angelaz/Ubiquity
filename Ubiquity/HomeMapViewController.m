@@ -147,7 +147,7 @@
     [query includeKey:kPAWParseSenderKey];
     [query includeKey:@"userData"];
     
-    if (i < 2 )
+    if (i < 2)
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     else
         [query whereKey:@"receivers" equalTo:publicUserObj];

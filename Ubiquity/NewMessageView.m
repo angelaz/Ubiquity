@@ -163,26 +163,28 @@ int const LINE_HEIGHT = 30;
 
 - (void) createPictureButtonWithWidth: (int) w andHeight: (int) h
 {
+    CGFloat iconDimensions = 35.0;
     self.pictureButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *pictureButtonImage = [UIImage imageNamed:@"camera"];
     [self.pictureButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
     int width = WIDEST_POINT;
-    int innerFrameLeftMargin = w/2 + width/2 - 20.0;
-    int innerFrameTopMargin = h - TOP_PADDING * 10.5;
-    self.pictureButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20.0, 20.0);
+    int innerFrameLeftMargin = w/2 + width/2 - iconDimensions;
+    int innerFrameTopMargin = h - TOP_PADDING * 10.75;
+    self.pictureButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions*1.1, iconDimensions);
     [self addSubview:self.pictureButton];
 }
 
 
 - (void)createMusicButtonWithWidth:(int)w andHeight:(int) h
 {
+    CGFloat iconDimensions = 35.0;
     self.musicButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *musicButtonImage = [UIImage imageNamed:@"musicNote.png"];
     [self.musicButton setBackgroundImage:musicButtonImage forState:UIControlStateNormal];
     int width = WIDEST_POINT;
-    int innerFrameLeftMargin = w/2 + width/2 - 20.0;
-    int innerFrameTopMargin = h - TOP_PADDING * 10.5 - 25;
-    CGRect musicFrame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20, 20);
+    int innerFrameLeftMargin = w/2 - width/2;
+    int innerFrameTopMargin = h - TOP_PADDING * 9.6;
+    CGRect musicFrame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions, iconDimensions);
     [_musicButton setFrame:musicFrame];
     [self addSubview:self.musicButton];
 }

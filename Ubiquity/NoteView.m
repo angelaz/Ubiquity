@@ -80,6 +80,7 @@ static CGFloat const kMessageFontSize = 11.f;
 {
     int width = WIDEST_POINT;
     int innerFrameLeftMargin = w/2 - width/2;
+    CGFloat iconDimensions = 20.0;
     int innerFrameTopMargin = h-self.envelope.frame.size.height+ ADDRESS_PADDING;
     self.pagingLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
     self.pagingLabel.text = @"1 of 2";
@@ -91,13 +92,13 @@ static CGFloat const kMessageFontSize = 11.f;
     [self addSubview:self.pagingLabel];
     
     self.leftArrow = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.leftArrow.frame = CGRectMake(innerFrameLeftMargin + LEFT_PADDING*1.2, innerFrameTopMargin + 7, 15, 15);
+    self.leftArrow.frame = CGRectMake(innerFrameLeftMargin + LEFT_PADDING*1.1, innerFrameTopMargin + 5, iconDimensions, iconDimensions);
     [self.leftArrow setBackgroundImage: [UIImage imageNamed:@"leftarrow"] forState: UIControlStateNormal];
     [self addSubview: self.leftArrow];
 
     
     self.rightArrow = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.rightArrow.frame = CGRectMake(innerFrameLeftMargin + width - LEFT_PADDING * 1.5, innerFrameTopMargin + 7, 15, 15);
+    self.rightArrow.frame = CGRectMake(innerFrameLeftMargin + width - LEFT_PADDING * 1.5, innerFrameTopMargin + 5, iconDimensions, iconDimensions);
     [self.rightArrow setBackgroundImage: [UIImage imageNamed:@"rightarrow"] forState: UIControlStateNormal];
     [self addSubview: self.rightArrow];
 
@@ -145,7 +146,7 @@ static CGFloat const kMessageFontSize = 11.f;
 {
     int width = WIDEST_POINT;
     int innerFrameLeftMargin = w/2 - width/2;
-    int innerFrameTopMargin = h - TOP_PADDING * 9.5;
+    int innerFrameTopMargin = h - TOP_PADDING * 9.0;
     self.fromLabel = [[UILabel alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, LINE_HEIGHT)];
     self.fromLabel.text = @"<INSERT SENDERS NAME>";
     self.fromLabel.textAlignment = NSTextAlignmentRight;
@@ -168,25 +169,29 @@ static CGFloat const kMessageFontSize = 11.f;
 
 - (void) createPictureButtonWithWidth: (int) w andHeight: (int) h
 {
+    CGFloat iconDimensions = 35.0;
     self.pictureButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *pictureButtonImage = [UIImage imageNamed:@"camera"];
     [self.pictureButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
     int width = WIDEST_POINT;
-    int innerFrameLeftMargin = w/2 + width/2 - 20.0;
-    int innerFrameTopMargin = h - TOP_PADDING * 10.5;
-    self.pictureButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20.0, 20.0);
+    int innerFrameLeftMargin = w/2 + width/2 - iconDimensions;
+    int innerFrameTopMargin = h - TOP_PADDING * 10.75;
+    self.pictureButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions*1.1, iconDimensions);
+    [self addSubview:self.pictureButton];
 }
 
 - (void)createMusicButtonWithWidth:(int)w andHeight:(int) h
 {
+    CGFloat iconDimensions = 35.0;
     self.musicButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *musicButtonImage = [UIImage imageNamed:@"musicNote.png"];
     [self.musicButton setBackgroundImage:musicButtonImage forState:UIControlStateNormal];
     int width = WIDEST_POINT;
-    int innerFrameLeftMargin = w/2 + width/2 - 20.0;
-    int innerFrameTopMargin = h - TOP_PADDING * 10.5 - 25;
-    CGRect musicFrame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, 20, 20);
+    int innerFrameLeftMargin = w/2 - width/2;
+    int innerFrameTopMargin = h - TOP_PADDING * 9.6;
+    CGRect musicFrame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions, iconDimensions);
     [_musicButton setFrame:musicFrame];
+    [self addSubview:self.musicButton];
 }
 
 

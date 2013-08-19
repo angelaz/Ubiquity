@@ -424,7 +424,7 @@ int const PUBLIC = 2;
     _nmv.thumbnailImage = [self getThumbnailFromImage:image];
 
     _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
-    float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 30;
+    float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 40;
     float y = _nmv.messageTextView.frame.origin.y + _nmv.messageTextView.frame.size.height + 5;
     _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
 
@@ -443,7 +443,7 @@ int const PUBLIC = 2;
     CGContextDrawImage(context, newRect, imageRef);
     CGImageRef newImageRef = CGBitmapContextCreateImage(context);
     UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
-    
+
     CGImageRelease(newImageRef);
     UIGraphicsEndImageContext();
     
