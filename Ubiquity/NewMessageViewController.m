@@ -262,6 +262,17 @@ int const PUBLIC = 2;
     // Get the post's message
     NSString *postMessage = _nmv.messageTextView.text;
     
+    if ([postMessage isEqualToString: @""])
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Blank Note :("
+                                                        message:@"Remember to type something before you send!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
     [_nmv.messageTextView setText: @""];
     
     //Get the currently logged in PFUser
