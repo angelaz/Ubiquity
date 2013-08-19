@@ -114,6 +114,8 @@
 {
     if ([PFUser currentUser] != nil) {
         
+        
+        
         double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
         [self getParseQuery: i withRange: range];
         
@@ -135,6 +137,7 @@
 
 - (void) getParseQuery: (int) i withRange: (double) r
 {
+    
     PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
     
     LocationController* locationController = [LocationController sharedLocationController];
@@ -154,6 +157,7 @@
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
+            
             // The find succeeded.
             NSLog(@"Successfully retrieved %d posts.", objects.count);
             // Do something with the found objects
@@ -183,6 +187,7 @@
                 
                 
             }
+            
         } else {
             NSLog(@"Error in loading self and friends map posts: %@", error);
         }
@@ -196,6 +201,7 @@
         }
         LocationController *locationController = [LocationController sharedLocationController];
         [locationController updateLocation:locationController.location.coordinate];
+        
     }];
     
 }
@@ -384,7 +390,7 @@
     if(_wpvc == nil) {
         _wpvc = [[WallPostsViewController alloc] init];
         _wallPostsNavController = [[UINavigationController alloc]
-                                                      initWithRootViewController:_wpvc];
+                                   initWithRootViewController:_wpvc];
     }
     _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
@@ -424,7 +430,7 @@
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];
-//    [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
+    //    [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
     
     self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
     [self presentViewController:optionsNavController animated:YES completion:nil];
@@ -434,7 +440,7 @@
                      animations:^{
                          ovc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, ovc.view.frame.size.width, ovc.self.view.frame.size.height);
                      }];
-
+    
 }
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
