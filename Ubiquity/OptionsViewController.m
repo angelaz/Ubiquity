@@ -129,6 +129,8 @@
 
 -(void) closeOptions: (id) sender
 {
+    [self.optionsButton removeFromSuperview];
+    
     self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
     [UIView animateWithDuration:0.25
                      animations:^{

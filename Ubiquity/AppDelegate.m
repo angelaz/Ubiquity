@@ -74,8 +74,8 @@ static AppDelegate *launchedDelegate;
      UIRemoteNotificationTypeAlert |
      UIRemoteNotificationTypeSound];
     
-    self.window.backgroundColor = [UIColor grayColor];
-    //[self.window setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bluewood.jpg"]]];
+    //self.window.backgroundColor = [UIColor grayColor];
+    [self.window setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bluewood.jpg"]]];
     
     [self.window makeKeyAndVisible];
     if (![PFUser currentUser]) {

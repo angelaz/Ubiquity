@@ -146,7 +146,6 @@
     [_nv.leftArrow removeFromSuperview];
     [_nv.rightArrow removeFromSuperview];
     
-    
     [self loadDates: i];
     [self loadText: i];
     [self loadImages: i];

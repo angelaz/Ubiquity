@@ -147,7 +147,6 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
-    [query includeKey:@"userData"];
     
     if (i < 2) {
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
@@ -228,7 +227,6 @@
             [notesForMarker removeAllObjects];
             CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
             marker = [GMSMarkerWithCount markerWithPosition: pinLocation];
-            //  marker.icon = [UIImage imageNamed: @"UnreadNote"];
             marker.animated = YES;
             marker.map = _hmv.map;
             zoomLevel = _hmv.map.camera.zoom;
@@ -385,15 +383,6 @@
 }
 - (void)launchPostsView
 {
-    
-    
-    if(_wpvc == nil) {
-        _wpvc = [[WallPostsViewController alloc] init];
-        _wallPostsNavController = [[UINavigationController alloc]
-                                   initWithRootViewController:_wpvc];
-    }
-    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
     LocationController *locController = [LocationController sharedLocationController];
     if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"
@@ -403,7 +392,17 @@
                                                 otherButtonTitles:nil];
         [message show];
     }
-}
+
+    
+    if(_wpvc == nil) {
+        _wpvc = [[WallPostsViewController alloc] init];
+        _wallPostsNavController = [[UINavigationController alloc]
+                                                      initWithRootViewController:_wpvc];
+    }
+    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
+    
+    }
 
 - (void)launchNewMessage
 {

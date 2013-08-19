@@ -43,6 +43,7 @@ static NSInteger cellAttachedMediaTag = 8;
 #import "LocationController.h"
 #import "NewMessageViewController.h"
 #import "OptionsViewController.h"
+#import <Parse/Parse.h>
 
 @interface WallPostsViewController ()
 {
@@ -330,6 +331,7 @@ static NSInteger cellAttachedMediaTag = 8;
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"readReceiptsArray"];
     [query orderByDescending:@"createdAt"];
     
     if (self.indexing == 0) {
@@ -425,8 +427,31 @@ static NSInteger cellAttachedMediaTag = 8;
     sentDate.font = [UIFont systemFontOfSize:dateFontSize];
     
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:cellReceivedDateLabelTag];
-    receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
+    NSString *facebookId = [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"];
+    NSArray *rrArray = [object objectForKey:@"readReceiptsArray"];
+    
+    PFObject *rr = nil;
+    NSDate *receivedAt = nil;
+    
+    for(PFObject *r in rrArray) {
+        if([[r objectForKey:@"receiver"] isEqualToString:facebookId]) {
+            NSLog(@"%@", r);
+            receivedAt = [r objectForKey:@"dateOpened"];
+            rr = r;
+        }
+    }
+    
+    if(receivedAt == nil) {
+        receivedAt = [NSDate date];
+        [rr setObject:receivedAt forKey:@"dateOpened"];
+        [rr saveInBackground];
+    }
+    
+    
+    NSString *gotAtString = [df stringFromDate:receivedAt];
+    receivedDate.text = [NSString stringWithFormat: @"Read at: %@", gotAtString];
     receivedDate.font = [UIFont systemFontOfSize:dateFontSize];
+
     
 	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:cellNameLabelTag];
@@ -576,6 +601,34 @@ static NSInteger cellAttachedMediaTag = 8;
     
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+//-(IBAction)btnInfoTapped:(id)sender{
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    [UIView beginAnimations:nil context:context];
+//    [UIView setAnimationTransition: UIViewAnimationTransitionFlipFromLeft forView:viewMain cache:YES];
+//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationDuration:1.0];
+//    [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(hideMainView) userInfo:nil repeats:NO];
+//    [UIView commitAnimations];
+//}
+//-(void)hideMainView{
+//    [viewMain addSubview:viewInfo];
+//}
+//
+//-(IBAction)btnBack:(id)sender{
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    [UIView beginAnimations:nil context:context];
+//    [UIView setAnimationTransition: UIViewAnimationTransitionFlipFromRight forView:viewMain cache:YES];
+//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationDuration:1.0];
+//    [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(hideInfoView) userInfo:nil repeats:NO];
+//    [UIView commitAnimations];
+//}
+//
+//-(void)hideInfoView {
+//    [viewInfo removeFromSuperview];
+//}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	// Account for the load more cell at the bottom of the tableview if we hit the pagination limit:
