@@ -6,6 +6,7 @@
 #import "LoginView.h"
 #import "WallPostsViewController.h"
 #import "HomeMapViewController.h"
+#import "LocationController.h"
 
 @implementation LoginViewController
 
@@ -40,7 +41,7 @@
     // Login PFUser using facebook
     [PFFacebookUtils logInWithPermissions:permissionsArray block:^(PFUser *user, NSError *error) {
         [_activityIndicator stopAnimating]; // Hide loading indicator
-        
+       
         if (!user) {
             if (!error) {
                 NSLog(@"Uh oh. The user cancelled the Facebook login.");
@@ -61,9 +62,18 @@
             NSLog(@"User with facebook logged in!");
 
             [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
-                [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
+            [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
+                [self dismissViewControllerAnimated:YES completion:nil];
+                LocationController *locController = [LocationController sharedLocationController];
+                if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
+                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"
+                                                                      message:@"Please go to Settings -> Privacy -> Location Services to turn it on."
+                                                                     delegate:nil
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                    [message show];
+                }
             }];
-            [self dismissViewControllerAnimated:YES completion:nil];
 
         }
     }];
@@ -98,9 +108,6 @@
                                        toObject:nil
                                      finalBlock:block
              ];
-            
-            
-            //[self updateProfile];
         } else if ([[[[error userInfo] objectForKey:@"error"] objectForKey:@"type"]
                     isEqualToString: @"OAuthException"]) { // Since the request failed, we can check if it was due to an invalid session
             NSLog(@"The facebook session was invalidated");
