@@ -57,6 +57,7 @@ static int const numResults = 5;
     
     CGRect appFrame = [UIScreen mainScreen].applicationFrame;
     int w = appFrame.size.width;
+    
     int h = appFrame.size.height;
     UIView *view = [[UIView alloc] initWithFrame:appFrame];
     [view setBackgroundColor:[UIColor clearColor]];
@@ -257,6 +258,7 @@ static int const numResults = 5;
     
     [[cell textLabel] setText:[[_results objectAtIndex:[indexPath row]] objectForKey:@"name"]];
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    cell.textLabel.font = [UIFont boldSystemFontOfSize: 15.f];
     
     return cell;
 }

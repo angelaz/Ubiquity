@@ -52,12 +52,16 @@
     [[self navigationItem] setRightBarButtonItem:doneButton];
     
     
+    [_nv.leftArrow addTarget:self action:@selector(swipeController:) forControlEvents:UIControlEventTouchUpInside];
+    [_nv.rightArrow addTarget:self action:@selector(swipeController:) forControlEvents:UIControlEventTouchUpInside];
+
+    
     currentNote = 0;
-    swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeController:)];
     [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.view addGestureRecognizer:swipeLeft];
     
-    swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeController:)];
     [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
     [self.view addGestureRecognizer:swipeRight];
     
@@ -66,21 +70,25 @@
     [self loadNotesText: currentNote];
     
     
-    
-    
-    
 }
 
-- (void)nextTab:(id)sender
+- (void) swipeController: (id) sender
 {
-    if (sender == swipeLeft && (currentNote + 1) < self.notes.count)
-    {
+    if (sender == swipeLeft || sender == _nv.rightArrow)
         swipedLeft = true;
+    else if (sender == swipeRight || sender ==_nv.leftArrow)
+        swipedLeft = false;
+    [self nextTab];
+}
+
+- (void) nextTab
+{
+    if (swipedLeft && (currentNote + 1) < self.notes.count)
+    {
         currentNote++;
     }
-    else if (sender == swipeRight && currentNote > 0)
+    else if (!swipedLeft && currentNote > 0)
     {
-        swipedLeft = false;
         currentNote --;
     } else {
         return;

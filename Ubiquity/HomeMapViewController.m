@@ -145,8 +145,9 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"userData"];
     
-    if (i < 2 )
+    if (i < 2)
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     else
         [query whereKey:@"receivers" equalTo:publicUserObj];
@@ -419,7 +420,17 @@
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];
-    [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
+//    [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
+    
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:optionsNavController animated:YES completion:nil];
+    
+    ovc.view.frame = CGRectMake(ovc.view.frame.origin.x, self.view.frame.size.height, ovc.view.frame.size.width, ovc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         ovc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, ovc.view.frame.size.width, ovc.self.view.frame.size.height);
+                     }];
+
 }
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord
@@ -434,9 +445,6 @@
 {
     [_hmv.map setUserInteractionEnabled:NO];
 }
-
-
-
 
 
 - (void) startSearch: (id) sender
