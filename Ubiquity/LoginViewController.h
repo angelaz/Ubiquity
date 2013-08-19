@@ -7,5 +7,4 @@
 @property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
 
 - (void)loginButtonTouchHandler:(id)sender;
-
 @end

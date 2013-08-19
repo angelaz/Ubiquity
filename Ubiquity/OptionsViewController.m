@@ -10,6 +10,7 @@
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
 @interface OptionsViewController ()
+@property (nonatomic, strong) UIButton *optionsButton;
 
 @end
 
@@ -24,27 +25,87 @@
 {
     self = [super init];
     if (self) {
-        UINavigationItem *nav = [self navigationItem];
-        [nav setTitle:@"Options"];
-        UIBarButtonItem *logoutButton = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStylePlain target:self action:@selector(logoutButtonTouchHandler:)];
-        [[self navigationItem] setRightBarButtonItem:logoutButton];
-        UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                    target:self
-                                                                                    action:@selector(dismissOptions)];
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [button addTarget:self
-                   action:@selector(loginToTwitter)
-         forControlEvents:UIControlEventTouchDown];
-        [button setTitle:@"Twitter" forState:UIControlStateNormal];
-        button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
-        [self.view addSubview:button];
-        self.view.backgroundColor = [UIColor whiteColor];
-        
-        [[self navigationItem] setLeftBarButtonItem:backButton];
+        [self initOptionsButton];
     }
     
     return self;
+}
+
+- (void) loadView
+{
+    UINavigationItem *nav = [self navigationItem];
+    [nav setTitle:@"Options"];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                                                target:self
+                                                                                action:@selector(closeOptions:)];
+    CGRect appFrame = [UIScreen mainScreen].applicationFrame;
+    int w = appFrame.size.width;
+    int h = appFrame.size.height;
+    
+    UIView *view = [[UIView alloc] initWithFrame: appFrame];
+    [view setBackgroundColor:[UIColor clearColor]];
+    self.view = view;
+    
+    [self setUpBackgroundWithWidth:w andHeight: h];
+    [self setUpButtonsWithWidth: w andHeight: h];
+    
+    
+    [[self navigationItem] setLeftBarButtonItem:backButton];
+
+}
+
+- (void)initOptionsButton
+{
+    int const SCREEN_WIDTH = self.view.frame.size.width;
+    int const SCREEN_HEIGHT = self.view.frame.size.height;
+    self.optionsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *pictureButtonImage = [UIImage imageNamed:@"gear"];
+    [self.optionsButton setBackgroundImage:pictureButtonImage forState:UIControlStateNormal];
+    self.optionsButton.frame = CGRectMake(SCREEN_WIDTH - 25, SCREEN_HEIGHT - 70, 20.0, 20.0);
+    [self.optionsButton addTarget:self action:@selector(closeOptions:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+
+- (void) setUpBackgroundWithWidth: (int) w andHeight: (int) h
+{
+    int imageWidth = w * 4/5;
+    int imageHeight = h * 3/5;
+    UIImageView *frame = [[UIImageView alloc] initWithFrame:CGRectMake(w/2 - imageWidth / 2, h/2 - imageHeight/2 - 22, imageWidth, imageHeight)];
+    frame.image = [UIImage imageNamed:@"OptionsFrame"];
+    [self.view addSubview:frame];
+
+}
+
+- (void) setUpButtonsWithWidth: (int) w andHeight: (int) h
+{
+    UIColor *color = mainThemeColor;
+    
+    CGFloat buttonHeight = 40.0;
+    CGFloat buttonWidth = 160.0;
+    
+    UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [twitterButton addTarget:self
+                      action:@selector(loginToTwitter)
+            forControlEvents:UIControlEventTouchDown];
+    
+    [twitterButton setTitle:@"Twitter" forState:UIControlStateNormal];
+    twitterButton.titleLabel.textColor = [UIColor whiteColor];
+    twitterButton.frame = CGRectMake(w/2-buttonWidth/2, h/2-buttonHeight-32, buttonWidth, buttonHeight);
+    twitterButton.layer.cornerRadius = 5.0f;
+    [self.view addSubview:twitterButton];
+    twitterButton.backgroundColor = color;
+    
+    UIButton *logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [logoutButton addTarget:self
+                     action:@selector(logoutButtonTouchHandler:)
+           forControlEvents:UIControlEventTouchDown];
+    [logoutButton setTitle:@"Logout" forState:UIControlStateNormal];
+    logoutButton.titleLabel.textColor = [UIColor whiteColor];
+    logoutButton.frame = CGRectMake(w/2-buttonWidth/2, h/2-12, buttonWidth, buttonHeight);
+    logoutButton.layer.cornerRadius = 5.0f;
+    [self.view addSubview: logoutButton];
+    logoutButton.backgroundColor = color;
+
 }
 - (void)logoutButtonTouchHandler:(id)sender {
     
@@ -53,56 +114,54 @@
     {
         NSLog(@"Successfully Logged out");
         //[self.navigationController pushViewController:[[RecentViewController alloc] init] animated:YES];
-        LoginViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
-        [self.tabBarController setSelectedIndex:0];
-        [self.tabBarController presentViewController:loginViewController animated:NO completion:nil];
+        LoginViewController *loginViewController = [[LoginViewController alloc] init];
+        UINavigationController *loginNavController = [[UINavigationController alloc] initWithRootViewController:loginViewController];
+        [self presentViewController:loginNavController animated:YES completion:nil];
+        
     }
-}
-- (void)dismissOptions
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+
+- (void)dismissOptions
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
+    [self dismissViewControllerAnimated:NO completion:nil];
 }
+
+-(void) closeOptions: (id) sender
+{
+    self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.size.height, self.view.frame.size.width, self.view.frame.size.height);
+                     }];
+    
+    
+    [self performSelector:@selector(dismissOptions) withObject:self afterDelay:0.25];
+    
+}
+
+- (void) changeBackground
+{
+    [UIView animateWithDuration:0.1
+                     animations:^{
+                         
+                         [self.view setBackgroundColor:[UIColor colorWithWhite:0.0 alpha:0.5]];
+                         [self.view addSubview:self.optionsButton];
+
+                     }];
+}
+
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    UISwipeGestureRecognizer *swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
-    [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
-    [self.view addGestureRecognizer:swipeRight];
+    [self performSelector:@selector(changeBackground) withObject:self afterDelay:0.25];
+
 
 }
 
-- (void)nextTab:(id)sender
-{
-    int controllerIndex = 1;
-    
-    UIView * fromView = self.tabBarController.selectedViewController.view;
-    UIView * toView = [[self.tabBarController.viewControllers objectAtIndex:controllerIndex] view];
-    
-    // Transition using a page curl.
-    [UIView transitionFromView:fromView toView:toView duration:0.5
-                       options: (controllerIndex > self.tabBarController.selectedIndex ? UIViewAnimationOptionTransitionFlipFromRight : UIViewAnimationOptionTransitionFlipFromLeft)
-                    completion:^(BOOL finished) {
-                        
-                        if (finished) {
-                            self.tabBarController.selectedIndex = controllerIndex;
-                        }
-                        
-                    }];
-    
-    [self.tabBarController setSelectedIndex: controllerIndex];
-    
-}
 
 
 - (void)didReceiveMemoryWarning
@@ -130,25 +189,6 @@
             }
         }];
     }
-}
-
-- (void)save:(id)sender
-{
-    //FOR USE IF WE TURN THIS INTO A DISMISS BUTTON
-    //[self dismissViewControllerAnimated:YES completion:nil];
-    
-    //  //  ExpenseItem *newItem = [[ExpenseItemStore sharedStore] createItem];
-    //  //  DetailViewController *detailViewController = [[DetailViewController alloc] initForNewItem:YES];
-    //  //  [detailViewController setItem:newItem];
-    //
-    //  //  [detailViewController setDismissBlock:^{[[self tableView] reloadData];}];
-    //
-    //  //  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:detailViewController];
-    //  //  [navController setModalPresentationStyle:UIModalPresentationFormSheet];
-    //   // [navController setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-    //  //  [self presentViewController:navController
-    //    //                   animated:YES
-    //   //                  completion:nil];
 }
 
 @end

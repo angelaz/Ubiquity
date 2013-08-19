@@ -44,13 +44,4 @@
 
 - (void) moveMarkerToLocation:(CLLocationCoordinate2D)newCoordinate;
 
-//+ (CLLocationManager *) locationManager;
-//+ (CLLocation *) location;
-//
-//+ (GMSMarker *) marker;
-//+ (GMSMapView *) map;
-//+ (GMSGeocoder *) geocoder;
-//
-//+ (NSString *) markerLatestAddress;
-
 @end

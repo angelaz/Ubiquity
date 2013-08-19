@@ -61,7 +61,7 @@ int const PUBLIC = 2;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.title = @"New Message";
+        self.title = @"New Note";
         recipientsList = [[NSMutableArray alloc] init];
         countNumber = 0;
         song = @"";
@@ -77,6 +77,7 @@ int const PUBLIC = 2;
 {
     [super viewDidLoad];
     
+    
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
     
@@ -84,9 +85,8 @@ int const PUBLIC = 2;
     _nmv.messageTextView.delegate = self;
     _nmv.friendScroller.delegate = self;
     
-    UIBarButtonItem *doneButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                               target:self
-                                                                               action:@selector(sendMessage:)];
+     UIBarButtonItem*doneButton=[[UIBarButtonItem alloc] initWithTitle:@"Send" style:UIBarButtonItemStylePlain target:self action:@selector(sendMessage:)];
+    
     [[self navigationItem] setRightBarButtonItem:doneButton];
     
     [_nmv.addFriendsButton addTarget:self action:@selector(selectFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -105,8 +105,11 @@ int const PUBLIC = 2;
     [_nmv.addFriendsButton removeFromSuperview];
     [_nmv.friendScroller removeFromSuperview];
     [_nmv.toButton addTarget:self action:@selector(recipientSwitcher:) forControlEvents:UIControlEventTouchUpInside];
+    [_nmv.recipientButton addTarget: self action:@selector(recipientSwitcher:) forControlEvents:UIControlEventTouchUpInside];
+
 
     [_nmv.musicButton addTarget:self action:@selector(launchMusicSearch) forControlEvents:UIControlEventTouchUpInside];
+    
     
 }
 
@@ -114,25 +117,36 @@ int const PUBLIC = 2;
 {
     if (recipient == ME)
     {
+        if (recipientsList.count == 0)
+            [self.view addSubview:_nmv.recipientButton];
+        else {
+            [_nmv.recipientButton removeFromSuperview];
+            [_nmv.friendScroller setUserInteractionEnabled:YES];
+        }
+        
         [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToFriends"] forState:UIControlStateNormal];
+        [_nmv.recipientButton setTitle: @"For Friends" forState: UIControlStateNormal];
+        
         recipient = FRIENDS;
         [_nmv addSubview: _nmv.addFriendsButton];
         [_nmv addSubview: _nmv.friendScroller];
-        _nmv.recipientLabel.text = @"Add Friends";
+        [_nmv.friendScroller setUserInteractionEnabled:NO];
 
     } else if (recipient == FRIENDS)
     {
+        [self.view addSubview:_nmv.recipientButton];
         [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToPublic"] forState:UIControlStateNormal];
+        [_nmv.recipientButton setTitle: @"For Everyone" forState: UIControlStateNormal];
         recipient = PUBLIC;
         [_nmv.addFriendsButton removeFromSuperview];
         [_nmv.friendScroller removeFromSuperview];
-        _nmv.recipientLabel.text = @"Note for Everyone";
 
 
     } else {
+        [self.view addSubview:_nmv.recipientButton];
         [_nmv.toButton setBackgroundImage: [UIImage imageNamed: @"ToMe"] forState:UIControlStateNormal];
+        [_nmv.recipientButton setTitle: @"For Myself" forState: UIControlStateNormal];
         recipient = ME;
-        _nmv.recipientLabel.text = @"Note for Myself";
 
     }
 }
@@ -250,6 +264,17 @@ int const PUBLIC = 2;
     // Get the post's message
     NSString *postMessage = _nmv.messageTextView.text;
     
+    if ([postMessage isEqualToString: @""])
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Blank Note :("
+                                                        message:@"Remember to type something before you send!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
     [_nmv.messageTextView setText: @""];
     
     //Get the currently logged in PFUser
@@ -280,6 +305,7 @@ int const PUBLIC = 2;
     song = @"";
     
     NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber+1];
+    NSString *myUsername = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
@@ -293,10 +319,10 @@ int const PUBLIC = 2;
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
             
-            NSString *username = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
-            [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
-            [readReceiptsObject setObject:username forKey:@"receiver"];
+            //[readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
+            [readReceiptsObject setObject:myUsername forKey:@"receiver"];
+            [readReceiptsObject setObject:myUsername forKey:@"sender"];
             [readReceiptsArray addObject:readReceiptsObject];
    
         } else if (recipient == FRIENDS) {
@@ -314,6 +340,7 @@ int const PUBLIC = 2;
                 PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
                 [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
                 [readReceiptsObject setObject:username forKey:@"receiver"];
+                [readReceiptsObject setObject:myUsername forKey:@"sender"];
                 [readReceiptsArray addObject:readReceiptsObject];
 
             }
@@ -395,6 +422,7 @@ int const PUBLIC = 2;
 }
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
+    
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     UIImage *image;
@@ -415,17 +443,19 @@ int const PUBLIC = 2;
     mediaPicked = YES;
     
     //Make a thumbnail appear so user can see the image/video they attached!
-    _nmv.thumbnailImage = [self getThumbnailFromImage:image];
     if (_nmv.thumbnailImage == nil && !isiPhone5)
     {
         CGRect newFrame = _nmv.messageTextView.frame;
-        newFrame.size.height -= 40;
+        newFrame.size.height -= 50;
         _nmv.messageTextView.frame = newFrame;
     }
+    _nmv.thumbnailImage = [self getThumbnailFromImage:image];
+
     _nmv.thumbnailImageView = [[UIImageView alloc] initWithImage:_nmv.thumbnailImage];
-    float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 30;
+    float x = _nmv.messageTextView.frame.origin.x + _nmv.messageTextView.frame.size.width - _nmv.thumbnailImage.size.width - 40;
     float y = _nmv.messageTextView.frame.origin.y + _nmv.messageTextView.frame.size.height + 5;
     _nmv.thumbnailImageView.frame = CGRectMake(x, y, _nmv.thumbnailImage.size.width, _nmv.thumbnailImage.size.height);
+
     [_nmv addSubview:_nmv.thumbnailImageView];
 }
 
@@ -441,7 +471,7 @@ int const PUBLIC = 2;
     CGContextDrawImage(context, newRect, imageRef);
     CGImageRef newImageRef = CGBitmapContextCreateImage(context);
     UIImage *newImage = [UIImage imageWithCGImage:newImageRef];
-    
+
     CGImageRelease(newImageRef);
     UIGraphicsEndImageContext();
     
@@ -505,8 +535,11 @@ int const PUBLIC = 2;
 - (void)facebookViewControllerDoneWasPressed:(id)sender
 {
     [recipientsList removeAllObjects];
+    NSArray *viewsToRemove = [_nmv.friendScroller subviews];
+    for (UIView *v in viewsToRemove)
+        [v removeFromSuperview];
     
-    
+
     for (id<FBGraphUser> user in self.friendPickerController.selection) {
         [recipientsList addObject: user];
         
@@ -534,8 +567,16 @@ int const PUBLIC = 2;
     
     
     countNumber = [recipientsList count];
-    if (countNumber > 0)
-        _nmv.recipientLabel.text = @"";
+    if (countNumber > 0) {
+        [_nmv.recipientButton removeFromSuperview];
+        [_nmv.friendScroller setUserInteractionEnabled:YES];
+    } else
+    {
+        [self.view addSubview:_nmv.recipientButton];
+        [_nmv.addFriendsButton.layer setZPosition: 1];
+        [_nmv.friendScroller setUserInteractionEnabled:NO];
+
+    }
     readReceipts = [[NSMutableDictionary alloc] initWithCapacity:countNumber];
     
     [self handlePickerDone];

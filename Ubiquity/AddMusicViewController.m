@@ -6,7 +6,7 @@
 //
 //
 
-static int const numResults = 5;
+static int const numResults = 6;
 
 #import "AddMusicViewController.h"
 #import "AppDelegate.h"
@@ -57,6 +57,7 @@ static int const numResults = 5;
     
     CGRect appFrame = [UIScreen mainScreen].applicationFrame;
     int w = appFrame.size.width;
+    
     int h = appFrame.size.height;
     UIView *view = [[UIView alloc] initWithFrame:appFrame];
     [view setBackgroundColor:[UIColor clearColor]];
@@ -252,11 +253,14 @@ static int const numResults = 5;
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:MyCellIdentifier];
     
     if(cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:MyCellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:MyCellIdentifier];
     }
     
     [[cell textLabel] setText:[[_results objectAtIndex:[indexPath row]] objectForKey:@"name"]];
-    cell.textLabel.textAlignment = NSTextAlignmentCenter;
+    [[cell textLabel] setLineBreakMode:NSLineBreakByWordWrapping];
+    
+    [[cell detailTextLabel] setText:[[_results objectAtIndex:[indexPath row]] objectForKey:@"artist"]];
+    [[cell detailTextLabel] setLineBreakMode:NSLineBreakByWordWrapping];
     
     return cell;
 }
@@ -266,11 +270,23 @@ static int const numResults = 5;
     return numResults;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[_results objectAtIndex:[indexPath row]] objectForKey:@"key"]) {
         NSLog(@"touched me");
-        _trackKey = [[_results objectAtIndex:[indexPath row]] objectForKey:@"key"];
+        
+        for (int row = 0, rowCount = [self.tableView numberOfRowsInSection:0]; row < rowCount; ++row) {
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0]];
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = nil;
+        }
+
+        
+        UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
+        if (selectedCell.accessoryType == UITableViewCellAccessoryNone) {
+            selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
+            _trackKey = [[_results objectAtIndex:[indexPath row]] objectForKey:@"key"];
+        }
+        
         
     } else {
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Error:"
@@ -280,5 +296,8 @@ static int const numResults = 5;
                                                 otherButtonTitles:nil];
         [message show];
     }
+    
+    
 }
+
 @end

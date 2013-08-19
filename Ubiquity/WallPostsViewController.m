@@ -33,8 +33,7 @@ static NSInteger cellNameLabelTag = 4;
 static NSInteger cellSentDateLabelTag = 5;
 static NSInteger cellReceivedDateLabelTag = 6;
 static NSInteger cellLocationLabelTag = 7;
-static NSInteger cellAttachedPhotoTag = 8;
-static NSInteger cellAttachedMediaTag = 9;
+static NSInteger cellAttachedMediaTag = 8;
 
 #import <MediaPlayer/MediaPlayer.h>
 #import "HomeMapViewController.h"
@@ -44,6 +43,7 @@ static NSInteger cellAttachedMediaTag = 9;
 #import "LocationController.h"
 #import "NewMessageViewController.h"
 #import "OptionsViewController.h"
+#import <Parse/Parse.h>
 
 @interface WallPostsViewController ()
 {
@@ -130,6 +130,15 @@ static NSInteger cellAttachedMediaTag = 9;
 - (void)launchMapView
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+    LocationController *locController = [LocationController sharedLocationController];
+    if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"
+                                                          message:@"Please go to Settings -> Privacy -> Location Services to turn it on."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+    }
 }
 
 - (void)launchNewMessage
@@ -322,6 +331,7 @@ static NSInteger cellAttachedMediaTag = 9;
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"readReceiptsArray"];
     [query orderByDescending:@"createdAt"];
     
     if (self.indexing == 0) {
@@ -345,15 +355,13 @@ static NSInteger cellAttachedMediaTag = 9;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     
 	// Reuse identifiers for left and right cells
-	static NSString *LeftCellIdentifier = @"LeftCell";
+	static NSString *CellIdentifier = @"Cell";
     
 	// Try to reuse a cell
-	BOOL cellIsRight = [[[object objectForKey:kPAWParseSenderKey] objectForKey:kPAWParseUsernameKey] isEqualToString:[[PFUser currentUser] objectForKey:@"username"]];
-    
 	UITableViewCell *cell;
-    cell = [tableView dequeueReusableCellWithIdentifier:LeftCellIdentifier];
+    cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:LeftCellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         
         UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"PostBackground"] resizableImageWithCapInsets:UIEdgeInsetsMake(10.0f, 100.0f, 10.0f, 100.0f)]];
         [backgroundImage setTag:cellBackgroundTag];
@@ -384,6 +392,8 @@ static NSInteger cellAttachedMediaTag = 9;
         [cell.contentView addSubview:mediaView];
 
     }
+    
+    // so we don't get floating music buttons in random places they shouldn't be
     for (id subview in [cell.contentView subviews])
     {
         if ([subview  isKindOfClass:[UIButton class]])
@@ -417,23 +427,40 @@ static NSInteger cellAttachedMediaTag = 9;
     sentDate.font = [UIFont systemFontOfSize:dateFontSize];
     
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:cellReceivedDateLabelTag];
-    receivedDate.text = @"Received at: 6:05am Friday 28 July 2013";
+    NSString *facebookId = [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"];
+    NSArray *rrArray = [object objectForKey:@"readReceiptsArray"];
+    
+    PFObject *rr = nil;
+    NSDate *receivedAt = nil;
+    
+    for(PFObject *r in rrArray) {
+        if([[r objectForKey:@"receiver"] isEqualToString:facebookId]) {
+            NSLog(@"%@", r);
+            receivedAt = [r objectForKey:@"dateOpened"];
+            rr = r;
+        }
+    }
+    
+    if(receivedAt == nil) {
+        receivedAt = [NSDate date];
+        [rr setObject:receivedAt forKey:@"dateOpened"];
+        [rr saveInBackground];
+    }
+    
+    
+    NSString *gotAtString = [df stringFromDate:receivedAt];
+    receivedDate.text = [NSString stringWithFormat: @"Read at: %@", gotAtString];
     receivedDate.font = [UIFont systemFontOfSize:dateFontSize];
+
     
 	NSString *username = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
 	UILabel *nameLabel = (UILabel*) [cell.contentView viewWithTag:cellNameLabelTag];
 	nameLabel.text = username;
 	nameLabel.font = [UIFont systemFontOfSize:nameFontSize];
 	nameLabel.backgroundColor = [UIColor clearColor];
-	if (cellIsRight) {
-		nameLabel.textColor = [UIColor colorWithRed:175.0f/255.0f green:172.0f/255.0f blue:172.0f/255.0f alpha:1.0f];
-		nameLabel.shadowColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.35f];
-		nameLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
-	} else {
-		nameLabel.textColor = [UIColor blackColor];
-		nameLabel.shadowColor = [UIColor colorWithRed:0.9f green:0.9f blue:0.9f alpha:0.35f];
-		nameLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
-	}
+    nameLabel.textColor = [UIColor blackColor];
+    nameLabel.shadowColor = [UIColor colorWithRed:0.9f green:0.9f blue:0.9f alpha:0.35f];
+    nameLabel.shadowOffset = CGSizeMake(0.0f, 0.5f);
 	
 	UIImageView *backgroundImage = (UIImageView*) [cell.contentView viewWithTag:cellBackgroundTag];
 	
@@ -450,7 +477,6 @@ static NSInteger cellAttachedMediaTag = 9;
     
     
     
-	
 	CGFloat cellHeight = [self tableView:tableView heightForRowAtIndexPath:indexPath] + cellTextPaddingTop ; // Get the height of the cell
 	
 	// Place the content in the correct position depending on the type
@@ -575,6 +601,34 @@ static NSInteger cellAttachedMediaTag = 9;
     
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+//-(IBAction)btnInfoTapped:(id)sender{
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    [UIView beginAnimations:nil context:context];
+//    [UIView setAnimationTransition: UIViewAnimationTransitionFlipFromLeft forView:viewMain cache:YES];
+//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationDuration:1.0];
+//    [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(hideMainView) userInfo:nil repeats:NO];
+//    [UIView commitAnimations];
+//}
+//-(void)hideMainView{
+//    [viewMain addSubview:viewInfo];
+//}
+//
+//-(IBAction)btnBack:(id)sender{
+//    CGContextRef context = UIGraphicsGetCurrentContext();
+//    [UIView beginAnimations:nil context:context];
+//    [UIView setAnimationTransition: UIViewAnimationTransitionFlipFromRight forView:viewMain cache:YES];
+//    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+//    [UIView setAnimationDuration:1.0];
+//    [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(hideInfoView) userInfo:nil repeats:NO];
+//    [UIView commitAnimations];
+//}
+//
+//-(void)hideInfoView {
+//    [viewInfo removeFromSuperview];
+//}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	// Account for the load more cell at the bottom of the tableview if we hit the pagination limit:

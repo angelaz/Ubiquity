@@ -42,16 +42,6 @@
 @implementation HomeMapViewController
 @synthesize gs;
 
-- (void)viewDidAppear:(BOOL)animated
-{
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    if ([delegate firstLaunch]) {
-        TutorialViewController *tutorial = [[TutorialViewController alloc] init];
-        tutorial.delegate = self;
-        self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
-        [self presentViewController:tutorial animated:YES completion:nil];
-     }
-}
 
 - (void)viewDidLoad
 {
@@ -386,6 +376,16 @@
 }
 - (void)launchPostsView
 {
+<<<<<<< HEAD
+    if(_wpvc == nil) {
+        _wpvc = [[WallPostsViewController alloc] init];
+        _wallPostsNavController = [[UINavigationController alloc]
+                                                      initWithRootViewController:_wpvc];
+    }
+    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
+=======
+>>>>>>> a59d2c023497c46b167d044e003079b7457ddd1c
     LocationController *locController = [LocationController sharedLocationController];
     if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"

@@ -52,35 +52,45 @@
     [[self navigationItem] setRightBarButtonItem:doneButton];
     
     
+    [_nv.leftArrow addTarget:self action:@selector(swipeController:) forControlEvents:UIControlEventTouchUpInside];
+    [_nv.rightArrow addTarget:self action:@selector(swipeController:) forControlEvents:UIControlEventTouchUpInside];
+
+    
     currentNote = 0;
-    swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    swipeLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeController:)];
     [swipeLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
     [self.view addGestureRecognizer:swipeLeft];
     
-    swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(nextTab:)];
+    swipeRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeController:)];
     [swipeRight setDirection:UISwipeGestureRecognizerDirectionRight];
     [self.view addGestureRecognizer:swipeRight];
     
     _trackKeys = [[NSMutableArray alloc] init];
     
     [self loadNotesText: currentNote];
-    
-    
-    
+
     
     
 }
 
-- (void)nextTab:(id)sender
+
+- (void) swipeController: (id) sender
 {
-    if (sender == swipeLeft && (currentNote + 1) < self.notes.count)
-    {
+    if (sender == swipeLeft || sender == _nv.rightArrow)
         swipedLeft = true;
+    else if (sender == swipeRight || sender ==_nv.leftArrow)
+        swipedLeft = false;
+    [self nextTab];
+}
+
+- (void) nextTab
+{
+    if (swipedLeft && (currentNote + 1) < self.notes.count)
+    {
         currentNote++;
     }
-    else if (sender == swipeRight && currentNote > 0)
+    else if (!swipedLeft && currentNote > 0)
     {
-        swipedLeft = false;
         currentNote --;
     } else {
         return;
@@ -163,6 +173,7 @@
     {
         CGRect newFrame = _nv.messageTextView.frame;
         newFrame.size.height = textSize.height;
+        
         _nv.messageTextView.frame = newFrame;
     }
     _nv.messageTextView.text = [self.notes[i] objectForKey:@"text"];
@@ -178,9 +189,11 @@
 
 - (void) loadDates: (int) i
 {
-    NSDate *date = [self.notes[i] createdAt];
+    // PROBLEM: showing up as (null) because createdAt field is not included in parse query return. How to work around? Will come back to this later.
+    PFObject *object = self.notes[i];
+    NSDate *date = object.createdAt;
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setDateFormat:@"hh:mm a 'on' dd MMM yyyy"];
+    [df setDateFormat:@"h:mm a 'on' dd MMM yyyy"];
     NSString *sentAtString = [df stringFromDate:date];
     _nv.sentLabel.text = [NSString stringWithFormat: @"Sent at: %@", sentAtString];
     
@@ -213,6 +226,7 @@
     if (_trackKey)
     {
         [_nv addSubview:_nv.musicButton];
+        [ _nv.musicButton setImage: [UIImage imageNamed:@"musicNote"] forState:UIControlStateNormal];
         [_nv.musicButton addTarget:self action:@selector(playMusic) forControlEvents:UIControlEventTouchUpInside];
     }
     
