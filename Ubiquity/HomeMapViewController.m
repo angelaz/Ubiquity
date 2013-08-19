@@ -41,6 +41,16 @@
 @implementation HomeMapViewController
 @synthesize gs;
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    if ([delegate firstLaunch]) {
+        TutorialViewController *tutorial = [[TutorialViewController alloc] init];
+        tutorial.delegate = self;
+        self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        [self presentViewController:tutorial animated:YES completion:nil];
+     }
+}
 
 - (void)viewDidLoad
 {

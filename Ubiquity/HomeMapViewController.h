@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <GoogleMaps/GoogleMaps.h>
+#import <QuartzCore/QuartzCore.h>
 #import "Geocoding.h"
+#import "TutorialViewController.h"
 
-@interface HomeMapViewController : UIViewController <CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate>
+@interface HomeMapViewController : UIViewController <CLLocationManagerDelegate, UIGestureRecognizerDelegate, GMSMapViewDelegate, UINavigationControllerDelegate, UITextFieldDelegate, TutorialViewControllerDelegate>
 
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UIButton *optionsButton;

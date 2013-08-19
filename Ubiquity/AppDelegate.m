@@ -80,6 +80,19 @@ static AppDelegate *launchedDelegate;
         [self presentLoginViewController];
     }
     
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
+    {
+        NSLog(@"app has already launched once");
+        self.firstLaunch = NO;
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        self.firstLaunch = YES;
+        // This is the first launch ever
+    }
+    
     return YES;
 }
 

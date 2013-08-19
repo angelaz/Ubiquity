@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		20577B4D17C2A2C000201107 /* ArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 20577B4C17C2A2C000201107 /* ArrowView.m */; };
 		20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 20B9181717BC375600CC33C2 /* Default-568h@2x.png */; };
+		20CE06C317C2C6E800036600 /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CE06C217C2C6E800036600 /* TutorialViewController.m */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
@@ -125,7 +127,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		20577B4B17C2A2C000201107 /* ArrowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrowView.h; sourceTree = "<group>"; };
+		20577B4C17C2A2C000201107 /* ArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowView.m; sourceTree = "<group>"; };
 		20B9181717BC375600CC33C2 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		20CE06C117C2C6E800036600 /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialViewController.h; path = ../TutorialViewController.h; sourceTree = "<group>"; };
+		20CE06C217C2C6E800036600 /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TutorialViewController.m; path = ../TutorialViewController.m; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
 		20F8F2A817A1F0F600594994 /* WallPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostsViewController.m; sourceTree = "<group>"; };
 		20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -377,6 +383,10 @@
 				8254637417B953BE00019C24 /* LoginView.h */,
 				864C054517B5BF79000B5A52 /* HomeMapViewController.h */,
 				864C054617B5BF79000B5A52 /* HomeMapViewController.m */,
+				20CE06C117C2C6E800036600 /* TutorialViewController.h */,
+				20CE06C217C2C6E800036600 /* TutorialViewController.m */,
+				20577B4B17C2A2C000201107 /* ArrowView.h */,
+				20577B4C17C2A2C000201107 /* ArrowView.m */,
 				864C054817B5BF99000B5A52 /* HomeMapView.h */,
 				864C054917B5BF99000B5A52 /* HomeMapView.m */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
@@ -644,9 +654,11 @@
 				6097BEDA17A6DC650012A36A /* LocationController.m in Sources */,
 				86D1F44317BA9D31003B7FED /* NoteView.m in Sources */,
 				86894B6217A0A72800F7146B /* TextMessage.m in Sources */,
+				20577B4D17C2A2C000201107 /* ArrowView.m in Sources */,
 				82E931BA17A07A8800B3958B /* LoginViewController.m in Sources */,
 				86D1F44817BAB2B5003B7FED /* NoteViewController.m in Sources */,
 				20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */,
+				20CE06C317C2C6E800036600 /* TutorialViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
