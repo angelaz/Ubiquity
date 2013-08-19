@@ -379,15 +379,6 @@
 }
 - (void)launchPostsView
 {
-    
-    
-    if(_wpvc == nil) {
-        _wpvc = [[WallPostsViewController alloc] init];
-        _wallPostsNavController = [[UINavigationController alloc]
-                                                      initWithRootViewController:_wpvc];
-    }
-    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
     LocationController *locController = [LocationController sharedLocationController];
     if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"
@@ -397,7 +388,17 @@
                                                 otherButtonTitles:nil];
         [message show];
     }
-}
+
+    
+    if(_wpvc == nil) {
+        _wpvc = [[WallPostsViewController alloc] init];
+        _wallPostsNavController = [[UINavigationController alloc]
+                                                      initWithRootViewController:_wpvc];
+    }
+    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
+    
+    }
 
 - (void)launchNewMessage
 {
