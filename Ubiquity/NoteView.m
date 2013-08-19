@@ -184,7 +184,7 @@ static CGFloat const kMessageFontSize = 11.f;
 {
     CGFloat iconDimensions = 35.0;
     self.musicButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *musicButtonImage = [UIImage imageNamed:@"musicNote.png"];
+    UIImage *musicButtonImage = [UIImage imageNamed:@"musicNote"];
     [self.musicButton setBackgroundImage:musicButtonImage forState:UIControlStateNormal];
     int width = WIDEST_POINT;
     int innerFrameLeftMargin = w/2 - width/2;

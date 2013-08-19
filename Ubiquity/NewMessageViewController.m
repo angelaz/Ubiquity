@@ -77,6 +77,7 @@ int const PUBLIC = 2;
 {
     [super viewDidLoad];
     
+    
     _nmv = [[NewMessageView alloc] initWithFrame: [UIScreen mainScreen].bounds];
     [self setView: _nmv];
     
@@ -108,6 +109,7 @@ int const PUBLIC = 2;
 
 
     [_nmv.musicButton addTarget:self action:@selector(launchMusicSearch) forControlEvents:UIControlEventTouchUpInside];
+    
     
 }
 
@@ -262,6 +264,17 @@ int const PUBLIC = 2;
     // Get the post's message
     NSString *postMessage = _nmv.messageTextView.text;
     
+    if ([postMessage isEqualToString: @""])
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Blank Note :("
+                                                        message:@"Remember to type something before you send!"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"OK"
+                                              otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
     [_nmv.messageTextView setText: @""];
     
     //Get the currently logged in PFUser
@@ -292,6 +305,7 @@ int const PUBLIC = 2;
     song = @"";
     
     NSMutableArray *readReceiptsArray = [[NSMutableArray alloc] initWithCapacity:countNumber+1];
+    NSString *myUsername = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
     
     [postObject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [self sendInvitesViaFacebook:recipientsList atAddress:_nmv.addressTitle.text];
@@ -305,10 +319,10 @@ int const PUBLIC = 2;
                                        toObject:postObject
                                      finalBlock:^(PFObject *made){}];
             
-            NSString *username = [NSString stringWithFormat:@"%@", [[PFUser currentUser] objectForKey:@"fbId"]];
             PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
             //[readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
-            [readReceiptsObject setObject:username forKey:@"receiver"];
+            [readReceiptsObject setObject:myUsername forKey:@"receiver"];
+            [readReceiptsObject setObject:myUsername forKey:@"sender"];
             [readReceiptsArray addObject:readReceiptsObject];
    
         } else if (recipient == FRIENDS) {
@@ -326,6 +340,7 @@ int const PUBLIC = 2;
                 PFObject *readReceiptsObject = [PFObject objectWithClassName:@"ReadReceipts"];
                // [readReceiptsObject setObject:[NSNull null] forKey:@"dateOpened"];
                 [readReceiptsObject setObject:username forKey:@"receiver"];
+                [readReceiptsObject setObject:myUsername forKey:@"sender"];
                 [readReceiptsArray addObject:readReceiptsObject];
 
             }
