@@ -99,7 +99,7 @@
             if (!idleMethodBeingCalled)
             {
                 idleMethodBeingCalled = true;
-                double newRange = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
+                double newRange = 77.4795 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
                 NSLog(@"%f new range", newRange);
                 [self getParseQuery: self.segmentedControl.selectedSegmentIndex withRange: newRange];
                 
