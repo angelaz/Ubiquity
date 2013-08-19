@@ -57,6 +57,7 @@ static int const numResults = 5;
     
     CGRect appFrame = [UIScreen mainScreen].applicationFrame;
     int w = appFrame.size.width;
+    
     int h = appFrame.size.height;
     UIView *view = [[UIView alloc] initWithFrame:appFrame];
     [view setBackgroundColor:[UIColor clearColor]];

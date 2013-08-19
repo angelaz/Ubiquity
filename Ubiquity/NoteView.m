@@ -90,10 +90,15 @@ static CGFloat const kMessageFontSize = 11.f;
     self.pagingLabel.font = [UIFont systemFontOfSize: kSentLabelFontSize];
     [self addSubview:self.pagingLabel];
     
-    self.leftArrow = [[UIImageView alloc] initWithFrame: CGRectMake(innerFrameLeftMargin + LEFT_PADDING*1.2, innerFrameTopMargin + 7, 15, 15)];
-    [self.leftArrow setImage: [UIImage imageNamed:@"leftarrow"]];
-    self.rightArrow = [[UIImageView alloc] initWithFrame: CGRectMake(innerFrameLeftMargin + width - LEFT_PADDING * 1.5, innerFrameTopMargin + 7, 15, 15)];
-    [self.rightArrow setImage: [UIImage imageNamed:@"rightarrow"]];
+    self.leftArrow = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.leftArrow.frame = CGRectMake(innerFrameLeftMargin + LEFT_PADDING*1.2, innerFrameTopMargin + 7, 15, 15);
+    [self.leftArrow setBackgroundImage: [UIImage imageNamed:@"leftarrow"] forState: UIControlStateNormal];
+    [self addSubview: self.leftArrow];
+
+    
+    self.rightArrow = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.rightArrow.frame = CGRectMake(innerFrameLeftMargin + width - LEFT_PADDING * 1.5, innerFrameTopMargin + 7, 15, 15);
+    [self.rightArrow setBackgroundImage: [UIImage imageNamed:@"rightarrow"] forState: UIControlStateNormal];
     [self addSubview: self.rightArrow];
 
 }
