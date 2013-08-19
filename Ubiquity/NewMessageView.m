@@ -47,6 +47,7 @@ int const LINE_HEIGHT = 30;
         [self createMessageWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
         [self createToLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self createScrollViewWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         [self createRecipientLabelWithWidth: SCREEN_WIDTH andHeight: SCREEN_HEIGHT];
         [self createFromLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         [self createSentLabelWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
@@ -55,7 +56,6 @@ int const LINE_HEIGHT = 30;
         [self createMusicButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         [self createAddFriendsButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
-        [self createScrollViewWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
  
     }
     return self;
@@ -105,12 +105,15 @@ int const LINE_HEIGHT = 30;
 {
     int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 40;
     int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75;
-    self.recipientLabel = [[UILabel alloc] initWithFrame: CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, w * 5/11, 30)];
-    self.recipientLabel.text = @"Note for Myself";
-    self.recipientLabel.textAlignment = NSTextAlignmentCenter;
-    self.recipientLabel.font = [UIFont systemFontOfSize: kFromFontSize];
-    self.recipientLabel.textColor = mainThemeColor;
-    [self addSubview: self.recipientLabel];
+    self.recipientButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIColor *color = mainThemeColor;
+    self.recipientButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, w * 5/11, 30);
+    [self.recipientButton setTitle:@"For Myself" forState: UIControlStateNormal];
+    self.recipientButton.titleLabel.font = [UIFont systemFontOfSize: kFromFontSize];
+    [self.recipientButton setTitleColor:color forState:UIControlStateNormal];
+    [self.recipientButton setContentMode:UIViewContentModeCenter];
+    [self.recipientButton setClipsToBounds: NO];
+    [self addSubview: self.recipientButton];
 }
 
 

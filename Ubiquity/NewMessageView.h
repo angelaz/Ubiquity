@@ -23,7 +23,7 @@ extern int const LINE_HEIGHT;
 @property (strong, nonatomic) NSString *searchText;
 
 
-@property (nonatomic, strong) UILabel *recipientLabel;
+@property (nonatomic, strong) UIButton *recipientButton;
 @property (nonatomic, strong) UIButton *toButton;
 @property (nonatomic, strong) UILabel *fromLabel;
 @property (nonatomic, strong) UILabel *sentLabel;
