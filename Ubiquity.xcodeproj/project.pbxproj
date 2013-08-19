@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 20B9181717BC375600CC33C2 /* Default-568h@2x.png */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
@@ -40,11 +39,11 @@
 		82148F3217AADD140066C69A /* Geocoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 82148F3117AADD140066C69A /* Geocoding.m */; };
 		827C7A2917BAE44E000253DF /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8624CD2017A2E99800F32DE8 /* StoreKit.framework */; };
 		827CFE7717BD6A69003ED5AB /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 827CFE7617BD6A69003ED5AB /* MediaPlayer.framework */; };
-		82893E8917C2D24F000F5D56 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 82893E8817C2D24F000F5D56 /* Reachability.m */; };
 		829ED75F17B3135A006AD7D5 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 829ED75E17B3135A006AD7D5 /* camera.png */; };
 		82AA117C17BADC5F00D570DC /* Rdio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117B17BADC5F00D570DC /* Rdio.framework */; };
 		82AA117E17BADC7A00D570DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117D17BADC7A00D570DC /* AudioToolbox.framework */; };
 		82AA118017BADC8800D570DC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117F17BADC8800D570DC /* Security.framework */; };
+		82B9052A17C2E0A400E75BAF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 82B9052917C2E0A400E75BAF /* Reachability.m */; };
 		82CA7C3217BC37DA00F00008 /* musicNote.png in Resources */ = {isa = PBXBuildFile; fileRef = 82CA7C2F17BC37DA00F00008 /* musicNote.png */; };
 		82CA7C3317BC37DA00F00008 /* AddMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */; };
 		82E9316917A079C600B3958B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316817A079C600B3958B /* Foundation.framework */; };
@@ -172,12 +171,12 @@
 		8249ED8B17B9533200541598 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		8254637417B953BE00019C24 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
 		827CFE7617BD6A69003ED5AB /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		82893E8717C2D24F000F5D56 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
-		82893E8817C2D24F000F5D56 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		829ED75E17B3135A006AD7D5 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		82AA117B17BADC5F00D570DC /* Rdio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Rdio.framework; sourceTree = "<group>"; };
 		82AA117D17BADC7A00D570DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		82AA117F17BADC8800D570DC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		82B9052817C2E0A400E75BAF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		82B9052917C2E0A400E75BAF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		82CA7C2F17BC37DA00F00008 /* musicNote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicNote.png; sourceTree = "<group>"; };
 		82CA7C3017BC37DA00F00008 /* AddMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMusicViewController.h; sourceTree = "<group>"; };
 		82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMusicViewController.m; sourceTree = "<group>"; };
@@ -391,6 +390,8 @@
 			isa = PBXGroup;
 			children = (
 				60F4439817C28B7600C86E7E /* Libraries */,
+				82B9052817C2E0A400E75BAF /* Reachability.h */,
+				82B9052917C2E0A400E75BAF /* Reachability.m */,
 				82CA7C3017BC37DA00F00008 /* AddMusicViewController.h */,
 				82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
@@ -673,6 +674,7 @@
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,
 				82148F3217AADD140066C69A /* Geocoding.m in Sources */,
 				864C054717B5BF79000B5A52 /* HomeMapViewController.m in Sources */,
+				82B9052A17C2E0A400E75BAF /* Reachability.m in Sources */,
 				864C054A17B5BF99000B5A52 /* HomeMapView.m in Sources */,
 				6097BEDA17A6DC650012A36A /* LocationController.m in Sources */,
 				86D1F44317BA9D31003B7FED /* NoteView.m in Sources */,
