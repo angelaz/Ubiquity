@@ -130,6 +130,15 @@ static NSInteger cellAttachedMediaTag = 9;
 - (void)launchMapView
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+    LocationController *locController = [LocationController sharedLocationController];
+    if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"
+                                                          message:@"Please go to Settings -> Privacy -> Location Services to turn it on."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+    }
 }
 
 - (void)launchNewMessage

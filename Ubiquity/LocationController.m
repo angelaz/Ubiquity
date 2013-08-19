@@ -115,12 +115,6 @@
     }
 }
 
-//Example block
-
-- (void)moveMarkerToGeocode:(Geocoding*)gs then:(void(^)(void)) block {
-    
-}
-
 - (void) moveMarkerToLocation:(CLLocationCoordinate2D)newCoordinate
 {
     
