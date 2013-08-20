@@ -427,47 +427,13 @@ static NSInteger cellAttachedMediaTag = 8;
     sentDate.font = [UIFont systemFontOfSize:dateFontSize];
     
     UILabel *receivedDate = (UILabel *) [cell.contentView viewWithTag:cellReceivedDateLabelTag];
-    NSString *facebookId = [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"];
-    NSArray *rrArray = [object objectForKey:@"readReceiptsArray"];
     
-    PFObject *rr = nil;
-    NSDate *receivedAt = nil;
-    
-    for(PFObject *r in rrArray) {
-        if([[r objectForKey:@"receiver"] isEqualToString:facebookId]) {
-            NSLog(@"%@", r);
-            receivedAt = [r objectForKey:@"dateOpened"];
-            rr = r;
-        }
-    }
+    PFObject *receipt = [AppDelegate postReceipt:object];
+    NSDate *receivedAt = [receipt objectForKey:@"dateOpened"];
     
     if(receivedAt == nil) {
         receivedAt = [NSDate date];
-        [rr setObject:receivedAt forKey:@"dateOpened"];
-        [rr saveInBackground];
-        
-        if([rr objectForKey:@"sender"] != nil) {
-            
-            NSString *myFacebookId = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
-            
-            if(![[rr objectForKey:@"sender"] isEqualToString:myFacebookId]) {
-                PFQuery *userDataFromSenderId = [PFQuery queryWithClassName:@"UserData"];
-                [userDataFromSenderId whereKey:@"facebookId" equalTo:[rr objectForKey:@"sender"]];
-                
-                PFQuery *userFromUserData = [PFQuery queryWithClassName:@"_User"];
-                [userDataFromSenderId whereKey:@"userData" matchesQuery:userDataFromSenderId];
-                
-                // Create our Installation query
-                PFQuery *pushToUser = [PFInstallation query];
-                [pushToUser whereKey:@"owner" matchesQuery:userFromUserData];
-                
-                NSString *myName = [NSString stringWithFormat:@"%@",[[object objectForKey:kPAWParseSenderKey] objectForKey:@"profile"][@"name"]];
-                NSString *pushMessage = [NSString stringWithFormat:@"%@ opened a message from you! Please tell her this test worked", myName];
-                
-                [PFPush sendPushMessageToQueryInBackground:pushToUser
-                                               withMessage:pushMessage];
-            }
-        }
+        [AppDelegate openPostForFirstTime:object withReceipt:receipt atDate:receivedAt];
     }
     
     

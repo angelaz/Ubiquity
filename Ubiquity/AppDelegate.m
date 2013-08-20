@@ -228,5 +228,51 @@ static AppDelegate *launchedDelegate;
     
 }
 
++ (void) openPostForFirstTime:(PFObject *)post withReceipt:(PFObject *) receipt atDate:(NSDate *)date{
+    
+    [receipt setObject:date forKey:@"dateOpened"];
+    //[receipt saveInBackground];
+    
+    if([receipt objectForKey:@"sender"] != nil) {
+        
+        NSString *myFacebookId = [NSString stringWithFormat:@"%@",[[post objectForKey:@"sender"] objectForKey:@"facebookId"]];
+        NSLog(@"The sender: %@", [receipt objectForKey:@"sender"]);
+    
+        if(![[receipt objectForKey:@"sender"] isEqualToString:myFacebookId]) {
+            PFQuery *userDataFromSenderId = [PFQuery queryWithClassName:@"UserData"];
+            [userDataFromSenderId whereKey:@"facebookId" equalTo:[receipt objectForKey:@"sender"]];
+            [userDataFromSenderId includeKey:@"userData"];
+        
+            PFQuery *userFromUserData = [PFQuery queryWithClassName:@"_User"];
+            [userFromUserData whereKey:@"userData" matchesQuery:userDataFromSenderId];
+        
+            // Create our Installation query
+            PFQuery *pushToUser = [PFInstallation query];
+            [pushToUser whereKey:@"owner" matchesQuery:userFromUserData];
+        
+            NSString *myName = [NSString stringWithFormat:@"%@",[[post objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+            NSString *pushMessage = [NSString stringWithFormat:@"%@ tell me dis", myName];
+            
+            [PFPush sendPushMessageToQueryInBackground:pushToUser
+            withMessage:pushMessage];
+        }
+    }
+
+}
+
++ (PFObject *) postReceipt:(PFObject *)post {
+    
+    NSString *facebookId = [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"];
+    NSArray *rrArray = [post objectForKey:@"readReceiptsArray"];
+    
+    for(PFObject *r in rrArray) {
+        if([[r objectForKey:@"receiver"] isEqualToString:facebookId]) {
+            NSLog(@"%@", r);
+            return r;
+        }
+    }
+
+    return nil;
+}
 
 @end
