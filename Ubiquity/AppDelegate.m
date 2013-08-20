@@ -318,7 +318,7 @@ static AppDelegate *launchedDelegate;
     return nil;
 }
 
-+ (void) getParseQuery: (int)type  withRange: (double) range {
++ (void) makeParseQuery: (int)type  withRange: (double) range {
     
     PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
     
@@ -344,8 +344,6 @@ static AppDelegate *launchedDelegate;
             // The find succeeded.
             NSLog(@"Successfully retrieved %d posts.", objects.count);
             // Do something with the found objects
-            
-            
             
             for (PFObject *object in objects) {
                 if (type < TYPE_PUBLIC)
@@ -380,5 +378,47 @@ static AppDelegate *launchedDelegate;
     
 }
 
++ (PFQuery *) getQueryForType:(NSInteger)type {
+    
+	PFQuery *query = [PFQuery queryWithClassName:kPAWParsePostsClassKey];
+    
+    NSLog(@"querying for table called");
+	// If no objects are loaded in memory, we look to the cache first to fill the table
+	// and then subsequently do a query against the network.
+	//if ([self.objects count] == 0) {
+		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+	//}
+    
+	// Query for posts near our current location.
+    
+	// Get our current location:
+	LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
+    
+	// And set the query to look by location
+	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"readReceiptsArray"];
+    [query orderByDescending:@"createdAt"];
+    
+    if (type == TYPE_SELF) {
+        NSLog(@"Only shows notes from self");
+        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (type == TYPE_FRIENDS) {
+        NSLog(@"Shows notes from friends");
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"sender" notEqualTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (type == TYPE_PUBLIC) {
+        NSLog(@"Shows public notes");
+        [query whereKey:@"receivers" equalTo:[AppDelegate publicUser]];
+    }
+    
+	return query;
+
+}
 
 @end

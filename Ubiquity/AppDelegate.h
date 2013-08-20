@@ -96,7 +96,9 @@ static NSInteger * const TYPE_PUBLIC = 2;
 + (Rdio *)rdioInstance;
 + (PFObject *) publicUser;
 
-+ (void) getParseQuery:(int)type withRange: (double) range;
++ (void) makeParseQuery:(int)type withRange: (double) range;
+
++ (PFQuery *) getQueryForType:(NSInteger)type;
 
 + (NSMutableArray *)postsBySelf;
 + (NSMutableArray *)postsByFriends;
