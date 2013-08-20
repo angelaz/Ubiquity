@@ -44,4 +44,6 @@
 
 - (void) moveMarkerToLocation:(CLLocationCoordinate2D)newCoordinate;
 
+- (void) sendForegroundLocationToServerForPushNotifications:(CLLocation *)location;
+
 @end

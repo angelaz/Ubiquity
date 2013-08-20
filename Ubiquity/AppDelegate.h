@@ -42,6 +42,7 @@ static NSString * const kPAWLocationChangeNotification = @"kPAWLocationChangeNot
 static NSString * const kPAWPostCreatedNotification = @"kPAWPostCreatedNotification";
 static NSString * const KPAWInitialLocationFound = @"kPAWInitialLocationFound";
 static NSString * const kPAWCameraZoomChangeNotification = @"kPAWCameraZoomChangeNotification";
+static NSString * const kPAWPostsUpdated = @"kPAWPostsUpdatedNotification";
 
 
 // UI strings:
@@ -54,6 +55,9 @@ static NSString * const kNMDaily = @"Every Day";
 static NSString * const kNMWeekly = @"Every Week";
 static NSString * const kNMMonthy = @"Every Month";
 
+static NSInteger * const TYPE_SELF = 0;
+static NSInteger * const TYPE_FRIENDS = 1;
+static NSInteger * const TYPE_PUBLIC = 2;
 
 
 
@@ -71,6 +75,11 @@ static NSString * const kNMMonthy = @"Every Month";
 @property (nonatomic, strong) UINavigationController *navigationController;
 @property (readonly) Rdio *rdio;
 @property (nonatomic) BOOL firstLaunch;
+@property (nonatomic, strong) PFObject *publicUserObject;
+
+@property (nonatomic, strong) NSMutableArray *selfArray;
+@property (nonatomic, strong) NSMutableArray *friendsArray;
+@property (nonatomic, strong) NSMutableArray *publicArray;
 
 - (void)presentLoginViewController;
 
@@ -86,4 +95,16 @@ static NSString * const kNMMonthy = @"Every Month";
 + (PFObject *) postReceipt:(PFObject *)post;
 
 + (Rdio *)rdioInstance;
++ (PFObject *) publicUser;
+
++ (void) makeParseQuery: (int)type;
+
++ (PFQuery *) queryForType:(NSInteger)type;
+
++ (void) storeObjects:(NSArray *)objects ofType:(NSInteger) type;
+
++ (NSMutableArray *)postsBySelf;
++ (NSMutableArray *)postsByFriends;
++ (NSMutableArray *)postsByPublic;
+
 @end
