@@ -30,6 +30,21 @@ static AppDelegate *launchedDelegate;
     return launchedDelegate.rdio;
 }
 
++ (NSMutableArray *)postsByPublic
+{
+    return launchedDelegate.publicArray;
+}
+
++ (NSMutableArray *)postsByFriends
+{
+    return launchedDelegate.friendsArray;
+}
+
++ (NSMutableArray *)postsBySelf
+{
+    return launchedDelegate.selfArray;
+}
+
 + (PFObject *)publicUser
 {
     return launchedDelegate.publicUserObject;
@@ -56,6 +71,10 @@ static AppDelegate *launchedDelegate;
     //Rdio
     launchedDelegate = self;
     rdio = [[Rdio alloc] initWithConsumerKey:@"5zk8jxx8g6kj2yyttbmdvqkt" andSecret:@"fPYZqmPDPG" delegate:nil];
+    
+    launchedDelegate.selfArray = [[NSMutableArray alloc] init];
+    launchedDelegate.friendsArray = [[NSMutableArray alloc] init];
+    launchedDelegate.publicArray = [[NSMutableArray alloc] init];
     
     PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
     [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
@@ -298,5 +317,68 @@ static AppDelegate *launchedDelegate;
 
     return nil;
 }
+
++ (void) getParseQuery: (int)type  withRange: (double) range {
+    
+    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
+    
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = 1000.0f;
+    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"userData"];
+    
+    
+    if (type < TYPE_PUBLIC) {
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else {
+        [query whereKey:@"receivers" equalTo:[AppDelegate publicUser]];
+    }
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            
+            // The find succeeded.
+            NSLog(@"Successfully retrieved %d posts.", objects.count);
+            // Do something with the found objects
+            
+            
+            
+            for (PFObject *object in objects) {
+                if (type < TYPE_PUBLIC)
+                {
+                    BOOL selfie = ([[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
+                    
+                    BOOL friendPost = (![[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
+                    
+                    if (selfie) {
+                        [[self postsBySelf] addObject:object];
+                    } else if (friendPost) {
+                        [[self postsByFriends] addObject:object];
+                        
+                    }
+                }
+                else
+                {
+                    [[self postsByPublic] addObject:object];
+                }
+                
+                
+            }
+            
+        } else {
+            NSLog(@"Error in loading self and friends map posts: %@", error);
+        }
+        
+        LocationController *locationController = [LocationController sharedLocationController];
+        [locationController updateLocation:locationController.location.coordinate];
+        
+    }];
+    
+}
+
 
 @end

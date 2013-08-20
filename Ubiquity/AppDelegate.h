@@ -54,6 +54,9 @@ static NSString * const kNMDaily = @"Every Day";
 static NSString * const kNMWeekly = @"Every Week";
 static NSString * const kNMMonthy = @"Every Month";
 
+static NSInteger * const TYPE_SELF = 0;
+static NSInteger * const TYPE_FRIENDS = 1;
+static NSInteger * const TYPE_PUBLIC = 2;
 
 
 
@@ -73,6 +76,10 @@ static NSString * const kNMMonthy = @"Every Month";
 @property (nonatomic) BOOL firstLaunch;
 @property (nonatomic, strong) PFObject *publicUserObject;
 
+@property (nonatomic, strong) NSMutableArray *selfArray;
+@property (nonatomic, strong) NSMutableArray *friendsArray;
+@property (nonatomic, strong) NSMutableArray *publicArray;
+
 - (void)presentLoginViewController;
 
 + (void) linkOrStoreUserDetails:(NSObject *)userData
@@ -88,5 +95,11 @@ static NSString * const kNMMonthy = @"Every Month";
 
 + (Rdio *)rdioInstance;
 + (PFObject *) publicUser;
+
++ (void) getParseQuery:(int)type withRange: (double) range;
+
++ (NSMutableArray *)postsBySelf;
++ (NSMutableArray *)postsByFriends;
++ (NSMutableArray *)postsByPublic;
 
 @end

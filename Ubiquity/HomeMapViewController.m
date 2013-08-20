@@ -26,9 +26,6 @@
 {
     CGFloat zoomLevel;
     BOOL idleMethodBeingCalled; // async lock for background query method to prevent more than 1 query happening at once
-    NSMutableArray *selfArray;
-    NSMutableArray *friendsArray;
-    NSMutableArray *publicArray;
     
 }
 
@@ -119,7 +116,7 @@
                 idleMethodBeingCalled = true;
                 double newRange = 77.4795 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
                 NSLog(@"%f new range", newRange);
-                [self getParseQuery: self.segmentedControl.selectedSegmentIndex withRange: newRange];
+                [AppDelegate getParseQuery: self.segmentedControl.selectedSegmentIndex withRange: newRange];
                 
             }
         }
@@ -130,11 +127,16 @@
 - (void) loadPins: (int) i
 {
     if ([PFUser currentUser] != nil) {
-        
-        
-        
         double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
-        [self getParseQuery: i withRange: range];
+        [AppDelegate getParseQuery: i withRange: range];
+        
+        if (i == 0) {
+            [self deployParseQuery:[AppDelegate postsBySelf] withRange:range];
+        } else if (i == 1) {
+            [self deployParseQuery:[AppDelegate postsByFriends] withRange:range];
+        } else {
+            [self deployParseQuery:[AppDelegate postsByPublic] withRange:range];
+        }
         
         _hmv.map.delegate = self;
         _hmv.locationSearchTextField.delegate = self;
@@ -150,78 +152,6 @@
     
     [self readNote: marker];
     return YES;
-}
-
-- (void) getParseQuery: (int) i withRange: (double) r
-{
-    
-    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
-    
-    LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
-	CLLocationAccuracy filterDistance = 1000.0f;
-    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    [query includeKey:kPAWParseSenderKey];
-    [query includeKey:@"userData"];
-    
-    
-    if (i < 2) {
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    } else {
-        [query whereKey:@"receivers" equalTo:[AppDelegate publicUser]];
-    }
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            
-            // The find succeeded.
-            NSLog(@"Successfully retrieved %d posts.", objects.count);
-            // Do something with the found objects
-            
-            selfArray = [[NSMutableArray alloc] init];
-            friendsArray = [[NSMutableArray alloc] init];
-            publicArray = [[NSMutableArray alloc] init];
-            
-            for (PFObject *object in objects) {
-                if (i < 2)
-                {
-                    BOOL selfie = ([[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    BOOL friendPost = (![[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    if (selfie) {
-                        [selfArray addObject:object];
-                    } else if (friendPost) {
-                        [friendsArray addObject:object];
-                        
-                    }
-                }
-                else
-                {
-                    [publicArray addObject:object];
-                }
-                
-                
-            }
-            
-        } else {
-            NSLog(@"Error in loading self and friends map posts: %@", error);
-        }
-        
-        if (i == 0) {
-            [self deployParseQuery:selfArray withRange:r];
-        } else if (i == 1) {
-            [self deployParseQuery:friendsArray withRange:r];
-        } else {
-            [self deployParseQuery:publicArray withRange:r];
-        }
-        LocationController *locationController = [LocationController sharedLocationController];
-        [locationController updateLocation:locationController.location.coordinate];
-        
-    }];
-    
 }
 
 
