@@ -107,7 +107,7 @@
 
 - (void) refreshMap
 {
-    [self loadPins:self.segmentedControl.selectedSegmentIndex];
+    [self loadPins];
     LocationController* locationController = [LocationController sharedLocationController];
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude

@@ -389,6 +389,10 @@ static AppDelegate *launchedDelegate;
     [[NSNotificationCenter defaultCenter]
      postNotificationName: kPAWPostsUpdated
      object:self];
+    
+    LocationController *locationController = [LocationController sharedLocationController];
+    [locationController updateLocation:locationController.location.coordinate];
+
 }
 
 @end
