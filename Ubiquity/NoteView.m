@@ -162,7 +162,7 @@ static CGFloat const kMessageFontSize = 11.f;
     int innerFrameTopMargin = self.textScroll.frame.origin.y;
     int innerFrameLeftMargin = self.textScroll.frame.origin.x;
 
-    self.image = [[UIImageView alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, height)];
+    self.image = [[UIView alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, height)];
     self.image.backgroundColor = [UIColor clearColor];
 
 }
@@ -188,7 +188,7 @@ static CGFloat const kMessageFontSize = 11.f;
     [self.musicButton setBackgroundImage:musicButtonImage forState:UIControlStateNormal];
     int width = WIDEST_POINT;
     int innerFrameLeftMargin = w/2 - width/2;
-    int innerFrameTopMargin = h - TOP_PADDING * 9.6;
+    int innerFrameTopMargin = h - TOP_PADDING * 10.75;
     CGRect musicFrame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions, iconDimensions);
     [_musicButton setFrame:musicFrame];
     [self addSubview:self.musicButton];

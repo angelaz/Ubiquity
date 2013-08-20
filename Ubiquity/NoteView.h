@@ -20,7 +20,7 @@
 
 @property (nonatomic, strong) UILabel *pagingLabel;
 
-@property (nonatomic, strong) UIImageView *image;
+@property (nonatomic, strong) UIView *image;
 
 @property (nonatomic, strong) UILabel *messageTextView;
 @property (nonatomic, strong) UIScrollView *textScroll;

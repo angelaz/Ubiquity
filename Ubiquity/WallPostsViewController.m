@@ -54,7 +54,6 @@ static NSInteger cellAttachedMediaTag = 8;
     CGFloat additionalPhotoHeight;
     CGFloat additionalPhotoWidth;
     BOOL photoAttachmentExists;
-    PFObject *publicUserObj;
     RDPlayer* _player;
     BOOL _playing;
     BOOL _paused;
@@ -89,11 +88,7 @@ static NSInteger cellAttachedMediaTag = 8;
                                                  selector:@selector(loadObjects)
                                                      name:KPAWInitialLocationFound
                                                    object:nil];
-        PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
-        [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            publicUserObj = object;
-        }];
+
         _trackKeys = [[NSMutableArray alloc] init];
     }
     return self;
@@ -308,6 +303,8 @@ static NSInteger cellAttachedMediaTag = 8;
         NSLog(@"objectsDidLoad: Error: %@", error);
     }
     
+    [AppDelegate storeObjects:self.objects ofType:self.segmentedControl.selectedSegmentIndex];
+    
     // This method is called every time objects are loaded from Parse via the PFQuery
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];
@@ -323,45 +320,8 @@ static NSInteger cellAttachedMediaTag = 8;
 // Override to customize what kind of query to perform on the class. The default is  for
 // all objects ordered by createdAt descending.
 - (PFQuery *)queryForTable {
+    return [AppDelegate queryForType:self.segmentedControl.selectedSegmentIndex];
     
-	PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    
-    NSLog(@"querying for table called");
-	// If no objects are loaded in memory, we look to the cache first to fill the table
-	// and then subsequently do a query against the network.
-	if ([self.objects count] == 0) {
-		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-	}
-    
-	// Query for posts near our current location.
-    
-	// Get our current location:
-	LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
-	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
-    
-	// And set the query to look by location
-	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    [query includeKey:kPAWParseSenderKey];
-    [query includeKey:@"readReceiptsArray"];
-    [query orderByDescending:@"createdAt"];
-    
-    if (self.indexing == 0) {
-        NSLog(@"Only shows notes from self");
-        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    } else if (self.indexing == 1) {
-        NSLog(@"Shows notes from friends");
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-        [query whereKey:@"sender" notEqualTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    } else if (self.indexing == 2) {
-        NSLog(@"Shows public notes");
-        [query whereKey:@"receivers" equalTo:publicUserObj];
-    }
-    
-	return query;
 }
 
 // Override to customize the look of a cell representing an object. The default is to display

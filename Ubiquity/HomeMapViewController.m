@@ -14,6 +14,7 @@
 #import "OptionsViewController.h"
 #import "NoteViewController.h"
 #import "LocationController.h"
+#import "TutorialViewController.h"
 #import "GMSMarkerWithCount.h"
 #import <math.h>
 #import "Reachability.h"
@@ -25,10 +26,6 @@
 {
     CGFloat zoomLevel;
     BOOL idleMethodBeingCalled; // async lock for background query method to prevent more than 1 query happening at once
-    PFObject *publicUserObj;
-    NSMutableArray *selfArray;
-    NSMutableArray *friendsArray;
-    NSMutableArray *publicArray;
     
 }
 
@@ -51,6 +48,11 @@
         self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
         [self presentViewController:tutorial animated:YES completion:nil];
      }
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(displayPins)
+                                                 name:kPAWPostsUpdated
+                                               object:nil];
 }
 
 - (void)viewDidLoad
@@ -60,7 +62,7 @@
     _hmv.map.delegate = self;
     zoomLevel = _hmv.map.camera.zoom;
     self.objects = [[NSMutableArray alloc] init];
-    [self loadPins: self.segmentedControl.selectedSegmentIndex];
+    [self loadPins];
     
     _hmv.map.delegate = self;
     [_hmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
@@ -71,7 +73,7 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshPins)
+                                             selector:@selector(refreshMap)
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
     
@@ -100,7 +102,23 @@
 
 - (void) refreshPins
 {
-    [self loadPins:self.segmentedControl.selectedSegmentIndex];
+    [self loadPins];
+}
+
+- (void) refreshMap
+{
+    [self loadPins];
+    LocationController* locationController = [LocationController sharedLocationController];
+    [locationController updateLocation:locationController.location.coordinate];
+
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:_hmv.map.camera.zoom];
+    
+
+    _hmv.map.camera = camera;
+
 }
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
@@ -119,7 +137,7 @@
                 idleMethodBeingCalled = true;
                 double newRange = 77.4795 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
                 NSLog(@"%f new range", newRange);
-                [self getParseQuery: self.segmentedControl.selectedSegmentIndex withRange: newRange];
+                [AppDelegate makeParseQuery: self.segmentedControl.selectedSegmentIndex];
                 
             }
         }
@@ -127,15 +145,28 @@
 }
 
 
-- (void) loadPins: (int) i
+- (void) loadPins
 {
     if ([PFUser currentUser] != nil) {
+        int type = self.segmentedControl.selectedSegmentIndex;
         
-        double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
-        [self getParseQuery: i withRange: range];
+        [AppDelegate makeParseQuery: type];
         
         _hmv.map.delegate = self;
         _hmv.locationSearchTextField.delegate = self;
+    }
+}
+
+- (void) displayPins {
+    int type = self.segmentedControl.selectedSegmentIndex;
+    double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
+    
+    if (type == 0) {
+        [self displayParseQuery:[AppDelegate postsBySelf] withRange:range];
+    } else if (type == 1) {
+        [self displayParseQuery:[AppDelegate postsByFriends] withRange:range];
+    } else {
+        [self displayParseQuery:[AppDelegate postsByPublic] withRange:range];
     }
 }
 
@@ -150,75 +181,8 @@
     return YES;
 }
 
-- (void) getParseQuery: (int) i withRange: (double) r
-{
-    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
-    
-    LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
-	CLLocationAccuracy filterDistance = 1000.0f;
-    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    [query includeKey:kPAWParseSenderKey];
-    [query includeKey:@"userData"];
-    
-    if (i < 2) {
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    } else {
-        [query whereKey:@"receivers" equalTo:publicUserObj];
-    }
-    
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            // The find succeeded.
-            NSLog(@"Successfully retrieved %d posts.", objects.count);
-            // Do something with the found objects
-            
-            selfArray = [[NSMutableArray alloc] init];
-            friendsArray = [[NSMutableArray alloc] init];
-            publicArray = [[NSMutableArray alloc] init];
-            
-            for (PFObject *object in objects) {
-                if (i < 2)
-                {
-                    BOOL selfie = ([[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    BOOL friendPost = (![[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    if (selfie) {
-                        [selfArray addObject:object];
-                    } else if (friendPost) {
-                        [friendsArray addObject:object];
-                        
-                    }
-                }
-                else
-                {
-                    [publicArray addObject:object];
-                }
-                
-                
-            }
-        } else {
-            NSLog(@"Error in loading self and friends map posts: %@", error);
-        }
-        
-        if (i == 0) {
-            [self deployParseQuery:selfArray withRange:r];
-        } else if (i == 1) {
-            [self deployParseQuery:friendsArray withRange:r];
-        } else {
-            [self deployParseQuery:publicArray withRange:r];
-        }
-        LocationController *locationController = [LocationController sharedLocationController];
-        [locationController updateLocation:locationController.location.coordinate];
-    }];
-    
-}
 
-
-- (void) deployParseQuery: (NSMutableArray *) array withRange: (double) range
+- (void) displayParseQuery: (NSMutableArray *) array withRange: (double) range
 {
     [self.objects removeAllObjects];
     [_hmv.map clear];
@@ -239,7 +203,6 @@
             [notesForMarker removeAllObjects];
             CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
             marker = [GMSMarkerWithCount markerWithPosition: pinLocation];
-            //  marker.icon = [UIImage imageNamed: @"UnreadNote"];
             marker.animated = YES;
             marker.map = _hmv.map;
             zoomLevel = _hmv.map.camera.zoom;
@@ -352,12 +315,6 @@
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
-        
-        PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
-        [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            publicUserObj = object;
-        }];
     }
     return self;
 }
@@ -378,7 +335,7 @@
 - (void)changeSegment:(UISegmentedControl *)sender
 {
     NSInteger value = [sender selectedSegmentIndex];
-    [self loadPins: value];
+    [self loadPins];
 }
 
 
@@ -393,17 +350,17 @@
                                                 otherButtonTitles:nil];
         [message show];
     }
-
+    
     
     if(_wpvc == nil) {
         _wpvc = [[WallPostsViewController alloc] init];
         _wallPostsNavController = [[UINavigationController alloc]
-                                                      initWithRootViewController:_wpvc];
+                                   initWithRootViewController:_wpvc];
     }
-    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    _wallPostsNavController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
     
-    }
+}
 
 
 
@@ -423,8 +380,7 @@
 - (void)launchOptionsMenu
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
-    UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];
-    
+    UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];    
     self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
     [self presentViewController:optionsNavController animated:YES completion:nil];
     
@@ -433,7 +389,7 @@
                      animations:^{
                          ovc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, ovc.view.frame.size.width, ovc.self.view.frame.size.height);
                      }];
-
+    
 }
 
 -(void) mapView:(GMSMapView *)mv didLongPressAtCoordinate:(CLLocationCoordinate2D)coord

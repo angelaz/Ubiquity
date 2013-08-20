@@ -30,6 +30,26 @@ static AppDelegate *launchedDelegate;
     return launchedDelegate.rdio;
 }
 
++ (NSMutableArray *)postsByPublic
+{
+    return launchedDelegate.publicArray;
+}
+
++ (NSMutableArray *)postsByFriends
+{
+    return launchedDelegate.friendsArray;
+}
+
++ (NSMutableArray *)postsBySelf
+{
+    return launchedDelegate.selfArray;
+}
+
++ (PFObject *)publicUser
+{
+    return launchedDelegate.publicUserObject;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -51,6 +71,17 @@ static AppDelegate *launchedDelegate;
     //Rdio
     launchedDelegate = self;
     rdio = [[Rdio alloc] initWithConsumerKey:@"5zk8jxx8g6kj2yyttbmdvqkt" andSecret:@"fPYZqmPDPG" delegate:nil];
+    
+    launchedDelegate.selfArray = [[NSMutableArray alloc] init];
+    launchedDelegate.friendsArray = [[NSMutableArray alloc] init];
+    launchedDelegate.publicArray = [[NSMutableArray alloc] init];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
+    [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.publicUserObject = object;
+    }];
+
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
     
@@ -285,6 +316,83 @@ static AppDelegate *launchedDelegate;
     }
 
     return nil;
+}
+
++ (void) makeParseQuery: (int)type{
+    
+    PFQuery *query = [self queryForType:type];
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            [AppDelegate storeObjects:objects ofType:type];
+        } else {
+            NSLog(@"Error in loading self and friends map posts: %@", error);
+        }
+    }];
+    
+}
+
++ (PFQuery *) queryForType:(NSInteger)type {
+    
+	PFQuery *query = [PFQuery queryWithClassName:kPAWParsePostsClassKey];
+    
+    NSLog(@"querying for table called");
+	// If no objects are loaded in memory, we look to the cache first to fill the table
+	// and then subsequently do a query against the network.
+	//if ([self.objects count] == 0) {
+		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+	//}
+    
+	// Query for posts near our current location.
+    
+	// Get our current location:
+	LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    
+	CLLocationAccuracy filterDistance = locationController.locationManager.distanceFilter;
+    
+	// And set the query to look by location
+	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
+	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    
+    [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"readReceiptsArray"];
+    [query orderByDescending:@"createdAt"];
+    
+    
+    if (type == TYPE_SELF) {
+        NSLog(@"Only shows notes from self");
+        [query whereKey:@"sender" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (type == TYPE_FRIENDS) {
+        NSLog(@"Shows notes from friends");
+        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
+        [query whereKey:@"sender" notEqualTo:[[PFUser currentUser] objectForKey:@"userData"]];
+    } else if (type == TYPE_PUBLIC) {
+        NSLog(@"Shows public notes");
+        [query whereKey:@"receivers" equalTo:[AppDelegate publicUser]];
+    }
+    
+	return query;
+
+}
+
++ (void) storeObjects:(NSArray *)objects ofType:(NSInteger) type {
+    if (type == TYPE_SELF) {
+        launchedDelegate.selfArray = [objects mutableCopy];
+    } else if (type == TYPE_FRIENDS) {
+        launchedDelegate.friendsArray = [objects mutableCopy];
+    } else if (type == TYPE_PUBLIC) {
+        launchedDelegate.publicArray = [objects mutableCopy];
+    }
+
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName: kPAWPostsUpdated
+     object:self];
+    
+    LocationController *locationController = [LocationController sharedLocationController];
+    [locationController updateLocation:locationController.location.coordinate];
+
 }
 
 @end

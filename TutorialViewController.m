@@ -9,7 +9,7 @@
 #import "TutorialViewController.h"
 #import "ArrowView.h"
 #import "AppDelegate.h"
-
+#import "NewMessageView.h"
 
 
 @interface TutorialViewController ()
@@ -23,6 +23,7 @@
     int bubbleCount;
     
     ArrowView *welcomeBubble;
+    ArrowView *introBubble;
     ArrowView *selfBubble;
     ArrowView *friendsBubble;
     ArrowView *publicBubble;
@@ -30,6 +31,9 @@
     ArrowView *searchBarBubble;
     ArrowView *newMessageBubble;
     ArrowView *thankYouBubble;
+    
+    NewMessageView *nmv;
+    UIView *cover;
 }
 
 @end
@@ -67,12 +71,12 @@
     [self.view addGestureRecognizer:_bubbleTapRecognizer];
     bubbleCount = 0;
 
-    self.delegate = self;
+  //  self.delegate = self;
     
     SCREEN_WIDTH = self.view.frame.size.width;
     SCREEN_HEIGHT = self.view.frame.size.height;
     
-    BUTTON_WIDTH = 180;
+    BUTTON_WIDTH = 240;
     BUTTON_HEIGHT = 38;
     
     self.view.opaque = NO;
@@ -83,242 +87,256 @@
 }
 
 - (void) firstBubble {
-    welcomeBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT-300, BUTTON_WIDTH, BUTTON_HEIGHT*2.3)];
+    welcomeBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT-300, BUTTON_WIDTH, BUTTON_HEIGHT*2.3)];
+    [welcomeBubble setPointY:0.0];
+    [welcomeBubble setPointHeight:0.0];
+    [welcomeBubble setPointWidth:0.0];
+    welcomeBubble.label.text = @"Welcome to Breadcrumbs! Tap to get started.";
+    [self.view addSubview:welcomeBubble];
+}
+
+- (void) loadIntroBubble {
+    
+    welcomeBubble.label.text = @"Breadcrumbs are notes you can leave your friends or yourself at chosen locations.";
+}
+
+
+- (void) loadLongTapInstructions {
+    welcomeBubble.label.text = @"To choose a location, hold your finger on the map until the location bead shifts.";
+}
+
+
+
+
+-(void) nextBubble: (id) sender
+{
+    bubbleCount++;
+    switch (bubbleCount)
+    {
+        case 1:
+            [self loadIntroBubble];
+            break;
+        case 2:
+            [self loadLongTapInstructions];
+            break;
+        case 3:
+            [self loadSearchBarBubble];
+            break;
+
+        case 4:
+            [self loadNewMessageBubble];
+            break;
+        case 5:
+            [self openNewMessageView];
+            break;
+
+        case 6:
+            [self loadMessageViewTut1];
+            break;
+
+        case 7:
+            [self loadMessageViewTut2];
+            break;
+
+        case 8:
+            [self loadMessageViewTut3];
+            break;
+        case 9:
+            [self loadMessageViewTut4];
+            break;
+        case 10:
+            [self loadBarBubble];
+            break;
+        case 11:
+            [self loadSelfBubble];
+            break;
+        case 12:
+            [self loadFriendsBubble];
+            break;
+        case 13:
+            [self loadPublicBubble];
+            break;
+        case 14:
+            [self loadListBubble];
+            break;
+        case 15:
+            [self loadThankYouBubble];
+            break;
+        case 16:
+            [self didFinishTutorial];
+            break;
+        
+    }
+    
+    
+}
+
+- (void)loadSearchBarBubble {
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/8, SCREEN_HEIGHT/7, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:10.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+    
+    welcomeBubble.label.text = @"Or, you can look for an address using the search bar";
+    welcomeBubble.label.numberOfLines = 3;
+}
+
+
+- (void)loadNewMessageBubble {
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH*29/30 - BUTTON_WIDTH, SCREEN_HEIGHT/11, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:210.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+    
+    welcomeBubble.label.text = @"When you've picked the location you want, click here to leave a Breadcrumb!";
+    
+    welcomeBubble.label.numberOfLines = 3;
+}
+
+
+- (void) openNewMessageView {
+    nmv = [[NewMessageView alloc] initWithFrame: self.view.bounds];
+    [self.view addSubview:nmv];
+    [welcomeBubble.layer setZPosition:1.0];
+
+    cover = [[UIView alloc] initWithFrame: self.view.bounds];
+    cover.backgroundColor = [[UIColor alloc] initWithWhite: 0.0 alpha: 0.5];
+    [self.view addSubview:cover];
+    
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT/2 - BUTTON_HEIGHT*2.3, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
     [welcomeBubble setPointY:0.0];
     [welcomeBubble setPointHeight:0.0];
     [welcomeBubble setPointWidth:0.0];
     [welcomeBubble setNeedsDisplay];
     
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(welcomeBubble.bounds.origin.x, welcomeBubble.bounds.origin.y, welcomeBubble.bounds.size.width, welcomeBubble.bounds.size.height + (welcomeBubble.pointWidth/2))];
+    welcomeBubble.label.text = @"This is what you'll see when you want to leave a new Breadcrumb.";
     
+    welcomeBubble.label.numberOfLines = 3;
+
     
-    label.text = @"Welcome to Ubiquity! Tap to get started.";
-    label.numberOfLines = 3;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [welcomeBubble addSubview:label];
-    
-    [self.view addSubview:welcomeBubble];
-    [self.view setNeedsDisplay];
+
 }
 
--(void) nextBubble: (id) sender
-{
-    bubbleCount = bubbleCount + 1;
-    if (bubbleCount == 1) {
-        [welcomeBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self loadSelfBubble];
-    } else if (bubbleCount == 2) {
-        [selfBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self loadFriendsBubble];
-    } else if (bubbleCount == 3) {
-        [friendsBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self loadPublicBubble];
-    } else if (bubbleCount == 4) {
-        [publicBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self loadListBubble];
-    } else if (bubbleCount == 5) {
-        [listBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self loadSearchBarBubble];
-    } else if (bubbleCount == 6) {
-        [searchBarBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self loadNewMessageBubble];
-    } else if (bubbleCount == 7) {
-        [newMessageBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self loadThankYouBubble];
-    } else if (bubbleCount == 8) {
-        [thankYouBubble removeFromSuperview];
-        [self.view setNeedsDisplay];
-        [self didFinishTutorial];
-    }
+- (void) loadMessageViewTut1 {
+    [welcomeBubble setPointY:60.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+    welcomeBubble.label.text = @"Start typing here to leave a note!";
+
+    
+
+}
+- (void) loadMessageViewTut2 {
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT*2/3+10, BUTTON_WIDTH, BUTTON_HEIGHT*2);
+    [welcomeBubble setPointY:0.0];
+    [welcomeBubble setPointHeight:0.0];
+    [welcomeBubble setPointWidth:0.0];
+    [welcomeBubble setNeedsDisplay];
+    
+    welcomeBubble.label.text = @"You can also attach a song or a picture to your Breadcrumb";
+    
+    welcomeBubble.label.numberOfLines = 2;
     
 }
+
+- (void) loadMessageViewTut3 {
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT/5, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:60.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+    
+    welcomeBubble.label.text = @"And finally, you can change who you want to see your Breadcrumb!";
+    
+    welcomeBubble.label.numberOfLines = 3;
+    
+}
+
+- (void) loadMessageViewTut4 {
+    [nmv removeFromSuperview];
+    [cover removeFromSuperview];
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT/2 - BUTTON_HEIGHT*2.3, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:0.0];
+    [welcomeBubble setPointHeight:0.0];
+    [welcomeBubble setPointWidth:0.0];
+    
+    welcomeBubble.label.text = @"Leave lots of Breadcrumbs for friends to find! When you're in an area with Breadcrumbs around, they'll appear on the map!";
+    
+    welcomeBubble.label.numberOfLines = 6;
+    [welcomeBubble setNeedsDisplay];
+
+}
+
+- (void)loadBarBubble {
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT/11, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:20.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+    
+    welcomeBubble.label.text = @"This bar controls what kinds of Breadcrumbs you want to see on the map.";
+    welcomeBubble.label.numberOfLines = 5;
+}
+
 
 - (void)loadSelfBubble {
-    selfBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT-520, BUTTON_WIDTH, BUTTON_HEIGHT*2)];
-    [selfBubble setPointY:20.0];
-    [selfBubble setPointHeight:20.0];
-    [selfBubble setPointWidth:10.0];
-    [selfBubble setNeedsDisplay];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(selfBubble.bounds.origin.x, selfBubble.bounds.origin.y, selfBubble.bounds.size.width, selfBubble.bounds.size.height + (selfBubble.pointWidth/2))];
-    
-    
-    label.text = @"Click here to see notes from yourself";
-    label.numberOfLines = 2;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [selfBubble addSubview:label];
-    
-    [self.view addSubview:selfBubble];
-    [self.view setNeedsDisplay];
-}
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT/11, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:20.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
 
+        welcomeBubble.label.text = @"This option shows all the notes you left yourself.";
+    welcomeBubble.label.numberOfLines = 5;
+    }
 - (void)loadFriendsBubble {
-    friendsBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT-520, BUTTON_WIDTH, BUTTON_HEIGHT*2)];
-    [friendsBubble setPointY:70.0];
-    [friendsBubble setPointHeight:20.0];
-    [friendsBubble setPointWidth:10.0];
-    [friendsBubble setNeedsDisplay];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(friendsBubble.bounds.origin.x, friendsBubble.bounds.origin.y, friendsBubble.bounds.size.width, friendsBubble.bounds.size.height + (friendsBubble.pointWidth/2))];
-    
-    
-    label.text = @"Click here to see notes from your friends";
-    label.numberOfLines = 2;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [friendsBubble addSubview:label];
-    
-    [self.view addSubview:friendsBubble];
-    [self.view setNeedsDisplay];
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT/11, BUTTON_WIDTH, BUTTON_HEIGHT*2);
+    [welcomeBubble setPointY:70.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+
+    welcomeBubble.label.text = @"To see Breadcrumbs your friends left you, click here";
+    welcomeBubble.label.numberOfLines = 2;
 }
 
 - (void)loadPublicBubble {
-    publicBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT-520, BUTTON_WIDTH, BUTTON_HEIGHT*2.3)];
-    [publicBubble setPointY:120.0];
-    [publicBubble setPointHeight:20.0];
-    [publicBubble setPointWidth:10.0];
-    [publicBubble setNeedsDisplay];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(publicBubble.bounds.origin.x, publicBubble.bounds.origin.y, publicBubble.bounds.size.width, publicBubble.bounds.size.height + (publicBubble.pointWidth/2))];
-    
-    
-    label.text = @"Click here to see public notes from everyone around you";
-    label.numberOfLines = 3;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [publicBubble addSubview:label];
-    
-    [self.view addSubview:publicBubble];
-    [self.view setNeedsDisplay];
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT/11, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:120.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+
+        welcomeBubble.label.text = @"Or if you're a social butterfly, you can choose to see public notes, from everyone around you!";
+    welcomeBubble.label.numberOfLines = 3;
 }
 
 - (void)loadListBubble {
-    listBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/20, SCREEN_HEIGHT-520, BUTTON_WIDTH, BUTTON_HEIGHT*2)];
-    [listBubble setPointY:20.0];
-    [listBubble setPointHeight:20.0];
-    [listBubble setPointWidth:10.0];
-    [listBubble setNeedsDisplay];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(listBubble.bounds.origin.x, listBubble.bounds.origin.y, listBubble.bounds.size.width, listBubble.bounds.size.height + (listBubble.pointWidth/2))];
-    
-    
-    label.text = @"Click here to see all your notes in a list";
-    label.numberOfLines = 2;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [listBubble addSubview:label];
-    
-    [self.view addSubview:listBubble];
-    [self.view setNeedsDisplay];
+    welcomeBubble.frame= CGRectMake(SCREEN_WIDTH/20, SCREEN_HEIGHT/11, BUTTON_WIDTH, BUTTON_HEIGHT*2);
+    [welcomeBubble setPointY:20.0];
+    [welcomeBubble setPointHeight:20.0];
+    [welcomeBubble setPointWidth:10.0];
+    [welcomeBubble setNeedsDisplay];
+
+    welcomeBubble.label.text = @"If you're more of a list kind of person, you can see all your notes at once here";
+    welcomeBubble.label.numberOfLines = 3;
 }
 
-- (void)loadSearchBarBubble {
-    searchBarBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/8, SCREEN_HEIGHT-485, BUTTON_WIDTH, BUTTON_HEIGHT*2.3)];
-    [searchBarBubble setPointY:10.0];
-    [searchBarBubble setPointHeight:20.0];
-    [searchBarBubble setPointWidth:10.0];
-    [searchBarBubble setNeedsDisplay];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(searchBarBubble.bounds.origin.x, searchBarBubble.bounds.origin.y, searchBarBubble.bounds.size.width, searchBarBubble.bounds.size.height + (searchBarBubble.pointWidth/2))];
-    
-    
-    label.text = @"Search addresses here before posting a note at that location";
-    label.numberOfLines = 3;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [searchBarBubble addSubview:label];
-    
-    [self.view addSubview:searchBarBubble];
-    [self.view setNeedsDisplay];
-}
 
-- (void)loadNewMessageBubble {
-    newMessageBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2.4, SCREEN_HEIGHT-520, BUTTON_WIDTH, BUTTON_HEIGHT*2.3)];
-    [newMessageBubble setPointY:150.0];
-    [newMessageBubble setPointHeight:20.0];
-    [newMessageBubble setPointWidth:10.0];
-    [newMessageBubble setNeedsDisplay];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(newMessageBubble.bounds.origin.x, newMessageBubble.bounds.origin.y, newMessageBubble.bounds.size.width, newMessageBubble.bounds.size.height + (newMessageBubble.pointWidth/2))];
-    
-    
-    label.text = @"Click here to post a new note at the chosen location";
-    label.numberOfLines = 3;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [newMessageBubble addSubview:label];
-    
-    [self.view addSubview:newMessageBubble];
-    [self.view setNeedsDisplay];
-}
 
 - (void)loadThankYouBubble {
-    thankYouBubble = [[ArrowView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/4, SCREEN_HEIGHT-300, BUTTON_WIDTH, BUTTON_HEIGHT*2.3)];
-    [thankYouBubble setPointY:0.0];
-    [thankYouBubble setPointHeight:0.0];
-    [thankYouBubble setPointWidth:0.0];
-    [thankYouBubble setNeedsDisplay];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(thankYouBubble.bounds.origin.x, thankYouBubble.bounds.origin.y, thankYouBubble.bounds.size.width, thankYouBubble.bounds.size.height + (thankYouBubble.pointWidth/2))];
-    
-    
-    label.text = @"Thanks for using Ubiquity! Tap to end tutorial.";
-    label.numberOfLines = 3;
-    label.textColor = [UIColor darkGrayColor];
-    label.backgroundColor = [UIColor clearColor];
-    label.opaque = NO;
-    label.layer.cornerRadius = 8;
-    label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont systemFontOfSize: 16.f];
-    //[label sizeToFit];
-    [thankYouBubble addSubview:label];
-    
-    [self.view addSubview:thankYouBubble];
-    [self.view setNeedsDisplay];
+    welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT-300, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
+    [welcomeBubble setPointY:0.0];
+    [welcomeBubble setPointHeight:0.0];
+    [welcomeBubble setPointWidth:0.0];
+    [welcomeBubble setNeedsDisplay];
+
+    welcomeBubble.label.text = @"Thanks for using Breadcrumbs! Tap to end the tutorial.";
+    welcomeBubble.label.numberOfLines = 5;
+
 }
 
 - (void) didFinishTutorial {

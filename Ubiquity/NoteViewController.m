@@ -10,6 +10,7 @@
 #import "NoteView.h"
 #import <Parse/Parse.h>
 #import "TextMessage.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface NoteViewController()
 {
@@ -146,7 +147,6 @@
     [_nv.leftArrow removeFromSuperview];
     [_nv.rightArrow removeFromSuperview];
     
-    
     [self loadDates: i];
     [self loadText: i];
     [self loadImages: i];
@@ -201,19 +201,41 @@
 
 - (void) loadImages: (int) i
 {
-    [_nv.image setImage:nil];
-    [_nv.pictureButton removeFromSuperview];
     
-    PFFile *photoData = [self.notes[i] objectForKey:@"photo"];
-    [photoData getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-        UIImage *photo = [[UIImage alloc] initWithData:data];
-        _nv.image.contentMode = UIViewContentModeScaleAspectFit;
-        [_nv.image setImage:photo];
+    for (id subview in [_nv.image subviews])
+        [subview removeFromSuperview];
+    [_nv.pictureButton removeFromSuperview];
+
+
+    if([self.notes[i] objectForKey:@"mediaHeight"] > 0) {
         [_nv addSubview:_nv.pictureButton];
         [_nv.pictureButton addTarget:self action:@selector(toggleImage:) forControlEvents:UIControlEventTouchUpInside];
-        
-    }];
-    
+        _nv.image.contentMode = UIViewContentModeScaleAspectFill;
+        PFFile *mediaData = [self.notes[i] objectForKey:@"media"];
+        [mediaData getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
+            UIImage *photo = [[UIImage alloc] initWithData: data];
+            if (photo) {
+                _nv.image.contentMode = UIViewContentModeScaleAspectFit;
+                UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
+                [photoView setFrame:CGRectMake(0, 0, _nv.image.frame.size.width, _nv.image.frame.size.height)];
+                [_nv.image addSubview:photoView];
+            } else { //photo will be null if mediaData is not valid image data, so movie
+                NSLog(@"look this post has a movie :O");
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsDirectory = [paths objectAtIndex:0];
+                NSString *path = [documentsDirectory stringByAppendingPathComponent:@"postVideo.m4v"];
+                [data writeToFile:path atomically:YES];
+                NSURL *videoURL = [NSURL fileURLWithPath:path];
+                MPMoviePlayerController *player = [[MPMoviePlayerController alloc] init];
+                [player setContentURL:videoURL];
+                [player prepareToPlay];
+                [player.view setFrame:CGRectMake(0, 0, _nv.image.frame.size.width, _nv.image.frame.size.height)];
+                [_nv.image addSubview:player.view];
+                [player play];
+            }
+        }];
+
+    }
     
 }
 

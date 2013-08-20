@@ -31,6 +31,7 @@
 
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate
 {
+    self.marker.position = self.location.coordinate;
     self.marker.map = self.map;
 
 }
@@ -51,6 +52,7 @@
         self.marker = [GMSMarker markerWithPosition:self.location.coordinate];
        // self.marker.icon = [GMSMarker markerImageWithColor:[UIColor blueColor]];
         self.marker.icon = [UIImage imageNamed:@"CurLocationMarker"];
+        self.marker.tappable = NO;
         self.marker.animated = YES;
         
         [locationManager startMonitoringSignificantLocationChanges];

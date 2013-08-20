@@ -200,7 +200,7 @@ int const LINE_HEIGHT = 30;
     int innerFrameLeftMargin = w/2 - self.envelope.frame.size.width/2 + LEFT_PADDING + 35;
     int innerFrameTopMargin = h - self.envelope.frame.size.height + HEADER_HEIGHT + TOP_PADDING * 0.75;
     self.addFriendsButton.frame = CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, iconDimensions, iconDimensions);
-    [self addSubview: self.addFriendsButton];
+    //[self addSubview: self.addFriendsButton];
 }
 
 - (void) createScrollViewWithWidth: (int)w andHeight:(int)h
