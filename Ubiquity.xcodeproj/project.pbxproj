@@ -104,6 +104,7 @@
 		86894B6217A0A72800F7146B /* TextMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 86894B6117A0A72800F7146B /* TextMessage.m */; };
 		86894B6517A1E96200F7146B /* searchbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6317A1E96200F7146B /* searchbutton.png */; };
 		86894B6617A1E96200F7146B /* searchbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86894B6417A1E96200F7146B /* searchbutton@2x.png */; };
+		8690A13017C439D60062F549 /* facebook@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8690A12F17C439D60062F549 /* facebook@2x.png */; };
 		869BEC9D17B0143E00437EA0 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 869BEC8517B0119D00437EA0 /* SenTestingKit.framework */; };
 		86A66C2D17A316A000DB5752 /* NewMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86A66C2C17A316A000DB5752 /* NewMessageView.m */; };
 		86D1F43217B956BC003B7FED /* envelope@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D1F43117B956BC003B7FED /* envelope@2x.png */; };
@@ -253,6 +254,7 @@
 		86894B6117A0A72800F7146B /* TextMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextMessage.m; sourceTree = "<group>"; };
 		86894B6317A1E96200F7146B /* searchbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = searchbutton.png; sourceTree = "<group>"; };
 		86894B6417A1E96200F7146B /* searchbutton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "searchbutton@2x.png"; sourceTree = "<group>"; };
+		8690A12F17C439D60062F549 /* facebook@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "facebook@2x.png"; sourceTree = "<group>"; };
 		869BEC8517B0119D00437EA0 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		86A66C2B17A316A000DB5752 /* NewMessageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewMessageView.h; sourceTree = "<group>"; };
 		86A66C2C17A316A000DB5752 /* NewMessageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewMessageView.m; sourceTree = "<group>"; };
@@ -446,6 +448,7 @@
 			isa = PBXGroup;
 			children = (
 				60B6D1C817C2CCDC00A46B06 /* facebook.png */,
+				8690A12F17C439D60062F549 /* facebook@2x.png */,
 				60B6D1C917C2CCDC00A46B06 /* twitter.png */,
 				60F4439617BEDBDC00C86E7E /* bluewood.jpg */,
 				866D059317BEF9F400803974 /* OptionsFrame@2x.png */,
@@ -611,6 +614,7 @@
 				860A83D717BD8B1A00DFB58A /* UnreadNote.png in Resources */,
 				86D1F43A17B9B6D6003B7FED /* gear@2x.png in Resources */,
 				60B6D1CA17C2CCDC00A46B06 /* facebook.png in Resources */,
+				8690A13017C439D60062F549 /* facebook@2x.png in Resources */,
 				86730A0E17BEB048001CF1C1 /* CurLocationMarker.png in Resources */,
 				866D059C17C2C92C00803974 /* PostBackground@2x.png in Resources */,
 				865FBE4E17B4069000A3F7E2 /* Default.png in Resources */,

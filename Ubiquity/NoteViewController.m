@@ -210,12 +210,11 @@
     if([self.notes[i] objectForKey:@"mediaHeight"] > 0) {
         [_nv addSubview:_nv.pictureButton];
         [_nv.pictureButton addTarget:self action:@selector(toggleImage:) forControlEvents:UIControlEventTouchUpInside];
-        _nv.image.contentMode = UIViewContentModeScaleAspectFill;
+        _nv.image.contentMode = UIViewContentModeScaleAspectFit;
         PFFile *mediaData = [self.notes[i] objectForKey:@"media"];
         [mediaData getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
             UIImage *photo = [[UIImage alloc] initWithData: data];
             if (photo) {
-                _nv.image.contentMode = UIViewContentModeScaleAspectFit;
                 UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
                 [photoView setFrame:CGRectMake(0, 0, _nv.image.frame.size.width, _nv.image.frame.size.height)];
                 [_nv.image addSubview:photoView];

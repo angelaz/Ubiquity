@@ -478,6 +478,21 @@ static NSInteger cellAttachedMediaTag = 8;
                               additionalPhotoWidth,
                                additionalPhotoHeight);
     
+    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
+    [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: tweetButton];
+    tweetButton.frame = CGRectMake(cell.contentView.frame.size.width/2 + 2.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
+    [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *fbPic = [UIImage imageNamed:@"facebook"];
+    [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: fbButton];
+    fbButton.frame = CGRectMake(cell.contentView.frame.size.width/2 - 32.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
+    [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
+
+    
     if([object objectForKey:@"mediaHeight"] > 0) {
         mediaView.contentMode = UIViewContentModeScaleAspectFill;
         [[object objectForKey:@"media"] getDataInBackgroundWithBlock:^(NSData *mediaData, NSError *error) {
@@ -533,19 +548,6 @@ static NSInteger cellAttachedMediaTag = 8;
 
     }
     
-    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
-    [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
-    [cell.contentView addSubview: tweetButton];
-    tweetButton.frame = CGRectMake(cellPaddingSides*2, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5 - 30, 30.0, 30.0);
-    [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *fbPic = [UIImage imageNamed:@"facebook"];
-    [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
-    [cell.contentView addSubview: fbButton];
-    fbButton.frame = CGRectMake(cellPaddingSides*2 + 30, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5 - 30, 30.0, 30.0);
-    [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
     
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -732,7 +734,7 @@ static NSInteger cellAttachedMediaTag = 8;
         // Add an image
         [tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
         // Add a link
-        [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
+      //  [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
         [self presentViewController: tweetSheet animated: YES completion: nil];
     }
     
