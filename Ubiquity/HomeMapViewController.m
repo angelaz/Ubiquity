@@ -147,6 +147,8 @@
     PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
     [query includeKey:kPAWParseSenderKey];
+    [query includeKey:@"userData"];
+    
     
     if (i < 2) {
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
@@ -392,17 +394,17 @@
                                                 otherButtonTitles:nil];
         [message show];
     }
-
+    
     
     if(_wpvc == nil) {
         _wpvc = [[WallPostsViewController alloc] init];
         _wallPostsNavController = [[UINavigationController alloc]
-                                                      initWithRootViewController:_wpvc];
+                                   initWithRootViewController:_wpvc];
     }
-    _wpvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    _wallPostsNavController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self.navigationController presentViewController:_wallPostsNavController animated:YES completion:nil];
     
-    }
+}
 
 - (void)launchNewMessage
 {

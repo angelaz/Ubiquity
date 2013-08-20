@@ -59,7 +59,7 @@
     
     self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(w/2 - width/2 - 20,topMargin, width, lineHeight)];
     
-    self.locationSearchTextField.placeholder = @"Search for a location";
+    self.locationSearchTextField.placeholder = @"Enter an Address";
     self.locationSearchTextField.borderStyle = UITextBorderStyleNone;
     self.locationSearchTextField.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.locationSearchTextField];
