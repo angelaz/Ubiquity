@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		20577B4D17C2A2C000201107 /* ArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 20577B4C17C2A2C000201107 /* ArrowView.m */; };
-		20B9181817BC375600CC33C2 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 20B9181717BC375600CC33C2 /* Default-568h@2x.png */; };
 		20CE06C317C2C6E800036600 /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CE06C217C2C6E800036600 /* TutorialViewController.m */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
+		6071076C17C2FEB4007179FC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6071076B17C2FEB4007179FC /* Social.framework */; };
 		6097BEDA17A6DC650012A36A /* LocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6097BED917A6DC650012A36A /* LocationController.m */; };
 		60B6D1CA17C2CCDC00A46B06 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = 60B6D1C817C2CCDC00A46B06 /* facebook.png */; };
 		60B6D1CB17C2CCDC00A46B06 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 60B6D1C917C2CCDC00A46B06 /* twitter.png */; };
@@ -136,13 +136,13 @@
 /* Begin PBXFileReference section */
 		20577B4B17C2A2C000201107 /* ArrowView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrowView.h; sourceTree = "<group>"; };
 		20577B4C17C2A2C000201107 /* ArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowView.m; sourceTree = "<group>"; };
-		20B9181717BC375600CC33C2 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		20CE06C117C2C6E800036600 /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialViewController.h; path = ../TutorialViewController.h; sourceTree = "<group>"; };
 		20CE06C217C2C6E800036600 /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TutorialViewController.m; path = ../TutorialViewController.m; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
 		20F8F2A817A1F0F600594994 /* WallPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostsViewController.m; sourceTree = "<group>"; };
 		20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		6071076B17C2FEB4007179FC /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		6097BED817A6DC650012A36A /* LocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationController.h; sourceTree = "<group>"; };
 		6097BED917A6DC650012A36A /* LocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationController.m; sourceTree = "<group>"; };
 		60B3A23217BACD9F00CBCE51 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -280,6 +280,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6071076C17C2FEB4007179FC /* Social.framework in Frameworks */,
 				827CFE7717BD6A69003ED5AB /* MediaPlayer.framework in Frameworks */,
 				827C7A2917BAE44E000253DF /* StoreKit.framework in Frameworks */,
 				82AA118017BADC8800D570DC /* Security.framework in Frameworks */,
@@ -357,6 +358,7 @@
 		82E9316717A079C600B3958B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6071076B17C2FEB4007179FC /* Social.framework */,
 				827CFE7617BD6A69003ED5AB /* MediaPlayer.framework */,
 				82AA117F17BADC8800D570DC /* Security.framework */,
 				82AA117D17BADC7A00D570DC /* AudioToolbox.framework */,
