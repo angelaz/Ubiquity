@@ -317,7 +317,7 @@ static NSInteger cellAttachedMediaTag = 8;
 // Override to customize what kind of query to perform on the class. The default is  for
 // all objects ordered by createdAt descending.
 - (PFQuery *)queryForTable {
-    return [AppDelegate getQueryForType:self.segmentedControl.selectedSegmentIndex];
+    return [AppDelegate queryForType:self.segmentedControl.selectedSegmentIndex];
     
 }
 

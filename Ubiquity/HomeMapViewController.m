@@ -116,7 +116,7 @@
                 idleMethodBeingCalled = true;
                 double newRange = 77.4795 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
                 NSLog(@"%f new range", newRange);
-                [AppDelegate makeParseQuery: self.segmentedControl.selectedSegmentIndex withRange: newRange];
+                [AppDelegate makeParseQuery: self.segmentedControl.selectedSegmentIndex];
                 
             }
         }
@@ -128,14 +128,14 @@
 {
     if ([PFUser currentUser] != nil) {
         double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
-        [AppDelegate makeParseQuery: i withRange: range];
+        [AppDelegate makeParseQuery: i];
         
         if (i == 0) {
-            [self deployParseQuery:[AppDelegate postsBySelf] withRange:range];
+            [self displayParseQuery:[AppDelegate postsBySelf] withRange:range];
         } else if (i == 1) {
-            [self deployParseQuery:[AppDelegate postsByFriends] withRange:range];
+            [self displayParseQuery:[AppDelegate postsByFriends] withRange:range];
         } else {
-            [self deployParseQuery:[AppDelegate postsByPublic] withRange:range];
+            [self displayParseQuery:[AppDelegate postsByPublic] withRange:range];
         }
         
         _hmv.map.delegate = self;
@@ -155,7 +155,7 @@
 }
 
 
-- (void) deployParseQuery: (NSMutableArray *) array withRange: (double) range
+- (void) displayParseQuery: (NSMutableArray *) array withRange: (double) range
 {
     [self.objects removeAllObjects];
     [_hmv.map clear];
