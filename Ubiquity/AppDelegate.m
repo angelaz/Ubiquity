@@ -30,6 +30,11 @@ static AppDelegate *launchedDelegate;
     return launchedDelegate.rdio;
 }
 
++ (PFObject *)publicUser
+{
+    return launchedDelegate.publicUserObject;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -51,6 +56,13 @@ static AppDelegate *launchedDelegate;
     //Rdio
     launchedDelegate = self;
     rdio = [[Rdio alloc] initWithConsumerKey:@"5zk8jxx8g6kj2yyttbmdvqkt" andSecret:@"fPYZqmPDPG" delegate:nil];
+    
+    PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
+    [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
+    [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.publicUserObject = object;
+    }];
+
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeMapViewController alloc] init]];
     

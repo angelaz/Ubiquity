@@ -71,6 +71,7 @@ static NSString * const kNMMonthy = @"Every Month";
 @property (nonatomic, strong) UINavigationController *navigationController;
 @property (readonly) Rdio *rdio;
 @property (nonatomic) BOOL firstLaunch;
+@property (nonatomic, strong) PFObject *publicUserObject;
 
 - (void)presentLoginViewController;
 
@@ -86,4 +87,6 @@ static NSString * const kNMMonthy = @"Every Month";
 + (PFObject *) postReceipt:(PFObject *)post;
 
 + (Rdio *)rdioInstance;
++ (PFObject *) publicUser;
+
 @end

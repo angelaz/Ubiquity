@@ -25,7 +25,6 @@
 {
     CGFloat zoomLevel;
     BOOL idleMethodBeingCalled; // async lock for background query method to prevent more than 1 query happening at once
-    PFObject *publicUserObj;
     NSMutableArray *selfArray;
     NSMutableArray *friendsArray;
     NSMutableArray *publicArray;
@@ -166,7 +165,7 @@
     if (i < 2) {
         [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
     } else {
-        [query whereKey:@"receivers" equalTo:publicUserObj];
+        [query whereKey:@"receivers" equalTo:[AppDelegate publicUser]];
     }
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
@@ -352,12 +351,6 @@
         [self initButtons];
         [self initSegmentedControl];
         [self initOptionsButton];
-        
-        PFQuery *query = [PFQuery queryWithClassName:@"UserData"];
-        [query whereKey:@"facebookId" equalTo:[NSString stringWithFormat:@"100006434632076"]];
-        [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            publicUserObj = object;
-        }];
     }
     return self;
 }
