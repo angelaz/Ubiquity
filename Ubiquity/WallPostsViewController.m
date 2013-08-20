@@ -809,7 +809,6 @@ static NSInteger cellAttachedMediaTag = 8;
      @"https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png", @"picture",
      nil];
     
-    [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
     // Invoke the dialog
     [FBWebDialogs presentFeedDialogModallyWithSession:nil
                                            parameters:params

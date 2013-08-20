@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		20577B4D17C2A2C000201107 /* ArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 20577B4C17C2A2C000201107 /* ArrowView.m */; };
 		20CE06C317C2C6E800036600 /* TutorialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20CE06C217C2C6E800036600 /* TutorialViewController.m */; };
+		20CF23BB17C42F7900BF9A7A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 20CF23BA17C42F7900BF9A7A /* Default-568h@2x.png */; };
 		20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2A817A1F0F600594994 /* WallPostsViewController.m */; };
 		20F8F2AC17A1F0FD00594994 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F8F2AB17A1F0FD00594994 /* OptionsViewController.m */; };
 		6071076C17C2FEB4007179FC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6071076B17C2FEB4007179FC /* Social.framework */; };
@@ -138,6 +139,7 @@
 		20577B4C17C2A2C000201107 /* ArrowView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrowView.m; sourceTree = "<group>"; };
 		20CE06C117C2C6E800036600 /* TutorialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TutorialViewController.h; path = ../TutorialViewController.h; sourceTree = "<group>"; };
 		20CE06C217C2C6E800036600 /* TutorialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TutorialViewController.m; path = ../TutorialViewController.m; sourceTree = "<group>"; };
+		20CF23BA17C42F7900BF9A7A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		20F8F2A717A1F0F600594994 /* WallPostsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WallPostsViewController.h; sourceTree = "<group>"; };
 		20F8F2A817A1F0F600594994 /* WallPostsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WallPostsViewController.m; sourceTree = "<group>"; };
 		20F8F2AA17A1F0FD00594994 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 		82E9315C17A079C600B3958B = {
 			isa = PBXGroup;
 			children = (
+				20CF23BA17C42F7900BF9A7A /* Default-568h@2x.png */,
 				82E9316E17A079C600B3958B /* Ubiquity */,
 				82E9318717A079C600B3958B /* UbiquityTests */,
 				82E9316717A079C600B3958B /* Frameworks */,
@@ -660,6 +663,7 @@
 				86D1F45617BC2F3C003B7FED /* ReadNote@2x.png in Resources */,
 				60F4439717BEDBDC00C86E7E /* bluewood.jpg in Resources */,
 				866D059417BEF9F400803974 /* OptionsFrame@2x.png in Resources */,
+				20CF23BB17C42F7900BF9A7A /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
