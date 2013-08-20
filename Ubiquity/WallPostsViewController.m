@@ -302,6 +302,8 @@ static NSInteger cellAttachedMediaTag = 8;
         NSLog(@"objectsDidLoad: Error: %@", error);
     }
     
+    [AppDelegate storeObjects:self.objects ofType:self.segmentedControl.selectedSegmentIndex];
+    
     // This method is called every time objects are loaded from Parse via the PFQuery
     if (NSClassFromString(@"UIRefreshControl")) {
         [self.refreshControl endRefreshing];

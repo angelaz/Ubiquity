@@ -100,6 +100,8 @@ static NSInteger * const TYPE_PUBLIC = 2;
 
 + (PFQuery *) queryForType:(NSInteger)type;
 
++ (void) storeObjects:(NSArray *)objects ofType:(NSInteger) type;
+
 + (NSMutableArray *)postsBySelf;
 + (NSMutableArray *)postsByFriends;
 + (NSMutableArray *)postsByPublic;

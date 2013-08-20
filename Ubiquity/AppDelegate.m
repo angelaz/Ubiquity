@@ -324,15 +324,7 @@ static AppDelegate *launchedDelegate;
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            if (type == TYPE_SELF) {
-                launchedDelegate.selfArray = [objects mutableCopy];
-            } else if (type == TYPE_FRIENDS) {
-                launchedDelegate.friendsArray = [objects mutableCopy];
-            } else if (type == TYPE_PUBLIC) {
-                launchedDelegate.selfArray = [objects mutableCopy];
-            }
-
-            
+            [AppDelegate storeObjects:objects ofType:type];
         } else {
             NSLog(@"Error in loading self and friends map posts: %@", error);
         }
@@ -382,6 +374,17 @@ static AppDelegate *launchedDelegate;
     }
     
 	return query;
+
+}
+
++ (void) storeObjects:(NSArray *)objects ofType:(NSInteger) type {
+    if (type == TYPE_SELF) {
+        launchedDelegate.selfArray = [objects mutableCopy];
+    } else if (type == TYPE_FRIENDS) {
+        launchedDelegate.friendsArray = [objects mutableCopy];
+    } else if (type == TYPE_PUBLIC) {
+        launchedDelegate.publicArray = [objects mutableCopy];
+    }
 
 }
 
