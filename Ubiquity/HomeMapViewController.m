@@ -48,6 +48,11 @@
         self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
         [self presentViewController:tutorial animated:YES completion:nil];
      }
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(displayPins)
+                                                 name:kPAWPostsUpdated
+                                               object:nil];
 }
 
 - (void)viewDidLoad
@@ -57,7 +62,7 @@
     _hmv.map.delegate = self;
     zoomLevel = _hmv.map.camera.zoom;
     self.objects = [[NSMutableArray alloc] init];
-    [self loadPins: self.segmentedControl.selectedSegmentIndex];
+    [self loadPins];
     
     _hmv.map.delegate = self;
     [_hmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
@@ -97,7 +102,7 @@
 
 - (void) refreshPins
 {
-    [self loadPins:self.segmentedControl.selectedSegmentIndex];
+    [self loadPins];
 }
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
@@ -124,22 +129,28 @@
 }
 
 
-- (void) loadPins: (int) i
+- (void) loadPins
 {
     if ([PFUser currentUser] != nil) {
-        double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
-        [AppDelegate makeParseQuery: i];
+        int type = self.segmentedControl.selectedSegmentIndex;
         
-        if (i == 0) {
-            [self displayParseQuery:[AppDelegate postsBySelf] withRange:range];
-        } else if (i == 1) {
-            [self displayParseQuery:[AppDelegate postsByFriends] withRange:range];
-        } else {
-            [self displayParseQuery:[AppDelegate postsByPublic] withRange:range];
-        }
+        [AppDelegate makeParseQuery: type];
         
         _hmv.map.delegate = self;
         _hmv.locationSearchTextField.delegate = self;
+    }
+}
+
+- (void) displayPins {
+    int type = self.segmentedControl.selectedSegmentIndex;
+    double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
+    
+    if (type == 0) {
+        [self displayParseQuery:[AppDelegate postsBySelf] withRange:range];
+    } else if (type == 1) {
+        [self displayParseQuery:[AppDelegate postsByFriends] withRange:range];
+    } else {
+        [self displayParseQuery:[AppDelegate postsByPublic] withRange:range];
     }
 }
 
@@ -308,7 +319,7 @@
 - (void)changeSegment:(UISegmentedControl *)sender
 {
     NSInteger value = [sender selectedSegmentIndex];
-    [self loadPins: value];
+    [self loadPins];
 }
 
 

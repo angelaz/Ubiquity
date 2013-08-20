@@ -386,6 +386,9 @@ static AppDelegate *launchedDelegate;
         launchedDelegate.publicArray = [objects mutableCopy];
     }
 
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName: kPAWPostsUpdated
+     object:self];
 }
 
 @end

@@ -42,6 +42,7 @@ static NSString * const kPAWLocationChangeNotification = @"kPAWLocationChangeNot
 static NSString * const kPAWPostCreatedNotification = @"kPAWPostCreatedNotification";
 static NSString * const KPAWInitialLocationFound = @"kPAWInitialLocationFound";
 static NSString * const kPAWCameraZoomChangeNotification = @"kPAWCameraZoomChangeNotification";
+static NSString * const kPAWPostsUpdated = @"kPAWPostsUpdatedNotification";
 
 
 // UI strings:
