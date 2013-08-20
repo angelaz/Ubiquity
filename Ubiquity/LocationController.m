@@ -53,7 +53,7 @@
         self.marker.icon = [UIImage imageNamed:@"CurLocationMarker"];
         self.marker.animated = YES;
         
-        [locationManager startUpdatingLocation];
+        [locationManager startMonitoringSignificantLocationChanges];
         NSLog(@"Location updates started");
         
         if ([PFUser currentUser] != nil) {
@@ -74,6 +74,13 @@
         isInBackground = YES;
     }
     
+    if ([PFUser currentUser] != nil) {
+        if (pushQuery == nil) {
+            pushQuery = [PFInstallation query];
+            [pushQuery whereKey:@"deviceType" equalTo:@"ios"];
+            [pushQuery whereKey:@"owner" equalTo:[PFUser currentUser]];
+        }
+    }
     
     NSLog(@"%f is the accuracy level", locationManager
            .location.horizontalAccuracy);
@@ -106,12 +113,12 @@
          postNotificationName: kPAWLocationChangeNotification
          object:self];
         
-        [self sendForegroundLocationToServer:_location];
+        [self sendForegroundLocationToServerForPushNotifications:_location];
     }
     
     if (isInBackground)
     {
-        [self sendBackgroundLocationToServer:_location];
+        [self sendBackgroundLocationToServerForPushNotifications:_location];
     }
 }
 
@@ -152,7 +159,7 @@
     
 }
 
--(void) sendForegroundLocationToServer:(CLLocation *)location
+-(void) sendForegroundLocationToServerForPushNotifications:(CLLocation *)location
 {
 
     PFQuery *query = [PFQuery queryWithClassName:@"Posts"];
@@ -208,7 +215,7 @@
 }
 
 
--(void) sendBackgroundLocationToServer:(CLLocation *)location
+-(void) sendBackgroundLocationToServerForPushNotifications:(CLLocation *)location
 {
     // REMEMBER. We are running in the background if this is being executed.
     // We can't assume normal network access.
@@ -218,7 +225,8 @@
     // end tasks that we have started.
     UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication]
                                          beginBackgroundTaskWithExpirationHandler:
-                                         ^{
+                                         ^(void){
+                                             NSLog(@"background task initialized");
                                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
                                          }];
     

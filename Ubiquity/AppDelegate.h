@@ -70,6 +70,7 @@ static NSString * const kNMMonthy = @"Every Month";
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @property (nonatomic, strong) UINavigationController *navigationController;
 @property (readonly) Rdio *rdio;
+@property (nonatomic) BOOL firstLaunch;
 
 - (void)presentLoginViewController;
 

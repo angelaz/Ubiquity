@@ -11,6 +11,9 @@
 
 @implementation LoginViewController
 
+
+#pragma mark - UIViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationController.navigationBarHidden = YES;
@@ -19,7 +22,7 @@
     [view.loginButton addTarget:self action:@selector(loginButtonTouchHandler:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (id)init
+- (id) init
 {
     self = [super init];
     if (self)
@@ -37,7 +40,7 @@
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == NotReachable) {
         //A new user can't login if there's no internet connection
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Error: No Internet Connection"
-                                                          message:@"Can't login."
+                                                          message:nil
                                                          delegate:nil
                                                 cancelButtonTitle:@"OK"
                                                 otherButtonTitles:nil];
@@ -62,11 +65,12 @@
                 [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
                     [self dismissViewControllerAnimated:YES completion:nil];
                 }];
+                
             } else {
                 NSLog(@"User with facebook logged in!");
 
+<<<<<<< HEAD
                 [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
-                    [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
                     [self dismissViewControllerAnimated:YES completion:nil];
                     LocationController *locController = [LocationController sharedLocationController];
                     if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
@@ -80,12 +84,34 @@
                 }];
             }
         }];
+        
+        [_activityIndicator startAnimating]; // Show loading indicator until login is finished
     }
+=======
+            [self pullMyFBDataAndOrganizeWithBlock:^(PFObject *dummy) {
+            [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
+                [self dismissViewControllerAnimated:YES completion:nil];
+                LocationController *locController = [LocationController sharedLocationController];
+                if ((locController.location.coordinate.latitude == 0) && (locController.location.coordinate.longitude == 0)) {
+                    UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Turn On Location Services to See Nearby Posts"
+                                                                      message:@"Please go to Settings -> Privacy -> Location Services to turn it on."
+                                                                     delegate:nil
+                                                            cancelButtonTitle:@"OK"
+                                                            otherButtonTitles:nil];
+                    [message show];
+                }
+            }];
+
+        }
+    }];
+    
     [_activityIndicator startAnimating]; // Show loading indicator until login is finished
+>>>>>>> a59d2c023497c46b167d044e003079b7457ddd1c
 }
 
 
-- (void)pullMyFBDataAndOrganizeWithBlock:(void (^)(PFObject* user))block {
+
+- (void) pullMyFBDataAndOrganizeWithBlock:(void (^)(PFObject* user))block {
     // Send request to Facebook
     FBRequest *request = [FBRequest requestForMe];
     [request startWithCompletionHandler:^(FBRequestConnection *connection, id result, NSError *error) {
