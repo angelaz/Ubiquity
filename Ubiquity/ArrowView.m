@@ -63,7 +63,6 @@
     CGContextAddLineToPoint (context, minx2 + _pointY + (_pointHeight / 2), miny2 - self.pointWidth);
     
     CGContextClosePath(context);
-    NSLog(@"pointy is %f", _pointY);
     [rectColor setFill];
     CGContextDrawPath(context, kCGPathFill);
     [self setNeedsDisplay];

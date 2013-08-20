@@ -62,8 +62,8 @@ static NSInteger cellAttachedMediaTag = 8;
     PFQuery *pushQuery;
     NSString *_trackKey;
     NSMutableDictionary *songsToCell;
+    NSMutableDictionary *objectsToPost;
 }
-
 
 @end
 
@@ -244,6 +244,7 @@ static NSInteger cellAttachedMediaTag = 8;
     [super viewDidLoad];
     
     songsToCell = [[NSMutableDictionary alloc] init];
+    objectsToPost = [[NSMutableDictionary alloc] init];
     
     if (NSClassFromString(@"UIRefreshControl")) {
         // Use the new iOS 6 refresh control.
@@ -573,6 +574,8 @@ static NSInteger cellAttachedMediaTag = 8;
 
     }
     
+    [objectsToPost setObject:object forKey:indexPath];
+    
     UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
     [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
@@ -586,7 +589,6 @@ static NSInteger cellAttachedMediaTag = 8;
     [cell.contentView addSubview: fbButton];
     fbButton.frame = CGRectMake(cellPaddingSides*2 + 30, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5 - 30, 30.0, 30.0);
     [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
-    
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
@@ -762,18 +764,26 @@ static NSInteger cellAttachedMediaTag = 8;
     UIView *contentView = [sender superview];
     UITableViewCell *cell = (UITableViewCell *)[contentView superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+
+    PFObject *object = [objectsToPost objectForKey:indexPath];
+    NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+    NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
+    NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
+    NSString *postText = [NSString stringWithFormat:@"%@ would like to share a note from %@: %@", senderName, receiverName, objectText];
     
     
     if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
     {
         SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [tweetSheet setInitialText:@"This is a tweet from iOS"]; //Add here your text
+        [tweetSheet setInitialText:postText]; //Add here your text
         
         // Add an image
         [tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
         // Add a link
         [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
         [self presentViewController: tweetSheet animated: YES completion: nil];
+    } else if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
+        NSLog(@"twitter not logged in");
     }
     
 }
@@ -784,8 +794,110 @@ static NSInteger cellAttachedMediaTag = 8;
     UIView *contentView = [sender superview];
     UITableViewCell *cell = (UITableViewCell *)[contentView superview];
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    PFObject *object = [objectsToPost objectForKey:indexPath];
+    NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+    NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
+    NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
+    NSString *postText = [NSString stringWithFormat:@"%@ has shared a note from %@: %@", receiverName, senderName, objectText];
+    
+    if ([object objectForKey:@"media"]) {
+        
+        UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
+        additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
+        CGSize textSize = [[object objectForKey:kPAWParseTextKey] sizeWithFont:[UIFont systemFontOfSize:textFontSize] constrainedToSize:CGSizeMake(cellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
+        CGRect mediaFrame = CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
+                                       cellPaddingTop+cellTextPaddingTop*11+textSize.height,
+                                       additionalPhotoWidth,
+                                       additionalPhotoHeight);
+        
+            [[object objectForKey:@"media"] getDataInBackgroundWithBlock:^(NSData *mediaData, NSError *error) {
+                UIImage *photo = [[UIImage alloc] initWithData:mediaData];
+                if (photo) {
+                    mediaView.contentMode = UIViewContentModeScaleAspectFill;
+                    UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
+                    [photoView setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
+                    [mediaView addSubview:photoView];
+                } else { //photo will be null if mediaData is not valid image data, so movie
+                    NSLog(@"look this post has a movie :O");
+                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                    NSString *documentsDirectory = [paths objectAtIndex:0];
+                    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"postVideo.m4v"];
+                    [mediaData writeToFile:path atomically:YES];
+                    NSURL *videoURL = [NSURL fileURLWithPath:path];
+                    MPMoviePlayerController *player = [[MPMoviePlayerController alloc] init];
+                    [player setContentURL:videoURL];
+                    [player prepareToPlay];
+                    [player.view setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
+                    [mediaView addSubview:player.view];
+                    [player play];
+                }
+                
+            }];
+        
+        [mediaView setFrame:mediaFrame];
+        
+        
+    
+    }
+    // Put together the dialog parameters
+    NSMutableDictionary *params =
+    [NSMutableDictionary dictionaryWithObjectsAndKeys:
+     @"Ubiquity", @"name",
+     @"Share location-based reminders, memories, and notes with friends.", @"caption",
+     postText, @"description",
+     @"https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png", @"picture",
+     nil];
+    
+    [PFFacebookUtils reauthorizeUser:[PFUser currentUser] withPublishPermissions:@[@"user_location"] audience:FBSessionDefaultAudienceEveryone target:self selector:nil];
+    // Invoke the dialog
+    [FBWebDialogs presentFeedDialogModallyWithSession:nil
+                                           parameters:params
+                                              handler:
+     ^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
+         if (error) {
+             // Error launching the dialog or publishing a story.
+             NSLog(@"Error publishing story.");
+         } else {
+             if (result == FBWebDialogResultDialogNotCompleted) {
+                 // User clicked the "x" icon
+                 NSLog(@"User canceled story publishing.");
+             } else {
+                 // Handle the publish feed callback
+                 NSDictionary *urlParams = [self parseURLParams:[resultURL query]];
+                 if (![urlParams valueForKey:@"post_id"]) {
+                     // User clicked the Cancel button
+                     NSLog(@"User canceled story publishing.");
+                 } else {
+                     // User clicked the Share button
+                     NSString *msg = [NSString stringWithFormat:
+                                      @"Posted story about note: %@",
+                                      objectText];
+                     NSLog(@"%@", msg);
+                     // Show the result in an alert
+                     [[[UIAlertView alloc] initWithTitle:@"Thanks for sharing!"
+                                                 message:msg
+                                                delegate:nil
+                                       cancelButtonTitle:@"OK!"
+                                       otherButtonTitles:nil]
+                      show];
+                 }
+             }
+         }
+     }];
 
 }
 
+- (NSDictionary*)parseURLParams:(NSString *)query {
+    NSArray *pairs = [query componentsSeparatedByString:@"&"];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc] init];
+    for (NSString *pair in pairs) {
+        NSArray *kv = [pair componentsSeparatedByString:@"="];
+        NSString *val =
+        [kv[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        params[kv[0]] = val;
+    }
+    return params;
+}
 
 @end
