@@ -173,16 +173,6 @@
 }
 
 - (void) loginToTwitter {
-//    [PFTwitterUtils logInWithBlock:^(PFUser *user, NSError *error) {
-//        if (!user) {
-//            NSLog(@"Uh oh. The user cancelled the Twitter login.");
-//            return;
-//        } else if (user.isNew) {
-//            NSLog(@"User signed up and logged in with Twitter!");
-//        } else {
-//            NSLog(@"User logged in with Twitter!");
-//        }    
-//    }];
     
     if (![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
         [PFTwitterUtils linkUser:[PFUser currentUser] block:^(BOOL succeeded, NSError *error) {

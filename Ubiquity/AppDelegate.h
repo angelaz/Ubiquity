@@ -81,5 +81,9 @@ static NSString * const kNMMonthy = @"Every Month";
                        toObject:(PFObject *) object
                      finalBlock:(void(^)(PFObject *made))finalBlock;
 
+
++ (void) openPostForFirstTime:(PFObject *)post withReceipt:(PFObject *) receipt atDate:(NSDate *)date;
++ (PFObject *) postReceipt:(PFObject *)post;
+
 + (Rdio *)rdioInstance;
 @end
