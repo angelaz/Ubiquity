@@ -47,6 +47,7 @@ static NSInteger cellAttachedMediaTag = 8;
 #import "NewMessageViewController.h"
 #import "OptionsViewController.h"
 #import "WallPostsViewController.h"
+#import <Social/Social.h>
 
 @interface WallPostsViewController ()
 {
@@ -572,7 +573,20 @@ static NSInteger cellAttachedMediaTag = 8;
 
     }
     
-
+    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
+    [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: tweetButton];
+    tweetButton.frame = CGRectMake(cellPaddingSides*2, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5 - 30, 30.0, 30.0);
+    [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *fbPic = [UIImage imageNamed:@"facebook"];
+    [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: fbButton];
+    fbButton.frame = CGRectMake(cellPaddingSides*2 + 30, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5 - 30, 30.0, 30.0);
+    [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
+    
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
@@ -591,14 +605,14 @@ static NSInteger cellAttachedMediaTag = 8;
 	// call super because we're a custom subclass.
 	[super tableView:tableView didSelectRowAtIndexPath:indexPath];
     
-    //Flips cell on touch
-    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    [UIView beginAnimations:@"FlipCellAnimation" context:nil];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:cell cache:YES];
-    [cell removeFromSuperview];
-    [self.tableView addSubview:cell];
-    [UIView commitAnimations];
+//    //Flips cell on touch
+//    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+//    [UIView beginAnimations:@"FlipCellAnimation" context:nil];
+//    [UIView setAnimationDuration:0.5];
+//    [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromLeft forView:cell cache:YES];
+//    [cell removeFromSuperview];
+//    [self.tableView addSubview:cell];
+//    [UIView commitAnimations];
     
 	[tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -662,7 +676,7 @@ static NSInteger cellAttachedMediaTag = 8;
     
 	CGFloat rowHeight = cellPaddingTop + textSize.height + nameSize.height * 5 + cellBGOffset + cellPaddingTop + additionalPhotoHeight;
     
-	return rowHeight;
+	return rowHeight + 50;
 }
 
 
@@ -741,6 +755,36 @@ static NSInteger cellAttachedMediaTag = 8;
         [[self getPlayer] togglePause];
     }
     
+}
+
+- (void)sendTweet: (id) sender
+{
+    UIView *contentView = [sender superview];
+    UITableViewCell *cell = (UITableViewCell *)[contentView superview];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    
+    
+    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+    {
+        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+        [tweetSheet setInitialText:@"This is a tweet from iOS"]; //Add here your text
+        
+        // Add an image
+        [tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
+        // Add a link
+        [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
+        [self presentViewController: tweetSheet animated: YES completion: nil];
+    }
+    
+}
+
+
+- (void)fbPost: (id) sender
+{
+    UIView *contentView = [sender superview];
+    UITableViewCell *cell = (UITableViewCell *)[contentView superview];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+
 }
 
 
