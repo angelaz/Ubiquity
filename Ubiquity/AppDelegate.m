@@ -243,7 +243,7 @@ static AppDelegate *launchedDelegate;
 + (void) openPostForFirstTime:(PFObject *)post withReceipt:(PFObject *) receipt atDate:(NSDate *)date{
     
     [receipt setObject:date forKey:@"dateOpened"];
-    //[receipt saveInBackground];
+    [receipt saveInBackground];
     
     if([receipt objectForKey:@"sender"] != nil) {
         
