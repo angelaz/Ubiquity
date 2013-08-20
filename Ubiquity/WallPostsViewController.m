@@ -36,14 +36,17 @@ static NSInteger cellLocationLabelTag = 7;
 static NSInteger cellAttachedMediaTag = 8;
 
 #import <MediaPlayer/MediaPlayer.h>
-#import "HomeMapViewController.h"
-#import "WallPostsViewController.h"
+#import <Parse/Parse.h>
+
 #import "AppDelegate.h"
+#import "Reachability.h"
 #import "TextMessage.h"
+
+#import "HomeMapViewController.h"
 #import "LocationController.h"
 #import "NewMessageViewController.h"
 #import "OptionsViewController.h"
-#import <Parse/Parse.h>
+#import "WallPostsViewController.h"
 
 @interface WallPostsViewController ()
 {
@@ -143,17 +146,26 @@ static NSInteger cellAttachedMediaTag = 8;
 
 - (void)launchNewMessage
 {
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    UINavigationController *newMessageNavController = [[UINavigationController alloc]
-                                                       initWithRootViewController:nmvc];
-    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    [self presentViewController:newMessageNavController animated:YES completion:nil];
-    
-    nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
-                     }];
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == NotReachable) {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Error: No Internet Connection"
+                                                          message:@"Can't send messages when offline."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+    } else {
+        NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+        UINavigationController *newMessageNavController = [[UINavigationController alloc]
+                                                           initWithRootViewController:nmvc];
+        self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        [self presentViewController:newMessageNavController animated:YES completion:nil];
+        
+        nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
+                         }];
+    }
 }
 
 - (void)initOptionsButton

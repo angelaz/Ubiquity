@@ -59,7 +59,6 @@
     [self setView: _hmv];
     _hmv.map.delegate = self;
     zoomLevel = _hmv.map.camera.zoom;
-    [self initNewMessageButton];
     self.objects = [[NSMutableArray alloc] init];
     [self loadPins: self.segmentedControl.selectedSegmentIndex];
     
@@ -126,7 +125,6 @@
         }
     }
 }
-
 
 
 - (void) loadPins: (int) i
@@ -265,34 +263,51 @@
     return (p1.latitude + d >= p2.latitude && p1.latitude - d <= p2.latitude && p1.longitude + d >= p2.longitude && p1.longitude - d <= p2.longitude);
 }
 
-- (void) openNewMessageView
-{
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    UINavigationController *newMessageNavController = [[UINavigationController alloc]
-                                                       initWithRootViewController:nmvc];
-    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
-    [self presentViewController:newMessageNavController animated:YES completion:nil];
-    
-    nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
-    [UIView animateWithDuration:0.25
-                     animations:^{
-                         nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
-                     }];
-}
 
-- (void) initNewMessageButton
+- (void)initButtons
 {
+    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"< List"
+                                                                style:UIBarButtonItemStylePlain
+                                                               target:self
+                                                               action:@selector(launchPostsView)];
+    [[self navigationItem] setLeftBarButtonItem:mapList];
+    
     UIImage *image = [UIImage imageNamed:@"newMessage"];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
     button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
-    [button addTarget:self action:@selector(openNewMessageView)    forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(launchNewMessage)    forControlEvents:UIControlEventTouchUpInside];
     
     UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height) ];
     [v addSubview:button];
     
     UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
     self.navigationItem.rightBarButtonItem = newMessage;
+    
+}
+
+- (void)launchNewMessage
+{
+    if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == NotReachable) {
+        UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Error: No Internet Connection"
+                                                          message:@"Can't send messages when offline."
+                                                         delegate:nil
+                                                cancelButtonTitle:@"OK"
+                                                otherButtonTitles:nil];
+        [message show];
+    } else {
+        NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
+        UINavigationController *newMessageNavController = [[UINavigationController alloc]
+                                                           initWithRootViewController:nmvc];
+        self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+        [self presentViewController:newMessageNavController animated:YES completion:nil];
+        
+        nmvc.view.frame = CGRectMake(nmvc.view.frame.origin.x, self.view.frame.size.height, nmvc.view.frame.size.width, nmvc.view.frame.size.height);
+        [UIView animateWithDuration:0.25
+                         animations:^{
+                             nmvc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, nmvc.view.frame.size.width, nmvc.self.view.frame.size.height);
+                         }];
+    }
 }
 
 - (void) readNote: (id) sender
@@ -366,24 +381,7 @@
     [self loadPins: value];
 }
 
-- (void)initButtons
-{
-    UIBarButtonItem *mapList = [[UIBarButtonItem alloc] initWithTitle:@"< List"
-                                                                style:UIBarButtonItemStylePlain
-                                                               target:self
-                                                               action:@selector(launchPostsView)];
-    [[self navigationItem] setLeftBarButtonItem:mapList];
-    
-    UIImage *image = [UIImage imageNamed:@"newMessage"];
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button setBackgroundImage: [image stretchableImageWithLeftCapWidth:7.0 topCapHeight:0.0] forState:UIControlStateNormal];
-    button.frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
-    [button addTarget:self action:@selector(launchNewMessage)    forControlEvents:UIControlEventTouchUpInside];
-    UIView *v= [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, image.size.width, image.size.height)];
-    [v addSubview:button];
-    UIBarButtonItem *newMessage = [[UIBarButtonItem alloc] initWithCustomView:v];
-    [[self navigationItem] setRightBarButtonItem:newMessage];
-}
+
 - (void)launchPostsView
 {
     LocationController *locController = [LocationController sharedLocationController];
@@ -407,13 +405,7 @@
     
     }
 
-- (void)launchNewMessage
-{
-    NewMessageViewController *nmvc = [[NewMessageViewController alloc] init];
-    UINavigationController *newMessageNavController = [[UINavigationController alloc]
-                                                       initWithRootViewController:nmvc];
-    [self.navigationController presentViewController:newMessageNavController animated:YES completion:nil];
-}
+
 
 
 - (void)initOptionsButton
