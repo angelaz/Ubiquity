@@ -162,7 +162,7 @@ static CGFloat const kMessageFontSize = 11.f;
     int innerFrameTopMargin = self.textScroll.frame.origin.y;
     int innerFrameLeftMargin = self.textScroll.frame.origin.x;
 
-    self.image = [[UIImageView alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, height)];
+    self.image = [[UIView alloc] initWithFrame:CGRectMake(innerFrameLeftMargin, innerFrameTopMargin, width, height)];
     self.image.backgroundColor = [UIColor clearColor];
 
 }
