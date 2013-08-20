@@ -82,13 +82,13 @@
     
     CGFloat buttonHeight = 40.0;
     CGFloat buttonWidth = 160.0;
-    
+
     UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [twitterButton addTarget:self
                       action:@selector(loginToTwitter)
             forControlEvents:UIControlEventTouchDown];
     
-    [twitterButton setTitle:@"Twitter" forState:UIControlStateNormal];
+    [twitterButton setTitle:@"Share on Twitter" forState:UIControlStateNormal];
     twitterButton.titleLabel.textColor = [UIColor whiteColor];
     twitterButton.frame = CGRectMake(w/2-buttonWidth/2, h/2-buttonHeight-32, buttonWidth, buttonHeight);
     twitterButton.layer.cornerRadius = 5.0f;
