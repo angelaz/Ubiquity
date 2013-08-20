@@ -318,67 +318,29 @@ static AppDelegate *launchedDelegate;
     return nil;
 }
 
-+ (void) makeParseQuery: (int)type  withRange: (double) range {
++ (void) makeParseQuery: (int)type{
     
-    PFQuery *query = [PFQuery queryWithClassName: kPAWParsePostsClassKey];
-    
-    LocationController* locationController = [LocationController sharedLocationController];
-    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
-    
-	CLLocationAccuracy filterDistance = 1000.0f;
-    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
-	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
-    [query includeKey:kPAWParseSenderKey];
-    [query includeKey:@"userData"];
-    
-    
-    if (type < TYPE_PUBLIC) {
-        [query whereKey:@"receivers" equalTo:[[PFUser currentUser] objectForKey:@"userData"]];
-    } else {
-        [query whereKey:@"receivers" equalTo:[AppDelegate publicUser]];
-    }
+    PFQuery *query = [self queryForType:type];
     
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
-            
-            // The find succeeded.
-            NSLog(@"Successfully retrieved %d posts.", objects.count);
-            // Do something with the found objects
-            
-            for (PFObject *object in objects) {
-                if (type < TYPE_PUBLIC)
-                {
-                    BOOL selfie = ([[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    BOOL friendPost = (![[[object objectForKey:kPAWParseSenderKey] objectForKey:@"facebookId"] isEqual: [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"]]);
-                    
-                    if (selfie) {
-                        [[self postsBySelf] addObject:object];
-                    } else if (friendPost) {
-                        [[self postsByFriends] addObject:object];
-                        
-                    }
-                }
-                else
-                {
-                    [[self postsByPublic] addObject:object];
-                }
-                
-                
+            if (type == TYPE_SELF) {
+                launchedDelegate.selfArray = [objects mutableCopy];
+            } else if (type == TYPE_FRIENDS) {
+                launchedDelegate.friendsArray = [objects mutableCopy];
+            } else if (type == TYPE_PUBLIC) {
+                launchedDelegate.selfArray = [objects mutableCopy];
             }
+
             
         } else {
             NSLog(@"Error in loading self and friends map posts: %@", error);
         }
-        
-        LocationController *locationController = [LocationController sharedLocationController];
-        [locationController updateLocation:locationController.location.coordinate];
-        
     }];
     
 }
 
-+ (PFQuery *) getQueryForType:(NSInteger)type {
++ (PFQuery *) queryForType:(NSInteger)type {
     
 	PFQuery *query = [PFQuery queryWithClassName:kPAWParsePostsClassKey];
     
@@ -400,9 +362,11 @@ static AppDelegate *launchedDelegate;
 	// And set the query to look by location
 	PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:currentCoordinate.latitude longitude:currentCoordinate.longitude];
 	[query whereKey:kPAWParseLocationKey nearGeoPoint:point withinKilometers:filterDistance / kPAWMetersInAKilometer];
+    
     [query includeKey:kPAWParseSenderKey];
     [query includeKey:@"readReceiptsArray"];
     [query orderByDescending:@"createdAt"];
+    
     
     if (type == TYPE_SELF) {
         NSLog(@"Only shows notes from self");
