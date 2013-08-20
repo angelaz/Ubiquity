@@ -16,9 +16,19 @@
     if (self) {
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
-        
         self.layer.masksToBounds = YES;
         self.layer.cornerRadius = 8.0;
+        
+        self.label = [[UILabel alloc] initWithFrame:CGRectMake(0, self.pointHeight*2, frame.size.width, frame.size.height - self.pointHeight)];
+        self.label.text = @"hi";
+        self.label.numberOfLines = 3;
+        self.label.textColor = [UIColor darkGrayColor];
+        self.label.backgroundColor = [UIColor clearColor];
+        self.label.opaque = NO;
+        self.label.textAlignment = NSTextAlignmentCenter;
+        self.label.font = [UIFont systemFontOfSize: 16.f];
+        [self addSubview:self.label];
+
     }
     return self;
 }

@@ -20,16 +20,21 @@
         CGFloat const SCREEN_HEIGHT = frame.size.height;
         CGFloat const BUTTON_WIDTH = 120;
         CGFloat const BUTTON_HEIGHT = 35;
+        
+        CGFloat offset = 25.0;
 
         [self setBackgroundColor: [UIColor colorWithPatternImage: [UIImage imageNamed:@"LoginBg"]]];
-        self.loginButton = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT*4/7, BUTTON_WIDTH, BUTTON_HEIGHT)];
+        self.loginButton = [[UIButton alloc] initWithFrame:CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT*5/7 - offset*2, BUTTON_WIDTH, BUTTON_HEIGHT)];
         [self.loginButton setImage: [UIImage imageNamed:@"login-button-small"] forState:UIControlStateNormal];
         [self.loginButton setTitle: @"Login" forState:UIControlStateNormal];
         [self addSubview: self.loginButton];
         
         UIImageView *image = [[UIImageView alloc] initWithImage: [UIImage imageNamed:@"ubi"]];
         
-        [image setFrame: CGRectMake (SCREEN_WIDTH/2 - BUTTON_WIDTH * 0.75, SCREEN_HEIGHT / 4, BUTTON_WIDTH * 1.5, BUTTON_HEIGHT * 4)];
+        
+        CGFloat imageWidth = 300;
+        CGFloat imageHeight = 250;
+        [image setFrame: CGRectMake (SCREEN_WIDTH/2 - imageWidth / 2, SCREEN_HEIGHT/2 - imageHeight * 4/5, imageWidth, imageHeight)];
         [self addSubview:image ];
 
     }

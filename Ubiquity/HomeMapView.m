@@ -44,11 +44,11 @@
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:15];
-    self.
-    map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
+    self.map = [GMSMapView mapWithFrame: CGRectMake(0, 0, w, h) camera:camera];
     locationController.map = self.map;
     
     [self addSubview:self.map];
+
 }
 
 - (void) setUpLocationSearchWithWidth: (int)w andHeight: (int)h
@@ -59,7 +59,7 @@
     
     self.locationSearchTextField = [[UITextField alloc] initWithFrame:CGRectMake(w/2 - width/2 - 20,topMargin, width, lineHeight)];
     
-    self.locationSearchTextField.placeholder = @"Search for a location";
+    self.locationSearchTextField.placeholder = @"Enter an Address";
     self.locationSearchTextField.borderStyle = UITextBorderStyleNone;
     self.locationSearchTextField.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.locationSearchTextField];
