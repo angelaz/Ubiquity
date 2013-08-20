@@ -43,6 +43,7 @@
 		82AA117C17BADC5F00D570DC /* Rdio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117B17BADC5F00D570DC /* Rdio.framework */; };
 		82AA117E17BADC7A00D570DC /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117D17BADC7A00D570DC /* AudioToolbox.framework */; };
 		82AA118017BADC8800D570DC /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82AA117F17BADC8800D570DC /* Security.framework */; };
+		82B9052A17C2E0A400E75BAF /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 82B9052917C2E0A400E75BAF /* Reachability.m */; };
 		82CA7C3217BC37DA00F00008 /* musicNote.png in Resources */ = {isa = PBXBuildFile; fileRef = 82CA7C2F17BC37DA00F00008 /* musicNote.png */; };
 		82CA7C3317BC37DA00F00008 /* AddMusicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */; };
 		82E9316917A079C600B3958B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9316817A079C600B3958B /* Foundation.framework */; };
@@ -174,6 +175,8 @@
 		82AA117B17BADC5F00D570DC /* Rdio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Rdio.framework; sourceTree = "<group>"; };
 		82AA117D17BADC7A00D570DC /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		82AA117F17BADC8800D570DC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		82B9052817C2E0A400E75BAF /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		82B9052917C2E0A400E75BAF /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		82CA7C2F17BC37DA00F00008 /* musicNote.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = musicNote.png; sourceTree = "<group>"; };
 		82CA7C3017BC37DA00F00008 /* AddMusicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddMusicViewController.h; sourceTree = "<group>"; };
 		82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddMusicViewController.m; sourceTree = "<group>"; };
@@ -387,6 +390,8 @@
 			isa = PBXGroup;
 			children = (
 				60F4439817C28B7600C86E7E /* Libraries */,
+				82B9052817C2E0A400E75BAF /* Reachability.h */,
+				82B9052917C2E0A400E75BAF /* Reachability.m */,
 				82CA7C3017BC37DA00F00008 /* AddMusicViewController.h */,
 				82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
@@ -669,6 +674,7 @@
 				20F8F2A917A1F0F600594994 /* WallPostsViewController.m in Sources */,
 				82148F3217AADD140066C69A /* Geocoding.m in Sources */,
 				864C054717B5BF79000B5A52 /* HomeMapViewController.m in Sources */,
+				82B9052A17C2E0A400E75BAF /* Reachability.m in Sources */,
 				864C054A17B5BF99000B5A52 /* HomeMapView.m in Sources */,
 				6097BEDA17A6DC650012A36A /* LocationController.m in Sources */,
 				86D1F44317BA9D31003B7FED /* NoteView.m in Sources */,
