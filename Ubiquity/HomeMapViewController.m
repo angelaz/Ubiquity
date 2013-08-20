@@ -72,7 +72,7 @@
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshPins)
+                                             selector:@selector(refreshMap)
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
     
@@ -102,6 +102,18 @@
 - (void) refreshPins
 {
     [self loadPins:self.segmentedControl.selectedSegmentIndex];
+}
+
+- (void) refreshMap
+{
+    [self loadPins:self.segmentedControl.selectedSegmentIndex];
+    LocationController* locationController = [LocationController sharedLocationController];
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:_hmv.map.camera.zoom];
+
+    _hmv.map.camera = camera;
 }
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
