@@ -328,6 +328,10 @@
 		60F4439817C28B7600C86E7E /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				20577B4B17C2A2C000201107 /* ArrowView.h */,
+				20577B4C17C2A2C000201107 /* ArrowView.m */,
+				82B9052817C2E0A400E75BAF /* Reachability.h */,
+				82B9052917C2E0A400E75BAF /* Reachability.m */,
 				82148F3017AADD140066C69A /* Geocoding.h */,
 				82148F3117AADD140066C69A /* Geocoding.m */,
 				60F4439917C28B8A00C86E7E /* AutoScrollLabel.h */,
@@ -400,8 +404,6 @@
 			isa = PBXGroup;
 			children = (
 				60F4439817C28B7600C86E7E /* Libraries */,
-				82B9052817C2E0A400E75BAF /* Reachability.h */,
-				82B9052917C2E0A400E75BAF /* Reachability.m */,
 				82CA7C3017BC37DA00F00008 /* AddMusicViewController.h */,
 				82CA7C3117BC37DA00F00008 /* AddMusicViewController.m */,
 				82E9317717A079C600B3958B /* AppDelegate.h */,
@@ -416,8 +418,6 @@
 				864C054617B5BF79000B5A52 /* HomeMapViewController.m */,
 				20CE06C117C2C6E800036600 /* TutorialViewController.h */,
 				20CE06C217C2C6E800036600 /* TutorialViewController.m */,
-				20577B4B17C2A2C000201107 /* ArrowView.h */,
-				20577B4C17C2A2C000201107 /* ArrowView.m */,
 				864C054817B5BF99000B5A52 /* HomeMapView.h */,
 				864C054917B5BF99000B5A52 /* HomeMapView.m */,
 				20F8F2A717A1F0F600594994 /* WallPostsViewController.h */,
