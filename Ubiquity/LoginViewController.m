@@ -37,7 +37,7 @@
     if ([[Reachability reachabilityForInternetConnection] currentReachabilityStatus] == NotReachable) {
         //A new user can't login if there's no internet connection
         UIAlertView *message = [[UIAlertView alloc] initWithTitle:@"Error: No Internet Connection"
-                                                          message:nil
+                                                          message:@"Can't login."
                                                          delegate:nil
                                                 cancelButtonTitle:@"OK"
                                                 otherButtonTitles:nil];

@@ -83,6 +83,19 @@ static AppDelegate *launchedDelegate;
         [self presentLoginViewController];
     }
     
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HasLaunchedOnce"])
+    {
+        NSLog(@"app has already launched once");
+        self.firstLaunch = NO;
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HasLaunchedOnce"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        self.firstLaunch = YES;
+        // This is the first launch ever
+    }
+    
     return YES;
 }
 
@@ -120,6 +133,7 @@ static AppDelegate *launchedDelegate;
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    NSLog(@"application sent to background");
     LocationController* locationController = [LocationController sharedLocationController];
     [locationController.locationManager startMonitoringSignificantLocationChanges];
 }
@@ -132,9 +146,6 @@ static AppDelegate *launchedDelegate;
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    LocationController* locationController = [LocationController sharedLocationController];
-    [locationController.locationManager stopMonitoringSignificantLocationChanges];
-    [locationController.locationManager startUpdatingLocation];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
