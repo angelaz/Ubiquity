@@ -13,5 +13,5 @@
 @property (nonatomic) CGFloat pointY;
 @property (nonatomic) CGFloat pointWidth;
 @property (nonatomic) CGFloat pointHeight;
-
+@property (nonatomic, strong) UILabel *label;
 @end

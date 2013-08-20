@@ -14,6 +14,7 @@
 #import "OptionsViewController.h"
 #import "NoteViewController.h"
 #import "LocationController.h"
+#import "TutorialViewController.h"
 #import "GMSMarkerWithCount.h"
 #import <math.h>
 #import "Reachability.h"
