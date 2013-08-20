@@ -109,12 +109,16 @@
 {
     [self loadPins];
     LocationController* locationController = [LocationController sharedLocationController];
+    [locationController updateLocation:locationController.location.coordinate];
+
     CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
                                                             longitude:currentCoordinate.longitude
                                                                  zoom:_hmv.map.camera.zoom];
+    
 
     _hmv.map.camera = camera;
+
 }
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
