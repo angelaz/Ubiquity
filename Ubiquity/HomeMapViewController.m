@@ -156,7 +156,6 @@
                 double newRange = 77.4795 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
                 NSLog(@"%f new range", newRange);
                 [AppDelegate makeParseQuery: self.segmentedControl.selectedSegmentIndex];
-                
             }
         }
     }

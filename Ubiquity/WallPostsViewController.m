@@ -495,11 +495,10 @@ static NSInteger cellAttachedMediaTag = 8;
                                additionalPhotoHeight);
     
     if([object objectForKey:@"mediaHeight"] > 0) {
-        mediaView.contentMode = UIViewContentModeScaleAspectFill;
+        mediaView.contentMode = UIViewContentModeScaleAspectFit;
         [[object objectForKey:@"media"] getDataInBackgroundWithBlock:^(NSData *mediaData, NSError *error) {
             UIImage *photo = [[UIImage alloc] initWithData:mediaData];
             if (photo) {
-                mediaView.contentMode = UIViewContentModeScaleAspectFill;
   
                 UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
                 if (photo.size.height > photo.size.width) {
