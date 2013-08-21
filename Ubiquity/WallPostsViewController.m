@@ -783,10 +783,10 @@ static NSInteger cellAttachedMediaTag = 8;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     PFObject *object = [objectsToPost objectForKey:indexPath];
-   // NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+    NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
     NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
     NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
-    NSString *postText = [NSString stringWithFormat:@"%@ has shared a note: %@", receiverName, objectText];
+    NSString *postText = [NSString stringWithFormat:@"%@ received a note from %@: %@", receiverName, senderName, objectText];
     
     NSMutableString *realURL = [[NSMutableString alloc] init];
     if ([object objectForKey:@"media"]) {

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "82E9316417A079C600B3958B"
-               BuildableName = "Ubiquity.app"
+               BuildableName = "TerraFlare.app"
                BlueprintName = "TerraFlare"
                ReferencedContainer = "container:Ubiquity.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "82E9316417A079C600B3958B"
-            BuildableName = "Ubiquity.app"
+            BuildableName = "TerraFlare.app"
             BlueprintName = "TerraFlare"
             ReferencedContainer = "container:Ubiquity.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "82E9316417A079C600B3958B"
-            BuildableName = "Ubiquity.app"
+            BuildableName = "TerraFlare.app"
             BlueprintName = "TerraFlare"
             ReferencedContainer = "container:Ubiquity.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "82E9316417A079C600B3958B"
-            BuildableName = "Ubiquity.app"
+            BuildableName = "TerraFlare.app"
             BlueprintName = "TerraFlare"
             ReferencedContainer = "container:Ubiquity.xcodeproj">
          </BuildableReference>
