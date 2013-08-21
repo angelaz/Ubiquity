@@ -249,15 +249,12 @@
 
 - (BOOL) pointsAreEqualA: (PFGeoPoint *) p1 andB: (PFGeoPoint *) p2 withinRange: (double) d
 {
-    double distance = [p1 distanceInKilometersTo:p2];
-    distance = distance / 111;
-    
-    //Assuming this is all in meters
-    if(distance > d) {
-        return NO;
-    }
 
-    return YES;
+    // still not clumping in midrange for some obscure reason
+    
+   // double distance = [p1 distanceInKilometersTo:p2]/111;
+   // return (distance > d);
+    return (p1.latitude + d >= p2.latitude && p1.latitude - d <= p2.latitude && p1.longitude + d >= p2.longitude && p1.longitude - d <= p2.longitude);
 }
 
 

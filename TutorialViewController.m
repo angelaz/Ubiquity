@@ -91,13 +91,13 @@
     [welcomeBubble setPointY:0.0];
     [welcomeBubble setPointHeight:0.0];
     [welcomeBubble setPointWidth:0.0];
-    welcomeBubble.label.text = @"Welcome to Breadcrumbs! Tap to get started.";
+    welcomeBubble.label.text = @"Welcome to TerraFlare! Tap to get started.";
     [self.view addSubview:welcomeBubble];
 }
 
 - (void) loadIntroBubble {
     
-    welcomeBubble.label.text = @"Breadcrumbs are notes you can leave your friends or yourself at chosen locations.";
+    welcomeBubble.label.text = @"TerraFlares are notes you can leave your friends or yourself at chosen locations.";
 }
 
 
@@ -178,7 +178,7 @@
     [welcomeBubble setPointWidth:10.0];
     [welcomeBubble setNeedsDisplay];
     
-    welcomeBubble.label.text = @"Or, you can look for an address using the search bar";
+    welcomeBubble.label.text = @"Or, you can look for an address using the search bar.";
     welcomeBubble.label.numberOfLines = 3;
 }
 
@@ -190,7 +190,7 @@
     [welcomeBubble setPointWidth:10.0];
     [welcomeBubble setNeedsDisplay];
     
-    welcomeBubble.label.text = @"When you've picked the location you want, click here to leave a Breadcrumb!";
+    welcomeBubble.label.text = @"When you've picked the location you want, click here to set off a Terraflare!";
     
     welcomeBubble.label.numberOfLines = 3;
 }
@@ -211,7 +211,7 @@
     [welcomeBubble setPointWidth:0.0];
     [welcomeBubble setNeedsDisplay];
     
-    welcomeBubble.label.text = @"This is what you'll see when you want to leave a new Breadcrumb.";
+    welcomeBubble.label.text = @"This is what you'll see when you want to leave a new TerraFlare.";
     
     welcomeBubble.label.numberOfLines = 3;
 
@@ -236,7 +236,7 @@
     [welcomeBubble setPointWidth:0.0];
     [welcomeBubble setNeedsDisplay];
     
-    welcomeBubble.label.text = @"You can also attach a song or a picture to your Breadcrumb";
+    welcomeBubble.label.text = @"You can also attach a song or a picture to your TerraFlare";
     
     welcomeBubble.label.numberOfLines = 2;
     
@@ -249,7 +249,7 @@
     [welcomeBubble setPointWidth:10.0];
     [welcomeBubble setNeedsDisplay];
     
-    welcomeBubble.label.text = @"And finally, you can change who you want to see your Breadcrumb!";
+    welcomeBubble.label.text = @"And finally, you can change who you want to see your TerraFlare!";
     
     welcomeBubble.label.numberOfLines = 3;
     
@@ -263,7 +263,7 @@
     [welcomeBubble setPointHeight:0.0];
     [welcomeBubble setPointWidth:0.0];
     
-    welcomeBubble.label.text = @"Leave lots of Breadcrumbs for friends to find! When you're in an area with Breadcrumbs around, they'll appear on the map!";
+    welcomeBubble.label.text = @"Set lots of TerraFlares for friends to find! When you're in an area with TerraFlares around, they'll appear on the map!";
     
     welcomeBubble.label.numberOfLines = 6;
     [welcomeBubble setNeedsDisplay];
@@ -277,7 +277,7 @@
     [welcomeBubble setPointWidth:10.0];
     [welcomeBubble setNeedsDisplay];
     
-    welcomeBubble.label.text = @"This bar controls what kinds of Breadcrumbs you want to see on the map.";
+    welcomeBubble.label.text = @"This bar controls what kinds of TerraFlares you want to see on the map.";
     welcomeBubble.label.numberOfLines = 5;
 }
 
@@ -289,7 +289,7 @@
     [welcomeBubble setPointWidth:10.0];
     [welcomeBubble setNeedsDisplay];
 
-        welcomeBubble.label.text = @"This option shows all the notes you left yourself.";
+        welcomeBubble.label.text = @"This option shows everything you left yourself.";
     welcomeBubble.label.numberOfLines = 5;
     }
 - (void)loadFriendsBubble {
@@ -299,7 +299,7 @@
     [welcomeBubble setPointWidth:10.0];
     [welcomeBubble setNeedsDisplay];
 
-    welcomeBubble.label.text = @"To see Breadcrumbs your friends left you, click here";
+    welcomeBubble.label.text = @"To see TerraFlares your friends left you, click here";
     welcomeBubble.label.numberOfLines = 2;
 }
 
@@ -321,7 +321,7 @@
     [welcomeBubble setPointWidth:10.0];
     [welcomeBubble setNeedsDisplay];
 
-    welcomeBubble.label.text = @"If you're more of a list kind of person, you can see all your notes at once here";
+    welcomeBubble.label.text = @"Or, you can view all the TerraFlares in the area at once here";
     welcomeBubble.label.numberOfLines = 3;
 }
 
@@ -334,7 +334,7 @@
     [welcomeBubble setPointWidth:0.0];
     [welcomeBubble setNeedsDisplay];
 
-    welcomeBubble.label.text = @"Thanks for using Breadcrumbs! Tap to end the tutorial.";
+    welcomeBubble.label.text = @"Thanks for using TerraFlare! Tap to end the tutorial.";
     welcomeBubble.label.numberOfLines = 5;
 
 }

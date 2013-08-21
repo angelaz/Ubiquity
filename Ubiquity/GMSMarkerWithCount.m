@@ -36,17 +36,17 @@
 - (UIImage *) icon
 {
     if(self.count > 0) {
-        UIImage *baseImage = [UIImage imageNamed:@"UnreadNote"];
-        baseImage = [self resizeImage: baseImage width:60.0 height:70.0];
+        UIImage *baseImage = [UIImage imageNamed:@"UnreadNoteFire"];
+        baseImage = [self resizeImage: baseImage width:60.0 height:100.0];
         NSString *text = [NSString stringWithFormat:@"%d", self.count];
-        CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*1/20);
+        CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*23/56);
         UIImage *returnImage = [self drawText: text inImage: baseImage atPoint: drawingPoint];
         return returnImage;
     } else {
         UIImage *baseImage = [UIImage imageNamed:@"UnreadNote"];
-        baseImage = [self resizeImage: baseImage width:30.0 height:35.0];
+        baseImage = [self resizeImage: baseImage width:35.0 height:40.0];
         NSString *text = [NSString stringWithFormat:@"%d", self.count];
-        CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*1/20);
+        CGPoint drawingPoint = CGPointMake(baseImage.size.width*61/80, baseImage.size.height*1/80);
         UIImage *returnImage = [self drawText: text inImage: baseImage atPoint: drawingPoint];
         return returnImage;
     }
