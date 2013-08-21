@@ -727,31 +727,50 @@ static NSInteger cellAttachedMediaTag = 8;
 
 - (void)sendTweet: (id) sender
 {
-    UIView *contentView = [sender superview];
-    UITableViewCell *cell = (UITableViewCell *)[contentView superview];
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-
-    PFObject *object = [objectsToPost objectForKey:indexPath];
-    NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
-    NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
-    NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
-    NSString *postText = [NSString stringWithFormat:@"%@ would like to share a note from %@: %@", senderName, receiverName, objectText];
-    
-    
-    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
-    {
-        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [tweetSheet setInitialText:postText]; //Add here your text
-        
-        // Add an image
-        [tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
-        // Add a link
-      //  [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
-        [self presentViewController: tweetSheet animated: YES completion: nil];
-    } else if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
+    if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
         NSLog(@"twitter not logged in");
+        [[[UIAlertView alloc] initWithTitle:@"Log in to Twitter!"
+                                    message:@"Please click on the options wheel in the bottom right corner of the screen to log in."
+                                   delegate:nil
+                          cancelButtonTitle:@"OK!"
+                          otherButtonTitles:nil]
+         show];
+        
+    } else {
+        UIView *contentView = [sender superview];
+        UITableViewCell *cell = (UITableViewCell *)[contentView superview];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+        PFObject *object = [objectsToPost objectForKey:indexPath];
+        NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+        NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
+        NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
+        NSString *postText = [NSString stringWithFormat:@"%@ would like to share a note from %@: %@", senderName, receiverName, objectText];
+        
+        NSMutableString *realURL = [[NSMutableString alloc] init];
+        if ([object objectForKey:@"media"]) {
+            PFFile *mediaFile = [object objectForKey:@"media"];
+            NSString *url = mediaFile.url;
+            [realURL setString:url];
+        } else {
+            NSString *url = @"https://raw.github.com/angelafz/Ubiquity/master/Ubiquity/icon@2x.png?login=cbbm&token=ab2cb597959ba2f93e6d7b63931bff1b";
+            [realURL setString:url];
+        }
+        
+        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+        {
+            SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+            [tweetSheet setInitialText:postText]; //Add here your text
+            
+            // Add an image
+            //[tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
+            // Add a link
+            [tweetSheet addURL:[NSURL URLWithString:realURL]]; //Add here your Link
+            [self presentViewController: tweetSheet animated: YES completion: nil];
+        } else if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
+            NSLog(@"twitter not logged in");
+        }
     }
-    
 }
 
 
