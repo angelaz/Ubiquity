@@ -17,7 +17,7 @@ static NSUInteger const kPAWWallPostMaximumCharacterCount = 140;
 
 static double const kPAWFeetToMeters = 0.3048; // this is an exact value.
 static double const kPAWFeetToMiles = 5280.0; // this is an exact value.
-static double const kPAWWallPostMaximumSearchDistance = 100.0;
+static double const kPAWWallPostMaximumSearchDistance = 1000.0;
 static double const kPAWMetersInAKilometer = 1000.0; // this is an exact value.
 
 static NSUInteger const kPAWWallPostsSearch = 20; // query limit for pins and tableviewcells
