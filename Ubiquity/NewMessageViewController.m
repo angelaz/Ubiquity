@@ -439,6 +439,7 @@ int const PUBLIC = 2;
         player = nil;
     }
     
+    
     mediaFile = [PFFile fileWithData:mediaData];
     mediaPicked = YES;
     

@@ -471,6 +471,8 @@ static NSInteger cellAttachedMediaTag = 8;
     
 
     
+ 
+    
     
     UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
     additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
@@ -485,8 +487,14 @@ static NSInteger cellAttachedMediaTag = 8;
             UIImage *photo = [[UIImage alloc] initWithData:mediaData];
             if (photo) {
                 mediaView.contentMode = UIViewContentModeScaleAspectFill;
+  
                 UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
-                [photoView setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
+                if (photo.size.height > photo.size.width) {
+                    [photoView setFrame:CGRectMake(0.0 + additionalPhotoWidth*.2, 0.0, additionalPhotoWidth*.6, additionalPhotoHeight)];
+                } else if (photo.size.height < photo.size.width) {
+                    [photoView setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
+                }
+
                 [mediaView addSubview:photoView];
             } else { //photo will be null if mediaData is not valid image data, so movie
                 NSLog(@"look this post has a movie :O");
@@ -510,6 +518,7 @@ static NSInteger cellAttachedMediaTag = 8;
         [mediaView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     }
     
+    mediaView.contentMode = UIViewContentModeScaleAspectFit;
     [mediaView setFrame:mediaFrame];
     
     [backgroundImage setFrame:CGRectMake(cellPaddingSides,
@@ -540,14 +549,14 @@ static NSInteger cellAttachedMediaTag = 8;
     UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
     [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
     [cell.contentView addSubview: tweetButton];
-    tweetButton.frame = CGRectMake(cellPaddingSides*2, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5 - 30, 30.0, 30.0);
+    tweetButton.frame = CGRectMake(cellPaddingSides*2, cellPaddingTop+cellTextPaddingTop * 12+ textSize.height + additionalPhotoHeight + 30, 30.0, 30.0);
     [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *fbPic = [UIImage imageNamed:@"facebook"];
     [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
     [cell.contentView addSubview: fbButton];
-    fbButton.frame = CGRectMake(cellPaddingSides*2 + 30, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5 - 30, 30.0, 30.0);
+    fbButton.frame = CGRectMake(cellPaddingSides*2 + 30, cellPaddingTop+cellTextPaddingTop * 12+ textSize.height + additionalPhotoHeight + 30, 30.0, 30.0);
     [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
     
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -761,9 +770,9 @@ static NSInteger cellAttachedMediaTag = 8;
     NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
     NSString *postText = [NSString stringWithFormat:@"%@ has shared a note from %@: %@", receiverName, senderName, objectText];
     
-    if ([object objectForKey:@"media"]) {
+    UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
+   // if ([object objectForKey:@"media"]) {
         
-        UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
         additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
         CGSize textSize = [[object objectForKey:kPAWParseTextKey] sizeWithFont:[UIFont systemFontOfSize:textFontSize] constrainedToSize:CGSizeMake(cellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
         CGRect mediaFrame = CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
@@ -797,9 +806,9 @@ static NSInteger cellAttachedMediaTag = 8;
         
         [mediaView setFrame:mediaFrame];
         
-        
+        UIImage *photo = [[UIImage alloc] initWithData:[object objectForKey:@"media"]];
     
-    }
+   // }
     // Put together the dialog parameters
     NSMutableDictionary *params =
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -810,7 +819,7 @@ static NSInteger cellAttachedMediaTag = 8;
      nil];
     
     // Invoke the dialog
-    [FBWebDialogs presentFeedDialogModallyWithSession:nil
+    [FBWebDialogs presentFeedDialogModallyWithSession:[PFFacebookUtils session]
                                            parameters:params
                                               handler:
      ^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
