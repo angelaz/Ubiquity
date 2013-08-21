@@ -374,7 +374,6 @@ static NSInteger cellAttachedMediaTag = 8;
             [subview removeFromSuperview];
     }
     
-    
 	// Configure the cell content
     
 	UILabel *textLabel = (UILabel*) [cell.contentView viewWithTag:cellTextLabelTag];
@@ -479,6 +478,10 @@ static NSInteger cellAttachedMediaTag = 8;
                               cellPaddingTop+cellTextPaddingTop*11+textSize.height,
                               additionalPhotoWidth,
                                additionalPhotoHeight);
+    
+    for (UIView *v in [mediaView subviews]) {
+        [v removeFromSuperview];
+    }
     
     if([object objectForKey:@"mediaHeight"] > 0) {
         mediaView.contentMode = UIViewContentModeScaleAspectFit;
