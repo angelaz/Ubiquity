@@ -191,7 +191,14 @@ static NSInteger cellAttachedMediaTag = 8;
 {
     OptionsViewController *ovc = [[OptionsViewController alloc] init];
     UINavigationController *optionsNavController = [[UINavigationController alloc] initWithRootViewController:ovc];
-    [self.navigationController presentViewController:optionsNavController animated:YES completion:nil];
+    self.navigationController.modalPresentationStyle = UIModalPresentationCurrentContext;
+    [self presentViewController:optionsNavController animated:YES completion:nil];
+    
+    ovc.view.frame = CGRectMake(ovc.view.frame.origin.x, self.view.frame.size.height, ovc.view.frame.size.width, ovc.view.frame.size.height);
+    [UIView animateWithDuration:0.25
+                     animations:^{
+                         ovc.view.frame = CGRectMake(0, self.navigationController.navigationBar.frame.size.height, ovc.view.frame.size.width, ovc.self.view.frame.size.height);
+                     }];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
