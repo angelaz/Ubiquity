@@ -147,6 +147,14 @@
     [_nv.leftArrow removeFromSuperview];
     [_nv.rightArrow removeFromSuperview];
     
+    PFObject *receipt = [AppDelegate postReceipt:self.notes[i]];
+    NSDate *receivedAt = [receipt objectForKey:@"dateOpened"];
+    
+    if(receivedAt == nil) {
+        receivedAt = [NSDate date];
+        [AppDelegate openPostForFirstTime:self.notes[i] withReceipt:receipt atDate:receivedAt];
+    }
+    
     [self loadDates: i];
     [self loadText: i];
     [self loadImages: i];
