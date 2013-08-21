@@ -469,10 +469,23 @@ static NSInteger cellAttachedMediaTag = 8;
                                    textSize.width,
                                    textSize.height)];
     
+    
+    [objectsToPost setObject:object forKey:indexPath];
+    
+    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
+    [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: tweetButton];
+    tweetButton.frame = CGRectMake(cell.contentView.frame.size.width/2 + 2.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
+    [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *fbPic = [UIImage imageNamed:@"facebook"];
+    [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: fbButton];
+    fbButton.frame = CGRectMake(cell.contentView.frame.size.width/2 - 32.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
+    [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
 
-    
- 
-    
     
     UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
     additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
@@ -542,23 +555,7 @@ static NSInteger cellAttachedMediaTag = 8;
         musicButton.frame = CGRectMake(self.tableView.frame.size.width - cellPaddingSides - cellTextPaddingSides*3, cellHeight + additionalPhotoHeight - cellPaddingBottom - cellTextPaddingBottom*5, 20.0, 20.0);
 
     }
-    
-    [objectsToPost setObject:object forKey:indexPath];
-    
-    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
-    [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
-    [cell.contentView addSubview: tweetButton];
-    tweetButton.frame = CGRectMake(cellPaddingSides*2, cellPaddingTop+cellTextPaddingTop * 12+ textSize.height + additionalPhotoHeight + 30, 30.0, 30.0);
-    [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *fbPic = [UIImage imageNamed:@"facebook"];
-    [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
-    [cell.contentView addSubview: fbButton];
-    fbButton.frame = CGRectMake(cellPaddingSides*2 + 30, cellPaddingTop+cellTextPaddingTop * 12+ textSize.height + additionalPhotoHeight + 30, 30.0, 30.0);
-    [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
-    
+
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
 }
@@ -749,7 +746,7 @@ static NSInteger cellAttachedMediaTag = 8;
         // Add an image
         [tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
         // Add a link
-        [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
+      //  [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
         [self presentViewController: tweetSheet animated: YES completion: nil];
     } else if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
         NSLog(@"twitter not logged in");

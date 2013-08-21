@@ -18,5 +18,6 @@
 
 @property (nonatomic, strong) UITextField *locationSearchTextField;
 @property (nonatomic, strong) UIButton *locationSearchButton;
+@property (nonatomic, strong) UIButton *currentLocationButton;
 
 @end

@@ -27,6 +27,7 @@
         
         [self setUpMapWithWidth: SCREEN_WIDTH andHeight: SCREEN_HEIGHT];
         [self setUpLocationSearchWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
+        [self setUpCurrentLocationButtonWithWidth:SCREEN_WIDTH andHeight:SCREEN_HEIGHT];
         
     }
     return self;
@@ -72,5 +73,18 @@
     
     [self addSubview:self.locationSearchButton];
 }
+
+- (void) setUpCurrentLocationButtonWithWidth: (int)w andHeight: (int)h
+{
+    CGFloat buttonWidth = 40;
+    
+    
+    self.currentLocationButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *btnImage = [UIImage imageNamed:@"currentlocationicon"];
+    [self.currentLocationButton setBackgroundImage: btnImage forState: UIControlStateNormal];
+    self.currentLocationButton.frame = CGRectMake(12, h*4/5, buttonWidth, buttonWidth);
+    [self addSubview:self.currentLocationButton];
+}
+
 
 @end
