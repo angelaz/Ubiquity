@@ -279,8 +279,6 @@ static AppDelegate *launchedDelegate;
     if([receipt objectForKey:@"sender"] != nil) {
         
         NSString *myFacebookId = [NSString stringWithFormat:@"%@",[[post objectForKey:@"sender"] objectForKey:@"facebookId"]];
-        NSLog(@"The sender: %@", [receipt objectForKey:@"sender"]);
-    
         if(![[receipt objectForKey:@"sender"] isEqualToString:myFacebookId]) {
             PFQuery *userDataFromSenderId = [PFQuery queryWithClassName:@"UserData"];
             [userDataFromSenderId whereKey:@"facebookId" equalTo:[receipt objectForKey:@"sender"]];
@@ -305,12 +303,13 @@ static AppDelegate *launchedDelegate;
 
 + (PFObject *) postReceipt:(PFObject *)post {
     
+    [[[PFUser currentUser] objectForKey:@"userData"] fetchIfNeeded];
+    
     NSString *facebookId = [[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"facebookId"];
     NSArray *rrArray = [post objectForKey:@"readReceiptsArray"];
     
     for(PFObject *r in rrArray) {
         if([[r objectForKey:@"receiver"] isEqualToString:facebookId]) {
-            NSLog(@"%@", r);
             return r;
         }
     }
@@ -340,8 +339,10 @@ static AppDelegate *launchedDelegate;
 	// If no objects are loaded in memory, we look to the cache first to fill the table
 	// and then subsequently do a query against the network.
 	//if ([self.objects count] == 0) {
-		query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-	//}
+    
+    query.cachePolicy = kPFCachePolicyNetworkElseCache;
+	
+    //}
     
 	// Query for posts near our current location.
     
