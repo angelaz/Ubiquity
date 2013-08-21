@@ -471,23 +471,6 @@ static NSInteger cellAttachedMediaTag = 8;
                                    cellPaddingTop+cellTextPaddingTop*9,
                                    textSize.width,
                                    textSize.height)];
-    
-    
-    [objectsToPost setObject:object forKey:indexPath];
-    
-    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
-    [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
-    [cell.contentView addSubview: tweetButton];
-    tweetButton.frame = CGRectMake(cell.contentView.frame.size.width/2 + 2.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
-    [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *fbPic = [UIImage imageNamed:@"facebook"];
-    [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
-    [cell.contentView addSubview: fbButton];
-    fbButton.frame = CGRectMake(cell.contentView.frame.size.width/2 - 32.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
-    [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
 
     
     UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
@@ -509,6 +492,8 @@ static NSInteger cellAttachedMediaTag = 8;
                     [photoView setFrame:CGRectMake(0.0 + additionalPhotoWidth*.2, 0.0, additionalPhotoWidth*.6, additionalPhotoHeight)];
                 } else if (photo.size.height < photo.size.width) {
                     [photoView setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
+                } else if (photo.size.height == photo.size.width) {
+                    [photoView setFrame:CGRectMake(0.0 + additionalPhotoWidth*.1, 0.0, additionalPhotoHeight, additionalPhotoHeight)];
                 }
 
                 [mediaView addSubview:photoView];
@@ -526,7 +511,6 @@ static NSInteger cellAttachedMediaTag = 8;
                 [mediaView addSubview:player.view];
                 [player play];
             }
-            
         }];
     } else {
         //REMOVE OLD BAD VIEWS STILL ATTACHED
@@ -559,6 +543,22 @@ static NSInteger cellAttachedMediaTag = 8;
 
     }
 
+    [objectsToPost setObject:object forKey:indexPath];
+    
+    UIButton *tweetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *twitterPic = [UIImage imageNamed:@"twitter"];
+    [tweetButton setBackgroundImage:twitterPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: tweetButton];
+    tweetButton.frame = CGRectMake(cell.contentView.frame.size.width/2 + 2.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
+    [tweetButton addTarget:self action:@selector (sendTweet:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIButton *fbButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *fbPic = [UIImage imageNamed:@"facebook"];
+    [fbButton setBackgroundImage:fbPic forState:UIControlStateNormal];
+    [cell.contentView addSubview: fbButton];
+    fbButton.frame = CGRectMake(cell.contentView.frame.size.width/2 - 32.5, cellPaddingTop+cellTextPaddingTop*15+textSize.height + additionalPhotoHeight, 30.0, 30.0);
+    [fbButton addTarget:self action:@selector (fbPost:) forControlEvents:UIControlEventTouchUpInside];
+    
 	cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	return cell;
 }
@@ -730,31 +730,50 @@ static NSInteger cellAttachedMediaTag = 8;
 
 - (void)sendTweet: (id) sender
 {
-    UIView *contentView = [sender superview];
-    UITableViewCell *cell = (UITableViewCell *)[contentView superview];
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-
-    PFObject *object = [objectsToPost objectForKey:indexPath];
-    NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
-    NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
-    NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
-    NSString *postText = [NSString stringWithFormat:@"%@ would like to share a note from %@: %@", senderName, receiverName, objectText];
-    
-    
-    if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
-    {
-        SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
-        [tweetSheet setInitialText:postText]; //Add here your text
-        
-        // Add an image
-        [tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
-        // Add a link
-      //  [tweetSheet addURL:[NSURL URLWithString:@"http://www.countdownpic.com"]]; //Add here your Link
-        [self presentViewController: tweetSheet animated: YES completion: nil];
-    } else if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
+    if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
         NSLog(@"twitter not logged in");
+        [[[UIAlertView alloc] initWithTitle:@"Log in to Twitter!"
+                                    message:@"Please click on the options wheel in the bottom right corner of the screen to log in."
+                                   delegate:nil
+                          cancelButtonTitle:@"OK!"
+                          otherButtonTitles:nil]
+         show];
+        
+    } else {
+        UIView *contentView = [sender superview];
+        UITableViewCell *cell = (UITableViewCell *)[contentView superview];
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        
+        PFObject *object = [objectsToPost objectForKey:indexPath];
+        NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+        NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
+        NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
+        NSString *postText = [NSString stringWithFormat:@"%@ would like to share a note from %@: %@", senderName, receiverName, objectText];
+        
+        NSMutableString *realURL = [[NSMutableString alloc] init];
+        if ([object objectForKey:@"media"]) {
+            PFFile *mediaFile = [object objectForKey:@"media"];
+            NSString *url = mediaFile.url;
+            [realURL setString:url];
+        } else {
+            NSString *url = @"https://raw.github.com/angelafz/Ubiquity/master/Ubiquity/icon@2x.png?login=cbbm&token=ab2cb597959ba2f93e6d7b63931bff1b";
+            [realURL setString:url];
+        }
+        
+        if ([SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter])
+        {
+            SLComposeViewController *tweetSheet = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeTwitter];
+            [tweetSheet setInitialText:postText]; //Add here your text
+            
+            // Add an image
+            //[tweetSheet addImage:[UIImage imageNamed:@"socialThumb.png"]]; //Add here the name of your picture
+            // Add a link
+            [tweetSheet addURL:[NSURL URLWithString:realURL]]; //Add here your Link
+            [self presentViewController: tweetSheet animated: YES completion: nil];
+        } else if (![SLComposeViewController isAvailableForServiceType:SLServiceTypeTwitter]) {
+            NSLog(@"twitter not logged in");
+        }
     }
-    
 }
 
 
@@ -765,61 +784,32 @@ static NSInteger cellAttachedMediaTag = 8;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
     PFObject *object = [objectsToPost objectForKey:indexPath];
-    NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
+   // NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
     NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
     NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
-    NSString *postText = [NSString stringWithFormat:@"%@ has shared a note from %@: %@", receiverName, senderName, objectText];
+    NSString *postText = [NSString stringWithFormat:@"%@ has shared a note: %@", receiverName, objectText];
     
-    UIView *mediaView = [cell.contentView viewWithTag:cellAttachedMediaTag];
-   // if ([object objectForKey:@"media"]) {
-        
-        additionalPhotoWidth = self.tableView.frame.size.width * 4/7;
-        CGSize textSize = [[object objectForKey:kPAWParseTextKey] sizeWithFont:[UIFont systemFontOfSize:textFontSize] constrainedToSize:CGSizeMake(cellWidth, FLT_MAX) lineBreakMode:NSLineBreakByWordWrapping];
-        CGRect mediaFrame = CGRectMake(self.tableView.frame.size.width/2 - additionalPhotoWidth/2,
-                                       cellPaddingTop+cellTextPaddingTop*11+textSize.height,
-                                       additionalPhotoWidth,
-                                       additionalPhotoHeight);
-        
-            [[object objectForKey:@"media"] getDataInBackgroundWithBlock:^(NSData *mediaData, NSError *error) {
-                UIImage *photo = [[UIImage alloc] initWithData:mediaData];
-                if (photo) {
-                    mediaView.contentMode = UIViewContentModeScaleAspectFill;
-                    UIImageView *photoView = [[UIImageView alloc] initWithImage:photo];
-                    [photoView setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
-                    [mediaView addSubview:photoView];
-                } else { //photo will be null if mediaData is not valid image data, so movie
-                    NSLog(@"look this post has a movie :O");
-                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                    NSString *documentsDirectory = [paths objectAtIndex:0];
-                    NSString *path = [documentsDirectory stringByAppendingPathComponent:@"postVideo.m4v"];
-                    [mediaData writeToFile:path atomically:YES];
-                    NSURL *videoURL = [NSURL fileURLWithPath:path];
-                    MPMoviePlayerController *player = [[MPMoviePlayerController alloc] init];
-                    [player setContentURL:videoURL];
-                    [player prepareToPlay];
-                    [player.view setFrame:CGRectMake(0.0, 0.0, additionalPhotoWidth, additionalPhotoHeight)];
-                    [mediaView addSubview:player.view];
-                    [player play];
-                }
-                
-            }];
-        
-        [mediaView setFrame:mediaFrame];
-        
-        UIImage *photo = [[UIImage alloc] initWithData:[object objectForKey:@"media"]];
-    
-   // }
+    NSMutableString *realURL = [[NSMutableString alloc] init];
+    if ([object objectForKey:@"media"]) {
+        PFFile *mediaFile = [object objectForKey:@"media"];
+        NSString *url = mediaFile.url;
+        [realURL setString:url];
+    } else {
+        NSString *url = @"https://raw.github.com/angelafz/Ubiquity/master/Ubiquity/icon@2x.png?login=cbbm&token=ab2cb597959ba2f93e6d7b63931bff1b";
+        [realURL setString:url];
+    }
+
     // Put together the dialog parameters
     NSMutableDictionary *params =
     [NSMutableDictionary dictionaryWithObjectsAndKeys:
-     @"Ubiquity", @"name",
+     @"TerraFlare", @"name",
      @"Share location-based reminders, memories, and notes with friends.", @"caption",
      postText, @"description",
-     @"https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png", @"picture",
+     realURL, @"picture",
      nil];
     
     // Invoke the dialog
-    [FBWebDialogs presentFeedDialogModallyWithSession:[PFFacebookUtils session]
+    [FBWebDialogs presentFeedDialogModallyWithSession:nil
                                            parameters:params
                                               handler:
      ^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {

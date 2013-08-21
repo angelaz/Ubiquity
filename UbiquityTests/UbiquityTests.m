@@ -12,7 +12,6 @@
 #import "LocationController.h"
 #import "OptionsViewController.h"
 #import "NewMessageViewController.h"
-#import "FriendsViewController.h"
 
 
 @interface UbiquityTests : SenTestCase

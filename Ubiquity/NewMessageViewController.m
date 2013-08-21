@@ -650,8 +650,8 @@ int const PUBLIC = 2;
                                              [idArray componentsJoinedByString:@","], @"to",    nil];
             
             [FBWebDialogs presentRequestsDialogModallyWithSession:[PFFacebookUtils session]
-                                                          message:[NSString stringWithFormat:@"You've received a note near %@ on Ubiquity! Install the app to find it!", address]
-                                                            title:@"Invite Friend to Find Message with Ubiquity!"
+                                                          message:[NSString stringWithFormat:@"You've received a note near %@ on TerraFlare! Install the app to find it!", address]
+                                                            title:@"Invite Friend to Find Note with TerraFlare!"
                                                        parameters:params
                                                           handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error) {
                                                               if (error) {
