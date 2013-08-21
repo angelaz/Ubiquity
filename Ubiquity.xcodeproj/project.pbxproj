@@ -547,9 +547,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		82E9316417A079C600B3958B /* Ubiquity */ = {
+		82E9316417A079C600B3958B /* TerraFlare */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 82E9319117A079C600B3958B /* Build configuration list for PBXNativeTarget "Ubiquity" */;
+			buildConfigurationList = 82E9319117A079C600B3958B /* Build configuration list for PBXNativeTarget "TerraFlare" */;
 			buildPhases = (
 				82E9316117A079C600B3958B /* Sources */,
 				82E9316217A079C600B3958B /* Frameworks */,
@@ -559,7 +559,7 @@
 			);
 			dependencies = (
 			);
-			name = Ubiquity;
+			name = TerraFlare;
 			productName = Ubiquity;
 			productReference = 82E9316517A079C600B3958B /* Ubiquity.app */;
 			productType = "com.apple.product-type.application";
@@ -608,7 +608,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				82E9316417A079C600B3958B /* Ubiquity */,
+				82E9316417A079C600B3958B /* TerraFlare */,
 				82E9317F17A079C600B3958B /* UbiquityTests */,
 			);
 		};
@@ -739,7 +739,7 @@
 /* Begin PBXTargetDependency section */
 		82E9318617A079C600B3958B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 82E9316417A079C600B3958B /* Ubiquity */;
+			target = 82E9316417A079C600B3958B /* TerraFlare */;
 			targetProxy = 82E9318517A079C600B3958B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -965,7 +965,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		82E9319117A079C600B3958B /* Build configuration list for PBXNativeTarget "Ubiquity" */ = {
+		82E9319117A079C600B3958B /* Build configuration list for PBXNativeTarget "TerraFlare" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				82E9319217A079C600B3958B /* Debug */,

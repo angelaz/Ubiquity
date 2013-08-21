@@ -326,7 +326,6 @@
 }
 
 
-
 - (void)loadThankYouBubble {
     welcomeBubble.frame = CGRectMake(SCREEN_WIDTH/2 - BUTTON_WIDTH/2, SCREEN_HEIGHT-300, BUTTON_WIDTH, BUTTON_HEIGHT*2.3);
     [welcomeBubble setPointY:0.0];
