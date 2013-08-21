@@ -250,8 +250,11 @@
 
 - (BOOL) pointsAreEqualA: (PFGeoPoint *) p1 andB: (PFGeoPoint *) p2 withinRange: (double) d
 {
+    double distance = [p1 distanceInKilometersTo:p2];
+    distance = distance / 111;
+    
     //Assuming this is all in meters
-    if([p1 distanceInKilometersTo:p2] > d) {
+    if(distance > d) {
         return NO;
     }
 
