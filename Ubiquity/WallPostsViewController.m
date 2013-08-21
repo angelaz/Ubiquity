@@ -747,15 +747,12 @@ static NSInteger cellAttachedMediaTag = 8;
         NSString *senderName = [NSString stringWithFormat:@"%@",[[object objectForKey:@"sender"] objectForKey:@"profile"][@"name"]];
         NSString *receiverName = [NSString stringWithFormat:@"%@",[[[PFUser currentUser] objectForKey:@"userData"] objectForKey:@"profile"][@"name"]];
         NSString *objectText = [NSString stringWithFormat:@"%@",[object objectForKey:@"text"]];
-        NSString *postText = [NSString stringWithFormat:@"%@ would like to share a note from %@: %@", senderName, receiverName, objectText];
+        NSString *postText = [NSString stringWithFormat:@"%@ would like to share a note from %@: %@", receiverName, senderName, objectText];
         
         NSMutableString *realURL = [[NSMutableString alloc] init];
         if ([object objectForKey:@"media"]) {
             PFFile *mediaFile = [object objectForKey:@"media"];
             NSString *url = mediaFile.url;
-            [realURL setString:url];
-        } else {
-            NSString *url = @"https://raw.github.com/angelafz/Ubiquity/master/Ubiquity/icon@2x.png?login=cbbm&token=ab2cb597959ba2f93e6d7b63931bff1b";
             [realURL setString:url];
         }
         
