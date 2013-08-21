@@ -485,7 +485,7 @@ static NSInteger cellAttachedMediaTag = 8;
                               cellPaddingTop+cellTextPaddingTop*11+textSize.height,
                               additionalPhotoWidth,
                                additionalPhotoHeight);
-    
+   
     for (UIView *v in [mediaView subviews]) {
         [v removeFromSuperview];
     }
@@ -504,7 +504,6 @@ static NSInteger cellAttachedMediaTag = 8;
                 } else if (photo.size.height == photo.size.width) {
                     [photoView setFrame:CGRectMake(0.0 + additionalPhotoWidth*.1, 0.0, additionalPhotoHeight, additionalPhotoHeight)];
                 }
-
                 [mediaView addSubview:photoView];
             } else { //photo will be null if mediaData is not valid image data, so movie
                 NSLog(@"look this post has a movie :O");
@@ -521,10 +520,6 @@ static NSInteger cellAttachedMediaTag = 8;
                 [player play];
             }
         }];
-    } else {
-        //REMOVE OLD BAD VIEWS STILL ATTACHED
-        
-        [mediaView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     }
     
     mediaView.contentMode = UIViewContentModeScaleAspectFit;
