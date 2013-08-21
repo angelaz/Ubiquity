@@ -67,13 +67,16 @@
     _hmv.map.delegate = self;
     [_hmv.locationSearchButton addTarget:self action:@selector(startSearch:) forControlEvents:UIControlEventTouchUpInside];
     
+    [_hmv.currentLocationButton addTarget:self action:@selector(returnToCurrentLocation:) forControlEvents:UIControlEventTouchUpInside];
+
+    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(refreshPins)
                                                  name:KPAWInitialLocationFound
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(refreshPins)
+                                             selector:@selector(refreshMap)
                                                  name:kPAWLocationChangeNotification
                                                object:nil];
     
@@ -100,9 +103,40 @@
     }
 }
 
+
 - (void) refreshPins
 {
     [self loadPins];
+}
+
+- (void) refreshMap
+{
+    [self loadPins];
+    LocationController* locationController = [LocationController sharedLocationController];
+    [locationController updateLocation:locationController.location.coordinate];
+
+    CLLocationCoordinate2D coords = locationController.marker.position;
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:coords.latitude
+                                                            longitude:coords.longitude
+                                                                 zoom:_hmv.map.camera.zoom];
+
+    _hmv.map.camera = camera;
+
+}
+
+- (void) returnToCurrentLocation: (id)sender
+{
+    LocationController* locationController = [LocationController sharedLocationController];
+    
+    CLLocationCoordinate2D currentCoordinate = locationController.location.coordinate;
+    locationController.marker.position = currentCoordinate;
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:currentCoordinate.latitude
+                                                            longitude:currentCoordinate.longitude
+                                                                 zoom:_hmv.map.camera.zoom];
+    
+    _hmv.map.camera = camera;
+
+    
 }
 
 - (void) mapView:(GMSMapView *)mapView idleAtCameraPosition:(GMSCameraPosition *)position
@@ -425,7 +459,8 @@
     marker.position = geolocation;
     marker.title = [gs.geocode objectForKey:@"address"];
     
-    marker.map = _hmv.map;
+    //marker.map = _hmv.map;
+    [LocationController sharedLocationController].marker.position = geolocation;
     
     GMSCameraUpdate *geoLocateCam = [GMSCameraUpdate setTarget:geolocation];
     [_hmv.map animateWithCameraUpdate:geoLocateCam];

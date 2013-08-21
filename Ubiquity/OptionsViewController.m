@@ -82,7 +82,7 @@
     
     CGFloat buttonHeight = 40.0;
     CGFloat buttonWidth = 160.0;
-    
+
     UIButton *twitterButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [twitterButton addTarget:self
                       action:@selector(loginToTwitter)
