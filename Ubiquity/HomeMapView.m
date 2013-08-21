@@ -76,13 +76,13 @@
 
 - (void) setUpCurrentLocationButtonWithWidth: (int)w andHeight: (int)h
 {
-    CGFloat buttonWidth = 30;
+    CGFloat buttonWidth = 40;
     
     
     self.currentLocationButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *btnImage = [UIImage imageNamed:@"currentlocationicon"];
     [self.currentLocationButton setBackgroundImage: btnImage forState: UIControlStateNormal];
-    self.currentLocationButton.frame = CGRectMake(10, h*5/6, buttonWidth, buttonWidth);
+    self.currentLocationButton.frame = CGRectMake(12, h*4/5, buttonWidth, buttonWidth);
     [self addSubview:self.currentLocationButton];
 }
 
