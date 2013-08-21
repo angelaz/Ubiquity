@@ -405,7 +405,7 @@ static NSInteger cellAttachedMediaTag = 8;
     PFObject *receipt = [AppDelegate postReceipt:object];
     NSDate *receivedAt = [receipt objectForKey:@"dateOpened"];
     
-    if(receivedAt == nil) {
+    if(receivedAt == nil || receivedAt == [NSNull null]) {
         receivedAt = [NSDate date];
         [AppDelegate openPostForFirstTime:object withReceipt:receipt atDate:receivedAt];
     }
