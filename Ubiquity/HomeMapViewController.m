@@ -143,7 +143,6 @@
 
 - (void) displayPins {
     int type = self.segmentedControl.selectedSegmentIndex;
-    double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
     
     if (type == 0) {
         [self displayParseQuery:[AppDelegate postsBySelf]];
@@ -168,7 +167,7 @@
 
 - (void) displayParseQuery: (NSMutableArray *) array
 {
-    int range = 100.0;
+    double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
     
     [self.objects removeAllObjects];
     [_hmv.map clear];
