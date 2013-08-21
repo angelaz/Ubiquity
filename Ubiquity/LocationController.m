@@ -45,7 +45,7 @@
         self.locationManager.delegate = self;
         
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        self.locationManager.distanceFilter = 50.0f;
+        self.locationManager.distanceFilter = 1000.0f;
         //self.locationManager.headingFilter = 5;
         
         self.marker = [GMSMarker markerWithPosition:self.location.coordinate];
