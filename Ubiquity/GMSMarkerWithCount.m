@@ -16,7 +16,7 @@
     if (self)
     {
         self.count = 0;
-        super.icon = self.icon;
+        super.icon = [self icon];
         self.animated = super.animated;
     }
     return self;
@@ -35,15 +35,21 @@
 
 - (UIImage *) icon
 {
-    UIImage *baseImage = [UIImage imageNamed:@"UnreadNote"];
-    baseImage = [self resizeImage: baseImage width:60.0 height:70.0];
-    NSString *text = [NSString stringWithFormat:@"%d", self.count];
-    CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*1/20);
-    UIImage *returnImage = [self drawText: text inImage: baseImage atPoint: drawingPoint];
-    
-    
-    
-    return returnImage;
+    if(self.count > 0) {
+        UIImage *baseImage = [UIImage imageNamed:@"UnreadNote"];
+        baseImage = [self resizeImage: baseImage width:60.0 height:70.0];
+        NSString *text = [NSString stringWithFormat:@"%d", self.count];
+        CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*1/20);
+        UIImage *returnImage = [self drawText: text inImage: baseImage atPoint: drawingPoint];
+        return returnImage;
+    } else {
+        UIImage *baseImage = [UIImage imageNamed:@"UnreadNote"];
+        baseImage = [self resizeImage: baseImage width:30.0 height:35.0];
+        NSString *text = [NSString stringWithFormat:@"%d", self.count];
+        CGPoint drawingPoint = CGPointMake(baseImage.size.width*30/40, baseImage.size.height*1/20);
+        UIImage *returnImage = [self drawText: text inImage: baseImage atPoint: drawingPoint];
+        return returnImage;
+    }
 }
 
 - (void) updateIcon
@@ -51,6 +57,13 @@
     self.count++;
     super.icon = self.icon;
 }
+
+- (void) restartCount
+{
+    self.count = 0;
+    super.icon = self.icon;
+}
+
 
 - (UIImage*) drawText:(NSString*) text
              inImage:(UIImage*)  image

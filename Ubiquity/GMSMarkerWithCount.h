@@ -13,4 +13,5 @@
 @property int count;
 - (UIImage *) icon;
 - (void) updateIcon;
+- (void) restartCount;
 @end
