@@ -146,11 +146,11 @@
     double range = 116.21925 * pow(M_E, -0.683106 * _hmv.map.camera.zoom);
     
     if (type == 0) {
-        [self displayParseQuery:[AppDelegate postsBySelf] withRange:range];
+        [self displayParseQuery:[AppDelegate postsBySelf]];
     } else if (type == 1) {
-        [self displayParseQuery:[AppDelegate postsByFriends] withRange:range];
+        [self displayParseQuery:[AppDelegate postsByFriends]];
     } else {
-        [self displayParseQuery:[AppDelegate postsByPublic] withRange:range];
+        [self displayParseQuery:[AppDelegate postsByPublic]];
     }
 }
 
@@ -166,8 +166,10 @@
 }
 
 
-- (void) displayParseQuery: (NSMutableArray *) array withRange: (double) range
+- (void) displayParseQuery: (NSMutableArray *) array
 {
+    int range = 100.0;
+    
     [self.objects removeAllObjects];
     [_hmv.map clear];
     
@@ -187,6 +189,7 @@
             [notesForMarker removeAllObjects];
             CLLocationCoordinate2D pinLocation = CLLocationCoordinate2DMake (gp.latitude, gp.longitude);
             marker = [GMSMarkerWithCount markerWithPosition: pinLocation];
+            [marker restartCount];
             marker.animated = YES;
             marker.map = _hmv.map;
             zoomLevel = _hmv.map.camera.zoom;
@@ -196,7 +199,14 @@
             [markers addObject: marker];
             self.markerNotearrayDict = [[NSMutableDictionary alloc] initWithObjects: @[markers, allNotes] forKeys:@[@"markers", @"arrayOfNotes"]];
         }
-        [marker updateIcon];
+        
+        PFObject *receipt = [AppDelegate postReceipt:object];
+        NSDate *receivedAt = nil;
+        receivedAt = [receipt objectForKey:@"dateOpened"];
+        if(receivedAt == nil) {
+           [marker updateIcon];
+        }
+        
         [notesForMarker addObject:object];
         
         current = gp;
@@ -207,7 +217,13 @@
 
 - (BOOL) pointsAreEqualA: (PFGeoPoint *) p1 andB: (PFGeoPoint *) p2 withinRange: (double) d
 {
-    return (p1.latitude + d >= p2.latitude && p1.latitude - d <= p2.latitude && p1.longitude + d >= p2.longitude && p1.longitude - d <= p2.longitude);
+    //Assuming this is all in meters
+    d = d/1000;
+    if([p1 distanceInKilometersTo:p2] > d) {
+        return NO;
+    }
+
+    return YES;
 }
 
 
