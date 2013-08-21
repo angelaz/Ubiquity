@@ -31,7 +31,6 @@
 
 - (void) updateLocation:(CLLocationCoordinate2D)currentCoordinate
 {
-    self.marker.position = self.location.coordinate;
     self.marker.map = self.map;
 
 }
