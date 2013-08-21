@@ -298,6 +298,11 @@ static AppDelegate *launchedDelegate;
             [PFPush sendPushMessageToQueryInBackground:pushToUser
             withMessage:pushMessage];
         }
+        
+        
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName: kPAWPostsUpdated
+         object:self];
     }
 
 }
