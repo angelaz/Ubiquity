@@ -405,13 +405,16 @@ static NSInteger cellAttachedMediaTag = 8;
     PFObject *receipt = [AppDelegate postReceipt:object];
     NSDate *receivedAt = [receipt objectForKey:@"dateOpened"];
     
-    if(receivedAt == nil || receivedAt == [NSNull null]) {
+    if(receivedAt == nil) {
         receivedAt = [NSDate date];
         [AppDelegate openPostForFirstTime:object withReceipt:receipt atDate:receivedAt];
     }
     
     
     NSString *gotAtString = [df stringFromDate:receivedAt];
+    if(gotAtString == nil) {
+        gotAtString = @"";
+    }
     receivedDate.text = [NSString stringWithFormat: @"Read at: %@", gotAtString];
     receivedDate.font = [UIFont systemFontOfSize:dateFontSize];
 
