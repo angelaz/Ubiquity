@@ -341,7 +341,7 @@ static AppDelegate *launchedDelegate;
 	// and then subsequently do a query against the network.
 	//if ([self.objects count] == 0) {
     
-    query.cachePolicy = kPFCachePolicyNetworkElseCache;
+    query.cachePolicy = kPFCachePolicyCacheThenNetwork;
 	
     //}
     

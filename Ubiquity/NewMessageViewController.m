@@ -349,8 +349,6 @@ int const PUBLIC = 2;
         [PFObject saveAllInBackground:readReceiptsArray block:^(BOOL succeeded, NSError *error) {
             [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
             [postObject saveInBackground];
-            
-            [AppDelegate makeParseQuery:recipient];
         }];
         
         if (countNumber == 0) {
@@ -367,6 +365,8 @@ int const PUBLIC = 2;
             
             
         }
+        
+        [AppDelegate makeParseQuery:recipient];
     }];
     
     // Set the access control list on the postObject to restrict future modifications
