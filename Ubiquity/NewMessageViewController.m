@@ -349,6 +349,8 @@ int const PUBLIC = 2;
         [PFObject saveAllInBackground:readReceiptsArray block:^(BOOL succeeded, NSError *error) {
             [postObject setObject:(NSArray *)readReceiptsArray forKey:@"readReceiptsArray"];
             [postObject saveInBackground];
+            
+            [AppDelegate makeParseQuery:recipient];
         }];
         
         if (countNumber == 0) {
